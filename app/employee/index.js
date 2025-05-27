@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
 
-export default function EmployerDashboard() {
+export default function employeeDashboard() {
   const { user } = useAuth();
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.welcomeText}>Welcome, Employer!</Text>
+        <Text style={styles.welcomeText}>Welcome, employee!</Text>
         <Text style={styles.emailText}>{user?.email}</Text>
       </View>
 

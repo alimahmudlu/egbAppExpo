@@ -40,7 +40,7 @@ This command will move the starter code to the **app-example** directory and cre
 This app includes a role-based authentication system that connects to an external API. The system supports:
 
 - User login and registration
-- Role-based access (employer, isci, worker)
+- Role-based access (employee, isci, worker)
 - Secure token storage
 - Automatic token refresh
 - Persistent sessions

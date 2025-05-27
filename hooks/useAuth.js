@@ -127,8 +127,8 @@ export function AuthProvider({ children }) {
       setLoading(false);
 
       // Navigate based on role
-      if (userData.role === 'employer') {
-        router.replace('/employer/');
+      if (userData.role === 'employee') {
+        router.replace('/employee/');
       } else if (userData.role === 'isci') {
         router.replace('/isci/');
       } else {

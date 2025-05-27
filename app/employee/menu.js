@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
 
-export default function EmployerProfileScreen() {
+export default function employeeProfileScreen() {
   const { user } = useAuth();
   
   // Sample profile data

@@ -3,7 +3,7 @@ import React from 'react';
 import {TouchableOpacity, Text, Platform} from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
 
-export default function EmployerTabLayout() {
+export default function employeeTabLayout() {
   const { logout } = useAuth();
 
   return (

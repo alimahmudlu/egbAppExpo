@@ -80,15 +80,6 @@ export default function LoginScreen() {
           <Text style={styles.buttonText}>Login</Text>
         )}
       </TouchableOpacity>
-      
-      <View style={styles.footer}>
-        <Text>Don't have an account? </Text>
-        <Link href="/auth/register" asChild>
-          <TouchableOpacity>
-            <Text style={styles.link}>Register</Text>
-          </TouchableOpacity>
-        </Link>
-      </View>
     </View>
   );
 }
