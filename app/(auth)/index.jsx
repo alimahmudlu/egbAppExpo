@@ -1,10 +1,10 @@
 import {View,Text,Image,KeyboardAvoidingView,Platform,TouchableWithoutFeedback,Keyboard} from "react-native";
 import styles from "../../assets/styles/auth/auth.styles";
 import AuthSection from "../../components/sections/AuthSection/AuthSection";
-import Form from "../../components/ui/Form/Form";
-import Input from "../../components/ui/Input/Input";
-import Checkbox from "../../components/ui/Checkbox/Checkbox";
-import Button from "../../components/ui/Button/Button";
+import SgForm from "../../components/ui/Form/Form";
+import SgInput from "../../components/ui/Input/Input";
+import SgCheckbox from "../../components/ui/Checkbox/Checkbox";
+import SgButton from "../../components/ui/Button/Button";
 import { useState } from "react";
 import COLORS from "../../constants/colors";
 
@@ -24,33 +24,33 @@ export default function Login() {
         <View style={styles.container}>
         <View>
             <AuthSection />
-            <Form>
-            <Input
+            <SgForm>
+            <SgInput
                 label="Your ID"
                 placeholder="Enter email..."
                 type="email"
                 value={id}
                 onChangeText={setId}
             />
-            <Input
+            <SgInput
                 label="Password"
                 placeholder="Enter password..."
                 type="password"
                 value={password}
                 onChangeText={setPassword}
             />
-            <Checkbox label="Remember me" />
-            </Form>
+            <SgCheckbox label="Remember me" />
+            </SgForm>
         </View>
         <View style={styles.buttonLayout}>
-            <Button
+            <SgButton
                 onPress={handleLogin}
                 disabled={!id || !password}
                 bgColor = {COLORS.primary}
                 color= {COLORS.white}
                 >
                 Login
-            </Button>
+            </SgButton>
         </View>
       </View>
       </TouchableWithoutFeedback>
