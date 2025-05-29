@@ -3,7 +3,7 @@ import { View, Text, TextInput, Pressable } from 'react-native';
 import styles from './Input.styles';
 import Eye from '../../../assets/images/eye.svg';
 
-export default function Input({
+export default function SgInput({
   label,
   placeholder,
   type = 'text', // 'text' | 'password' | 'email'

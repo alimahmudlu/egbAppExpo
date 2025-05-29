@@ -1,7 +1,7 @@
 import { TouchableOpacity, Text } from 'react-native';
 import styles from './Button.styles';
 
-export default function Button({
+export default function SgButton({
   children,
   onPress,
   style,

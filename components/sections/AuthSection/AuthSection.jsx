@@ -2,7 +2,7 @@ import { View, Text, Image } from 'react-native';
 import styles from "./authSection.styles"
 import Logo from "../../../assets/images/Group.svg";
 
-const AuthSection = () => {
+export default function SgSectionAuth () {
   return (
     <View style={styles.container}>
         <Logo style={styles.logo} width={60} height={80} />
@@ -13,5 +13,3 @@ const AuthSection = () => {
     </View>
   );
 };
-
-export default AuthSection;

@@ -3,7 +3,7 @@ import { Pressable, View, Text } from 'react-native';
 import styles from './Checkbox.styles';
 import Check from "../../../assets/images/check.svg";
 
-export default function Checkbox({ label }) {
+export default function SgCheckbox({ label }) {
   const [checked, setChecked] = useState(false);
 
   return (
