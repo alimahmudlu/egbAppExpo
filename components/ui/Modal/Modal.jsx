@@ -12,7 +12,7 @@ import COLORS from '../../../constants/colors';
 
 const { width } = Dimensions.get('window');
 
-export default function SgModal({
+export default function SgPopup({
   visible,
   onClose,
   title,

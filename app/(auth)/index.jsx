@@ -1,6 +1,6 @@
 import {View,Text,Image,KeyboardAvoidingView,Platform,TouchableWithoutFeedback,Keyboard} from "react-native";
 import styles from "../../assets/styles/auth/auth.styles";
-import AuthSection from "../../components/sections/AuthSection/AuthSection";
+import SgSectionAuth from "../../components/sections/AuthSection/AuthSection";
 import SgForm from "../../components/ui/Form/Form";
 import SgInput from "../../components/ui/Input/Input";
 import SgCheckbox from "../../components/ui/Checkbox/Checkbox";
@@ -23,7 +23,7 @@ export default function Login() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
         <View>
-            <AuthSection />
+            <SgSectionAuth />
             <SgForm>
             <SgInput
                 label="Your ID"

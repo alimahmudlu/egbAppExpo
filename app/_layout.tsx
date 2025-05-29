@@ -9,7 +9,8 @@ export default function RootLayout() {
       <SafeScreen>
         <Stack screenOptions={{ headerShown: false }} >
           <Stack.Screen  name="index" />  
-          <Stack.Screen  name="(auth)" /> 
+          <Stack.Screen  name="(auth)" />
+          <Stack.Screen  name="(employee)" />
         </Stack>
       </SafeScreen>
       <StatusBar style="dark" />
