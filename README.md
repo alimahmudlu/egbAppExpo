@@ -35,6 +35,49 @@ npm run reset-project
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
+## Authentication System
+
+This app includes a role-based authentication system that connects to an external API. The system supports:
+
+- User login and registration
+- Role-based access (employee, isci, worker)
+- Secure token storage
+- Automatic token refresh
+- Persistent sessions
+
+### API Configuration
+
+Before running the app, you need to configure the API URL:
+
+1. Open `hooks/useAuth.js`
+2. Update the `API_URL` constant with your authentication API endpoint:
+
+```javascript
+const API_URL = 'https://your-api-endpoint.com'; // Replace with your actual API URL
+```
+
+### API Requirements
+
+Your authentication API should support the following endpoints:
+
+- `POST /auth/login`: For user login
+  - Request: `{ email, password, role }`
+  - Response: `{ token, user: { email, role, ... } }`
+
+- `POST /auth/register`: For user registration
+  - Request: `{ email, password, role }`
+  - Response: `{ token, user: { email, role, ... } }`
+
+- `POST /auth/refresh`: For token refresh
+  - Request: `{ token }`
+  - Response: `{ token }`
+
+- `POST /auth/logout`: For user logout (optional)
+
+### Security
+
+User authentication tokens are securely stored using `expo-secure-store`, which provides encrypted storage on the device. User data is also stored securely and is automatically loaded when the app starts.
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
