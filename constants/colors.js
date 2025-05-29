@@ -1,0 +1,25 @@
+const COLORS = {
+    primary: "#1B6A5F",
+    white: "#ffffff",
+    black: "#000000",
+    brand_50: "#D2F5EC",
+    brand_300: "#41C0A9",
+    brand_600: "#1B6A5F",
+    brand_950: "#0A2926",
+    error_100: "#FEE4E2",
+    error_600: "#D92D20",
+    gray_100: "#F2F4F7",
+    gray_700: "#344054",
+    gray_800: "#182230",
+    gray_900: "#101828",
+    background: "#ffffff",
+    labelColor: "#344054",
+    borderColor: "#D0D5DD",
+    checkLabelColor: "#182230",
+    checkedColor: "#1B6A5F",
+    buttonColor: "#F2F4F7",
+    buttonTextColor: "#98A2B3",
+    buttonNoColor: "#475467", 
+}
+
+export default COLORS;
