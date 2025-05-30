@@ -17,7 +17,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Link href="/(auth)">Login</Link>
+      {/* <Link href="/(auth)">Login</Link> */}
       <Link href="/(employee)">Employee</Link>
 
       <View>
