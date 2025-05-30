@@ -1,6 +1,6 @@
 import { View, Text, Image } from 'react-native';
 import styles from './Staff.styles';
-import RightIcon from '../../../assets/images/chevron-right.svg';
+import RightIcon from '@/assets/images/chevron-right.svg';
 
 export function SgSectionStaff({ title, staffImages = [] }) {
   const visibleImages = staffImages.slice(0, 5);

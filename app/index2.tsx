@@ -1,12 +1,12 @@
 import { Link } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
-import SgPopup from "../components/ui/Modal/Modal";
-import InfoIcon from "../assets/images/info-circle.svg";
-import SgButton from "../components/ui/Button/Button";
-import COLORS from "../constants/colors";
+import SgPopup from "@/components/ui/Modal/Modal";
+import InfoIcon from "@/assets/images/info-circle.svg";
+import SgButton from "@/components/ui/Button/Button";
+import COLORS from "@/constants/colors";
 
-export default function Index() {
+export default function Index2() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleDelete = () => {

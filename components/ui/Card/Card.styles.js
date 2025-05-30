@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
-import COLORS from "../../../constants/colors";
+import COLORS from "@/constants/colors";
 
 const styles = StyleSheet.create({
   card: {
     borderRadius: 16,
     justifyContent: 'space-between',
     backgroundColor: COLORS.gray_100,
-    marginBottom: 24
   },
   content: {
       padding: 20,

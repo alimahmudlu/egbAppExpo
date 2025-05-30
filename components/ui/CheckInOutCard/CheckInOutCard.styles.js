@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
-import COLORS from "../../../constants/colors";
+import COLORS from "@/constants/colors";
 
 const styles = StyleSheet.create({
   card: {
     flex: 1,
     borderRadius: 16,
-    marginHorizontal: 6,
-    height: 256, 
+    minHeight: 256,
     justifyContent: 'space-between',
   },
   content: {

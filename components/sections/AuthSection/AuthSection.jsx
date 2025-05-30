@@ -1,6 +1,6 @@
 import { View, Text, Image } from 'react-native';
 import styles from "./authSection.styles"
-import Logo from "../../../assets/images/Group.svg";
+import Logo from "@/assets/images/Group.svg";
 
 export default function SgSectionAuth () {
   return (

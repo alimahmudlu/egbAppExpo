@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import Vector from '../../../assets/images/vector.svg';
+import Vector from '@/assets/images/vector.svg';
 import styles from './Header.styles';
 
 export default function SgTemplateHeader({ name, role, rating, profileImage }) {

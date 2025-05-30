@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
-import SgTemplateHeader from "../../components/templates/Header/Header";
-import Avatar from "../../assets/images/avatar.png";
-import SgCheckInOutGroup from "../../components/ui/CheckInOutGroup/CheckInOutGroup";
-import SgCard from "../../components/ui/Card/Card";
-import Clock from "../../assets/images/clock.svg"; 
-import { SgSectionStaff } from "../../components/sections/Staff/Staff";
+import SgTemplateHeader from "@/components/templates/Header/Header";
+import Avatar from "@/assets/images/avatar.png";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import SgCard from "@/components/ui/Card/Card";
+import Clock from "@/assets/images/clock.svg"; 
+import { SgSectionStaff } from "@/components/sections/Staff/Staff";
 
 export default function Home() {
     const staffImages = [

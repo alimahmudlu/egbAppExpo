@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import styles from './Input.styles';
-import Eye from '../../../assets/images/eye.svg';
+import Eye from '@/assets/images/eye.svg';
 
 export default function SgInput({
   label,

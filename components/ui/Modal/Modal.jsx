@@ -7,8 +7,8 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import styles from './Modal.styles';
-import Button from '../../../components/ui/Button/Button';
-import COLORS from '../../../constants/colors';
+import Button from '@/components/ui/Button/Button';
+import COLORS from '@/constants/colors';
 
 const { width } = Dimensions.get('window');
 

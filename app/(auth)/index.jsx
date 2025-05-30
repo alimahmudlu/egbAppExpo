@@ -1,12 +1,12 @@
 import {View,Text,Image,KeyboardAvoidingView,Platform,TouchableWithoutFeedback,Keyboard} from "react-native";
-import styles from "../../assets/styles/auth/auth.styles";
-import SgSectionAuth from "../../components/sections/AuthSection/AuthSection";
-import SgForm from "../../components/ui/Form/Form";
-import SgInput from "../../components/ui/Input/Input";
-import SgCheckbox from "../../components/ui/Checkbox/Checkbox";
-import SgButton from "../../components/ui/Button/Button";
+import styles from "@/assets/styles/auth/auth.styles";
+import SgSectionAuth from "@/components/sections/AuthSection/AuthSection";
+import SgForm from "@/components/ui/Form/Form";
+import SgInput from "@/components/ui/Input/Input";
+import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
+import SgButton from "@/components/ui/Button/Button";
 import { useState } from "react";
-import COLORS from "../../constants/colors";
+import COLORS from "@/constants/colors";
 
 export default function Login() {
     const [id, setId] = useState('');
@@ -27,8 +27,8 @@ export default function Login() {
             <SgForm>
             <SgInput
                 label="Your ID"
-                placeholder="Enter email..."
-                type="email"
+                placeholder="Enter ID..."
+                type="text"
                 value={id}
                 onChangeText={setId}
             />

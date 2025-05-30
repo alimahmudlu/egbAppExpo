@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import styles from "./Card.styles";
-import COLORS from "../../../constants/colors";
+import COLORS from "@/constants/colors";
 
 export default function SgCard({ title, icon, time, children = null, bgColor=COLORS.gray_100 }) {
   const Icon = icon ? icon : null;
