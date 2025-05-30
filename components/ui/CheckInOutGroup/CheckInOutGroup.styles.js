@@ -4,9 +4,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 12,
+    gap: 12,
     alignItems: 'stretch',
-    padding: 16,
   },
 });
 

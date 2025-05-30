@@ -3,10 +3,16 @@ import SgTemplateHeader from "../../components/templates/Header/Header";
 import Avatar from "../../assets/images/avatar.png";
 import SgCheckInOutGroup from "../../components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgCard from "../../components/ui/Card/Card";
-import Clock from "../../assets/images/clock.svg"; 
+import Clock from "../../assets/images/clock.svg";
 import { SgSectionStaff } from "../../components/sections/Staff/Staff";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
+import SgTemplateHeader from "@/components/templates/Header/Header";
+import Avatar from "@/assets/images/avatar.png";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import SgCard from "@/components/ui/Card/Card";
+import Clock from "@/assets/images/clock.svg";
+import { SgSectionStaff } from "@/components/sections/Staff/Staff";
 
 export default function Home() {
     const staffImages = [
@@ -27,7 +33,7 @@ export default function Home() {
                 profileImage={Avatar}
             />
             <SgCheckInOutGroup />
-            <SgCard 
+            <SgCard
                 title="Work Time"
                 time="18:30 AM"
                 icon={Clock}
@@ -46,7 +52,7 @@ export default function Home() {
                 <Text style={styles.title}>Added Projects</Text>
             </SgCard>
 
-            <SgSectionStaff 
+            <SgSectionStaff
                 title="Unde omnis iste natus error sit"
                 staffImages={staffImages}
             />
@@ -82,11 +88,11 @@ export default function Home() {
                 statusType="danger"
             />
 
-            <SgCard 
+            <SgCard
                 contentTitle="Sed ut perspic"
                 contentDescription="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
             />
-                
+
         </View>
     );
 }

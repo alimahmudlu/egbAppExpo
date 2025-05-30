@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, cloneElement } from 'react';
 import {Modal, View, Text, Animated, TouchableWithoutFeedback} from 'react-native';
 import styles from './Modal.styles';
-import Button from '../../../components/ui/Button/Button';
-import COLORS from '../../../constants/colors';
+import Button from '@/components/ui/Button/Button';
+import COLORS from '@/constants/colors';
 
 import InfoIcon from '@/assets/images/info-circle.svg';
 
