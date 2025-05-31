@@ -1,8 +1,8 @@
 import { View, Text, Image } from 'react-native';
-import styles from './Staff.styles';
+import styles from './ProjectList.styles';
 import RightIcon from '@/assets/images/chevron-right.svg';
 
-export function SgSectionStaff({ title, staffImages = [] }) {
+export default function SgSectionProjectList({ title, staffImages = [] }) {
   const visibleImages = staffImages.slice(0, 5);
   const hiddenCount = staffImages.length - visibleImages.length;
 
