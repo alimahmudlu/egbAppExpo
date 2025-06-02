@@ -6,15 +6,17 @@ const styles = StyleSheet.create({
     padding: 16,
     flex: 1,
   },
+
   checkinBg: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: '#D1FAE5', 
   },
   checkoutBg: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FEE2E2', 
   },
   grayBg: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: '#E5E7EB', 
   },
+
   cardTitle: {
     color: '#4B5563',
     fontSize: 14,
@@ -24,11 +26,24 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+
   checkinText: {
-    color: '#059669',
+    color: '#059669', 
   },
   checkoutText: {
-    color: '#DC2626',
+    color: '#DC2626', 
+  },
+  defaultText: {
+    color: '#6B7280', 
+  },
+
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  iconWrapper: {
+    marginLeft: 'auto',
   },
 });
 

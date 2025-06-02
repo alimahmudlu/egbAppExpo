@@ -7,6 +7,8 @@ import { useState } from "react";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
+import CheckIn from "@/assets/images/check-in.svg";
+import SgSectionProjectDetail from "@/components/sections/ProjectDetail/ProjectDetail";
 
 export default function Home () {
     const employeeList = [
@@ -28,6 +30,7 @@ export default function Home () {
                 title="Daily check in"
                 count={32}
                 type="checkin"
+                customIcon={CheckIn}
             />
             <View style={{ width: 16 }} />
             <SgSectionInfoCard
@@ -57,6 +60,11 @@ export default function Home () {
           image={emp.image}
         />
       ))}
+
+      <SgSectionProjectDetail
+        title="Project name"
+        description="There are many variations of passages of Lorem Ipsum available"
+      />
     </View>
     )}
 

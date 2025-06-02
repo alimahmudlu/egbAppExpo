@@ -13,10 +13,9 @@ export default function SgCheckInOutCard(props) {
     time,
     buttonLabel,
     children = null,
-    status = 0, // 0: not checked in, 1: waiting, 2: checked in
+    status = 0, 
   } = props;
   if (type !== 'checkin' && type !== 'checkout') {
-    // Nə səhv verir, nə də göstərir — sadəcə heç nə render olunmur.
     return null;
   }
 

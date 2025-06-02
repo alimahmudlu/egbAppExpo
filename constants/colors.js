@@ -5,6 +5,7 @@ const COLORS = {
     
     brand_50:  "#D2F5EC",
     brand_300: "#41C0A9",
+    brand_400: "#28A490",
     brand_500: "#1D8475",
     brand_600: "#1B6A5F",
     brand_800: "#1A4742",
