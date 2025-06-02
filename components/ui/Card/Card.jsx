@@ -14,7 +14,7 @@ export default function SgCard({
 }) {
   const Icon = icon ? icon : null;
 
-  const getBackgroundColor = (type) => {
+  const getBackgroundColor = (type = 'gray') => {
     switch (type) {
       case "gray":
         return COLORS.gray_100;
@@ -50,7 +50,7 @@ export default function SgCard({
     <View style={[styles.card, dynamicStyle]}>
       <View style={[
           styles.content,
-          !bgColor && { padding: 0 }
+          // !bgColor && { padding: 0 }
         ]}>
         {showHeader && (
           <View style={styles.header}>

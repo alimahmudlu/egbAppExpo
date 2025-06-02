@@ -7,7 +7,7 @@ import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgCard from "@/components/ui/Card/Card";
 import Clock from "@/assets/images/clock.svg";
-import {SgSectionStaff} from "@/components/sections/Staff/Staff";
+import {SgSectionProjectListItem, SgSectionStaff} from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 
 export default function employeeDashboard() {
@@ -45,6 +45,7 @@ export default function employeeDashboard() {
             title="Check Out"
         />
       </SgCheckInOutGroup>
+
       <SgCard
           title="Work Time"
           time="18:30 AM"
@@ -55,10 +56,12 @@ export default function employeeDashboard() {
         <Text style={styles.title}>Added Projects</Text>
       </SgCard>
 
-      <SgSectionStaff
-          title="Unde omnis iste natus error sit"
-          staffImages={staffImages}
-      />
+      <View>
+        <SgSectionProjectListItem
+            title="Unde omnis iste natus error sit"
+            staffImages={staffImages}
+        />
+      </View>
     </SgTemplateScreenView>
   );
 }
