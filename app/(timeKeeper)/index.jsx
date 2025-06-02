@@ -24,20 +24,21 @@ export default function Home () {
         />
         <SgCheckInOutGroup>
             <SgSectionInfoCard
-                icon="log-in-outline"
                 title="Daily check in"
                 count={32}
                 type="checkin"
-                customIcon={CheckIn}
             />
-            <View style={{ width: 16 }} />
             <SgSectionInfoCard
-                icon="log-out-outline"
                 title="Daily check out"
                 count={12}
                 type="checkout"
             />
         </SgCheckInOutGroup>
+        <SgSectionInfoCard
+                title="Daily check in"
+                count={32}
+                customIcon={CheckIn}
+            />
         <SgFilterTab
             defaultTabIndex={0}
             onTabChange={(index) => console.log('Selected tab:', index)}
@@ -59,10 +60,10 @@ export default function Home () {
         />
       ))}
 
-      <SgSectionProjectNameCard
+      {/* <SgSectionProjectNameCard
         title="Project name"
         description="There are many variations of passages of Lorem Ipsum available"
-      />
+      /> */}
     </View>
     )}
 

@@ -3,6 +3,7 @@ import styles from "@/components/sections/InfoCard/InfoCard.styles";
 import RightIcon from '@/assets/images/chevron-right.svg';
 import CheckIn from "@/assets/images/check-in.svg";
 import CheckOut from "@/assets/images/check-out.svg";
+import COLORS from "@/constants/colors";
 
 export default function SgSectionInfoCard({ customIcon, title, count, type }) {
   let bgColor;
@@ -22,14 +23,15 @@ export default function SgSectionInfoCard({ customIcon, title, count, type }) {
       break;
     default:
       bgColor = styles.grayBg;
-      textColor = styles.defaultText || { color: '#666' };
+      textColor = styles.defaultText || { color: COLORS.black };
       IconComponent = customIcon || null;
       break;
   }
 
   return (
     <View style={[styles.infoCard, bgColor]}>
-      <View style={styles.iconContainer}>
+      <View style={styles.header}>
+        <View style={styles.iconContainer}>
         {IconComponent && (
           <IconComponent width={20} height={20} style={{ color: textColor.color }} />
         )}
@@ -38,6 +40,7 @@ export default function SgSectionInfoCard({ customIcon, title, count, type }) {
         </View>
       </View>
       <Text style={styles.cardTitle}>{title}</Text>
+      </View>
       <Text style={[styles.cardCount, textColor]}>{count}</Text>
     </View>
   );
