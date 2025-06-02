@@ -1,9 +1,7 @@
-import React from "react";
+import styles from "@/components/sections/ProjectNameCard/ProjectNameCard.styles";
 import { Text, View } from "react-native";
-import styles from "@/components/sections/ProjectDetail/ProjectDetail.styles";
-import COLORS from "@/constants/colors";
 
-export default function SgSectionProjectDetail({title, icon ,description,children = null}) {
+export default function SgSectionProjectNameCard({title, icon ,description,children = null}) {
 
   const Icon = icon ? icon : null;
 

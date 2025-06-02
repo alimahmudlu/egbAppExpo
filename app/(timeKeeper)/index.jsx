@@ -1,14 +1,12 @@
-import SgTemplateHeader from "@/components/templates/Header/Header";
-import { StyleSheet, View } from "react-native";
 import Avatar from "@/assets/images/avatar.png";
-import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
-import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
-import { useState } from "react";
-import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import CheckIn from "@/assets/images/check-in.svg";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
-import CheckIn from "@/assets/images/check-in.svg";
-import SgSectionProjectDetail from "@/components/sections/ProjectDetail/ProjectDetail";
+import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
+import SgTemplateHeader from "@/components/templates/Header/Header";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import { StyleSheet, View } from "react-native";
 
 export default function Home () {
     const employeeList = [
@@ -61,7 +59,7 @@ export default function Home () {
         />
       ))}
 
-      <SgSectionProjectDetail
+      <SgSectionProjectNameCard
         title="Project name"
         description="There are many variations of passages of Lorem Ipsum available"
       />
