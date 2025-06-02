@@ -1,6 +1,6 @@
 import Avatar from "@/assets/images/avatar.png";
 import Clock from "@/assets/images/clock.svg";
-import { SgSectionStaff } from "@/components/sections/ProjectList/ProjectList";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import SgCard from "@/components/ui/Card/Card";
@@ -48,7 +48,7 @@ export default function employeeDashboard() {
         <Text style={styles.title}>Added Projects</Text>
       </SgCard>
 
-      <SgSectionStaff
+      <SgSectionProjectListItem
         title="Unde omnis iste natus error sit"
         staffImages={staffImages}
       />
