@@ -8,7 +8,7 @@ export default function SgSectionProjectListItem({ title, staffImages = [] }) {
   const hiddenCount = staffImages.length - visibleImages.length;
 
   return (
-      <Link href={'/projects/1'} style={styles.card}>
+    <Link href={'/projects/1'} style={styles.card}>
       <View style={styles.rowWrapper}>
         <View style={styles.contentWrapper}>
           <Text style={styles.title}>{title}</Text>
