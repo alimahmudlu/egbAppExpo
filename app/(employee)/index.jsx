@@ -1,3 +1,5 @@
+import { StyleSheet, Text, View } from "react-native";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard"
 import Clock from "@/assets/images/clock.svg";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
@@ -6,7 +8,10 @@ import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import { StyleSheet, Text, View } from "react-native";
 import SgSectionProjectList from "@/components/sections/ProjectList/ProjectList";
 import SgTemplateHeader from "@/components/templates/Header/Header";
-import Avatar from "@/assets/images/avatar.png";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import SgCard from "@/components/ui/Card/Card";
+import Clock from "@/assets/images/clock.svg";
+import {SgSectionProjectListItem} from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import LoginIcon from "@/assets/images/login.svg";
@@ -65,7 +70,7 @@ export default function Home() {
                 <Text style={styles.title}>Added Projects</Text>
             </SgCard>
 
-            <SgSectionProjectList
+            <SgSectionProjectListItem
                 title="Unde omnis iste natus error sit"
                 staffImages={staffImages}
             />
