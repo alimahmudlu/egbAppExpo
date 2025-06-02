@@ -1,12 +1,22 @@
 import { StyleSheet, Text, View } from "react-native";
-import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard"
+import Clock from "@/assets/images/clock.svg";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import SgCard from "@/components/ui/Card/Card";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import { StyleSheet, Text, View } from "react-native";
+import SgSectionProjectList from "@/components/sections/ProjectList/ProjectList";
 import SgTemplateHeader from "@/components/templates/Header/Header";
-import Avatar from "@/assets/images/avatar.png";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgCard from "@/components/ui/Card/Card";
 import Clock from "@/assets/images/clock.svg";
 import {SgSectionProjectListItem} from "@/components/sections/ProjectListItem/ProjectListItem";
+import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
+import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
+import LoginIcon from "@/assets/images/login.svg";
+import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
+import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 
 export default function Home() {
     const staffImages = [
@@ -26,7 +36,22 @@ export default function Home() {
                 rating="3.12"
                 profileImage={Avatar}
             />
-            <SgCheckInOutGroup />
+            <SgCheckInOutGroup>
+                <SgCheckInOutCard
+                    type="checkin"
+                    title="Check In"
+                    time="12.04.2025 / 10:20 AM"
+                    buttonLabel="Check in"
+                    status={0}
+                />
+                <SgCheckInOutCard
+                    type="checkout"
+                    title="Check Out"
+                    time="12.04.2025 / 10:20 AM"
+                    buttonLabel="Check out"
+                    status={1}
+                />
+            </SgCheckInOutGroup>
             <SgCard
                 title="Work Time"
                 time="18:30 AM"
@@ -40,7 +65,6 @@ export default function Home() {
                 contentDescription="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
                 icon={null}
                 time="12.04.2025 / 10:20 AM"
-                children={<SgFileCard />}
                 bgColor="gray"
             >
                 <Text style={styles.title}>Added Projects</Text>
@@ -82,9 +106,38 @@ export default function Home() {
                 statusType="danger"
             />
 
-            <SgCard
+             <SgCard
                 contentTitle="Sed ut perspic"
                 contentDescription="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
+            />
+
+            <SgSectionFileHead
+                title="My Docs"
+                description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+                icon="filter"
+            />
+            <SgNoticeCard
+                icon={<LoginIcon width={20} height={20} />}
+                title="Check in rejected"
+                buttonText="Reject detail"
+                bgCard="danger"
+                bgButton="danger"
+            />
+
+            <SgNoticeCard
+                title="Active Docs"
+                buttonText="Add doc +"
+                bgButton="success"
+            />
+
+            <SgSectionUserInfo
+                name="Jane Doe"
+                role="Employee"
+                rating="3.12"
+                profileImage={Avatar}
+                roleColor="gray"
+                color="dark"
+                size="md"
             />
 
         </View>

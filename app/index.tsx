@@ -6,7 +6,7 @@ import InfoIcon from "@/assets/images/info-circle.svg";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
 
-export default function Index2() {
+export default function Index() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleDelete = () => {
@@ -19,6 +19,7 @@ export default function Index2() {
     <View style={styles.container}>
       {/* <Link href="/(auth)">Login</Link> */}
       <Link href="/(employee)">Employee</Link>
+      <Link href="/(timeKeeper)">Time Keeper</Link>
 
       <View>
         <Button title="Show Modal" onPress={() => setModalVisible(true)} />
