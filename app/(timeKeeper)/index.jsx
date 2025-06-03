@@ -10,9 +10,13 @@ import { StyleSheet, View } from "react-native";
 
 export default function Home () {
     const employeeList = [
-    { title: 'Jane Doe', role: 'Employee', time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
-    { title: 'John Smith', role: 'Employee', time: '7:14 AM', image: '' },
-    { title: 'Ali Veli', role: 'Employee', time: '7:20 AM', image: '' },
+    { title: 'Jane Doe CI', status: 'checkIn',  role: 'Employee', time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
+    { title: 'John Smith CI', status: 'checkIn',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
+    { title: 'Ali Veli CI', status: 'checkIn',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/3.jpg' },
+    { title: 'John Smith CO', status: 'checkOut',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/4.jpg' },
+    { title: 'Ali Veli CO', status: 'checkOut',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/5.jpg' },
+    { title: 'John Smith AW', status: 'atWork',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
+    { title: 'Ali Veli AW', status: 'atWork',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
   ];
 
     return(
@@ -40,15 +44,58 @@ export default function Home () {
                 customIcon={CheckIn}
             />
         <SgFilterTab
-            defaultTabIndex={0}
+            defaultTabId='checkOut'
             onTabChange={(index) => console.log('Selected tab:', index)}
             tabs={[
-                { label: 'Check in', count: 120 },
-                { label: 'Check out', count: 0 },
-                { label: 'At work', count: 15 },
+                { label: 'Check in', id: 'checkIn', count: 120 },
+                { label: 'Check out', id: 'checkOut', count: 0 },
+                { label: 'At work', id: 'atWork', count: 15 },
+            ]}
+            tabContent={[
+                {
+                    element: (
+                        employeeList?.filter(el => el.status === 'checkIn').map((emp, index) => (
+                                <SgSectionEmployeeCard
+                                    key={index}
+                                    title={emp.title}
+                                    role={emp.role}
+                                    time={emp.time}
+                                    image={emp.image}
+                                />
+                            ))
+                    ),
+                    id: 'checkIn'
+                },
+                {
+                    element: (
+                        employeeList?.filter(el => el.status === 'checkOut').map((emp, index) => (
+                                <SgSectionEmployeeCard
+                                    key={index}
+                                    title={emp.title}
+                                    role={emp.role}
+                                    time={emp.time}
+                                    image={emp.image}
+                                />
+                            ))
+                    ),
+                    id: 'checkOut'
+                },
+                {
+                    element: (
+                        employeeList?.filter(el => el.status === 'atWork').map((emp, index) => (
+                                <SgSectionEmployeeCard
+                                    key={index}
+                                    title={emp.title}
+                                    role={emp.role}
+                                    time={emp.time}
+                                    image={emp.image}
+                                />
+                            ))
+                    ),
+                    id: 'atWork'
+                },
             ]}
         />
-
 
         {employeeList.map((emp, index) => (
         <SgSectionEmployeeCard

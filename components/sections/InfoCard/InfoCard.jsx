@@ -32,11 +32,11 @@ export default function SgSectionInfoCard({ customIcon, title, count, type }) {
     <View style={[styles.infoCard, bgColor]}>
       <View style={styles.header}>
         <View style={styles.iconContainer}>
-        {IconComponent && (
-          <IconComponent width={20} height={20} style={{ color: textColor.color }} />
-        )}
-        <View style={styles.iconWrapper}>
-          <RightIcon width={20} height={20} />
+            <Ionicons name={icon} size={20} color={textColor.color} />
+            {/*<View style={styles.iconWrapper}>*/}
+            {/*    <RightIcon width={20} height={20} />*/}
+            {/*</View>*/}
+
         </View>
       </View>
       <Text style={styles.cardTitle}>{title}</Text>

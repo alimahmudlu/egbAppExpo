@@ -1,211 +1,122 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import Avatar from "@/assets/images/avatar.png";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
+import SgTemplateHeader from "@/components/templates/Header/Header";
+import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgCard from "@/components/ui/Card/Card";
+import Clock from "@/assets/images/clock.svg";
+import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import { useAuth } from "@/hooks/useAuth";
+import { StyleSheet, Text, View } from "react-native";
+import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
+import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 
-// Sample job data
-const jobsData = [
-  {
-    id: '1',
-    title: 'Senior Software Developer',
-    company: 'Tech Solutions Inc.',
-    location: 'Baku, Azerbaijan',
-    type: 'Full-time',
-    salary: '3000-4000 AZN',
-    posted: '2 days ago',
-  },
-  {
-    id: '2',
-    title: 'UI/UX Designer',
-    company: 'Creative Design Studio',
-    location: 'Remote',
-    type: 'Contract',
-    salary: '2500-3500 AZN',
-    posted: '1 week ago',
-  },
-  {
-    id: '3',
-    title: 'Project Manager',
-    company: 'Global Innovations',
-    location: 'Baku, Azerbaijan',
-    type: 'Full-time',
-    salary: '4000-5000 AZN',
-    posted: '3 weeks ago',
-  },
-  {
-    id: '4',
-    title: 'Marketing Specialist',
-    company: 'Media Group',
-    location: 'Ganja, Azerbaijan',
-    type: 'Part-time',
-    salary: '1500-2000 AZN',
-    posted: '1 month ago',
-  },
-  {
-    id: '5',
-    title: 'Customer Support Representative',
-    company: 'Service Solutions',
-    location: 'Baku, Azerbaijan',
-    type: 'Full-time',
-    salary: '1200-1800 AZN',
-    posted: '2 days ago',
-  },
-];
-
-export default function IsciJobsScreen() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredJobs, setFilteredJobs] = useState(jobsData);
-
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    if (text) {
-      const filtered = jobsData.filter(job => 
-        job.title.toLowerCase().includes(text.toLowerCase()) ||
-        job.company.toLowerCase().includes(text.toLowerCase()) ||
-        job.location.toLowerCase().includes(text.toLowerCase())
-      );
-      setFilteredJobs(filtered);
-    } else {
-      setFilteredJobs(jobsData);
-    }
-  };
-
-  const renderJobItem = ({ item }) => (
-    <View style={styles.jobCard}>
-      <Text style={styles.jobTitle}>{item.title}</Text>
-      <Text style={styles.companyName}>{item.company}</Text>
-      
-      <View style={styles.jobDetails}>
-        <Text style={styles.jobInfo}>{item.location}</Text>
-        <Text style={styles.jobInfo}>{item.type}</Text>
-        <Text style={styles.jobInfo}>Salary: {item.salary}</Text>
-        <Text style={styles.jobInfo}>Posted: {item.posted}</Text>
-      </View>
-      
-      <View style={styles.actionsContainer}>
-        <TouchableOpacity style={styles.viewButton}>
-          <Text style={styles.viewButtonText}>View Details</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.applyButton}>
-          <Text style={styles.applyButtonText}>Apply Now</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+export default function EmployeeDashboardScreen() {
+  const { user } = useAuth();
+  const employeeList = [
+    { title: 'Jane Doe CI', status: 'checkIn',  role: 'Employee', time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
+    { title: 'John Smith CI', status: 'checkIn',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
+    { title: 'Ali Veli CI', status: 'checkIn',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/3.jpg' },
+    { title: 'John Smith CO', status: 'checkOut',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/4.jpg' },
+    { title: 'Ali Veli CO', status: 'checkOut',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/5.jpg' },
+    { title: 'John Smith AW', status: 'atWork',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
+    { title: 'Ali Veli AW', status: 'atWork',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
+  ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search jobs, companies, or locations..."
-          value={searchQuery}
-          onChangeText={handleSearch}
+    <SgTemplateScreenView
+      head={
+        <SgTemplateHeader
+          name="Jane Doe"
+          role="Time Keeper"
+          profileImage={Avatar}
         />
-      </View>
-      
-      <FlatList
-        data={filteredJobs}
-        renderItem={renderJobItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No jobs found matching your search.</Text>
-          </View>
-        }
+      }
+    >
+      <SgCheckInOutGroup>
+        <SgSectionInfoCard
+            icon="log-in-outline"
+            title="Daily check in"
+            count={32}
+            type="checkin"
+        />
+        <View style={{ width: 16 }} />
+        <SgSectionInfoCard
+            icon="log-out-outline"
+            title="Daily check out"
+            count={12}
+            type="checkout"
+        />
+      </SgCheckInOutGroup>
+
+      <SgFilterTab
+          defaultTabId='checkOut'
+          onTabChange={(index) => console.log('Selected tab:', index)}
+          tabs={[
+            { label: 'Check in', id: 'checkIn', count: 120 },
+            { label: 'Check out', id: 'checkOut', count: 0 },
+            { label: 'At work', id: 'atWork', count: 15 },
+          ]}
+          tabContent={[
+            {
+              element: (
+                  employeeList?.filter(el => el.status === 'checkIn').map((emp, index) => (
+                      <SgSectionEmployeeCard
+                          key={index}
+                          title={emp.title}
+                          role={emp.role}
+                          time={emp.time}
+                          image={emp.image}
+                      />
+                  ))
+              ),
+              id: 'checkIn'
+            },
+            {
+              element: (
+                  employeeList?.filter(el => el.status === 'checkOut').map((emp, index) => (
+                      <SgSectionEmployeeCard
+                          key={index}
+                          title={emp.title}
+                          role={emp.role}
+                          time={emp.time}
+                          image={emp.image}
+                      />
+                  ))
+              ),
+              id: 'checkOut'
+            },
+            {
+              element: (
+                  employeeList?.filter(el => el.status === 'atWork').map((emp, index) => (
+                      <SgSectionEmployeeCard
+                          key={index}
+                          title={emp.title}
+                          role={emp.role}
+                          time={emp.time}
+                          image={emp.image}
+                      />
+                  ))
+              ),
+              id: 'atWork'
+            },
+          ]}
       />
-    </View>
+    </SgTemplateScreenView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#fff",
   },
-  searchContainer: {
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  searchInput: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    backgroundColor: '#f9f9f9',
-  },
-  listContainer: {
-    padding: 15,
-  },
-  jobCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  jobTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  companyName: {
+  title: {
+    fontFamily: "Inter",
     fontSize: 16,
-    color: '#666',
-    marginBottom: 10,
-  },
-  jobDetails: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 15,
-  },
-  jobInfo: {
-    fontSize: 14,
-    color: '#666',
-    marginRight: 15,
-    marginBottom: 5,
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  viewButton: {
-    flex: 1,
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginRight: 5,
-  },
-  viewButtonText: {
-    color: '#333',
-    fontWeight: 'bold',
-  },
-  applyButton: {
-    flex: 1,
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginLeft: 5,
-  },
-  applyButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  emptyContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#666',
+    fontStyle: "normal",
+    fontWeight: "600",
+    lineHeight: 20,
   },
 });

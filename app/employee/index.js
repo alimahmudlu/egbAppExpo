@@ -1,15 +1,15 @@
 import Avatar from "@/assets/images/avatar.png";
-import Clock from "@/assets/images/clock.svg";
-import { SgSectionStaff } from "@/components/sections/ProjectList/ProjectList";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import SgCard from "@/components/ui/Card/Card";
+import Clock from "@/assets/images/clock.svg";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import { useAuth } from "@/hooks/useAuth";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function employeeDashboard() {
+export default function EmployeeDashboardScreen() {
   const { user } = useAuth();
   const staffImages = [
     "https://randomuser.me/api/portraits/men/1.jpg",
@@ -42,16 +42,23 @@ export default function employeeDashboard() {
         />
         <SgCheckInOutCard type="checkout" title="Check Out" />
       </SgCheckInOutGroup>
-      <SgCard title="Work Time" time="18:30 AM" icon={Clock} />
+
+      <SgCard
+          title="Work Time"
+          time="18:30 AM"
+          icon={Clock}
+      />
 
       <SgCard>
         <Text style={styles.title}>Added Projects</Text>
       </SgCard>
 
-      <SgSectionStaff
-        title="Unde omnis iste natus error sit"
-        staffImages={staffImages}
-      />
+      <View>
+        <SgSectionProjectListItem
+            title="Unde omnis iste natus error sit"
+            staffImages={staffImages}
+        />
+      </View>
     </SgTemplateScreenView>
   );
 }

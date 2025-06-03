@@ -1,13 +1,14 @@
 import { View, Text, Image } from 'react-native';
-import styles from './ProjectList.styles';
+import styles from './ProjectListItem.styles';
 import RightIcon from '@/assets/images/chevron-right.svg';
+import {Link} from "expo-router";
 
-export default function SgSectionProjectList({ title, staffImages = [] }) {
+export default function SgSectionProjectListItem({ title, staffImages = [] }) {
   const visibleImages = staffImages.slice(0, 5);
   const hiddenCount = staffImages.length - visibleImages.length;
 
   return (
-    <View style={styles.card}>
+    <Link href={'/projects/1'} style={styles.card}>
       <View style={styles.rowWrapper}>
         <View style={styles.contentWrapper}>
           <Text style={styles.title}>{title}</Text>
@@ -43,6 +44,6 @@ export default function SgSectionProjectList({ title, staffImages = [] }) {
           <RightIcon width={20} height={20} />
         </View>
       </View>
-    </View>
+    </Link>
   );
 }

@@ -39,7 +39,7 @@ export default function employeeTabLayout() {
         }}
       />
       <Tabs.Screen
-        name="docs"
+        name="docs/index"
         options={{
           title: 'My Docs',
           tabBarLabel: 'My Docs',
@@ -47,7 +47,7 @@ export default function employeeTabLayout() {
         }}
       />
       <Tabs.Screen
-        name="menu"
+        name="menu/index"
         options={{
           title: 'Menu',
           tabBarLabel: 'Menu',

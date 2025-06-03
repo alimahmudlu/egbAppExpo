@@ -4,6 +4,7 @@ import COLORS from '@/constants/colors';
 const styles = StyleSheet.create({
   button: {
     width: '100%',
+    flex: 1,
     paddingVertical: 14,
     paddingHorizontal: 22,
     justifyContent: 'center',

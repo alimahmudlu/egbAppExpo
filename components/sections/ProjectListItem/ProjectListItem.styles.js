@@ -4,8 +4,12 @@ import COLORS from "@/constants/colors";
 const styles = StyleSheet.create({
   card: {
     borderRadius: 0,
+    flex: 1
   },
   rowWrapper: {
+    display: 'flex',
+    width: '100%',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

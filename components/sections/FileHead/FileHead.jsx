@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import styles from '@/components/sections/FileHead/FileHead.styles';
 import TrashIcon from '@/assets/images/trash.svg';
-import FilterIcon from '@/assets/images/filter.svg';    
+import FilterIcon from '@/assets/images/filter.svg';
+import { Link } from 'expo-router';
 
 export default function SgSectionFileHead ({ title, description, icon }) {
   const renderIcon = () => {
@@ -20,9 +21,9 @@ export default function SgSectionFileHead ({ title, description, icon }) {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.title}>{title}</Text>
-        <View style={styles.iconWrapper}>
+        <Link href={`/employee/docs/archive`} style={styles.iconWrapper}>
           {renderIcon()}
-        </View>
+        </Link>
       </View>
       <Text style={styles.description}>{description}</Text>
     </View>
