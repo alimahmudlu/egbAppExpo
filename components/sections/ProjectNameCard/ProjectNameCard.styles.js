@@ -4,11 +4,10 @@ import COLORS from "@/constants/colors";
 const styles = StyleSheet.create({
   card: {
     borderRadius: 16,
-    backgroundColor: COLORS.gray_100,
+    backgroundColor: COLORS.brand_950,
   },
   content: {
-      paddingVertical: 10,
-    paddingHorizontal: 16,
+      padding: 16,
   },
   header: {
     flexDirection: 'row',
@@ -20,27 +19,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'normal',
-    fontWeight: 400,
+    fontWeight: 600,
     lineHeight: 20,
-    color: COLORS.black,
+    color: COLORS.brand_400,
   },
-  contentTitle: {
-    fontFamily: 'Inter',
-    fontSize: 13,
-    fontStyle: 'normal',
-    fontWeight: 500,
-    lineHeight: 18,
-    color: COLORS.gray_500,
-    marginBottom: 4,
-  },
-  contentDesc: {
+  description: {
     fontFamily: 'Inter',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: 600,
     lineHeight: 24,
-    color: COLORS.gray_800,
-  },
+    color: COLORS.white,
+  }
 });
 
 export default styles;

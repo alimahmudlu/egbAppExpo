@@ -1,12 +1,12 @@
-import SgTemplateHeader from "@/components/templates/Header/Header";
-import { StyleSheet, View } from "react-native";
 import Avatar from "@/assets/images/avatar.png";
-import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
-import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
-import { useState } from "react";
-import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import CheckIn from "@/assets/images/check-in.svg";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
+import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
+import SgTemplateHeader from "@/components/templates/Header/Header";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import { StyleSheet, View } from "react-native";
 
 export default function Home () {
     const employeeList = [
@@ -28,19 +28,21 @@ export default function Home () {
         />
         <SgCheckInOutGroup>
             <SgSectionInfoCard
-                icon="log-in-outline"
                 title="Daily check in"
                 count={32}
                 type="checkin"
             />
-            <View style={{ width: 16 }} />
             <SgSectionInfoCard
-                icon="log-out-outline"
                 title="Daily check out"
                 count={12}
                 type="checkout"
             />
         </SgCheckInOutGroup>
+        <SgSectionInfoCard
+                title="Daily check in"
+                count={32}
+                customIcon={CheckIn}
+            />
         <SgFilterTab
             defaultTabId='checkOut'
             onTabChange={(index) => console.log('Selected tab:', index)}
@@ -94,6 +96,21 @@ export default function Home () {
                 },
             ]}
         />
+
+        {employeeList.map((emp, index) => (
+        <SgSectionEmployeeCard
+          key={index}
+          title={emp.title}
+          role={emp.role}
+          time={emp.time}
+          image={emp.image}
+        />
+      ))}
+
+      {/* <SgSectionProjectNameCard
+        title="Project name"
+        description="There are many variations of passages of Lorem Ipsum available"
+      /> */}
     </View>
     )}
 

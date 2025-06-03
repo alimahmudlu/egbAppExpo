@@ -1,34 +1,63 @@
+import COLORS from "@/constants/colors";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   infoCard: {
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 20,
     flex: 1,
+    gap: 24,
+    justifyContent: 'space-between',
+    height: 'auto',
   },
+
   checkinBg: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: COLORS.brand_50, 
   },
   checkoutBg: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: COLORS.error_100, 
   },
   grayBg: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: COLORS.gray_100, 
   },
+
+  header: {
+    gap: 8,
+  },
+
   cardTitle: {
-    color: '#4B5563',
+    fontFamily: 'Inter',
     fontSize: 14,
-    marginTop: 4,
+    fontStyle: 'normal',
+    fontWeight: 400,
+    lineHeight: 20,
+    color: COLORS.black,
   },
   cardCount: {
+    fontFamily: 'Inter',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontStyle: 'normal',
+    fontWeight: 700,
+    lineHeight: 32,
   },
+
   checkinText: {
-    color: '#059669',
+    color: COLORS.brand_600, 
   },
   checkoutText: {
-    color: '#DC2626',
+    color: COLORS.error_600,
+  },
+  defaultText: {
+    color: COLORS.gray_800, 
+  },
+
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  iconWrapper: {
+    marginLeft: 'auto',
   },
 });
 
