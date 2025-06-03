@@ -7,9 +7,9 @@ import Clock from "@/assets/images/clock.svg";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import { useAuth } from "@/hooks/useAuth";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function employeeDashboard() {
+export default function EmployeeDashboardScreen() {
   const { user } = useAuth();
   const staffImages = [
     "https://randomuser.me/api/portraits/men/1.jpg",
@@ -48,7 +48,6 @@ export default function employeeDashboard() {
           time="18:30 AM"
           icon={Clock}
       />
-      <SgCard title="Work Time" time="18:30 AM" icon={Clock} />
 
       <SgCard>
         <Text style={styles.title}>Added Projects</Text>

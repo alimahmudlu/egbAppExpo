@@ -3,6 +3,8 @@ import React from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
+import SgCard from "@/components/ui/Card/Card";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -34,10 +36,69 @@ export default function ProjectItemScreen() {
         <SgTemplateScreenView
             head={<ProjectHeader projectId={projectId} />}
         >
-            <View style={styles.container}>
-                <Text style={styles.contentText}>Project Item Screen {projectId}</Text>
-                {/* Add your project item content here */}
+            <SgCard
+                bgColor='green'
+                contentTitle='Project name'
+                contentDescription='There are many variations of passages of Lorem Ipsum available'
+            />
+
+            <SgCard>
+                <Text style={styles.title}>Assigned tasks</Text>
+            </SgCard>
+
+            <View style={{gap: 16}}>
+                <SgSectionTaskCard
+                    time="12.04.2025 / 10:20 AM"
+                    duration="2h. 42m."
+                    title="There are many variations of passages of Lorem Ipsum available but the"
+                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
+                    name="Jane Doe"
+                    image={null}
+                    status="Complete"
+                    statusType="success"
+                />
+                <SgSectionTaskCard
+                    time="12.04.2025 / 10:20 AM"
+                    duration="2h. 42m."
+                    title="There are many variations of passages of Lorem Ipsum available but the"
+                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
+                    name="Jane Doe"
+                    image={null}
+                    status="Complete"
+                    statusType="success"
+                />
+                <SgSectionTaskCard
+                    time="12.04.2025 / 10:20 AM"
+                    duration="2h. 42m."
+                    title="There are many variations of passages of Lorem Ipsum available but the"
+                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
+                    name="Jane Doe"
+                    image={null}
+                    status="Complete"
+                    statusType="success"
+                />
+                <SgSectionTaskCard
+                    time="12.04.2025 / 10:20 AM"
+                    duration="2h. 42m."
+                    title="There are many variations of passages of Lorem Ipsum available but the"
+                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
+                    name="Jane Doe"
+                    image={null}
+                    status="Complete"
+                    statusType="success"
+                />
+                <SgSectionTaskCard
+                    time="12.04.2025 / 10:20 AM"
+                    duration="2h. 42m."
+                    title="There are many variations of passages of Lorem Ipsum available but the"
+                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
+                    name="Jane Doe"
+                    image={null}
+                    status="Complete"
+                    statusType="success"
+                />
             </View>
+
         </SgTemplateScreenView>
     );
 }
@@ -70,7 +131,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter',
         fontWeight: '500',
         fontSize: 16,
-        lineHeight: '24px',
+        // lineHeight: '24px',
 },
     container: {
         flex: 1,
