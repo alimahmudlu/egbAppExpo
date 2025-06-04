@@ -11,6 +11,11 @@ import { StyleSheet, View } from "react-native";
 import SgSectionMenuCard from "@/components/sections/MenuCard/MenuCard";
 import SgSectionLanguageSelector from "@/components/sections/LanguageSelect/LanguageSelect";
 import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp";
+import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
+import SgSectionIconLabel from "@/components/sections/IconLabel/IconLabel";
+import ClockCheck from "@/assets/images/clock-check.svg";
+import SgSectionStatusCard from "@/components/sections/StatusCard/StatusCard";
+import LogIn from "@/assets/images/log-in_20.svg";
 
 export default function Home () {
     const employeeList = [
@@ -22,6 +27,14 @@ export default function Home () {
     { title: 'John Smith AW', status: 'atWork',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
     { title: 'Ali Veli AW', status: 'atWork',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
   ];
+
+  const data = [
+  { label: '1-2', value: 14, percentage: 90 },
+  { label: '3-4', value: 9, percentage: 70 },
+  { label: '5-6', value: 7, percentage: 50 },
+  { label: '7-8', value: 11, percentage: 80 },
+  { label: '9-10', value: 2, percentage: 20 },
+];
 
     return(
     <View style={styles.container}>
@@ -134,6 +147,41 @@ export default function Home () {
         title="Project name"
         description="There are many variations of passages of Lorem Ipsum available"
       /> */}
+
+      <View >
+      {data.map((item, index) => (
+        <SgSectionProgressBar
+          key={index}
+          label={item.label}
+          value={item.value}
+          percentage={item.percentage}
+        />
+      ))}
+    </View>
+    <SgSectionIconLabel
+        icon={<ClockCheck width={20} height={20} />}
+        title="View activities"
+      />
+
+
+    <View style={{ display: 'flex', flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
+      <View style={{ flex: 1 }}>
+      <SgSectionStatusCard
+        title="Check In"
+        time="7:12 AM"
+        icon={<LogIn width={20} height={20} />}
+      />
+      </View>
+      <View style={{ flex: 1 }}>
+      <SgSectionStatusCard
+        location="https://arubaunleashed.com/wp-content/uploads/2023/12/Location-of-Aruba-1024x768.jpg"
+        title="Check In"
+        time="7:12 AM"
+        icon={<LogIn width={20} height={20} />}
+      />
+      </View>
+    </View>
+
     </View>
     )}
 
