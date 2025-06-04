@@ -83,7 +83,16 @@ export default function SgPopup({
             </View>
           )}
 
-          {title && <Text style={styles.title}>{title}</Text>}
+          {title && (
+            <Text
+              style={[
+                styles.title,
+                !iconType && styles.titleWithoutIcon,
+              ]}
+            >
+              {title}
+            </Text>
+          )}
           {description && <Text style={styles.description}>{description}</Text>}
 
           {children}

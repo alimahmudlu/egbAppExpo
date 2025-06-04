@@ -2,11 +2,15 @@ import Avatar from "@/assets/images/avatar.png";
 import CheckIn from "@/assets/images/check-in.svg";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
+import SgSectionProfileBanner from "@/components/sections/ProfileBanner/ProfileBanner";
 import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import { StyleSheet, View } from "react-native";
+import SgSectionMenuCard from "@/components/sections/MenuCard/MenuCard";
+import SgSectionLanguageSelector from "@/components/sections/LanguageSelect/LanguageSelect";
+import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp";
 
 export default function Home () {
     const employeeList = [
@@ -26,7 +30,26 @@ export default function Home () {
             role="Time Keeper"
             profileImage={Avatar}
         />
-        <SgCheckInOutGroup>
+
+        {/* <SgSectionProfileBanner
+        image={Avatar} 
+        name="Jane Doe"
+        role="Time Keeper"
+        onLogout={() => alert('Logged out')}
+      /> */}
+
+       {/* <SgSectionMenuCard /> */}
+
+       {/* <SgSectionDownloadApp
+            version="2.44.9"
+            title="Tətbiqi aşağıdakı platformalarda qiymətləndirin"
+            platforms={['android', 'ios']}
+        /> */}
+
+
+        {/* <SgSectionLanguageSelector /> */}
+
+        {/* <SgCheckInOutGroup>
             <SgSectionInfoCard
                 title="Daily check in"
                 count={32}
@@ -37,13 +60,13 @@ export default function Home () {
                 count={12}
                 type="checkout"
             />
-        </SgCheckInOutGroup>
-        <SgSectionInfoCard
+        </SgCheckInOutGroup> */}
+        {/* <SgSectionInfoCard
                 title="Daily check in"
                 count={32}
                 customIcon={CheckIn}
-            />
-        <SgFilterTab
+            /> */}
+        {/* <SgFilterTab
             defaultTabId='checkOut'
             onTabChange={(index) => console.log('Selected tab:', index)}
             tabs={[
@@ -95,9 +118,9 @@ export default function Home () {
                     id: 'atWork'
                 },
             ]}
-        />
+        /> */}
 
-        {employeeList.map((emp, index) => (
+        {/* {employeeList.map((emp, index) => (
         <SgSectionEmployeeCard
           key={index}
           title={emp.title}
@@ -105,7 +128,7 @@ export default function Home () {
           time={emp.time}
           image={emp.image}
         />
-      ))}
+      ))} */}
 
       {/* <SgSectionProjectNameCard
         title="Project name"
@@ -125,6 +148,13 @@ export default function Home () {
             fontStyle: 'normal',
             fontWeight: '600',
             lineHeight: 20,
-        }
+        },
+        menuContainer: {
+            marginHorizontal: 20,
+            marginTop: 10,
+            backgroundColor: '#F7F7F7',
+            borderRadius: 16,
+            padding: 10,
+        },
     });
     

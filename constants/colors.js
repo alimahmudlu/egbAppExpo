@@ -16,6 +16,7 @@ const COLORS = {
     error_600: "#D92D20",
     error_700: "#B42318",
 
+    gray_50:  "#F9FAFB",
     gray_100: "#F2F4F7",
     gray_200: "#EAECF0",
     gray_300: "#D0D5DD",

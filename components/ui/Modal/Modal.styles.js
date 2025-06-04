@@ -12,22 +12,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: COLORS.white,
-    paddingHorizontal: 24,
     paddingVertical: 12,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    alignItems: 'center',
   },
   dragHandle: {
     width: 48,
     height: 5,
     backgroundColor: COLORS.borderColor,
     borderRadius: 4,
+    alignSelf: 'center',
   },
   iconContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     paddingTop: 24,
     paddingBottom: 32,
+    alignItems: 'center',
   },
   title: {
     color: COLORS.gray_900,
@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginBottom: 8,
     textAlign: 'center',
+    paddingHorizontal: 24,
+    alignSelf: 'center',
+  },
+  titleWithoutIcon: {
+    paddingTop: 24,
   },
   description: {
     color: COLORS.gray_700,
@@ -48,6 +53,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     paddingBottom: 32,
     textAlign: 'center',
+    paddingHorizontal: 24,
+    alignSelf: 'center',
   },
   footerButtonsContainer: {
     flexDirection: 'row',
@@ -55,7 +62,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingBottom: 10,
-},
+    paddingHorizontal: 24,
+  },
 });
 
 export default styles;
