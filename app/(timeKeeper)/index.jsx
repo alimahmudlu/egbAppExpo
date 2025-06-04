@@ -14,8 +14,9 @@ import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp"
 import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
 import SgSectionIconLabel from "@/components/sections/IconLabel/IconLabel";
 import ClockCheck from "@/assets/images/clock-check.svg";
-import SgSectionStatusCard from "@/components/sections/StatusCard/StatusCard";
 import LogIn from "@/assets/images/log-in_20.svg";
+import SgInput from "@/components/ui/Input/Input";
+import SgSectionStatusCard from "@/components/sections/StatusCard/StatusCard";
 
 export default function Home () {
     const employeeList = [
@@ -164,8 +165,8 @@ export default function Home () {
       />
 
 
-    <View style={{ display: 'flex', flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
-      <View style={{ flex: 1 }}>
+    <View style={{ flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
+      <View style={{ flex: 1, }}>
       <SgSectionStatusCard
         title="Check In"
         time="7:12 AM"
@@ -174,7 +175,7 @@ export default function Home () {
       </View>
       <View style={{ flex: 1 }}>
       <SgSectionStatusCard
-        location="https://arubaunleashed.com/wp-content/uploads/2023/12/Location-of-Aruba-1024x768.jpg"
+        location="https://www.centurytrails.in/images/plans/century-trails-location-map.webp"
         title="Check In"
         time="7:12 AM"
         icon={<LogIn width={20} height={20} />}
@@ -182,6 +183,10 @@ export default function Home () {
       </View>
     </View>
 
+    {/* <SgInput
+        placeholder="Reject detail..."
+        type="textarea"
+    /> */}
     </View>
     )}
 

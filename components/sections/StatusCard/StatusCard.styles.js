@@ -9,6 +9,8 @@ const styles = StyleSheet.create({
     padding: 20,
     flexDirection: 'column',
     justifyContent: 'space-between',
+    alignItems: 'stretch',
+    minHeight: 160,
   },
   containerNoPadding: {
     padding: 0,
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
   },
   mapImage: {
     width: "100%",
-    height: 100,
+    height: 124,
     borderRadius: 12,
   },
   openMap: {

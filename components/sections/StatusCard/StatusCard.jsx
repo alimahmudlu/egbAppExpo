@@ -12,8 +12,7 @@
 /> */}
 
 
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '@/components/sections/StatusCard/StatusCard.styles';
 
 export default function SgSectionStatusCard({ icon, title, time, location }) {
