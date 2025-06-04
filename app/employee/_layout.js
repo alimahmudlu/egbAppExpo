@@ -2,6 +2,12 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import {TouchableOpacity, Text, Platform} from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
+import HomeIcon from '@/assets/images/home.svg';
+import HomeActiveIcon from '@/assets/images/home-active.svg';
+import DocsIcon from '@/assets/images/docs.svg';
+import DocsActiveIcon from '@/assets/images/docs-active.svg';
+import MenuIcon from '@/assets/images/menu.svg';
+import MenuActiveIcon from '@/assets/images/menu-active.svg';
 
 export default function employeeTabLayout() {
   const { logout } = useAuth();
@@ -36,6 +42,7 @@ export default function employeeTabLayout() {
           title: 'Home',
           tabBarLabel: 'Home',
           headerTitle: 'Home',
+            tabBarIcon: ({ color, focused }) => focused ? <HomeActiveIcon width={20} height={20} /> : <HomeIcon width={20} height={20} />
         }}
       />
       <Tabs.Screen
@@ -44,6 +51,7 @@ export default function employeeTabLayout() {
           title: 'My Docs',
           tabBarLabel: 'My Docs',
           headerTitle: 'My Docs',
+            tabBarIcon: ({ color, focused }) => focused ? <DocsActiveIcon width={20} height={20} /> : <DocsIcon width={20} height={20} />
         }}
       />
       <Tabs.Screen
@@ -52,6 +60,7 @@ export default function employeeTabLayout() {
           title: 'Menu',
           tabBarLabel: 'Menu',
           headerTitle: 'Menu',
+            tabBarIcon: ({ color, focused }) => focused ? <MenuActiveIcon width={20} height={20} /> : <MenuIcon width={20} height={20} />
         }}
       />
     </Tabs>

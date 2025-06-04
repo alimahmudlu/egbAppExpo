@@ -44,7 +44,7 @@ export default function SgFilterTab({ tabs = [], defaultTabId, onTabChange, tabC
         })}
       </View>
 
-      <View>
+      <View style={{gap: 12}}>
           {tabContent?.find(el => el.id === activeTabId)?.element || null}
       </View>
     </View>

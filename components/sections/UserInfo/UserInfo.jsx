@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from '@/components/sections/UserInfo/UserInfo.styles';
 import COLORS from '@/constants/colors';
+import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 export default function SgSectionUserInfo({
   name,
@@ -12,7 +14,16 @@ export default function SgSectionUserInfo({
   color,
   roleColor,
   size = 'md',
+    clickable = null,
 }) {
+  const router = useRouter();
+
+  function handleClickUser() {
+    if (!!clickable) {
+      router.navigate(clickable)
+    }
+  }
+
   const getRoleColor = (colorKey) => {
     switch (colorKey) {
       case 'success':
@@ -63,7 +74,7 @@ export default function SgSectionUserInfo({
   const appliedSize = getSizeStyles(size);
 
   return (
-    <View style={styles.profileSection}>
+    <Pressable onPress={handleClickUser} style={styles.profileSection}>
       {profileImage ? (
         <Image
           source={profileImage}
@@ -150,6 +161,6 @@ export default function SgSectionUserInfo({
           )}
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }

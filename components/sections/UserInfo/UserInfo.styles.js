@@ -3,6 +3,9 @@ import COLORS from "@/constants/colors";
 
 const styles = StyleSheet.create({
   profileSection: {
+    display: "flex",
+    flex: 1,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,

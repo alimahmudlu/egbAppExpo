@@ -41,7 +41,6 @@ export default function EmployeeDashboardScreen() {
             count={32}
             type="checkin"
         />
-        <View style={{ width: 16 }} />
         <SgSectionInfoCard
             icon="log-out-outline"
             title="Daily check out"

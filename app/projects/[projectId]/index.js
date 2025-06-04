@@ -5,6 +5,7 @@ import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -36,10 +37,9 @@ export default function ProjectItemScreen() {
         <SgTemplateScreenView
             head={<ProjectHeader projectId={projectId} />}
         >
-            <SgCard
-                bgColor='green'
-                contentTitle='Project name'
-                contentDescription='There are many variations of passages of Lorem Ipsum available'
+            <SgSectionProjectNameCard
+                title="Project name"
+                description="There are many variations of passages of Lorem Ipsum available"
             />
 
             <SgCard>
