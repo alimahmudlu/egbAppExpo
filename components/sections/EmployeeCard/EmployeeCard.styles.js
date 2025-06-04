@@ -84,6 +84,34 @@ const styles = StyleSheet.create({
   confirmButton: {
     backgroundColor: COLORS.brand_50,
   },
+  infoButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    gap: 4
+  },
+  infoText: {
+    fontFamily: 'Inter',
+    fontSize: 10,
+    fontStyle: 'normal',
+    fontWeight: 600,
+    lineHeight: 14,
+  },
+  rejectButton: {
+    backgroundColor: COLORS.error_100,
+  },
+  acceptButton: {
+    backgroundColor: COLORS.brand_50,
+  },
+  rejectText: {
+    color: COLORS.error_600,
+  },
+  acceptText: {
+    color: COLORS.brand_600,
+  }
 });
 
 export default styles;

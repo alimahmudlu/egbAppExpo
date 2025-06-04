@@ -10,6 +10,7 @@ import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import { StyleSheet, View } from "react-native";
 import SgSectionMenuCard from "@/components/sections/MenuCard/MenuCard";
 import SgSectionLanguageSelector from "@/components/sections/LanguageSelect/LanguageSelect";
+import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp";
 
 export default function Home () {
     const employeeList = [
@@ -37,7 +38,14 @@ export default function Home () {
         onLogout={() => alert('Logged out')}
       /> */}
 
-       <SgSectionMenuCard />
+       {/* <SgSectionMenuCard /> */}
+
+       {/* <SgSectionDownloadApp
+            version="2.44.9"
+            title="Tətbiqi aşağıdakı platformalarda qiymətləndirin"
+            platforms={['android', 'ios']}
+        /> */}
+
 
         {/* <SgSectionLanguageSelector /> */}
 
