@@ -8,6 +8,13 @@ const styles = StyleSheet.create({
     gap: 12,
     backgroundColor: COLORS.white,
   },
+  employeeCardGroup: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: COLORS.white,
+  },
   avatarContainer: {
     width: 40,
     height: 40,
@@ -111,6 +118,26 @@ const styles = StyleSheet.create({
   },
   acceptText: {
     color: COLORS.brand_600,
+  },
+  modalGroup: {
+    width:'100%',
+    flex: 1,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray_200
+  },
+  modalGroupButtons: {
+    flexDirection: 'row',
+    gap: 12
+  },
+  textArea: {
+    width: '100%',
+    minHeight: 160,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.gray_300,
+    padding: 12,
+    verticalAlign: 'top'
   }
 });
 

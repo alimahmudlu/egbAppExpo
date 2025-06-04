@@ -24,6 +24,16 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: COLORS.black,
   },
+  time: {
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontStyle: 'normal',
+    fontWeight: 700,
+    lineHeight: 32,
+    color: COLORS.gray_800,
+    marginBottom: 10,
+    flexShrink: 1,
+  },
   contentTitle: {
     fontFamily: 'Inter',
     fontSize: 13,

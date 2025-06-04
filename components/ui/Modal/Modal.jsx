@@ -11,6 +11,7 @@ export default function SgPopup({
   onClose,
   title,
   description,
+    icon,
   iconType = null,
   children = null,
   footerButton = null,
@@ -42,7 +43,7 @@ export default function SgPopup({
       case 'danger':
         return <InfoIcon width={28} height={28} />;
       default:
-        return null;
+        return icon;
     }
   };
 
@@ -76,7 +77,7 @@ export default function SgPopup({
         <View style={styles.container}>
           <View style={styles.dragHandle} />
 
-          {iconType && (
+          {(iconType || icon) && (
             <View style={styles.iconContainer}>
               {renderIcon()}
             </View>

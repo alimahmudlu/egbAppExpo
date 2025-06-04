@@ -5,7 +5,7 @@ import COLORS from '@/constants/colors';
 import SgButton from '@/components/ui/Button/Button';
 import SgPopup from '@/components/ui/Modal/Modal';
 
-export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton }) {
+export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton, onClick }) {
     const [modalVisible, setModalVisible] = useState(false);
     let cardBackground;
     let buttonBackground;
@@ -46,28 +46,12 @@ export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton
                 <Text style={styles.title}>{title}</Text>
             </View>
             <TouchableOpacity 
-                onPress={() => setModalVisible(true)} 
+                onPress={(e) => onClick?.(e)}
                 style={[styles.button, { backgroundColor: buttonBackground }]}
             >
                 <Text style={styles.buttonText}>{buttonText}</Text>
             </TouchableOpacity>
         </View>
-        <SgPopup
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        title="Task Completed"
-        description="You have successfully completed the task."
-        iconType="success"
-        footerButton={
-        <SgButton
-            onPress={''}
-            bgColor={COLORS.primary}
-            color={COLORS.white}
-        >
-            Check in
-        </SgButton>
-        }
-        />
     </View>
   );
 }

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "egbAppExpo",
-    "slug": "egbAppExpo",
+    "slug": "egb-expo-app",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
@@ -9,14 +9,19 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alimahmudlu.egbexpoapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.alimahmudlu.egbexpoapp"
     },
     "web": {
       "bundler": "metro",
@@ -33,10 +38,18 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d461924c-79d5-4a37-8efa-85691df04b88"
+      }
+    },
+    "owner": "alimahmudlu"
   }
 }
