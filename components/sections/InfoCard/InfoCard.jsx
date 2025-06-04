@@ -6,7 +6,7 @@ import CheckOut from "@/assets/images/check-out.svg";
 import COLORS from "@/constants/colors";
 import { useRouter } from 'expo-router';
 
-export default function SgSectionInfoCard({ customIcon, title, count, type, href = null }) {
+export default function SgSectionInfoCard({ customIcon, title, count, type, href = null, children = null }) {
   const router = useRouter();
 
   let bgColor;
@@ -55,6 +55,10 @@ export default function SgSectionInfoCard({ customIcon, title, count, type, href
         </View>
         <Text style={styles.cardTitle}>{title}</Text>
         <Text style={[styles.cardCount, textColor]}>{count}</Text>
+
+        <View>
+          {children}
+        </View>
       </Pressable>
   );
 }

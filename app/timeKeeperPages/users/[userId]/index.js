@@ -6,6 +6,8 @@ import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import SgCard from "@/components/ui/Card/Card";
+import ClockHistory from "@/assets/images/clock-history.svg";
 
 
 // Custom header component with back button and overview button
@@ -58,6 +60,26 @@ export default function TimeKeeperUserScreen() {
                         href={`/timeKeeperPages/users/${userId}/history/checkOut`}
                     />
                 </SgCheckInOutGroup>
+            </View>
+            <View>
+                <SgSectionInfoCard
+                    customIcon={ClockHistory}
+                    title="Total Work Hours"
+                    count='34562h. 12m.'
+                    href={`/timeKeeperPages/users/${userId}`}
+                >
+                    <Text>1-2 hours   --- PROGRESS...</Text>
+                    <Text>3-4 hours   --- PROGRESS...</Text>
+                    <Text>5-6 hours   --- PROGRESS...</Text>
+                    <Text>7-8 hours   --- PROGRESS...</Text>
+                    <Text>9-10 hours  --- PROGRESS...</Text>
+                </SgSectionInfoCard>
+            </View>
+            <View>
+                <SgCard
+                    title="Average Work Hours"
+                    time="6h. 12m."
+                />
             </View>
         </SgTemplateScreenView>
     )
