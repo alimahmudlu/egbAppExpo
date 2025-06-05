@@ -17,6 +17,12 @@ import ClockCheck from "@/assets/images/clock-check.svg";
 import LogIn from "@/assets/images/log-in_20.svg";
 import SgInput from "@/components/ui/Input/Input";
 import SgSectionStatusCard from "@/components/sections/StatusCard/StatusCard";
+import PPT from "@/assets/images/ppt-icon.svg";
+import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
+import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
+import Lang from '@/assets/images/language.svg';
+import Notify from '@/assets/images/notification.svg';
+import AppInfo from '@/assets/images/appInfo.svg';
 
 export default function Home () {
     const employeeList = [
@@ -37,6 +43,53 @@ export default function Home () {
   { label: '9-10', value: 2, percentage: 20 },
 ];
 
+ const fileList = [
+    {
+    id: '1',
+    title: 'Unde omnis iste natus error sit',
+    datetime: '13.02.2025 / 4:21 PM',
+    filename: 'report1.xlsx',
+    type: 'ppt',
+  },
+  {
+    id: '2',
+    title: 'Unde omnis iste natus error sit',
+    datetime: '13.02.2025 / 4:21 PM',
+    filename: 'report1.xlsx',
+    type: 'xlsx',
+  },
+  {
+    id: '3',
+    title: 'Unde omnis iste natus error sit',
+    datetime: '13.02.2025 / 4:21 PM',
+    filename: 'report2.xlsx',
+    type: 'pdf',
+  },
+  {
+    id: '4',
+    title: 'Unde omnis iste natus error sit',
+    datetime: '13.02.2025 / 4:21 PM',
+    filename: 'report3.xlsx',
+    type: 'doc',
+  },
+];
+
+const extraItems = [
+  {
+    id: 'faq',
+    title: 'FAQ',
+    icon: Lang,
+    onPress: () => console.log('FAQ clicked'),
+  },
+  {
+    id: 'help',
+    title: 'Help Center',
+    icon: AppInfo,
+    onPress: () => console.log('Help clicked'),
+  },
+];
+
+
     return(
     <View style={styles.container}>
         <SgTemplateHeader
@@ -52,7 +105,7 @@ export default function Home () {
         onLogout={() => alert('Logged out')}
       /> */}
 
-       {/* <SgSectionMenuCard /> */}
+       <SgSectionMenuCard extraItems={extraItems} />;
 
        {/* <SgSectionDownloadApp
             version="2.44.9"
@@ -149,7 +202,7 @@ export default function Home () {
         description="There are many variations of passages of Lorem Ipsum available"
       /> */}
 
-      <View >
+      {/* <View >
       {data.map((item, index) => (
         <SgSectionProgressBar
           key={index}
@@ -158,14 +211,15 @@ export default function Home () {
           percentage={item.percentage}
         />
       ))}
-    </View>
-    <SgSectionIconLabel
+    </View> */}
+
+    {/* <SgSectionIconLabel
         icon={<ClockCheck width={20} height={20} />}
         title="View activities"
-      />
+      /> */}
 
 
-    <View style={{ flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
+    {/* <View style={{ flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
       <View style={{ flex: 1, }}>
       <SgSectionStatusCard
         title="Check In"
@@ -181,12 +235,38 @@ export default function Home () {
         icon={<LogIn width={20} height={20} />}
       />
       </View>
-    </View>
+    </View> */}
 
     {/* <SgInput
         placeholder="Reject detail..."
         type="textarea"
     /> */}
+
+
+
+    {/* {fileList.map(file => (
+    <SgSectionAddFile
+        key={file.id}
+        title={file.title}
+        type={file.type}
+        datetime={file.datetime}
+        onPress={() => console.log(file.filename)}
+    />
+    ))} */}
+
+
+
+    {/* <SgSectionStatusInfo 
+        title="Progress"
+        status="Complete"
+        statusType="success"
+    />
+    <SgSectionStatusInfo 
+        title="Progress"
+        status="Check Progress"
+        statusType="warning"
+    /> */}
+
     </View>
     )}
 
