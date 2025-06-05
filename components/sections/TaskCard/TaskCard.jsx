@@ -54,7 +54,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
                     </View>
                 </View>
 
-                <Link href={`/projects/${projectId}/${id}`} style={styles.content}>
+                <Link href={`/employeePages/projects/${projectId}/${id}`} style={styles.content}>
                     <Text style={styles.title} numberOfLines={1}>{title}</Text>
                     <Text style={styles.description} numberOfLines={2}>{description}</Text>
                 </Link>

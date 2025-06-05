@@ -14,15 +14,15 @@ import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCa
 
 export default function EmployeeDashboardScreen() {
   const { user } = useAuth();
-  const employeeList = [
-    { title: 'Jane Doe CI', status: 'checkIn',  role: 'Employee', time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
-    { title: 'John Smith CI', status: 'checkIn',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
-    { title: 'Ali Veli CI', status: 'checkIn',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/3.jpg' },
-    { title: 'John Smith CO', status: 'checkOut',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/4.jpg' },
-    { title: 'Ali Veli CO', status: 'checkOut',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/5.jpg' },
-    { title: 'John Smith AW', status: 'atWork',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
-    { title: 'Ali Veli AW', status: 'atWork',  role: 'Employee', time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
-  ];
+    const employeeList = [
+        { title: 'Jane Doe CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
+        { title: 'John Smith CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
+        { title: 'Ali Veli CI', type: 'checkIn', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/3.jpg' },
+        { title: 'John Smith CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/4.jpg' },
+        { title: 'Ali Veli CO', type: 'checkOut', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/5.jpg' },
+        { title: 'John Smith AW', type: 'checkOut', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
+        { title: 'Ali Veli AW', type: 'checkOut', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
+    ];
 
   return (
     <SgTemplateScreenView
@@ -60,7 +60,7 @@ export default function EmployeeDashboardScreen() {
           tabContent={[
             {
               element: (
-                  employeeList?.filter(el => el.status === 'checkIn').map((emp, index) => (
+                  employeeList?.filter(el => el.type === 'checkIn').map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
                           title={emp.title}
@@ -74,7 +74,7 @@ export default function EmployeeDashboardScreen() {
             },
             {
               element: (
-                  employeeList?.filter(el => el.status === 'checkOut').map((emp, index) => (
+                  employeeList?.filter(el => el.type === 'checkOut').map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
                           title={emp.title}
@@ -88,7 +88,7 @@ export default function EmployeeDashboardScreen() {
             },
             {
               element: (
-                  employeeList?.filter(el => el.status === 'atWork').map((emp, index) => (
+                  employeeList?.filter(el => el.type === 'atWork').map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
                           title={emp.title}

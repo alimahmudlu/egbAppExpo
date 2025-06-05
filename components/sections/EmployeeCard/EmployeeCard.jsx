@@ -13,17 +13,32 @@ import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import RejectIcon from '@/assets/images/x-close_12.svg';
 import AcceptIcon from '@/assets/images/check_12.svg';
+import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
+import SgCard from "@/components/ui/Card/Card";
+import {router} from "expo-router";
 
 
-export default function SgSectionEmployeeCard ({ image, title, role, time }) {
+export default function SgSectionEmployeeCard ({ image, title, role, time, editable = true, status, reason }) {
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
     const [acceptCheckInModal, setAcceptCheckInModal] = useState(false);
     const [acceptedCheckInModal, setAcceptedCheckInModal] = useState(false);
 
+    const [rejectInfoModal, setRejectInfoModal] = useState(false);
+
+    function toggleRejectInfoModal() {
+        setRejectInfoModal(!rejectInfoModal);
+    }
+
+
     function toggleUserOperationModal(status) {
-        setUserOperationModal( status === 1 ? false : !userOperationModal);
+        if (editable) {
+            setUserOperationModal( status === 1 ? false : !userOperationModal);
+        }
+        else {
+            router.push('/timeKeeperPages/users/1')
+        }
     }
 
     function toggleRejectCheckInModal() {
@@ -79,26 +94,43 @@ export default function SgSectionEmployeeCard ({ image, title, role, time }) {
                     <Text style={styles.checkTime}>Check in: <Text style={styles.time}>{time}</Text></Text>
                 </View>
             </Pressable>
-            <View style={styles.buttonGroup}>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={toggleRejectCheckInModal}>
-                    <CancelIcon with={20} height={20} style={styles.closeIcon}/>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.confirmButton]} onPress={toggleAcceptCheckInModal}>
-                    <ConfirmIcon with={20} height={20} style={styles.confirmIcon}/>
-                </TouchableOpacity>
-            </View>
- {/* Accept and reject Info */}
-      {/* <View style={styles.infoGroup}>
-        <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}>
-            <Text style={[styles.infoText, styles.rejectText]}>Rejected</Text>
-            <RejectIcon with={12} height={12} style={styles.rejectIcon}/>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.infoButton, styles.acceptButton]}>
-            <Text style={[styles.infoText, styles.acceptText]}>Accepted</Text>
-            <AcceptIcon with={12} height={12} style={styles.acceptIcon}/>
-        </TouchableOpacity>
-      </View> */}
+            {editable ?
+                <View style={styles.buttonGroup}>
+                    <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={toggleRejectCheckInModal}>
+                        <CancelIcon with={20} height={20} style={styles.closeIcon}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.button, styles.confirmButton]} onPress={toggleAcceptCheckInModal}>
+                        <ConfirmIcon with={20} height={20} style={styles.confirmIcon}/>
+                    </TouchableOpacity>
+                </View>
+                :
+               <View style={styles.infoGroup}>
+                 {status === 0 ?
+                    <TouchableOpacity style={[styles.infoButton, styles.rejectButton]} onPress={toggleRejectInfoModal}>
+                        <Text style={[styles.infoText, styles.rejectText]}>Rejected</Text>
+                        <RejectIcon with={12} height={12} style={styles.rejectIcon}/>
+                    </TouchableOpacity>
+                   :
+                    <TouchableOpacity style={[styles.infoButton, styles.acceptButton]}>
+                        <Text style={[styles.infoText, styles.acceptText]}>Accepted</Text>
+                        <AcceptIcon with={12} height={12} style={styles.acceptIcon}/>
+                    </TouchableOpacity>
+                 }
+               </View>
+            }
         </View>
+
+
+        <SgPopup
+            visible={rejectInfoModal}
+            onClose={toggleRejectInfoModal}
+            icon={<InfoCircleModalIcon width={56} height={56} />}
+        >
+            <Text style={styles.rejectModal}>Reject detail</Text>
+            <SgCard><Text>{reason}</Text></SgCard>
+        </SgPopup>
+
+
 
         <SgPopup
             visible={userOperationModal}

@@ -138,7 +138,16 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray_300,
     padding: 12,
     verticalAlign: 'top'
-  }
+  },
+  rejectModal: {
+    fontFamily: "Inter",
+    fontSize: 20,
+    fontStyle: "normal",
+    fontWeight: "600",
+    lineHeight: 30,
+    marginBottom: 32,
+    textAlign: "center",
+  },
 });
 
 export default styles;
