@@ -4,11 +4,13 @@ import DotsIcon from "../../../assets/images/dots-icon.svg";
 import styles from './TaskCard.styles';
 import COLORS from '@/constants/colors';
 import SgPopup from '@/components/ui/Modal/Modal';
-import InfoIcon from "@/assets/images/info-circle.svg"
+import ClipboardIcon from "@/assets/images/clipboard-check.svg"
+import PencilIcon from "@/assets/images/pencil.svg"
+import TrashIcon from "@/assets/images/trash2.svg"
 import SgButton from '@/components/ui/Button/Button';
 import {Link} from "expo-router";
 
-export default function SgSectionTaskCard({time, title, description, name, image, status, statusType, duration, id, projectId}) {
+export default function SgSectionTaskCard({time, title, description, name, image, status, statusType, duration, id, projectId, href}) {
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleDelete = () => {
@@ -54,7 +56,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
                     </View>
                 </View>
 
-                <Link href={`/employeePages/projects/${projectId}/${id}`} style={styles.content}>
+                <Link href={href || '#'} style={styles.content}>
                     <Text style={styles.title} numberOfLines={1}>{title}</Text>
                     <Text style={styles.description} numberOfLines={2}>{description}</Text>
                 </Link>
@@ -75,22 +77,34 @@ export default function SgSectionTaskCard({time, title, description, name, image
                     </View>
                 </View>
             </View>
+
             <SgPopup
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
-                title="Task Completed"
-                description="You have successfully completed the task."
-                iconType="success"
-                footerButton={
-                    <SgButton
-                        onPress={handleDelete}
-                        bgColor={COLORS.primary}
-                        color={COLORS.white}
-                    >
-                        Check in
-                    </SgButton>
-                }
-            />
+                title="Actions"
+                description=" "
+            >
+                <View style={styles.modalList}>
+                    <TouchableOpacity>
+                        <View style={styles.modalItem}>
+                            <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
+                            <Text style={styles.modalText}>Complete task</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.modalItem}>
+                            <PencilIcon width={20} height={20} style={styles.modalIcon}/>
+                            <Text style={styles.modalText}>Edit task</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.modalItem}>
+                            <TrashIcon width={20} height={20} style={styles.modalIcon}/>
+                            <Text style={styles.modalText}>Remove task</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </SgPopup>
         </View>
     );
 };

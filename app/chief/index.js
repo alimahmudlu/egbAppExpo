@@ -1,124 +1,257 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { useAuth } from '@/hooks/useAuth';
+import Avatar from "@/assets/images/avatar.png";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
+import SgTemplateHeader from "@/components/templates/Header/Header";
+import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgCard from "@/components/ui/Card/Card";
+import Clock from "@/assets/images/clock.svg";
+import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import {useAuth} from "@/hooks/useAuth";
+import {StyleSheet, Text, View} from "react-native";
+import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
+import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
+import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
+import React from "react";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 
-export default function WorkerDashboard() {
-  const { user } = useAuth();
+export default function EmployeeDashboardScreen() {
+    const {user} = useAuth();
+    const taskList = [
+        {
+            id: 1,
+            projectId: 1,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Check",
+            statusType: "warning",
+            type: 'check'
+        },
+        {
+            id: 2,
+            projectId: 2,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: null,
+            statusType: "success",
+            type: null
+        },
+        {
+            id: 3,
+            projectId: 3,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 4,
+            projectId: 4,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: null,
+            statusType: "success",
+            type: null
+        },
+        {
+            id: 5,
+            projectId: 5,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 6,
+            projectId: 6,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 7,
+            projectId: 7,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: null,
+            statusType: "success",
+            type: null
+        },
+        {
+            id: 8,
+            projectId: 8,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 9,
+            projectId: 9,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        }
+    ]
 
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.welcomeText}>Welcome, Worker!</Text>
-        <Text style={styles.emailText}>{user?.email}</Text>
-      </View>
+    return (
+        <SgTemplateScreenView
+            head={
+                <SgTemplateHeader
+                    name="Jane Doe"
+                    role="Time Keeper"
+                    profileImage={Avatar}
+                />
+            }
+        >
+            <SgCheckInOutGroup>
+                <SgSectionInfoCard
+                    icon="log-in-outline"
+                    title="Daily check in"
+                    count={32}
+                    type="checkin"
+                />
+                <SgSectionInfoCard
+                    icon="log-out-outline"
+                    title="Daily check out"
+                    count={12}
+                    type="checkout"
+                />
+            </SgCheckInOutGroup>
 
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>3</Text>
-          <Text style={styles.statLabel}>Active Tasks</Text>
-        </View>
-        
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>12</Text>
-          <Text style={styles.statLabel}>Completed</Text>
-        </View>
-        
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>4.8</Text>
-          <Text style={styles.statLabel}>Rating</Text>
-        </View>
-      </View>
+            <SgNoticeCard
+                title="Active tasks"
+                buttonText="Add task +"
+                bgButton="success"
+            />
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Recent Activity</Text>
-        <View style={styles.activityItem}>
-          <Text style={styles.activityTitle}>New task assigned</Text>
-          <Text style={styles.activityTime}>2 hours ago</Text>
-        </View>
-        <View style={styles.activityItem}>
-          <Text style={styles.activityTitle}>Task completed successfully</Text>
-          <Text style={styles.activityTime}>1 day ago</Text>
-        </View>
-        <View style={styles.activityItem}>
-          <Text style={styles.activityTitle}>Received 5-star rating</Text>
-          <Text style={styles.activityTime}>2 days ago</Text>
-        </View>
-      </View>
-    </ScrollView>
-  );
+            <SgFilterTab
+                defaultTabId='all'
+                tabs={[
+                    {label: 'All tasks', id: 'all', count: taskList?.length},
+                    {label: 'Check', id: 'check', count: taskList?.filter(el => el?.type === 'check')?.length},
+                    {label: 'Complete', id: 'complete', count: taskList?.filter(el => el?.type === 'complete')?.length},
+                ]}
+                tabContent={[
+                    {
+                        element: (
+                            <View style={{gap: 16}}>
+                                {taskList?.map((el, index) => (
+                                    <SgSectionTaskCard
+                                        time={el?.time}
+                                        duration={el?.duration}
+                                        title={el?.title}
+                                        description={el?.description}
+                                        name={el?.name}
+                                        image={null}
+                                        status={el?.status}
+                                        statusType={el?.statusType}
+                                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                                    />
+                                ))}
+                            </View>
+                        ),
+                        id: 'all'
+                    },
+                    {
+                        element: (
+                            <View style={{gap: 16}}>
+                                {taskList?.filter(el => el?.type === 'check')?.map((el, index) => (
+                                    <SgSectionTaskCard
+                                        time={el?.time}
+                                        duration={el?.duration}
+                                        title={el?.title}
+                                        description={el?.description}
+                                        name={el?.name}
+                                        image={null}
+                                        status={el?.status}
+                                        statusType={el?.statusType}
+                                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                                    />
+                                ))}
+                            </View>
+                        ),
+                        id: 'check'
+                    },
+                    {
+                        element: (
+                            <View style={{gap: 16}}>
+                                {taskList?.filter(el => el?.type === 'complete')?.map((el, index) => (
+                                    <SgSectionTaskCard
+                                        time={el?.time}
+                                        duration={el?.duration}
+                                        title={el?.title}
+                                        description={el?.description}
+                                        name={el?.name}
+                                        image={null}
+                                        status={el?.status}
+                                        statusType={el?.statusType}
+                                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                                    />
+                                ))}
+                            </View>
+                        ),
+                        id: 'complete'
+                    }
+                ]}
+            />
+        </SgTemplateScreenView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  section: {
-    backgroundColor: '#fff',
-    padding: 20,
-    marginVertical: 10,
-    borderRadius: 10,
-    marginHorizontal: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  welcomeText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  emailText: {
-    fontSize: 16,
-    color: '#666',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 15,
-    marginVertical: 10,
-  },
-  statCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    flex: 1,
-    marginHorizontal: 5,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#007BFF',
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  activityItem: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  activityTitle: {
-    fontSize: 16,
-  },
-  activityTime: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+    },
+    title: {
+        fontFamily: "Inter",
+        fontSize: 16,
+        fontStyle: "normal",
+        fontWeight: "600",
+        lineHeight: 20,
+    },
 });

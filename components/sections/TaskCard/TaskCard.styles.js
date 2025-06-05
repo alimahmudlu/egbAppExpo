@@ -124,6 +124,27 @@ const styles = StyleSheet.create({
 //   warning: {
 //     backgroundColor: '#FBBF24',
 //   },
+  modalList: {
+    flexDirection: "column",
+    justifyContent: "center",
+    gap: 8
+  },
+  modalItem: {
+    flexDirection: "row",
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+  },
+  modalText: {
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: 14,
+    lineHeight: 20,
+    color: COLORS.gray_800,
+  },
+  modalIcon: {
+    color: COLORS.gray_800,
+  }
 });
 
 export default styles;
