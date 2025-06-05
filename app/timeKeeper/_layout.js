@@ -16,13 +16,24 @@ export default function TimeKeeperTabLayout() {
     <Tabs
         screenOptions={{
             headerShown: false,
+            tabBarInActiveTintColor: '#98A2B3',
+            tabBarActiveTintColor: '#182230',
+            tabBarActiveBackgroundColor: '#F2F4F7',
             tabBarStyle: Platform.select({
                 ios: {
                     // Use a transparent background on iOS to show the blur effect
                     position: 'absolute',
                 },
-                default: {},
+                default: {
+                    boxShadow: '0px -24px 40px -20px #00000014',
+                    border: 'none',
+                    borderColor: '#FFFFFF'
+                },
             }),
+            tabBarItemStyle: {
+                borderRadius: 12,
+                overflow: "hidden"
+            },
         }}
     >
       <Tabs.Screen

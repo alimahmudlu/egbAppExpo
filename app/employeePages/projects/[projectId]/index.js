@@ -21,7 +21,7 @@ const ProjectHeader = ({ projectId }) => {
             <Text style={styles.headerTitle}>Project details</Text>
 
             <Link
-                href={`/projects/${projectId}/overview`}
+                href={`/employeePages/projects/${projectId}/overview`}
                 style={styles.overviewButton}
             >
                 <Text style={styles.overviewButtonText}>Overview</Text>

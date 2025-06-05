@@ -10,6 +10,7 @@ import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useState} from "react";
+import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 
 
 // Custom header component with back button and overview button
@@ -39,59 +40,53 @@ export default function TimeKeeperUserScreen() {
         { title: 'John Smith AW', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
         { title: 'Ali Veli AW', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
     ];
-    const [rejectInfoModal, setRejectInfoModal] = useState(false);
-    const [rejectInfoData, setRejectInfoData] = useState("");
-
-    function toggleRejectInfoModal(selectedData = '') {
-        setRejectInfoData(selectedData)
-        setRejectInfoModal(!rejectInfoModal);
-    }
-
 
     return (
         <SgTemplateScreenView
             head={<ScreenHeader />}
         >
             {employeeList?.map((emp, index) => (
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}} key={index}>
-                    <SgListUserItem
-                        key={index}
-                        title={emp.title}
-                        role={emp.role}
-                        date={emp.date}
-                        time={emp.time}
-                        image={emp.image}
-                    />
-                    {emp.status === 1 ?
-                        <Pressable
-                            style={styles.acceptButton}
-                        >
-                            <Text style={styles.acceptButtonText}>
-                                Accepted
-                            </Text>
-                            <CheckIcon width={8} height={8} />
-                        </Pressable>
-                        :
-                        <Pressable
-                            onPress={() => toggleRejectInfoModal(emp?.reason)}
-                            style={styles.rejectButton}
-                        >
-                            <Text style={styles.rejectButtonText}>
-                                Rejected
-                            </Text>
-                            <CheckIcon width={8} height={8} />
-                        </Pressable>
-                    }
-                </View>
+                <SgSectionEmployeeCard
+                    key={index}
+                    title={emp.title}
+                    role={emp.role}
+                    time={emp.time}
+                    image={emp.image}
+                    editable={false}
+                    status={emp.status}
+                    reason={emp.reason}
+                />
+                // <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}} key={index}>
+                //     <SgListUserItem
+                //         key={index}
+                //         title={emp.title}
+                //         role={emp.role}
+                //         date={emp.date}
+                //         time={emp.time}
+                //         image={emp.image}
+                //     />
+                //     {emp.status === 1 ?
+                //         <Pressable
+                //             style={styles.acceptButton}
+                //         >
+                //             <Text style={styles.acceptButtonText}>
+                //                 Accepted
+                //             </Text>
+                //             <CheckIcon width={8} height={8} />
+                //         </Pressable>
+                //         :
+                //         <Pressable
+                //             onPress={() => toggleRejectInfoModal(emp?.reason)}
+                //             style={styles.rejectButton}
+                //         >
+                //             <Text style={styles.rejectButtonText}>
+                //                 Rejected
+                //             </Text>
+                //             <CheckIcon width={8} height={8} />
+                //         </Pressable>
+                //     }
+                // </View>
             ))}
-            <SgPopup
-                visible={rejectInfoModal}
-                onClose={toggleRejectInfoModal}
-                icon={<InfoCircleModalIcon width={56} height={56} />}
-            >
-                <Text style={styles.rejectModal}>Reject detail</Text>
-                <SgCard><Text>{rejectInfoData}</Text></SgCard>
-            </SgPopup>
         </SgTemplateScreenView>
     )
 }
