@@ -8,6 +8,7 @@ import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgCard from "@/components/ui/Card/Card";
 import ClockHistory from "@/assets/images/clock-history.svg";
+import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
 
 
 // Custom header component with back button and overview button
@@ -28,6 +29,13 @@ const ScreenHeader = () => {
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
+    const data = [
+        { label: '1-2', value: 14, percentage: 90 },
+        { label: '3-4', value: 9, percentage: 70 },
+        { label: '5-6', value: 7, percentage: 50 },
+        { label: '7-8', value: 11, percentage: 80 },
+        { label: '9-10', value: 2, percentage: 20 },
+    ];
 
     return (
         <SgTemplateScreenView
@@ -68,11 +76,16 @@ export default function TimeKeeperUserScreen() {
                     count='34562h. 12m.'
                     href={`/timeKeeperPages/users/${userId}`}
                 >
-                    <Text>1-2 hours   --- PROGRESS...</Text>
-                    <Text>3-4 hours   --- PROGRESS...</Text>
-                    <Text>5-6 hours   --- PROGRESS...</Text>
-                    <Text>7-8 hours   --- PROGRESS...</Text>
-                    <Text>9-10 hours  --- PROGRESS...</Text>
+                    <View >
+                        {data.map((item, index) => (
+                            <SgSectionProgressBar
+                                key={index}
+                                label={item.label}
+                                value={item.value}
+                                percentage={item.percentage}
+                            />
+                        ))}
+                    </View>
                 </SgSectionInfoCard>
             </View>
             <View>

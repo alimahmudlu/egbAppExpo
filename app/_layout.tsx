@@ -44,7 +44,7 @@ function RootLayoutNav() {
         // User is authenticated, show role-based screens
         // user.role === 'timeKeeper' ? (
             !user ? (
-          <Stack.Screen name="timeKeeper" options={{ headerShown: false }} />
+          <Stack.Screen name="chief" options={{ headerShown: false }} />
         ) : user.role === 'employee' ? (
           <Stack.Screen name="employee" options={{ headerShown: false }} />
         ) : (

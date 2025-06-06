@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text, Pressable} from 'react-native';
 import styles from '@/components/sections/FileHead/FileHead.styles';
 import TrashIcon from '@/assets/images/trash.svg';
 import FilterIcon from '@/assets/images/filter.svg';
 import { Link } from 'expo-router';
 
-export default function SgSectionFileHead ({ title, description, icon }) {
+export default function SgSectionFileHead ({ title, description, icon, href, onPress }) {
   const renderIcon = () => {
     switch (icon) {
       case 'trash':
@@ -21,9 +21,15 @@ export default function SgSectionFileHead ({ title, description, icon }) {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.title}>{title}</Text>
-        <Link href={`/employee/docs/archive`} style={styles.iconWrapper}>
-          {renderIcon()}
-        </Link>
+        {href ?
+            <Link href={href} style={styles.iconWrapper}>
+              {renderIcon()}
+            </Link>
+            :
+            <Pressable style={styles.iconWrapper} onPress={() => onPress?.()}>
+              {renderIcon()}
+            </Pressable>
+        }
       </View>
       <Text style={styles.description}>{description}</Text>
     </View>

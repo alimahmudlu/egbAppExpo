@@ -14,6 +14,7 @@ export default function EmployeeDocsScreen() {
               title="My Docs"
               description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
               icon="filter"
+              href={`/employeePages/docs/archive`}
           />
         </View>
       }

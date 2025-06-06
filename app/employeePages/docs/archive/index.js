@@ -8,6 +8,7 @@ import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
+import SgFileCard from "@/components/sections/FileCard/FileCard";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -20,7 +21,7 @@ const ProjectHeader = ({ projectId }) => {
                 <LeftIcon width={20} height={20} />
             </TouchableOpacity>
 
-            <Text style={styles.headerTitle}>App Info</Text>
+            <Text style={styles.headerTitle}>Docs archive</Text>
         </View>
     );
 };
@@ -32,57 +33,53 @@ export default function ProjectItemScreen() {
         <SgTemplateScreenView
             head={<ProjectHeader projectId={projectId} />}
         >
-            <SgCard
-                contentTitle='Reporter'
-            >
-                <SgSectionUserInfo
-                    name="Jane Doe"
-                    role="Employee"
-                    profileImage={Avatar}
-                    color="dark"
-                    size="md"
+            <View style={{gap: 12}}>
+                <SgFileCard
+                    fileType="xlsx"
+                    title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
+                    description=""
+                    date="10.05.2025"
+                    migrationId="Migration id"
+                    statusText="Expired"
+                    statusType="danger"
                 />
-            </SgCard>
-            <SgCard
-                contentTitle='Deadline date'
-                contentDescription='12.04.2025 / 1:50 PM'
-            />
-            <SgCard
-                contentTitle='Points to be earned'
-                contentDescription='12'
-            />
-
-            <SgCard
-                contentTitle='Task'
-                contentDescription='There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form'
-                padding={false}
-                bgColor={null}
-            />
-            <SgCard
-                contentTitle='Description'
-                contentDescription='Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolorem laudantium, totam rem aperiam. All the rem ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.'
-                padding={false}
-                bgColor={null}
-            />
-
-            <View style={{
-                gap: 12,
-                flexDirection: 'row',
-            }}>
-                <SgButton
-                    bgColor='#FEF0C7'
-                    color='#B54708'
-                >
-                    Check request
-                </SgButton>
-                <SgButton
-                    bgColor='#D2F5EC'
-                    color='#1A554E'
-                >
-                    Add file
-                </SgButton>
+                <SgFileCard
+                    fileType="xlsx"
+                    title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
+                    description=""
+                    date="10.05.2025"
+                    migrationId="Migration id"
+                    statusText="Expired"
+                    statusType="danger"
+                />
+                <SgFileCard
+                    fileType="xlsx"
+                    title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
+                    description=""
+                    date="10.05.2025"
+                    migrationId="Migration id"
+                    statusText="Expired"
+                    statusType="danger"
+                />
+                <SgFileCard
+                    fileType="xlsx"
+                    title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
+                    description=""
+                    date="10.05.2025"
+                    migrationId="Migration id"
+                    statusText="Expired"
+                    statusType="danger"
+                />
+                <SgFileCard
+                    fileType="xlsx"
+                    title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
+                    description=""
+                    date="10.05.2025"
+                    migrationId="Migration id"
+                    statusText="Expired"
+                    statusType="danger"
+                />
             </View>
-
         </SgTemplateScreenView>
     );
 }

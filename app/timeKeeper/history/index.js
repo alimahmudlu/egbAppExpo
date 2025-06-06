@@ -1,143 +1,80 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
+import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
+import SgFileCard from "@/components/sections/FileCard/FileCard";
+import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
+import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 
-// Sample applications data
-const applicationsData = [
-  {
-    id: '1',
-    jobTitle: 'Senior Software Developer',
-    company: 'Tech Solutions Inc.',
-    location: 'Baku, Azerbaijan',
-    appliedDate: '2023-05-15',
-    status: 'pending',
-  },
-  {
-    id: '2',
-    jobTitle: 'UI/UX Designer',
-    company: 'Creative Design Studio',
-    location: 'Remote',
-    appliedDate: '2023-05-10',
-    status: 'interview',
-  },
-  {
-    id: '3',
-    jobTitle: 'Project Manager',
-    company: 'Global Innovations',
-    location: 'Baku, Azerbaijan',
-    appliedDate: '2023-04-28',
-    status: 'rejected',
-  },
-  {
-    id: '4',
-    jobTitle: 'Frontend Developer',
-    company: 'Web Solutions',
-    location: 'Baku, Azerbaijan',
-    appliedDate: '2023-05-05',
-    status: 'accepted',
-  },
-];
-
-export default function ApplicationsScreen() {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'pending':
-        return '#f9a825'; // Yellow
-      case 'interview':
-        return '#1e88e5'; // Blue
-      case 'accepted':
-        return '#43a047'; // Green
-      case 'rejected':
-        return '#e53935'; // Red
-      default:
-        return '#757575'; // Grey
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'Pending Review';
-      case 'interview':
-        return 'Interview Scheduled';
-      case 'accepted':
-        return 'Accepted';
-      case 'rejected':
-        return 'Not Selected';
-      default:
-        return 'Unknown';
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  const renderApplicationItem = ({ item }) => (
-    <View style={styles.applicationCard}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.jobTitle}>{item.jobTitle}</Text>
-        <View 
-          style={[
-            styles.statusBadge, 
-            { backgroundColor: getStatusColor(item.status) + '20' } // 20 is for opacity
-          ]}
-        >
-          <Text 
-            style={[
-              styles.statusText, 
-              { color: getStatusColor(item.status) }
-            ]}
-          >
-            {getStatusText(item.status)}
-          </Text>
-        </View>
-      </View>
-      
-      <Text style={styles.companyName}>{item.company}</Text>
-      <Text style={styles.locationText}>{item.location}</Text>
-      <Text style={styles.appliedDate}>Applied on {formatDate(item.appliedDate)}</Text>
-      
-      <View style={styles.actionsContainer}>
-        <TouchableOpacity 
-          style={[
-            styles.actionButton,
-            item.status === 'rejected' ? styles.disabledButton : null
-          ]}
-          disabled={item.status === 'rejected'}
-        >
-          <Text style={styles.actionButtonText}>View Details</Text>
-        </TouchableOpacity>
-        
-        {item.status === 'interview' && (
-          <TouchableOpacity style={[styles.actionButton, styles.scheduleButton]}>
-            <Text style={styles.scheduleButtonText}>View Schedule</Text>
-          </TouchableOpacity>
-        )}
-        
-        {item.status === 'pending' && (
-          <TouchableOpacity style={[styles.actionButton, styles.withdrawButton]}>
-            <Text style={styles.withdrawButtonText}>Withdraw</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
-  );
+export default function EmployeeDocsScreen() {
+  const employeeList = [
+    { title: 'Jane Doe CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
+    { title: 'John Smith CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
+    { title: 'Ali Veli CI', type: 'checkIn', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/3.jpg' },
+    { title: 'John Smith CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/4.jpg' },
+    { title: 'Ali Veli CO', type: 'checkOut', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/5.jpg' },
+    { title: 'John Smith AW', type: 'checkOut', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
+    { title: 'Ali Veli AW', type: 'checkOut', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
+  ];
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={applicationsData}
-        renderItem={renderApplicationItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>You haven't applied to any jobs yet.</Text>
-          </View>
-        }
+    <SgTemplateScreenView
+      head={
+        <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
+          <SgSectionFileHead
+              title="History"
+              description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+              icon="filter"
+          />
+        </View>
+      }
+    >
+      <SgFilterTab
+          defaultTabId='checkIn'
+          onTabChange={(index) => console.log('Selected tab:', index)}
+          tabs={[
+            { label: 'Check in', id: 'checkIn' },
+            { label: 'Check out', id: 'checkOut' },
+          ]}
+          tabContent={[
+            {
+              element: (
+                  employeeList?.filter(el => el.type === 'checkIn').map((emp, index) => (
+                      <SgSectionEmployeeCard
+                          key={index}
+                          title={emp.title}
+                          role={emp.role}
+                          time={emp.time}
+                          image={emp.image}
+                          editable={false}
+                          status={emp.status}
+                          reason={emp.reason}
+                      />
+                  ))
+              ),
+              id: 'checkIn'
+            },
+            {
+              element: (
+                  employeeList?.filter(el => el.type === 'checkOut').map((emp, index) => (
+                      <SgSectionEmployeeCard
+                          key={index}
+                          title={emp.title}
+                          role={emp.role}
+                          time={emp.time}
+                          image={emp.image}
+                          editable={false}
+                          status={emp.status}
+                          reason={emp.reason}
+                      />
+                  ))
+              ),
+              id: 'checkOut'
+            }
+          ]}
       />
-    </View>
+    </SgTemplateScreenView>
   );
 }
 
@@ -146,10 +83,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  addButton: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   listContainer: {
     padding: 15,
   },
-  applicationCard: {
+  jobCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 15,
@@ -160,7 +120,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  cardHeader: {
+  jobHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -170,31 +130,50 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     flex: 1,
-    marginRight: 10,
   },
   statusBadge: {
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 4,
   },
+  activeBadge: {
+    backgroundColor: '#e6f7ee',
+  },
+  closedBadge: {
+    backgroundColor: '#ffebee',
+  },
   statusText: {
     fontSize: 12,
     fontWeight: 'bold',
   },
-  companyName: {
+  activeText: {
+    color: '#00a86b',
+  },
+  closedText: {
+    color: '#f44336',
+  },
+  jobDetails: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 10,
+  },
+  jobInfo: {
+    fontSize: 14,
+    color: '#666',
+    marginRight: 15,
+    marginBottom: 5,
+  },
+  applicantsContainer: {
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    paddingVertical: 10,
+    marginVertical: 10,
+  },
+  applicantsText: {
     fontSize: 16,
-    color: '#666',
-    marginBottom: 5,
-  },
-  locationText: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 5,
-  },
-  appliedDate: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 15,
+    fontWeight: '500',
   },
   actionsContainer: {
     flexDirection: 'row',
@@ -208,33 +187,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 5,
   },
+  closeButton: {
+    backgroundColor: '#f44336',
+  },
+  reopenButton: {
+    backgroundColor: '#4caf50',
+  },
   actionButtonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
-  scheduleButton: {
-    backgroundColor: '#1e88e5',
-  },
-  scheduleButtonText: {
+  closeButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
   },
-  withdrawButton: {
-    backgroundColor: '#e53935',
-  },
-  withdrawButtonText: {
+  reopenButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
-  },
-  disabledButton: {
-    backgroundColor: '#bdbdbd',
-  },
-  emptyContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#666',
   },
 });

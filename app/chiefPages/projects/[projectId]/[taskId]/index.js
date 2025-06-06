@@ -64,25 +64,6 @@ export default function ProjectItemScreen() {
                 padding={false}
                 bgColor={null}
             />
-
-            <View style={{
-                gap: 12,
-                flexDirection: 'row',
-            }}>
-                <SgButton
-                    bgColor='#FEF0C7'
-                    color='#B54708'
-                >
-                    Check request
-                </SgButton>
-                <SgButton
-                    bgColor='#D2F5EC'
-                    color='#1A554E'
-                >
-                    Add file
-                </SgButton>
-            </View>
-
         </SgTemplateScreenView>
     );
 }

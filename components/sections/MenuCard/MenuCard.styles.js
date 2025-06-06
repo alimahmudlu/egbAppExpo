@@ -25,6 +25,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   item: {
+    display: "flex",
+    width: '100%',
+    flex: 1,
     gap: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
   left: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12
+    gap: 12,
   },
   iconContainer: {
     backgroundColor: COLORS.brand_50,
@@ -45,7 +48,8 @@ const styles = StyleSheet.create({
   right: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12
+    gap: 12,
+    marginLeft: 'auto',
   },
   title: {
     fontFamily: 'Inter',
