@@ -1,4 +1,13 @@
-import {View,Text,Image,KeyboardAvoidingView,Platform,TouchableWithoutFeedback,Keyboard} from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Alert
+} from "react-native";
 import styles from "@/assets/styles/auth/auth.styles";
 import SgSectionAuth from "@/components/sections/AuthSection/AuthSection";
 import SgForm from "@/components/ui/Form/Form";
@@ -7,13 +16,19 @@ import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 import SgButton from "@/components/ui/Button/Button";
 import { useState } from "react";
 import COLORS from "@/constants/colors";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function Login() {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth(); // Assuming useAuth is defined in your hooks
 
   const handleLogin = () => {
     console.log('Logging in with:', id, password);
+
+    login(id, password).then((resp) => {
+
+    }).catch((error) => {})
   };
   return (
     <KeyboardAvoidingView

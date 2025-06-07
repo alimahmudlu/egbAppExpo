@@ -181,6 +181,7 @@ export default function EmployeeDashboardScreen() {
                             <View style={{gap: 16}}>
                                 {taskList?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        key={index}
                                         time={el?.time}
                                         duration={el?.duration}
                                         title={el?.title}
@@ -201,6 +202,7 @@ export default function EmployeeDashboardScreen() {
                             <View style={{gap: 16}}>
                                 {taskList?.filter(el => el?.type === 'check')?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        key={index}
                                         time={el?.time}
                                         duration={el?.duration}
                                         title={el?.title}
@@ -221,6 +223,7 @@ export default function EmployeeDashboardScreen() {
                             <View style={{gap: 16}}>
                                 {taskList?.filter(el => el?.type === 'complete')?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        key={index}
                                         time={el?.time}
                                         duration={el?.duration}
                                         title={el?.title}

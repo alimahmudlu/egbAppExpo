@@ -36,20 +36,17 @@ function RootLayoutNav() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      {/*{!user ? (*/}
-      {/*  // User is not authenticated, show auth screens*/}
-      {/*  <Stack.Screen name="(auth)" options={{ headerShown: false }} />*/}
-      {/*) : (*/}
-        {(
-        // User is authenticated, show role-based screens
-        // user.role === 'timeKeeper' ? (
-            !user ? (
-          <Stack.Screen name="chief" options={{ headerShown: false }} />
-        ) : user.role === 'employee' ? (
+      {!user ? (
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      ) :
+        (
+        user?.role?.id === 1 ? (
           <Stack.Screen name="employee" options={{ headerShown: false }} />
-        ) : (
+        ) : user?.role?.id === 2 ? (
+          <Stack.Screen name="timeKeeper" options={{ headerShown: false }} />
+        ) : user?.role?.id === 3 ? (
           <Stack.Screen name="chief" options={{ headerShown: false }} />
-        )
+        ) : <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       )}
     </Stack>
   );
