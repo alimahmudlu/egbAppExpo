@@ -171,7 +171,7 @@ export function AuthProvider({ children }) {
       const userData = users?.find(el => el.id === Number(id) && el.password === password);
 
       if (!userData?.id) {
-        throw new Error('User not found');
+        throw new Error('User not found! Plase check your ID and password and try again.');
       }
 
       // Store token and user data
