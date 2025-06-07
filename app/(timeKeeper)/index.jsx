@@ -7,7 +7,7 @@ import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/Proj
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
-import { StyleSheet, View } from "react-native";
+import { Button, Modal, StyleSheet, View } from "react-native";
 import SgSectionMenuCard from "@/components/sections/MenuCard/MenuCard";
 import SgSectionLanguageSelector from "@/components/sections/LanguageSelect/LanguageSelect";
 import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp";
@@ -23,8 +23,13 @@ import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
 import Lang from '@/assets/images/language.svg';
 import Notify from '@/assets/images/notification.svg';
 import AppInfo from '@/assets/images/appInfo.svg';
+import SgSectionFilterCard from "@/components/sections/FilterCard/FilterCard";
+import { useState } from "react";
+import SgSectionTimePicker from "@/components/sections/TimePicker/TimePicker";
+import SgSectionDatePicker from "@/components/sections/DatePicker/DatePicker";
 
 export default function Home () {
+
     const employeeList = [
     { title: 'Jane Doe CI', status: 'checkIn',  role: 'Employee', time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
     { title: 'John Smith CI', status: 'checkIn',  role: 'Employee', time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
@@ -98,6 +103,12 @@ const extraItems = [
             profileImage={Avatar}
         />
 
+        <SgSectionDatePicker />
+
+        <SgSectionTimePicker />
+
+        {/* <SgSectionFilterCard /> */}
+
         {/* <SgSectionProfileBanner
         image={Avatar} 
         name="Jane Doe"
@@ -105,7 +116,7 @@ const extraItems = [
         onLogout={() => alert('Logged out')}
       /> */}
 
-       <SgSectionMenuCard extraItems={extraItems} />;
+       {/* <SgSectionMenuCard extraItems={extraItems} />; */}
 
        {/* <SgSectionDownloadApp
             version="2.44.9"
@@ -283,11 +294,9 @@ const extraItems = [
             lineHeight: 20,
         },
         menuContainer: {
-            marginHorizontal: 20,
             marginTop: 10,
             backgroundColor: '#F7F7F7',
             borderRadius: 16,
-            padding: 10,
         },
     });
     

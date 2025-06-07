@@ -13,6 +13,7 @@ import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import Avatar from "@/assets/images/avatar.png";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import CalendarPicker from "@/components/sections/DatePicker/DatePicker";
 
 export default function Home() {
     const staffImages = [
@@ -35,7 +36,11 @@ export default function Home() {
                 />
             }
         >
-            <View style={styles.container}>
+
+
+
+
+            {/* <View style={styles.container}>
                 <SgTemplateHeader
                     name="Jane Doe"
                     role="Employee"
@@ -146,7 +151,9 @@ export default function Home() {
                     size="md"
                 />
 
-            </View>
+            </View> */}
+
+            
         </SgTemplateScreenView>
     );
 }
