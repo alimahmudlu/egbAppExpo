@@ -1,5 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
+import SgCard from "@/components/ui/Card/Card";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 
 // Sample tasks data
 const tasksData = [
@@ -51,116 +55,52 @@ const tasksData = [
 ];
 
 export default function TasksScreen() {
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case 'high':
-        return '#e53935'; // Red
-      case 'medium':
-        return '#fb8c00'; // Orange
-      case 'low':
-        return '#43a047'; // Green
-      default:
-        return '#757575'; // Grey
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case 'active':
-        return 'In Progress';
-      case 'pending':
-        return 'Not Started';
-      case 'completed':
-        return 'Completed';
-      default:
-        return 'Unknown';
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  const renderTaskItem = ({ item }) => (
-    <View style={styles.taskCard}>
-      <View style={styles.cardHeader}>
-        <View 
-          style={[
-            styles.priorityIndicator, 
-            { backgroundColor: getPriorityColor(item.priority) }
-          ]}
-        />
-        <Text style={styles.taskTitle}>{item.title}</Text>
-      </View>
-      
-      <View style={styles.taskDetails}>
-        <Text style={styles.clientName}>Client: {item.client}</Text>
-        <Text style={styles.locationText}>Location: {item.location}</Text>
-        <Text style={styles.dueDate}>Due: {formatDate(item.dueDate)}</Text>
-        <View 
-          style={[
-            styles.statusBadge, 
-            item.status === 'completed' ? styles.completedBadge : 
-            item.status === 'active' ? styles.activeBadge : styles.pendingBadge
-          ]}
-        >
-          <Text 
-            style={[
-              styles.statusText, 
-              item.status === 'completed' ? styles.completedText : 
-              item.status === 'active' ? styles.activeText : styles.pendingText
-            ]}
-          >
-            {getStatusText(item.status)}
-          </Text>
-        </View>
-      </View>
-      
-      <View style={styles.actionsContainer}>
-        {item.status !== 'completed' && (
-          <>
-            <TouchableOpacity 
-              style={[styles.actionButton, styles.startButton]}
-              disabled={item.status === 'active'}
-            >
-              <Text style={styles.actionButtonText}>
-                {item.status === 'active' ? 'In Progress' : 'Start Task'}
-              </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.actionButton, styles.completeButton]}
-              disabled={item.status === 'pending'}
-            >
-              <Text style={styles.actionButtonText}>Complete</Text>
-            </TouchableOpacity>
-          </>
-        )}
-        
-        {item.status === 'completed' && (
-          <TouchableOpacity style={[styles.actionButton, styles.viewButton]}>
-            <Text style={styles.actionButtonText}>View Details</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
-  );
+  const staffImages = [
+    "https://randomuser.me/api/portraits/men/1.jpg",
+    "https://randomuser.me/api/portraits/women/2.jpg",
+    "https://randomuser.me/api/portraits/men/3.jpg",
+    "https://randomuser.me/api/portraits/women/4.jpg",
+    "https://randomuser.me/api/portraits/men/5.jpg",
+    "https://randomuser.me/api/portraits/women/6.jpg",
+    "https://randomuser.me/api/portraits/women/6.jpg",
+  ];
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={tasksData}
-        renderItem={renderTaskItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No tasks assigned yet.</Text>
+      <SgTemplateScreenView
+        head={
+          <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
+            <SgSectionFileHead
+                title="Projects"
+                description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+            />
           </View>
         }
-      />
-    </View>
+      >
+        <SgCard>
+          <Text style={styles.title}>Added Projects</Text>
+        </SgCard>
+
+        <View style={{gap: 12}}>
+          <SgSectionProjectListItem
+              title="Unde omnis iste natus error sit"
+              staffImages={staffImages}
+              id={1}
+              href={`/chiefPages/projects/${1}`}
+          />
+          <SgSectionProjectListItem
+              title="Unde omnis iste natus error sit"
+              staffImages={staffImages}
+              id={2}
+              href={`/chiefPages/projects/${2}`}
+          />
+          <SgSectionProjectListItem
+              title="Unde omnis iste natus error sit"
+              staffImages={staffImages}
+              id={3}
+              href={`/chiefPages/projects/${3}`}
+          />
+        </View>
+      </SgTemplateScreenView>
   );
 }
 

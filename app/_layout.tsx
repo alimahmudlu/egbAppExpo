@@ -41,11 +41,20 @@ function RootLayoutNav() {
       ) :
         (
         user?.role?.id === 1 ? (
-          <Stack.Screen name="employee" options={{ headerShown: false }} />
+          <>
+              <Stack.Screen name="employee" options={{ headerShown: false }} />
+              <Stack.Screen name="employeePages" options={{ headerShown: false }} />
+          </>
         ) : user?.role?.id === 2 ? (
-          <Stack.Screen name="timeKeeper" options={{ headerShown: false }} />
+          <>
+              <Stack.Screen name="timeKeeper" options={{ headerShown: false }} />
+              <Stack.Screen name="timeKeeperPages" options={{ headerShown: false }} />
+          </>
         ) : user?.role?.id === 3 ? (
-          <Stack.Screen name="chief" options={{ headerShown: false }} />
+          <>
+              <Stack.Screen name="chief" options={{ headerShown: false }} />
+              <Stack.Screen name="chiefPages" options={{ headerShown: false }} />
+          </>
         ) : <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       )}
     </Stack>

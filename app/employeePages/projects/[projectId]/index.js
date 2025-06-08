@@ -32,6 +32,125 @@ const ProjectHeader = ({ projectId }) => {
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
+    const taskList = [
+        {
+            id: 1,
+            projectId: 1,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Check",
+            statusType: "warning",
+            type: 'check'
+        },
+        {
+            id: 2,
+            projectId: 2,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: null,
+            statusType: "success",
+            type: null
+        },
+        {
+            id: 3,
+            projectId: 3,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 4,
+            projectId: 4,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: null,
+            statusType: "success",
+            type: null
+        },
+        {
+            id: 5,
+            projectId: 5,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 6,
+            projectId: 6,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 7,
+            projectId: 7,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: null,
+            statusType: "success",
+            type: null
+        },
+        {
+            id: 8,
+            projectId: 8,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        },
+        {
+            id: 9,
+            projectId: 9,
+            time: "12.04.2025 / 10:20 AM",
+            duration: "2h. 42m.",
+            title: "There are many variations of passages of Lorem Ipsum available but the",
+            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+            name: "Jane Doe",
+            image: null,
+            status: "Complete",
+            statusType: "success",
+            type: 'complete'
+        }
+    ]
 
     return (
         <SgTemplateScreenView
@@ -47,56 +166,20 @@ export default function ProjectItemScreen() {
             </SgCard>
 
             <View style={{gap: 16}}>
-                <SgSectionTaskCard
-                    time="12.04.2025 / 10:20 AM"
-                    duration="2h. 42m."
-                    title="There are many variations of passages of Lorem Ipsum available but the"
-                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
-                    name="Jane Doe"
-                    image={null}
-                    status="Complete"
-                    statusType="success"
-                />
-                <SgSectionTaskCard
-                    time="12.04.2025 / 10:20 AM"
-                    duration="2h. 42m."
-                    title="There are many variations of passages of Lorem Ipsum available but the"
-                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
-                    name="Jane Doe"
-                    image={null}
-                    status="Complete"
-                    statusType="success"
-                />
-                <SgSectionTaskCard
-                    time="12.04.2025 / 10:20 AM"
-                    duration="2h. 42m."
-                    title="There are many variations of passages of Lorem Ipsum available but the"
-                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
-                    name="Jane Doe"
-                    image={null}
-                    status="Complete"
-                    statusType="success"
-                />
-                <SgSectionTaskCard
-                    time="12.04.2025 / 10:20 AM"
-                    duration="2h. 42m."
-                    title="There are many variations of passages of Lorem Ipsum available but the"
-                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
-                    name="Jane Doe"
-                    image={null}
-                    status="Complete"
-                    statusType="success"
-                />
-                <SgSectionTaskCard
-                    time="12.04.2025 / 10:20 AM"
-                    duration="2h. 42m."
-                    title="There are many variations of passages of Lorem Ipsum available but the"
-                    description="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages"
-                    name="Jane Doe"
-                    image={null}
-                    status="Complete"
-                    statusType="success"
-                />
+                {taskList.map((el, index) => (
+                    <SgSectionTaskCard
+                        key={index}
+                        time={el?.time}
+                        duration={el?.duration}
+                        title={el?.title}
+                        description={el?.description}
+                        name={el?.name}
+                        image={null}
+                        status={el?.status}
+                        statusType={el?.statusType}
+                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                    />
+                ))}
             </View>
 
         </SgTemplateScreenView>

@@ -5,9 +5,6 @@ import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
-import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
-import Avatar from "@/assets/images/avatar.png";
-import SgButton from "@/components/ui/Button/Button";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -20,7 +17,7 @@ const ProjectHeader = ({ projectId }) => {
                 <LeftIcon width={20} height={20} />
             </TouchableOpacity>
 
-            <Text style={styles.headerTitle}>Task detail</Text>
+            <Text style={styles.headerTitle}>Project overview</Text>
         </View>
     );
 };
@@ -33,55 +30,21 @@ export default function ProjectItemScreen() {
             head={<ProjectHeader projectId={projectId} />}
         >
             <SgCard
-                contentTitle='Reporter'
-            >
-                <SgSectionUserInfo
-                    name="Jane Doe"
-                    role="Employee"
-                    profileImage={Avatar}
-                    color="dark"
-                    size="md"
-                />
-            </SgCard>
-            <SgCard
-                contentTitle='Deadline date'
-                contentDescription='12.04.2025 / 1:50 PM'
+                contentTitle='Project name'
+                contentDescription='There are many variations of passages of Lorem Ipsum available'
             />
             <SgCard
-                contentTitle='Points to be earned'
-                contentDescription='12'
-            />
-
-            <SgCard
-                contentTitle='Task'
-                contentDescription='There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form'
-                padding={false}
-                bgColor={null}
+                contentTitle='Location'
+                contentDescription='Hampden-Sydney College in Virginia, looked up one'
             />
             <SgCard
-                contentTitle='Description'
-                contentDescription='Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolorem laudantium, totam rem aperiam. All the rem ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.'
-                padding={false}
-                bgColor={null}
+                contentTitle='Timeline'
+                contentDescription='16.02.2025 - 16.08.2025'
             />
-
-            <View style={{
-                gap: 12,
-                flexDirection: 'row',
-            }}>
-                <SgButton
-                    bgColor='#FEF0C7'
-                    color='#B54708'
-                >
-                    Check request
-                </SgButton>
-                <SgButton
-                    bgColor='#D2F5EC'
-                    color='#1A554E'
-                >
-                    Add file
-                </SgButton>
-            </View>
+            <SgCard
+                contentTitle='Optional notes'
+                contentDescription="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum"
+            />
 
         </SgTemplateScreenView>
     );

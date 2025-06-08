@@ -85,16 +85,19 @@ export default function EmployeeDashboardScreen() {
             title="Unde omnis iste natus error sit"
             staffImages={staffImages}
             id={1}
+            href={`/employeePages/projects/${1}`}
         />
         <SgSectionProjectListItem
             title="Unde omnis iste natus error sit"
             staffImages={staffImages}
             id={2}
+            href={`/employeePages/projects/${2}`}
         />
         <SgSectionProjectListItem
             title="Unde omnis iste natus error sit"
             staffImages={staffImages}
             id={3}
+            href={`/employeePages/projects/${3}`}
         />
       </View>
       <SgPopup

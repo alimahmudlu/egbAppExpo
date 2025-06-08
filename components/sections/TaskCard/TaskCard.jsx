@@ -85,7 +85,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
                     </View>
                 </View>
 
-                <Link href={href || '#'} style={styles.content}>
+                <Link href={href || '/chief/menu'} style={styles.content}>
                     <Text style={styles.title} numberOfLines={1}>{title}</Text>
                     <Text style={styles.description} numberOfLines={2}>{description}</Text>
                 </Link>
