@@ -27,13 +27,17 @@ const COLORS = {
     gray_800: "#182230",
     gray_900: "#101828",
     gray_950: "#0C111D",
-    
+
+    gray_blue_200: '#D5D9EB',
+    gray_blue_600: '#3E4784',
+
     success_100: "#DCFAE6",
     success_700: "#067647",
     
     warning_100: "#FEF0C7",
+    warning_600: "#DC6803",
     warning_700: "#B54708",
-    
+
     background: "#ffffff",
     labelColor: "#344054",
     borderColor: "#D0D5DD",

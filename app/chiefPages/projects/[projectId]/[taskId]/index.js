@@ -8,6 +8,9 @@ import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
+import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
+import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
+import COLORS from "@/constants/colors";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -32,17 +35,22 @@ export default function ProjectItemScreen() {
         <SgTemplateScreenView
             head={<ProjectHeader projectId={projectId} />}
         >
-            <SgCard
-                contentTitle='Reporter'
-            >
+            <View>
                 <SgSectionUserInfo
+                    rating={3.12}
                     name="Jane Doe"
                     role="Employee"
                     profileImage={Avatar}
                     color="dark"
                     size="md"
+                    clickable={`chiefPages/users/${1}`}
                 />
-            </SgCard>
+            </View>
+            <SgSectionStatusInfo
+                title="Progress"
+                status="Check Progress"
+                statusType="warning"
+            />
             <SgCard
                 contentTitle='Deadline date'
                 contentDescription='12.04.2025 / 1:50 PM'
@@ -64,6 +72,44 @@ export default function ProjectItemScreen() {
                 padding={false}
                 bgColor={null}
             />
+
+            <SgCard>
+                <Text style={styles.title}>Added Projects</Text>
+            </SgCard>
+
+            <SgSectionAddFile
+                title="Unde Omnis iste natus error sit"
+                type="xlsx"
+                datetime="13.02.2025 / 4:21 PM"
+                onPress={() => console.log('Eye icon pressed')}
+            />
+            <SgSectionAddFile
+                title="Unde Omnis iste natus error sit"
+                type="xlsx"
+                datetime="13.02.2025 / 4:21 PM"
+                onPress={() => console.log('Eye icon pressed')}
+            />
+            <SgSectionAddFile
+                title="Unde Omnis iste natus error sit"
+                type="xlsx"
+                datetime="13.02.2025 / 4:21 PM"
+                onPress={() => console.log('Eye icon pressed')}
+            />
+
+            <View style={{flexDirection: 'row', gap: 12, paddingTop: 12}}>
+                <SgButton
+                    bgColor={COLORS.error_50}
+                    color={COLORS.error_600}
+                >
+                    Reject
+                </SgButton>
+                <SgButton
+                    bgColor={COLORS.brand_600}
+                    color={COLORS.white}
+                >
+                    Complete task
+                </SgButton>
+            </View>
         </SgTemplateScreenView>
     );
 }

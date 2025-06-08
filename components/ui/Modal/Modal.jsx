@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, cloneElement } from 'react';
-import {Modal, View, Text, Animated, TouchableWithoutFeedback} from 'react-native';
+import {Modal, View, Text, Animated, TouchableWithoutFeedback, Dimensions} from 'react-native';
 import styles from './Modal.styles';
-import Button from '@/components/ui/Button/Button';
+import SgButton from '@/components/ui/Button/Button';
 import COLORS from '@/constants/colors';
 
 import InfoIcon from '@/assets/images/info-circle.svg';
@@ -15,6 +15,7 @@ export default function SgPopup({
   iconType = null,
   children = null,
   footerButton = null,
+    fullScreen = false,
 }) {
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -74,34 +75,36 @@ export default function SgPopup({
           <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
         </TouchableWithoutFeedback>
 
-        <View style={styles.container}>
+        <View style={[styles.container, fullScreen && { flex: 1, height: '100%',  }]}>
           <View style={styles.dragHandle} />
 
-          {(iconType || icon) && (
-            <View style={styles.iconContainer}>
-              {renderIcon()}
-            </View>
-          )}
+          <View style={{marginVertical: 'auto'}}>
+            {(iconType || icon) && (
+                <View style={styles.iconContainer}>
+                  {renderIcon()}
+                </View>
+            )}
 
-          {title && (
-            <Text
-              style={[
-                styles.title,
-                !iconType && styles.titleWithoutIcon,
-              ]}
-            >
-              {title}
-            </Text>
-          )}
-          {description && <Text style={styles.description}>{description}</Text>}
+            {title && (
+                <Text
+                    style={[
+                      styles.title,
+                      !iconType && styles.titleWithoutIcon,
+                    ]}
+                >
+                  {title}
+                </Text>
+            )}
+            {description && <Text style={styles.description}>{description}</Text>}
 
-          {children}
+            {children}
+          </View>
 
           <View style={styles.footerButtonsContainer}>
             <View style={{ flex: 1 }}>
-              <Button onPress={onClose} color={COLORS.buttonNoColor}>
+              <SgButton onPress={onClose} color={COLORS.buttonNoColor}>
                 Close
-              </Button>
+              </SgButton>
             </View>
             {footerButton && (
               <View style={{ flex: 1 }}>

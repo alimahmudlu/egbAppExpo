@@ -1,181 +1,162 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { useAuth } from '@/hooks/useAuth';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
+import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
+import SgFileCard from "@/components/sections/FileCard/FileCard";
+import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
+import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 
-export default function WorkerProfileScreen() {
-  const { user } = useAuth();
-  
-  // Sample profile data
-  const [profile, setProfile] = useState({
-    fullName: 'John Worker',
-    title: 'General Handyman',
-    location: 'Baku, Azerbaijan',
-    about: 'Experienced handyman with 8+ years of experience in plumbing, electrical work, carpentry, and general repairs.',
-    skills: ['Plumbing', 'Electrical', 'Carpentry', 'Painting', 'Tiling'],
-    experience: '8 years',
-    rating: 4.8,
-    completedJobs: 156,
-    contactEmail: user?.email || 'john.worker@example.com',
-    contactPhone: '+994 50 987 6543',
-  });
+export default function EmployeeDocsScreen() {
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedProfile, setEditedProfile] = useState(profile);
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    setEditedProfile(profile);
-  };
-
-  const handleSave = () => {
-    setProfile(editedProfile);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
-
-  const handleChange = (field, value) => {
-    setEditedProfile(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
+  const taskList = [
+    {
+      id: 1,
+      projectId: 1,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: "Check",
+      statusType: "warning",
+      type: 'check'
+    },
+    {
+      id: 2,
+      projectId: 2,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: null,
+      statusType: "success",
+      type: null
+    },
+    {
+      id: 3,
+      projectId: 3,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: "Complete",
+      statusType: "success",
+      type: 'complete'
+    },
+    {
+      id: 4,
+      projectId: 4,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: null,
+      statusType: "success",
+      type: null
+    },
+    {
+      id: 5,
+      projectId: 5,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: "Complete",
+      statusType: "success",
+      type: 'complete'
+    },
+    {
+      id: 6,
+      projectId: 6,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: "Complete",
+      statusType: "success",
+      type: 'complete'
+    },
+    {
+      id: 7,
+      projectId: 7,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: null,
+      statusType: "success",
+      type: null
+    },
+    {
+      id: 8,
+      projectId: 8,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: "Complete",
+      statusType: "success",
+      type: 'complete'
+    },
+    {
+      id: 9,
+      projectId: 9,
+      time: "12.04.2025 / 10:20 AM",
+      duration: "2h. 42m.",
+      title: "There are many variations of passages of Lorem Ipsum available but the",
+      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
+      name: "Jane Doe",
+      image: null,
+      status: "Complete",
+      statusType: "success",
+      type: 'complete'
+    }
+  ]
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.profileImageContainer}>
-          <View style={styles.profileImage}>
-            <Text style={styles.profileInitial}>{profile.fullName.charAt(0)}</Text>
-          </View>
-        </View>
-        
-        <View style={styles.headerContent}>
-          {isEditing ? (
-            <TextInput
-              style={styles.nameInput}
-              value={editedProfile.fullName}
-              onChangeText={(text) => handleChange('fullName', text)}
-            />
-          ) : (
-            <Text style={styles.name}>{profile.fullName}</Text>
-          )}
-          
-          {isEditing ? (
-            <TextInput
-              style={styles.titleInput}
-              value={editedProfile.title}
-              onChangeText={(text) => handleChange('title', text)}
-            />
-          ) : (
-            <Text style={styles.title}>{profile.title}</Text>
-          )}
-          
-          {isEditing ? (
-            <TextInput
-              style={styles.locationInput}
-              value={editedProfile.location}
-              onChangeText={(text) => handleChange('location', text)}
-            />
-          ) : (
-            <Text style={styles.location}>{profile.location}</Text>
-          )}
-        </View>
-      </View>
-
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{profile.rating}</Text>
-          <Text style={styles.statLabel}>Rating</Text>
-        </View>
-        
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{profile.completedJobs}</Text>
-          <Text style={styles.statLabel}>Jobs Completed</Text>
-        </View>
-        
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{profile.experience}</Text>
-          <Text style={styles.statLabel}>Experience</Text>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>About</Text>
-        {isEditing ? (
-          <TextInput
-            style={styles.aboutInput}
-            value={editedProfile.about}
-            onChangeText={(text) => handleChange('about', text)}
-            multiline
+    <SgTemplateScreenView
+      head={
+        <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
+          <SgSectionFileHead
+              title="History"
+              description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+              icon="filter"
           />
-        ) : (
-          <Text style={styles.aboutText}>{profile.about}</Text>
-        )}
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Skills</Text>
-        <View style={styles.skillsContainer}>
-          {profile.skills.map((skill, index) => (
-            <View key={index} style={styles.skillBadge}>
-              <Text style={styles.skillText}>{skill}</Text>
-            </View>
-          ))}
         </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Contact Information</Text>
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Email:</Text>
-          {isEditing ? (
-            <TextInput
-              style={styles.infoInput}
-              value={editedProfile.contactEmail}
-              onChangeText={(text) => handleChange('contactEmail', text)}
-              keyboardType="email-address"
-            />
-          ) : (
-            <Text style={styles.infoValue}>{profile.contactEmail}</Text>
-          )}
-        </View>
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Phone:</Text>
-          {isEditing ? (
-            <TextInput
-              style={styles.infoInput}
-              value={editedProfile.contactPhone}
-              onChangeText={(text) => handleChange('contactPhone', text)}
-              keyboardType="phone-pad"
-            />
-          ) : (
-            <Text style={styles.infoValue}>{profile.contactPhone}</Text>
-          )}
-        </View>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        {isEditing ? (
-          <>
-            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-              <Text style={styles.saveButtonText}>Save Changes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-            <Text style={styles.editButtonText}>Edit Profile</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </ScrollView>
+      }
+    >
+      {taskList?.map((el, index) => (
+          <SgSectionTaskCard
+              key={index}
+              time={el?.time}
+              duration={el?.duration}
+              title={el?.title}
+              description={el?.description}
+              name={el?.name}
+              image={null}
+              status={el?.status}
+              statusType={el?.statusType}
+              href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+          />
+      ))}
+    </SgTemplateScreenView>
   );
 }
 
@@ -185,207 +166,123 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    backgroundColor: '#fff',
-    padding: 20,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  profileImageContainer: {
-    marginRight: 15,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#007BFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileInitial: {
-    fontSize: 36,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  headerContent: {
-    flex: 1,
-  },
-  name: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  nameInput: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 5,
-  },
-  title: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 5,
-  },
-  titleInput: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 5,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 5,
-  },
-  location: {
-    fontSize: 14,
-    color: '#666',
-  },
-  locationInput: {
-    fontSize: 14,
-    color: '#666',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 5,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 15,
-    marginVertical: 15,
-  },
-  statCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    flex: 1,
-    marginHorizontal: 5,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#007BFF',
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-    textAlign: 'center',
-  },
-  section: {
-    backgroundColor: '#fff',
-    padding: 20,
-    marginVertical: 10,
-    marginHorizontal: 15,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  sectionTitle: {
+  headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15,
   },
-  aboutText: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  aboutInput: {
-    fontSize: 16,
-    lineHeight: 24,
-    borderWidth: 1,
-    borderColor: '#ddd',
+  addButton: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 5,
-    padding: 10,
-    height: 100,
-    textAlignVertical: 'top',
   },
-  skillsContainer: {
+  addButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  listContainer: {
+    padding: 15,
+  },
+  jobCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  jobHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  jobTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    flex: 1,
+  },
+  statusBadge: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+  },
+  activeBadge: {
+    backgroundColor: '#e6f7ee',
+  },
+  closedBadge: {
+    backgroundColor: '#ffebee',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  activeText: {
+    color: '#00a86b',
+  },
+  closedText: {
+    color: '#f44336',
+  },
+  jobDetails: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  skillBadge: {
-    backgroundColor: '#e3f2fd',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 20,
-    marginRight: 10,
     marginBottom: 10,
   },
-  skillText: {
-    color: '#1976d2',
+  jobInfo: {
+    fontSize: 14,
+    color: '#666',
+    marginRight: 15,
+    marginBottom: 5,
+  },
+  applicantsContainer: {
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    paddingVertical: 10,
+    marginVertical: 10,
+  },
+  applicantsText: {
+    fontSize: 16,
     fontWeight: '500',
   },
-  infoRow: {
+  actionsContainer: {
     flexDirection: 'row',
-    marginBottom: 10,
+    justifyContent: 'space-between',
   },
-  infoLabel: {
-    width: 80,
-    fontSize: 16,
-    color: '#666',
-  },
-  infoValue: {
+  actionButton: {
     flex: 1,
-    fontSize: 16,
-  },
-  infoInput: {
-    flex: 1,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 5,
-  },
-  buttonContainer: {
-    padding: 20,
-    marginBottom: 20,
-    marginHorizontal: 15,
-  },
-  editButton: {
     backgroundColor: '#007BFF',
-    padding: 15,
+    padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    marginHorizontal: 5,
   },
-  editButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  saveButton: {
-    backgroundColor: '#4caf50',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  saveButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  cancelButton: {
+  closeButton: {
     backgroundColor: '#f44336',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
   },
-  cancelButtonText: {
+  reopenButton: {
+    backgroundColor: '#4caf50',
+  },
+  actionButtonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+  },
+  closeButtonText: {
+    color: '#fff',
+  },
+  reopenButtonText: {
+    color: '#fff',
   },
 });
