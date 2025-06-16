@@ -34,16 +34,13 @@ export default function Login() {
     const { login } = useAuth(); // Assuming useAuth is defined in your hooks
 
   const handleLogin = () => {
-    console.log('Logging in with:', id, password);
-
     login(id, password).then((resp) => {
-        console.log(resp, 'aaa');
-
         if (!resp.success) {
             setErrorModalData(resp.error || 'Login failed');
             toggleErrorModal()
         }
     }).catch((error) => {
+        setErrorModalData('Login failed');
     })
   };
   return (

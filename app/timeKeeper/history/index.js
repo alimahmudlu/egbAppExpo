@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
@@ -6,8 +6,12 @@ import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
+import ApiService from "@/services/ApiService";
+import {useAuth} from "@/hooks/useAuth";
+import moment from "moment/moment";
 
 export default function EmployeeDocsScreen() {
+  const { accessToken } = useAuth();
   const employeeList = [
     { title: 'Jane Doe CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
     { title: 'John Smith CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
@@ -17,6 +21,19 @@ export default function EmployeeDocsScreen() {
     { title: 'John Smith AW', type: 'checkOut', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
     { title: 'Ali Veli AW', type: 'checkOut', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
   ];
+  const [employeeActivities, setEmployeeActivities] = useState([]);
+
+  useEffect(() => {
+    ApiService.get('/timekeeper/history/list', {
+      headers: {
+        'authorization': accessToken || ''
+      }
+    }).then(res => {
+      setEmployeeActivities(res?.data?.data || []);
+    }).catch(err => {
+      console.log(err, 'apiservice control err')
+    });
+  }, []);
 
   return (
     <SgTemplateScreenView
@@ -40,16 +57,17 @@ export default function EmployeeDocsScreen() {
           tabContent={[
             {
               element: (
-                  employeeList?.filter(el => el.type === 'checkIn').map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 1).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
-                          title={emp.title}
-                          role={emp.role}
-                          time={emp.time}
-                          image={emp.image}
+                          fullData={emp}
+                          title={emp?.employee?.full_name}
+                          role={emp?.employee?.role?.name}
+                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          image={emp?.employee?.image}
                           editable={false}
                           status={emp.status}
-                          reason={emp.reason}
+                          reason={emp.reject_reason}
                       />
                   ))
               ),
@@ -57,16 +75,17 @@ export default function EmployeeDocsScreen() {
             },
             {
               element: (
-                  employeeList?.filter(el => el.type === 'checkOut').map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 2).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
-                          title={emp.title}
-                          role={emp.role}
-                          time={emp.time}
-                          image={emp.image}
+                          fullData={emp}
+                          title={emp?.employee?.full_name}
+                          role={emp?.employee?.role?.name}
+                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          image={emp?.employee?.image}
                           editable={false}
                           status={emp.status}
-                          reason={emp.reason}
+                          reason={emp.reject_reason}
                       />
                   ))
               ),

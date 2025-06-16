@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
 // API configuration
-const API_URL = 'https://api.example.com'; // Replace with your actual API URL
+const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_DATA_KEY = 'user_data';
 
@@ -22,7 +22,7 @@ const AuthContext = createContext(null);
 // Authentication provider component
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Check for existing session on app load
@@ -35,24 +35,26 @@ export function AuthProvider({ children }) {
 
         if (storedToken && storedUserData) {
           // Set token in state and axios headers
-          setToken(storedToken);
+          setAccessToken(storedToken);
           api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 
           // Parse and set user data
-          const userData = JSON.parse(storedUserData);
+          const userData = JSON.parse(JSON.parse(storedUserData));
           setUser(userData);
         }
       } catch (error) {
         console.error('Failed to load authentication data:', error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500)
       }
     };
 
     loadStoredAuth();
   }, []);
 
-  // Set up axios interceptor for token refresh
+/*  // Set up axios interceptor for token refresh
   useEffect(() => {
     const interceptor = api.interceptors.response.use(
       (response) => response,
@@ -67,7 +69,7 @@ export function AuthProvider({ children }) {
 
             // Update token in state, storage and headers
             const newToken = response.data.token;
-            setToken(newToken);
+            setAccessToken(newToken);
             await SecureStore.setItemAsync(AUTH_TOKEN_KEY, newToken);
             api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
 
@@ -89,18 +91,19 @@ export function AuthProvider({ children }) {
     return () => {
       api.interceptors.response.eject(interceptor);
     };
-  }, [token]);
+  }, [token]);*/
+
 
   // Store authentication data
   const storeAuthData = async (token, userData) => {
     try {
       await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
-      await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(userData));
+      await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify(userData)));
 
       // Set token in axios headers for future requests
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      setToken(token);
+      setAccessToken(token);
       setUser(userData);
     } catch (error) {
       console.error('Failed to store authentication data:', error);
@@ -114,83 +117,90 @@ export function AuthProvider({ children }) {
       setLoading(true);
 
       // Make API call to authenticate
-      // const response = await api.post('/auth/login', {
-      //   email,
-      //   password,
-      //   role
-      // });
+      const response = await api.post('/auth', {
+        id,
+        password,
+      });
 
-      const users = [
-        {
-          id: 123,
-          password: 'password123',
-          email: 'employee@egb.app',
-          name: 'Jane',
-          surname: 'Doe',
-          role: {
-            id: 1,
-            name: 'employee',
-          },
-          image: 'https://randomuser.me/api/portraits/men/1.jpg',
-          tokens: {
-            accessToken: 'accessToken'
-          }
-        },
-        {
-          id: 456,
-          password: 'password456',
-          email: 'timekeeper@egb.app',
-          name: 'Jane',
-          surname: 'Doe Timekeeper',
-          role: {
-            id: 2,
-            name: 'timeKeeper',
-          },
-          image: 'https://randomuser.me/api/portraits/men/3.jpg',
-          tokens: {
-            accessToken: 'accessToken'
-          }
-        },
-        {
-          id: 789,
-          password: 'password789',
-          email: 'chief@egb.app',
-          name: 'Jane',
-          surname: 'Doe Chief',
-          role: {
-            id: 3,
-            name: 'chief',
-          },
-          image: 'https://randomuser.me/api/portraits/men/5.jpg',
-          tokens: {
-            accessToken: 'accessToken'
-          }
-        },
-      ]
 
-      const userData = users?.find(el => el.id === Number(id) && el.password === password);
+      const userData = JSON.parse(response?.data);
 
-      if (!userData?.id) {
+
+      // const users = [
+      //   {
+      //     id: 123,
+      //     password: 'password123',
+      //     email: 'employee@egb.app',
+      //     name: 'Jane',
+      //     surname: 'Doe',
+      //     role: {
+      //       id: 1,
+      //       name: 'employee',
+      //     },
+      //     image: 'https://randomuser.me/api/portraits/men/1.jpg',
+      //     tokens: {
+      //       accessToken: 'accessToken'
+      //     }
+      //   },
+      //   {
+      //     id: 456,
+      //     password: 'password456',
+      //     email: 'timekeeper@egb.app',
+      //     name: 'Jane',
+      //     surname: 'Doe Timekeeper',
+      //     role: {
+      //       id: 2,
+      //       name: 'timeKeeper',
+      //     },
+      //     image: 'https://randomuser.me/api/portraits/men/3.jpg',
+      //     tokens: {
+      //       accessToken: 'accessToken'
+      //     }
+      //   },
+      //   {
+      //     id: 789,
+      //     password: 'password789',
+      //     email: 'chief@egb.app',
+      //     name: 'Jane',
+      //     surname: 'Doe Chief',
+      //     role: {
+      //       id: 3,
+      //       name: 'chief',
+      //     },
+      //     image: 'https://randomuser.me/api/portraits/men/5.jpg',
+      //     tokens: {
+      //       accessToken: 'accessToken'
+      //     }
+      //   },
+      // ]
+      //
+      // const userData = users?.find(el => el.id === Number(id) && el.password === password);
+      //
+      if (!userData?.user?.id) {
         throw new Error('User not found! Plase check your ID and password and try again.');
       }
+      //
+      // // Store token and user data
+      await storeAuthData(userData?.token?.accessToken, userData?.user);
 
-      // Store token and user data
-      await storeAuthData(userData?.tokens?.accessToken, userData);
-
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500)
 
       // Navigate based on role
-      if (userData?.role?.id === 1) {
+      if (userData?.user?.role?.id === 1) {
         router.replace('/employee/');
-      } else if (userData?.role?.id === 2) {
+      } else if (userData?.user?.role?.id === 2) {
         router.replace('/timeKeeper/');
       } else {
         router.replace('/chief/');
       }
-
-      return { success: true, user: userData };
+      //
+      return { success: true, user: userData?.user };
     } catch (error) {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500)
       return {
         success: false,
         error: error.response?.data?.message || error.message || 'Login failed'
@@ -202,14 +212,14 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       // Call logout endpoint if needed
-      if (token) {
+      if (accessToken) {
         await api.post('/auth/logout');
       }
     } catch (error) {
       console.error('Logout API call failed:', error);
     } finally {
       // Clear token and user data regardless of API call success
-      setToken(null);
+      setAccessToken(null);
       setUser(null);
 
       // Remove auth header
@@ -220,7 +230,7 @@ export function AuthProvider({ children }) {
       await SecureStore.deleteItemAsync(USER_DATA_KEY);
 
       // Navigate to auth screen
-      router.replace('/(auth)/');
+      router.replace('/auth/');
     }
   };
 
@@ -228,6 +238,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
+        accessToken,
         loading,
         login,
         logout

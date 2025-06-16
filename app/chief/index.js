@@ -141,8 +141,8 @@ export default function EmployeeDashboardScreen() {
         <SgTemplateScreenView
             head={
                 <SgTemplateHeader
-                    name="Jane Doe"
-                    role="Time Keeper"
+                    name={user?.full_name}
+                    role={user?.role?.name}
                     profileImage={Avatar}
                 />
             }

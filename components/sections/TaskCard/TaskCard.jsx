@@ -46,11 +46,11 @@ export default function SgSectionTaskCard({time, title, description, name, image
         toggleCompleteTaskInfoModal();
     };
 
-    const getStatusStyles = (statusType) => {
-        switch (statusType) {
-            case 'success':
+    const getStatusStyles = () => {
+        switch (status?.id) {
+            case 4:
                 return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
-            case 'warning':
+            case 3:
                 return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
             default:
                 return {backgroundColor: COLORS.white, color: COLORS.black};
@@ -62,7 +62,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
                 <View style={styles.header}>
                     <Text style={styles.time}>{time}</Text>
                     <View style={styles.rightHeader}>
-                        {status && (
+                        {(status?.id && [3, 4].includes(status?.id)) && (
                             <View
                                 style={[
                                     styles.statusBadge,
@@ -75,7 +75,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
                                         {color: getStatusStyles(statusType).color},
                                     ]}
                                 >
-                                    {status}
+                                    {status?.name}
                                 </Text>
                             </View>
                         )}

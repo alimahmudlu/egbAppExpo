@@ -35,8 +35,8 @@ export default function EmployeeMenuScreen() {
         <View style={{padding: 16}}>
           <SgSectionProfileBanner
               image={Avatar}
-              name="Jane Doe"
-              role="Time Keeper"
+              name={user?.full_name}
+              role={user?.role?.name}
               onLogout={toggleLogOutModal}
           />
         </View>

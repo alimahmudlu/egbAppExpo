@@ -1,5 +1,5 @@
 import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
@@ -8,6 +8,9 @@ import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
+import axios from "axios";
+import {useAuth} from "@/hooks/useAuth";
+import moment from "moment/moment";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -26,8 +29,29 @@ const ProjectHeader = ({ projectId }) => {
 };
 
 export default function ProjectItemScreen() {
-    const { projectId } = useLocalSearchParams();
+    const { accessToken } = useAuth();
+    const { projectId, taskId } = useLocalSearchParams();
 
+    console.log(useLocalSearchParams());
+
+    const [taskDetails, setTaskDetails] = useState({});
+
+    useEffect(() => {
+        axios.get(`http://192.168.0.108:3000/api/employee/project/item/${projectId}/tasks/item/${taskId}`, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            if (res.data.success) {
+                setTaskDetails(res?.data?.data);
+            } else {
+                // Handle error response
+                console.log(res.data.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }, [projectId]);
     return (
         <SgTemplateScreenView
             head={<ProjectHeader projectId={projectId} />}
@@ -36,7 +60,7 @@ export default function ProjectItemScreen() {
                 contentTitle='Reporter'
             >
                 <SgSectionUserInfo
-                    name="Jane Doe"
+                    name={taskDetails?.reporter_employee?.full_name}
                     role="Employee"
                     profileImage={Avatar}
                     color="dark"
@@ -45,22 +69,22 @@ export default function ProjectItemScreen() {
             </SgCard>
             <SgCard
                 contentTitle='Deadline date'
-                contentDescription='12.04.2025 / 1:50 PM'
+                contentDescription={moment(taskDetails?.time).format('DD.MM.YYYY / HH:mm') || taskDetails?.time}
             />
             <SgCard
                 contentTitle='Points to be earned'
-                contentDescription='12'
+                contentDescription={taskDetails?.points}
             />
 
             <SgCard
                 contentTitle='Task'
-                contentDescription='There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form'
+                contentDescription={taskDetails?.name}
                 padding={false}
                 bgColor={null}
             />
             <SgCard
                 contentTitle='Description'
-                contentDescription='Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolorem laudantium, totam rem aperiam. All the rem ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.'
+                contentDescription={taskDetails?.description}
                 padding={false}
                 bgColor={null}
             />

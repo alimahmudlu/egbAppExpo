@@ -1,32 +1,50 @@
-{/* <SgSectionStatusCard
-    title="Check In"
-    time="7:12 AM"
-    icon={<LogIn width={20} height={20} />}
-/>
+import MapView, {Marker} from "react-native-maps";
 
-<SgSectionStatusCard
-    location="https://arubaunleashed.com/wp-content/uploads/2023/12/Location-of-Aruba-1024x768.jpg"
-    title="Check In"
-    time="7:12 AM"
-    icon={<LogIn width={20} height={20} />}
-/> */}
-
-
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import {View, Text, Image, TouchableOpacity, Platform} from 'react-native';
 import styles from '@/components/sections/StatusCard/StatusCard.styles';
+import * as Linking from "expo-linking";
 
-export default function SgSectionStatusCard({ icon, title, time, location }) {
-  const hasLocation = !!location;
+export default function SgSectionStatusCard({ icon, title, time, mapData }) {
+  const hasLocation = !!mapData?.longitude;
 
   const handleOpenMap = () => {
-    console.log('Open map pressed');
+    const scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+    const url = Platform.OS === 'ios'
+        ? `${scheme}?q=${mapData?.latitude},${mapData?.longitude}`
+        : `${scheme}${mapData?.latitude},${mapData?.longitude}`;
+
+    // For Google Maps specific URL
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapData?.latitude},${mapData?.longitude}`;
+
+    // Open the map based on platform
+    if (Platform.OS === 'ios') {
+      // On iOS, give option to choose between Apple Maps and Google Maps
+      Linking.openURL(url)
+    } else {
+      // On Android, directly open Google Maps
+      Linking.openURL(googleMapsUrl);
+    }
   };
+  //
+  // function openInMaps(latitude, longitude) {
+  //
+  // }
 
   return (
       <View style={[styles.container, hasLocation && styles.containerNoPadding]}>
-        {hasLocation ? (
+        {mapData?.longitude ? (
           <>
-            <Image source={{ uri: location }} style={styles.mapImage} />
+            <MapView
+                style={{flex: 1, height: 125}}
+                initialRegion={{
+                  latitude: Number(mapData?.latitude) || 0,
+                  longitude: Number(mapData?.longitude) || 0,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+            >
+              <Marker coordinate={{ latitude: Number(mapData?.latitude) || 0, longitude: Number(mapData?.longitude) || 0 }} />
+            </MapView>
             <TouchableOpacity style={styles.openMapContainer} onPress={handleOpenMap} activeOpacity={0.8}>
               <Text style={styles.openMap}>Open on map</Text>
             </TouchableOpacity>

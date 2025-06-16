@@ -1,11 +1,14 @@
 import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
+import axios from "axios";
+import {useAuth} from "@/hooks/useAuth";
+import moment from "moment";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -31,6 +34,7 @@ const ProjectHeader = ({ projectId }) => {
 };
 
 export default function ProjectItemScreen() {
+    const { accessToken } = useAuth();
     const { projectId } = useLocalSearchParams();
     const taskList = [
         {
@@ -151,13 +155,47 @@ export default function ProjectItemScreen() {
             type: 'complete'
         }
     ]
+    const [projectDetails, setProjectDetails] = useState({});
+    const [tasksList, setTasksList] = useState([]);
+
+    useEffect(() => {
+        axios.get(`http://192.168.0.108:3000/api/employee/project/item/${projectId}`, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            if (res.data.success) {
+                setProjectDetails(res?.data?.data);
+            } else {
+                // Handle error response
+                console.log(res.data.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+        axios.get(`http://192.168.0.108:3000/api/employee/project/item/${projectId}/tasks`, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            if (res.data.success) {
+                setTasksList(res?.data?.data);
+                console.log(res?.data?.data);
+            } else {
+                // Handle error response
+                console.log(res.data.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }, [projectId]);
 
     return (
         <SgTemplateScreenView
             head={<ProjectHeader projectId={projectId} />}
         >
             <SgSectionProjectNameCard
-                title="Project name"
+                title={projectDetails?.name}
                 description="There are many variations of passages of Lorem Ipsum available"
             />
 
@@ -166,18 +204,17 @@ export default function ProjectItemScreen() {
             </SgCard>
 
             <View style={{gap: 16}}>
-                {taskList.map((el, index) => (
+                {tasksList.map((el, index) => (
                     <SgSectionTaskCard
                         key={index}
-                        time={el?.time}
-                        duration={el?.duration}
-                        title={el?.title}
+                        time={moment(el?.time).format('DD.MM.YYYY / HH:mm') || el?.time}
+                        duration={'2h11m'}
+                        title={el?.name}
                         description={el?.description}
-                        name={el?.name}
+                        name={el?.reporter_employee?.full_name}
                         image={null}
                         status={el?.status}
-                        statusType={el?.statusType}
-                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                        href={`/employeePages/projects/${el?.project_id}/${el?.id}`}
                     />
                 ))}
             </View>

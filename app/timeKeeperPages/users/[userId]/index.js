@@ -9,6 +9,9 @@ import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgCard from "@/components/ui/Card/Card";
 import ClockHistory from "@/assets/images/clock-history.svg";
 import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
+import {useEffect, useState} from "react";
+import ApiService from "@/services/ApiService";
+import {useAuth} from "@/hooks/useAuth";
 
 
 // Custom header component with back button and overview button
@@ -29,6 +32,7 @@ const ScreenHeader = () => {
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
+    const { accessToken } = useAuth();
     const data = [
         { label: '1-2', value: 14, percentage: 90 },
         { label: '3-4', value: 9, percentage: 70 },
@@ -37,6 +41,20 @@ export default function TimeKeeperUserScreen() {
         { label: '9-10', value: 2, percentage: 20 },
     ];
 
+    const [employeeData, setEmployeeData] = useState({});
+
+    useEffect(() => {
+        ApiService.get(`/timekeeper/employee/details/${userId}`, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            setEmployeeData(res?.data?.data);
+        }).catch(err => {
+            console.log(err)
+        })
+    }, [userId]);
+
     return (
         <SgTemplateScreenView
             head={<ScreenHeader />}
@@ -44,8 +62,8 @@ export default function TimeKeeperUserScreen() {
             <View>
                 <SgSectionUserInfo
                     rating={3.12}
-                    name="Jane Doe"
-                    role="Employee"
+                    name={employeeData?.full_name || ''}
+                    role={employeeData?.role?.name || ''}
                     profileImage={Avatar}
                     color="dark"
                     size="md"
@@ -56,14 +74,14 @@ export default function TimeKeeperUserScreen() {
                     <SgSectionInfoCard
                         icon="log-in-outline"
                         title="Total check in"
-                        count={32}
+                        count={employeeData?.check_in_count || 0}
                         type="checkin"
                         href={`/timeKeeperPages/users/${userId}/history/checkIn`}
                     />
                     <SgSectionInfoCard
                         icon="log-out-outline"
                         title="Total check out"
-                        count={12}
+                        count={employeeData?.check_out_count || 0}
                         type="checkout"
                         href={`/timeKeeperPages/users/${userId}/history/checkOut`}
                     />

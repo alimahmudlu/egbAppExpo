@@ -1,4 +1,4 @@
-import {Slot, Stack} from "expo-router";
+import { Stack } from "expo-router";
 import {useState, useEffect} from "react";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import {ActivityIndicator, View} from "react-native";
@@ -94,7 +94,7 @@ export default function RootLayout() {
     } else {
   return (
       <AuthProvider>
-          <Slot />
+        <RootLayoutNav />
       </AuthProvider>
   );
   }

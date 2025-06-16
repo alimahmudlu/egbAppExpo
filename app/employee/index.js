@@ -12,10 +12,11 @@ import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import LoginIcon from "@/assets/images/login.svg";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 export default function EmployeeDashboardScreen() {
-  const { user } = useAuth();
+  const { user, accessToken } = useAuth();
   const staffImages = [
     "https://randomuser.me/api/portraits/men/1.jpg",
     "https://randomuser.me/api/portraits/women/2.jpg",
@@ -27,39 +28,58 @@ export default function EmployeeDashboardScreen() {
   ];
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
     const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
+  const [projectsList, setProjectsList] = useState([]);
 
     function toggleRejectInfoModal() {
       setRejectInfoModal(!rejectInfoModal);
     }
+
+  useEffect(() => {
+    axios.get('http://192.168.0.108:3000/api/employee/project/list', {
+      headers: {
+        'authorization': accessToken || ''
+      }
+    }).then(res => {
+        if (res.data.success) {
+            setProjectsList(res?.data?.data);
+            console.log(res?.data?.data);
+        } else {
+            // Handle error response
+            console.log(res.data.message);
+        }
+    }).catch(err => {
+      console.log(err);
+    })
+  }, []);
 
 
   return (
     <SgTemplateScreenView
       head={
         <SgTemplateHeader
-          name="Jane Doe"
-          role="Employee"
+          name={user?.full_name}
+          role={user?.role?.name}
           rating="3.12"
           profileImage={Avatar}
         />
       }
     >
 
-      <SgNoticeCard
-          icon={<LoginIcon width={20} height={20} />}
-          title="Check in rejected"
-          buttonText="Reject detail"
-          onClick={toggleRejectInfoModal}
-          bgCard="danger"
-          bgButton="danger"
-      />
+      {/*<SgNoticeCard*/}
+      {/*    icon={<LoginIcon width={20} height={20} />}*/}
+      {/*    title="Check in rejected"*/}
+      {/*    buttonText="Reject detail"*/}
+      {/*    onClick={toggleRejectInfoModal}*/}
+      {/*    bgCard="danger"*/}
+      {/*    bgButton="danger"*/}
+      {/*/>*/}
       <SgCheckInOutGroup>
         <SgCheckInOutCard
           type="checkin"
           title="Check In"
           time=""
           buttonLabel="Check in"
-          status={1} // 0: not checked in, 1: waiting, 2: checked in
+          status={0} // 0: not checked in, 1: waiting, 2: checked in
         />
         <SgCheckInOutCard
             type="checkout"
@@ -81,24 +101,15 @@ export default function EmployeeDashboardScreen() {
       </SgCard>
 
       <View style={{gap: 12}}>
-        <SgSectionProjectListItem
-            title="Unde omnis iste natus error sit"
-            staffImages={staffImages}
-            id={1}
-            href={`/employeePages/projects/${1}`}
-        />
-        <SgSectionProjectListItem
-            title="Unde omnis iste natus error sit"
-            staffImages={staffImages}
-            id={2}
-            href={`/employeePages/projects/${2}`}
-        />
-        <SgSectionProjectListItem
-            title="Unde omnis iste natus error sit"
-            staffImages={staffImages}
-            id={3}
-            href={`/employeePages/projects/${3}`}
-        />
+        {(projectsList || []).map((project, index) => (
+            <SgSectionProjectListItem
+                key={index}
+                title={project.name}
+                staffImages={project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")}
+                id={project.id}
+                href={`/employeePages/projects/${project.id}`}
+            />
+        ))}
       </View>
       <SgPopup
           visible={rejectInfoModal}

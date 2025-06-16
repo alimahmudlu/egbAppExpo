@@ -11,9 +11,12 @@ import { StyleSheet, Text, View } from "react-native";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
+import {useEffect, useState} from "react";
+import ApiService from "@/services/ApiService";
+import moment from "moment";
 
 export default function EmployeeDashboardScreen() {
-  const { user } = useAuth();
+    const { user, accessToken } = useAuth();
     const employeeList = [
         { title: 'Jane Doe CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
         { title: 'John Smith CI', type: 'checkIn', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
@@ -23,13 +26,26 @@ export default function EmployeeDashboardScreen() {
         { title: 'John Smith AW', type: 'checkOut', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
         { title: 'Ali Veli AW', type: 'checkOut', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
     ];
+    const [employeeActivities, setEmployeeActivities] = useState([]);
+
+    useEffect(() => {
+        ApiService.get('/timekeeper/activity/list', {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            setEmployeeActivities(res?.data?.data || []);
+        }).catch(err => {
+            console.log(err, 'apiservice control err')
+        });
+    }, []);
 
   return (
     <SgTemplateScreenView
       head={
         <SgTemplateHeader
-          name="Jane Doe"
-          role="Time Keeper"
+        name={user?.full_name}
+        role={user?.role?.name}
           profileImage={Avatar}
         />
       }
@@ -38,35 +54,36 @@ export default function EmployeeDashboardScreen() {
         <SgSectionInfoCard
             icon="log-in-outline"
             title="Daily check in"
-            count={32}
+            count={employeeActivities?.filter(el => el.type === 1)?.length}
             type="checkin"
         />
         <SgSectionInfoCard
             icon="log-out-outline"
             title="Daily check out"
-            count={12}
+            count={employeeActivities?.filter(el => el.type === 2)?.length}
             type="checkout"
         />
       </SgCheckInOutGroup>
 
       <SgFilterTab
-          defaultTabId='checkOut'
+          defaultTabId='checkIn'
           onTabChange={(index) => console.log('Selected tab:', index)}
           tabs={[
-            { label: 'Check in', id: 'checkIn', count: 120 },
-            { label: 'Check out', id: 'checkOut', count: 0 },
-            { label: 'At work', id: 'atWork', count: 15 },
+            { label: 'Check in', id: 'checkIn', count: employeeActivities?.filter(el => el.type === 1 && el.status === 0)?.length },
+            { label: 'Check out', id: 'checkOut', count: employeeActivities?.filter(el => el.type === 2 && el.status === 0)?.length },
+            { label: 'At work', id: 'atWork', count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length },
           ]}
           tabContent={[
             {
               element: (
-                  employeeList?.filter(el => el.type === 'checkIn').map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 1 && el.status === 0).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
-                          title={emp.title}
-                          role={emp.role}
-                          time={emp.time}
-                          image={emp.image}
+                          fullData={emp}
+                          title={emp?.employee?.full_name}
+                          role={emp?.employee?.role?.name}
+                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          image={emp?.employee?.image}
                       />
                   ))
               ),
@@ -74,13 +91,14 @@ export default function EmployeeDashboardScreen() {
             },
             {
               element: (
-                  employeeList?.filter(el => el.type === 'checkOut').map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 2 && el.status === 0).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
-                          title={emp.title}
-                          role={emp.role}
-                          time={emp.time}
-                          image={emp.image}
+                          fullData={emp}
+                          title={emp?.employee?.full_name}
+                          role={emp?.employee?.role?.name}
+                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          image={emp?.employee?.image}
                       />
                   ))
               ),
@@ -88,13 +106,15 @@ export default function EmployeeDashboardScreen() {
             },
             {
               element: (
-                  employeeList?.filter(el => el.type === 'atWork').map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
-                          title={emp.title}
-                          role={emp.role}
-                          time={emp.time}
-                          image={emp.image}
+                          fullData={emp}
+                          title={emp?.employee?.full_name}
+                          role={emp?.employee?.role?.name}
+                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          image={emp?.employee?.image}
+                          editable={false}
                       />
                   ))
               ),
