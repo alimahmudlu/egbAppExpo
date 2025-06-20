@@ -8,6 +8,7 @@ const COLORS = {
     brand_400: "#28A490",
     brand_500: "#1D8475",
     brand_600: "#1B6A5F",
+    brand_700: "#1A554E",
     brand_800: "#1A4742",
     brand_950: "#0A2926",
 
