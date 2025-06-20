@@ -14,6 +14,7 @@ import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import ApiService from "@/services/ApiService";
 
 export default function EmployeeDashboardScreen() {
   const { user, accessToken } = useAuth();
@@ -35,7 +36,7 @@ export default function EmployeeDashboardScreen() {
     }
 
   useEffect(() => {
-    axios.get('http://192.168.0.108:3000/api/employee/project/list', {
+    ApiService.get('/employee/project/list', {
       headers: {
         'authorization': accessToken || ''
       }

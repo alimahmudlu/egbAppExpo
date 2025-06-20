@@ -4,11 +4,13 @@ import styles from '@/components/ui/NoticeCard/NoticeCard.styles';
 import COLORS from '@/constants/colors';
 import SgButton from '@/components/ui/Button/Button';
 import SgPopup from '@/components/ui/Modal/Modal';
+import {useRouter} from "expo-router";
 
-export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton, onClick }) {
+export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton, href }) {
     const [modalVisible, setModalVisible] = useState(false);
     let cardBackground;
     let buttonBackground;
+    const router = useRouter();
 
   switch (bgCard) {
     case 'success':
@@ -38,6 +40,12 @@ export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton
       buttonBackground = COLORS.gray_700;
   }
 
+    function handleOnClick() {
+        if (href) {
+            router.navigate(href)
+        }
+    }
+
   return (
     <View>
         <View style={[styles.container, { backgroundColor: cardBackground }]}>
@@ -46,7 +54,7 @@ export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton
                 <Text style={styles.title}>{title}</Text>
             </View>
             <TouchableOpacity 
-                onPress={(e) => onClick?.(e)}
+                onPress={(e) => handleOnClick?.(e)}
                 style={[styles.button, { backgroundColor: buttonBackground }]}
             >
                 <Text style={styles.buttonText}>{buttonText}</Text>

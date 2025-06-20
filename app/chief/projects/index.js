@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
+import ApiService from "@/services/ApiService";
+import {useAuth} from "@/hooks/useAuth";
 
 // Sample tasks data
 const tasksData = [
@@ -55,6 +57,8 @@ const tasksData = [
 ];
 
 export default function TasksScreen() {
+  const { user, accessToken } = useAuth();
+  const [projectsList, setProjectsList] = useState([]);
   const staffImages = [
     "https://randomuser.me/api/portraits/men/1.jpg",
     "https://randomuser.me/api/portraits/women/2.jpg",
@@ -64,6 +68,25 @@ export default function TasksScreen() {
     "https://randomuser.me/api/portraits/women/6.jpg",
     "https://randomuser.me/api/portraits/women/6.jpg",
   ];
+
+
+  useEffect(() => {
+    ApiService.get('/chief/project/list', {
+      headers: {
+        'authorization': accessToken || ''
+      }
+    }).then(res => {
+      if (res.data.success) {
+        console.log(res?.data?.data, 'salam');
+        setProjectsList(res?.data?.data);
+      } else {
+        // Handle error response
+        console.log(res.data.message);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+  }, []);
 
   return (
       <SgTemplateScreenView
@@ -81,24 +104,15 @@ export default function TasksScreen() {
         </SgCard>
 
         <View style={{gap: 12}}>
-          <SgSectionProjectListItem
-              title="Unde omnis iste natus error sit"
-              staffImages={staffImages}
-              id={1}
-              href={`/chiefPages/projects/${1}`}
-          />
-          <SgSectionProjectListItem
-              title="Unde omnis iste natus error sit"
-              staffImages={staffImages}
-              id={2}
-              href={`/chiefPages/projects/${2}`}
-          />
-          <SgSectionProjectListItem
-              title="Unde omnis iste natus error sit"
-              staffImages={staffImages}
-              id={3}
-              href={`/chiefPages/projects/${3}`}
-          />
+          {(projectsList || []).map((project, index) => (
+              <SgSectionProjectListItem
+                  key={index}
+                  title={project.name}
+                  staffImages={project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")}
+                  id={project.id}
+                  href={`/chiefPages/projects/${project.id}`}
+              />
+          ))}
         </View>
       </SgTemplateScreenView>
   );

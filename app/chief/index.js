@@ -166,6 +166,7 @@ export default function EmployeeDashboardScreen() {
                 title="Active tasks"
                 buttonText="Add task +"
                 bgButton="success"
+                href="/chiefPages/create-task"
             />
 
             <SgFilterTab

@@ -14,6 +14,7 @@ import axios from "axios";
 import moment from "moment";
 import {useAuth} from "@/hooks/useAuth";
 import MapView, { Marker } from 'react-native-maps';
+import ApiService from "@/services/ApiService";
 
 export default function SgCheckInOutCard(props) {
   const { accessToken } = useAuth();
@@ -57,7 +58,7 @@ export default function SgCheckInOutCard(props) {
   }
 
   function handleSubmitCheckIn() {
-    axios.post('http://192.168.0.108:3000/api/employee/activity/checkin', {
+    ApiService.post('/employee/activity/checkin', {
         time: moment().format('YYYY-MM-DD HH:mm:ss'),
         latitude: checkInData?.latitude,
         longitude: checkInData?.longitude
@@ -88,7 +89,7 @@ export default function SgCheckInOutCard(props) {
   }
 
   function handleSubmitCheckOut() {
-    axios.post('http://192.168.0.108:3000/api/employee/activity/checkout', {
+    ApiService.post('/employee/activity/checkout', {
       time: moment().format('YYYY-MM-DD HH:mm:ss'),
       latitude: checkOutData?.latitude,
       longitude: checkOutData?.longitude

@@ -5,10 +5,12 @@ import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
-import moment from "moment";
-import axios from "axios";
+import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
 import {useAuth} from "@/hooks/useAuth";
+import moment from "moment";
 import ApiService from "@/services/ApiService";
+import COLORS from "@/constants/colors";
+import SgInput from "@/components/ui/Input/Input";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -21,54 +23,60 @@ const ProjectHeader = ({ projectId }) => {
                 <LeftIcon width={20} height={20} />
             </TouchableOpacity>
 
-            <Text style={styles.headerTitle}>Project overview</Text>
+            <Text style={styles.headerTitle}>Create task</Text>
+
         </View>
     );
 };
 
-export default function ProjectItemScreen() {
-    const { projectId } = useLocalSearchParams();
+export default function TaskCreateScreen() {
     const { accessToken } = useAuth();
-    const [projectDetails, setProjectDetails] = useState({});
+    const [data, setData] = useState({});
 
-    useEffect(() => {
-        ApiService.get(`/employee/project/item/${projectId}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
-        }).then(res => {
-            if (res.data.success) {
-                setProjectDetails(res?.data?.data);
-                console.log(res?.data?.data);
-            } else {
-                // Handle error response
-                console.log(res.data.message);
-            }
-        }).catch(err => {
-            console.log(err);
-        })
-    }, []);
+    function handleChange() {
+        // Handle input change logic here
+        // For example, you can update the state with the new value
+        // setData({ ...data, title: newValue });
+    }
 
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader projectId={projectId} />}
+            head={<ProjectHeader />}
         >
-            <SgCard
-                contentTitle='Project name'
-                contentDescription={projectDetails?.name}
-            />
-            <SgCard
-                contentTitle='Location'
-                contentDescription={projectDetails?.location || '-'}
-            />
-            <SgCard
-                contentTitle='Timeline'
-                contentDescription={`${moment(projectDetails?.start_date).format('DD-MM-YYYY')} - ${moment(projectDetails?.end_date).format('DD-MM-YYYY')}`}
-            />
-            <SgCard
-                contentTitle='Optional notes'
-                contentDescription={projectDetails?.optional_notes || '-'}
-            />
+            <Text style={{
+                fontSize: 12,
+                lineHeight: 18,
+                color: COLORS.black,
+                weight: '500',
+            }}>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
+            </Text>
+
+            <View>
+                <SgInput
+                    label="Title"
+                    placeholder="Enter Title..."
+                    type="text"
+                    value={data?.title}
+                    onChangeText={handleChange}
+                />
+                <SgInput
+                    label="Description"
+                    placeholder="Enter description..."
+                    type="textarea"
+                    value={data?.description}
+                    onChangeText={handleChange}
+                />
+                <SgInput
+                    label="Deadline"
+                    placeholder="Enter deadline..."
+                    type="textarea"
+                    value={data?.description}
+                    onChangeText={handleChange}
+                />
+            </View>
+
+
 
         </SgTemplateScreenView>
     );

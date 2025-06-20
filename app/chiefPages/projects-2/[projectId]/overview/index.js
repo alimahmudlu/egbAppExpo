@@ -1,14 +1,10 @@
 import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
-import moment from "moment";
-import axios from "axios";
-import {useAuth} from "@/hooks/useAuth";
-import ApiService from "@/services/ApiService";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -28,26 +24,6 @@ const ProjectHeader = ({ projectId }) => {
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
-    const { accessToken } = useAuth();
-    const [projectDetails, setProjectDetails] = useState({});
-
-    useEffect(() => {
-        ApiService.get(`/employee/project/item/${projectId}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
-        }).then(res => {
-            if (res.data.success) {
-                setProjectDetails(res?.data?.data);
-                console.log(res?.data?.data);
-            } else {
-                // Handle error response
-                console.log(res.data.message);
-            }
-        }).catch(err => {
-            console.log(err);
-        })
-    }, []);
 
     return (
         <SgTemplateScreenView
@@ -55,19 +31,19 @@ export default function ProjectItemScreen() {
         >
             <SgCard
                 contentTitle='Project name'
-                contentDescription={projectDetails?.name}
+                contentDescription='There are many variations of passages of Lorem Ipsum available'
             />
             <SgCard
                 contentTitle='Location'
-                contentDescription={projectDetails?.location || '-'}
+                contentDescription='Hampden-Sydney College in Virginia, looked up one'
             />
             <SgCard
                 contentTitle='Timeline'
-                contentDescription={`${moment(projectDetails?.start_date).format('DD-MM-YYYY')} - ${moment(projectDetails?.end_date).format('DD-MM-YYYY')}`}
+                contentDescription='16.02.2025 - 16.08.2025'
             />
             <SgCard
                 contentTitle='Optional notes'
-                contentDescription={projectDetails?.optional_notes || '-'}
+                contentDescription="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum"
             />
 
         </SgTemplateScreenView>
