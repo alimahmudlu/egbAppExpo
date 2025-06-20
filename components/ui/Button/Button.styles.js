@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     flex: 1,
+    minHeight: 55,
     paddingVertical: 14,
     paddingHorizontal: 22,
     justifyContent: 'center',

@@ -1,4 +1,13 @@
-import {View,Text,Image,KeyboardAvoidingView,Platform,TouchableWithoutFeedback,Keyboard} from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Alert
+} from "react-native";
 import styles from "@/assets/styles/auth/auth.styles";
 import SgSectionAuth from "@/components/sections/AuthSection/AuthSection";
 import SgForm from "@/components/ui/Form/Form";
@@ -7,13 +16,32 @@ import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 import SgButton from "@/components/ui/Button/Button";
 import { useState } from "react";
 import COLORS from "@/constants/colors";
+import {useAuth} from "@/hooks/useAuth";
+import SgPopup from "@/components/ui/Modal/Modal";
+import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
+import SgCard from "@/components/ui/Card/Card";
 
 export default function Login() {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const [errorModal, setErrorModal] = useState(false);
+    const [errorModalData, setErrorModalData] = useState("");
+
+    function toggleErrorModal() {
+        setErrorModal(!errorModal);
+    }
+
+    const { login } = useAuth(); // Assuming useAuth is defined in your hooks
 
   const handleLogin = () => {
-    console.log('Logging in with:', id, password);
+    login(id, password).then((resp) => {
+        if (!resp.success) {
+            setErrorModalData(resp.error || 'Login failed');
+            toggleErrorModal()
+        }
+    }).catch((error) => {
+        setErrorModalData('Login failed');
+    })
   };
   return (
     <KeyboardAvoidingView
@@ -54,6 +82,15 @@ export default function Login() {
         </View>
       </View>
       </TouchableWithoutFeedback>
+
+
+        <SgPopup
+            visible={errorModal}
+            onClose={toggleErrorModal}
+            icon={<InfoCircleModalIcon width={56} height={56} />}
+            title='Error'
+            description={errorModalData}
+        />
     </KeyboardAvoidingView>
   );
 }

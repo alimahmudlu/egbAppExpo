@@ -9,10 +9,15 @@ import SgButton from '@/components/ui/Button/Button';
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
 import SgPopup from "@/components/ui/Modal/Modal";
-import {useState} from "react";
-// import MapView, { Marker } from 'react-native-maps';
+import {useEffect, useState} from "react";
+import axios from "axios";
+import moment from "moment";
+import {useAuth} from "@/hooks/useAuth";
+import MapView, { Marker } from 'react-native-maps';
+import ApiService from "@/services/ApiService";
 
 export default function SgCheckInOutCard(props) {
+  const { accessToken } = useAuth();
   const {
     type = 'checkin',
     title,
@@ -53,11 +58,25 @@ export default function SgCheckInOutCard(props) {
   }
 
   function handleSubmitCheckIn() {
-    Alert.alert(
-        'Check In',
-        `You have successfully checked in. Please wait for confirmation. Location data will be sent to your manager. Location: ${checkInData?.latitude}, ${checkInData?.longitude}, Date: ${new Date().toLocaleDateString()}, Time: ${new Date().toLocaleTimeString()}`,
-        [{ text: 'OK' }]
-    );
+    ApiService.post('/employee/activity/checkin', {
+        time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        latitude: checkInData?.latitude,
+        longitude: checkInData?.longitude
+    }, {
+      headers: {
+        'authorization': accessToken || ''
+      }
+    }).then(res => {
+      if (res.data.success) {
+        console.log(res?.data?.data);
+      } else {
+        // Handle error response
+        console.log(res.data.message);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+
     toggleCheckInModal()
   }
 
@@ -70,11 +89,24 @@ export default function SgCheckInOutCard(props) {
   }
 
   function handleSubmitCheckOut() {
-    Alert.alert(
-        'Check Out',
-        `You have successfully checked out. Location: ${checkOutData?.latitude}, ${checkOutData?.longitude}, Date: ${new Date().toLocaleDateString()}, Time: ${new Date().toLocaleTimeString()}`,
-        [{ text: 'OK' }]
-    );
+    ApiService.post('/employee/activity/checkout', {
+      time: moment().format('YYYY-MM-DD HH:mm:ss'),
+      latitude: checkOutData?.latitude,
+      longitude: checkOutData?.longitude
+    }, {
+      headers: {
+        'authorization': accessToken || ''
+      }
+    }).then(res => {
+      if (res.data.success) {
+        console.log(res?.data?.data);
+      } else {
+        // Handle error response
+        console.log(res.data.message);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
     toggleCheckOutModal()
   }
 
@@ -188,20 +220,20 @@ export default function SgCheckInOutCard(props) {
         </Text>
       </View>
       <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
-        {/*{(isCheckIn && status === 2) && Platform.OS !== 'web' ?*/}
-        {/*  <MapView*/}
-        {/*    style={{flex: 1, height: 125}}*/}
-        {/*    initialRegion={{*/}
-        {/*      latitude: mapData?.checkIn?.latitude,*/}
-        {/*      longitude: mapData?.checkIn?.longitude,*/}
-        {/*      latitudeDelta: 0.01,*/}
-        {/*      longitudeDelta: 0.01,*/}
-        {/*    }}*/}
-        {/*>*/}
-        {/*  <Marker coordinate={{ latitude: mapData?.checkIn?.latitude, longitude: mapData?.checkIn?.longitude }} />*/}
-        {/*</MapView>*/}
-        {/*    : null*/}
-        {/*}*/}
+        {(isCheckIn && status === 2) && Platform.OS !== 'web' ?
+          <MapView
+            style={{flex: 1, height: 125}}
+            initialRegion={{
+              latitude: mapData?.checkIn?.latitude,
+              longitude: mapData?.checkIn?.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+        >
+          <Marker coordinate={{ latitude: mapData?.checkIn?.latitude, longitude: mapData?.checkIn?.longitude }} />
+        </MapView>
+            : null
+        }
         {(isCheckOut && status === 2) && Platform.OS !== 'web' ?
           <MapView
             style={{flex: 1, height: 125}}

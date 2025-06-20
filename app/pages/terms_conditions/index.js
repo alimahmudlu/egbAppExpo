@@ -20,7 +20,7 @@ const ProjectHeader = ({ projectId }) => {
                 <LeftIcon width={20} height={20} />
             </TouchableOpacity>
 
-            <Text style={styles.headerTitle}>Privacy Policy</Text>
+            <Text style={styles.headerTitle}>Terms & Conditions</Text>
         </View>
     );
 };

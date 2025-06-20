@@ -1,4 +1,5 @@
-import { Stack } from "expo-router";
+import {Slot, Stack} from "expo-router";
+import {useState, useEffect} from "react";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import {ActivityIndicator, View} from "react-native";
 import { useFonts } from '@expo-google-fonts/inter/useFonts';
@@ -22,37 +23,48 @@ import { Inter_800ExtraBold_Italic } from '@expo-google-fonts/inter/800ExtraBold
 import { Inter_900Black_Italic } from '@expo-google-fonts/inter/900Black_Italic';
 
 
+
 function RootLayoutNav() {
   const { user, loading } = useAuth();
+  const [screens, setScreens] = useState([]);
 
-  // Show a loading indicator while checking authentication state
-  if (loading) {
+    useEffect(() => {
+        console.log(user, loading, 'user and loading state in RootLayoutNav');
+        setScreens([])
+        if (!user) {
+            setScreens([<Stack.Screen key="auth" name="auth" options={{ headerShown: false }} />]);
+        } else if (user?.role?.id === 1) {
+            setScreens([
+                <Stack.Screen key="employee" name="(employee)" options={{ headerShown: false }} />,
+                <Stack.Screen key="employeePages" name="employeePages" options={{ headerShown: false }} />
+            ])
+        } else if (user?.role?.id === 2) {
+            setScreens([
+                <Stack.Screen key="timeKeeper" name="(timeKeeper)" options={{ headerShown: false }} />,
+                <Stack.Screen key="timeKeeperPages" name="timeKeeperPages" options={{ headerShown: false }} />
+            ])
+        } else if (user?.role?.id === 3) {
+            setScreens([
+                <Stack.Screen key="chief" name="(chief)" options={{ headerShown: false }} />,
+                <Stack.Screen key="chiefPages" name="chiefPages" options={{ headerShown: false }} />
+            ])
+        } else {
+            setScreens([<Stack.Screen key="auth" name="(auth)" options={{ headerShown: false }} />])
+        }
+
+        console.log(screens, 'screens in RootLayoutNav');
+    }, [user]);
+
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#007BFF" />
-      </View>
+        loading ?
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#007BFF" />
+            </View>
+            :
+            <Stack screenOptions={{ headerShown: false }}>
+                {screens}
+            </Stack>
     );
-  }
-
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {/*{!user ? (*/}
-      {/*  // User is not authenticated, show auth screens*/}
-      {/*  <Stack.Screen name="(auth)" options={{ headerShown: false }} />*/}
-      {/*) : (*/}
-        {(
-        // User is authenticated, show role-based screens
-        // user.role === 'timeKeeper' ? (
-            !user ? (
-          <Stack.Screen name="chief" options={{ headerShown: false }} />
-        ) : user.role === 'employee' ? (
-          <Stack.Screen name="employee" options={{ headerShown: false }} />
-        ) : (
-          <Stack.Screen name="chief" options={{ headerShown: false }} />
-        )
-      )}
-    </Stack>
-  );
 }
 
 // Wrap the root layout with the AuthProvider
@@ -82,7 +94,7 @@ export default function RootLayout() {
     } else {
   return (
       <AuthProvider>
-        <RootLayoutNav />
+          <Slot />
       </AuthProvider>
   );
   }

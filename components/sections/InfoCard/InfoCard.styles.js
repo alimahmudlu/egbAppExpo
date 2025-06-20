@@ -20,6 +20,12 @@ const styles = StyleSheet.create({
   grayBg: {
     backgroundColor: COLORS.gray_100, 
   },
+  activeTasksBg: {
+    backgroundColor: COLORS.warning_100,
+  },
+  averageEarnedPointsBg: {
+    backgroundColor: COLORS.gray_blue_200,
+  },
 
   header: {
     gap: 8,
@@ -46,6 +52,12 @@ const styles = StyleSheet.create({
   },
   checkoutText: {
     color: COLORS.error_600,
+  },
+  activeTasksText: {
+    color: COLORS.warning_600,
+  },
+  averageEarnedPointsText: {
+    color: COLORS.gray_blue_600,
   },
   defaultText: {
     color: COLORS.gray_800, 

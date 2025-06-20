@@ -9,8 +9,11 @@ import CheckIcon from "@/assets/images/check.svg";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgPopup from "@/components/ui/Modal/Modal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
+import ApiService from "@/services/ApiService";
+import {useAuth} from "@/hooks/useAuth";
+import moment from "moment/moment";
 
 
 // Custom header component with back button and overview button
@@ -30,6 +33,7 @@ const ScreenHeader = () => {
 };
 
 export default function TimeKeeperUserScreen() {
+    const { accessToken } = useAuth();
     const { userId } = useLocalSearchParams();
     const employeeList = [
         { title: 'Jane Doe CI', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
@@ -40,21 +44,42 @@ export default function TimeKeeperUserScreen() {
         { title: 'John Smith AW', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
         { title: 'Ali Veli AW', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
     ];
+    const [employeeActivities, setEmployeeActivities] = useState([]);
+
+    useEffect(() => {
+        ApiService.get(`/timekeeper/employee/history/${userId}/checkin`, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            setEmployeeActivities(res?.data?.data || []);
+        }).catch(err => {
+            console.log(err, 'apiservice control err')
+        });
+    }, []);
 
     return (
         <SgTemplateScreenView
             head={<ScreenHeader />}
         >
-            {employeeList?.map((emp, index) => (
+            {employeeActivities?.map((emp, index) => (
+                // <SgSectionEmployeeCard
+                //     key={index}
+                //     title={emp.title}
+                //     role={emp.role}
+                //     time={emp.time}
+                //     image={emp.image}
+                // />
                 <SgSectionEmployeeCard
                     key={index}
-                    title={emp.title}
-                    role={emp.role}
-                    time={emp.time}
-                    image={emp.image}
+                    fullData={emp}
+                    title={emp?.employee?.full_name}
+                    role={emp?.employee?.role?.name}
+                    time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                    image={emp?.employee?.image}
                     editable={false}
                     status={emp.status}
-                    reason={emp.reason}
+                    reason={emp.reject_reason}
                 />
                 /*<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}} key={index}>
                     <SgListUserItem

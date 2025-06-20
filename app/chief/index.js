@@ -141,8 +141,8 @@ export default function EmployeeDashboardScreen() {
         <SgTemplateScreenView
             head={
                 <SgTemplateHeader
-                    name="Jane Doe"
-                    role="Time Keeper"
+                    name={user?.full_name}
+                    role={user?.role?.name}
                     profileImage={Avatar}
                 />
             }
@@ -166,6 +166,7 @@ export default function EmployeeDashboardScreen() {
                 title="Active tasks"
                 buttonText="Add task +"
                 bgButton="success"
+                href="/chiefPages/create-task"
             />
 
             <SgFilterTab
@@ -181,6 +182,7 @@ export default function EmployeeDashboardScreen() {
                             <View style={{gap: 16}}>
                                 {taskList?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        key={index}
                                         time={el?.time}
                                         duration={el?.duration}
                                         title={el?.title}
@@ -201,6 +203,7 @@ export default function EmployeeDashboardScreen() {
                             <View style={{gap: 16}}>
                                 {taskList?.filter(el => el?.type === 'check')?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        key={index}
                                         time={el?.time}
                                         duration={el?.duration}
                                         title={el?.title}
@@ -221,6 +224,7 @@ export default function EmployeeDashboardScreen() {
                             <View style={{gap: 16}}>
                                 {taskList?.filter(el => el?.type === 'complete')?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        key={index}
                                         time={el?.time}
                                         duration={el?.duration}
                                         title={el?.title}

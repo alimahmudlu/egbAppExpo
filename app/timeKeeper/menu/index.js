@@ -12,7 +12,7 @@ import COLORS from "@/constants/colors";
 
 
 export default function TimeKeeperMenuScreen() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
     const [logOutModal, setLogOutModal] = useState(false);
 
@@ -23,8 +23,9 @@ export default function TimeKeeperMenuScreen() {
     function handleLogout() {
         // Implement your logout logic here
         // FIXME: This is just a placeholder for the logout logic
-        Alert.alert("Logout successfully!");
-        console.log("User logged out");
+        // Alert.alert("Logout successfully!");
+        // console.log("User logged out");
+        logout();
         toggleLogOutModal();
     }
 
@@ -34,8 +35,8 @@ export default function TimeKeeperMenuScreen() {
         <View style={{padding: 16}}>
           <SgSectionProfileBanner
               image={Avatar}
-              name="Jane Doe"
-              role="Time Keeper"
+              name={user?.full_name}
+              role={user?.role?.name}
               onLogout={toggleLogOutModal}
           />
         </View>

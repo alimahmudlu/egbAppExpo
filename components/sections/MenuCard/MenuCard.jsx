@@ -62,7 +62,7 @@ export default function SgSectionMenuCard({ extraItems = [] }) {
           <Divider />
 
           {/* App Info */}
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity onPress={() => router.push('/pages/info')} style={styles.item}>
             <View style={styles.left}>
               <View style={styles.iconContainer}>
                 <AppInfo width={20} height={20} style={styles.icon} />
@@ -76,7 +76,7 @@ export default function SgSectionMenuCard({ extraItems = [] }) {
           <Divider />
 
           {/* Terms & Conditions */}
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity onPress={() => router.push('/pages/terms_conditions')} style={styles.item}>
             <View style={styles.left}>
               <View style={styles.iconContainer}>
                 <Terms width={20} height={20} style={styles.icon} />
@@ -90,7 +90,7 @@ export default function SgSectionMenuCard({ extraItems = [] }) {
           <Divider />
 
           {/* Privacy Policy */}
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity onPress={() => router.push('/pages/privacy_policy')} style={styles.item}>
             <View style={styles.left}>
               <View style={styles.iconContainer}>
                 <Privacy width={20} height={20} style={styles.icon} />

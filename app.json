@@ -1,24 +1,24 @@
 {
   "expo": {
-    "name": "egbAppExpo",
+    "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "default",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.alimahmudlu.egbexpoapp",
+      "bundleIdentifier": "com.egb.egb",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/icon-white.png",
+        "backgroundColor": "#0B322F"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.alimahmudlu.egbexpoapp"
@@ -26,23 +26,30 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon-color.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/icon-white.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#0B322F"
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d461924c-79d5-4a37-8efa-85691df04b88"
+      }
     }
   }
 }

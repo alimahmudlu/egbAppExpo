@@ -5,6 +5,10 @@ import CheckIn from "@/assets/images/check-in.svg";
 import CheckOut from "@/assets/images/check-out.svg";
 import COLORS from "@/constants/colors";
 import { useRouter } from 'expo-router';
+import PinIcon from "@/assets/images/pin.svg";
+import CheckedCircleIcon from "@/assets/images/check-circle.svg";
+import CoinsHandIcon from "@/assets/images/coins-hand.svg";
+import OneCoinsIcon from "@/assets/images/one-coins.svg";
 
 export default function SgSectionInfoCard({ customIcon, title, count, type, href = null, children = null }) {
   const router = useRouter();
@@ -23,6 +27,26 @@ export default function SgSectionInfoCard({ customIcon, title, count, type, href
       bgColor = styles.checkoutBg;
       textColor = styles.checkoutText;
       IconComponent = CheckOut;
+      break;
+    case 'activeTasks':
+      bgColor = styles.activeTasksBg;
+      textColor = styles.activeTasksText;
+      IconComponent = PinIcon || customIcon || null;
+      break;
+    case 'completedTasks':
+      bgColor = styles.checkinBg;
+      textColor = styles.checkinText;
+      IconComponent = CheckedCircleIcon || customIcon || null;
+      break;
+    case 'earnedPoints':
+      bgColor = styles.checkoutBg;
+      textColor = styles.checkoutText;
+      IconComponent = CoinsHandIcon || customIcon || null;
+      break;
+    case 'averageEarnedPoints':
+      bgColor = styles.averageEarnedPointsBg;
+      textColor = styles.averageEarnedPointsText;
+      IconComponent = OneCoinsIcon || customIcon || null;
       break;
     default:
       bgColor = styles.grayBg;
