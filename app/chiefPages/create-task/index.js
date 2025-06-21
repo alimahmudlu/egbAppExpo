@@ -11,6 +11,15 @@ import moment from "moment";
 import ApiService from "@/services/ApiService";
 import COLORS from "@/constants/colors";
 import SgInput from "@/components/ui/Input/Input";
+import SgSectionDatePicker from "@/components/sections/DatePicker/DatePicker";
+import SgSectionTimePicker from "@/components/sections/TimePicker/TimePicker";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import SgSelect from "@/components/ui/Select/Select";
+import SgRadio from "@/components/ui/Radio/Radio";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
+import Avatar from "@/assets/images/avatar.png";
+import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
+import SgButton from "@/components/ui/Button/Button";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -32,12 +41,62 @@ const ProjectHeader = ({ projectId }) => {
 export default function TaskCreateScreen() {
     const { accessToken } = useAuth();
     const [data, setData] = useState({});
+    const [projectsList, setProjectsList] = useState([]);
+    const [employeesList, setEmployeesList] = useState([]);
 
-    function handleChange() {
-        // Handle input change logic here
-        // For example, you can update the state with the new value
-        // setData({ ...data, title: newValue });
+    function handleChange(e) {
+        setData({ ...data, [e.name]: e.value });
     }
+
+    useEffect(() => {
+        ApiService.get('/chief/options/projects', {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            if (res.data.success) {
+                setProjectsList(res?.data?.data);
+            } else {
+                // Handle error response
+                console.log(res.data.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }, []);
+
+    useEffect(() => {
+        if (data?.project?.id) {
+            ApiService.get(`/chief/options/employees/${data?.project?.id}`, {
+                headers: {
+                    'authorization': accessToken || ''
+                }
+            }).then(res => {
+                if (res.data.success) {
+                    setEmployeesList(res?.data?.data);
+                } else {
+                    // Handle error response
+                    console.log(res.data.message);
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+    }, [data?.project?.id]);
+
+    function handleSubmit() {
+        ApiService.post('/chief/task/create', data, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            console.log(res, 'res');
+        }).catch(err => {
+            console.log(err, 'err');
+        })
+    }
+
+
 
     return (
         <SgTemplateScreenView
@@ -52,12 +111,54 @@ export default function TaskCreateScreen() {
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
             </Text>
 
-            <View>
+            <View style={{gap: 16}}>
+                <SgSelect
+                    label="Project"
+                    placeholder="Enter project..."
+                    modalTitle="Select project"
+                    value={data?.project}
+                    name='project'
+                    onChangeText={handleChange}
+                    list={(projectsList || []).map((project, index) => (
+                        {
+                            id: project?.id,
+                            name: project?.name,
+                            render: <SgSectionProjectListItem
+                                key={index}
+                                title={project.name}
+                                staffImages={project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")}
+                                id={project.id}
+                            />
+                        }
+                    ))}
+                />
+                <SgSelect
+                    label="Assign to"
+                    placeholder="Select user..."
+                    modalTitle="Select user"
+                    value={data?.assigned_employee}
+                    name='assigned_employee'
+                    onChangeText={handleChange}
+                    list={(employeesList || []).map((employee, index) => (
+                        {
+                            id: employee?.id,
+                            name: employee?.full_name,
+                            render: <SgSectionUserInfo
+                                name={employee?.full_name}
+                                role="Employee"
+                                profileImage={Avatar}
+                                color="dark"
+                                size="md"
+                            />
+                        }
+                    ))}
+                />
                 <SgInput
                     label="Title"
                     placeholder="Enter Title..."
                     type="text"
                     value={data?.title}
+                    name='title'
                     onChangeText={handleChange}
                 />
                 <SgInput
@@ -65,15 +166,24 @@ export default function TaskCreateScreen() {
                     placeholder="Enter description..."
                     type="textarea"
                     value={data?.description}
+                    name='description'
                     onChangeText={handleChange}
                 />
-                <SgInput
-                    label="Deadline"
-                    placeholder="Enter deadline..."
-                    type="textarea"
-                    value={data?.description}
+                <SgDatePicker
+                    label="Deadline date"
+                    placeholder="dd/mm/yyyy - hh/mm A"
+                    value={data?.deadline}
+                    name='deadline'
                     onChangeText={handleChange}
                 />
+
+                <SgButton
+                    onPress={handleSubmit}
+                    bgColor = {COLORS.primary}
+                    color= {COLORS.white}
+                >
+                    Create task
+                </SgButton>
             </View>
 
 

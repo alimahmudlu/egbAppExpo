@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
 // API configuration
-const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
+const API_URL = 'http://192.168.1.60:3000/api'; // Replace with your actual API URL
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_DATA_KEY = 'user_data';
 

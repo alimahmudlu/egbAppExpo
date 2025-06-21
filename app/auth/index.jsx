@@ -44,10 +44,7 @@ export default function Login() {
     })
   };
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
         <View>
@@ -83,7 +80,6 @@ export default function Login() {
       </View>
       </TouchableWithoutFeedback>
 
-
         <SgPopup
             visible={errorModal}
             onClose={toggleErrorModal}
@@ -91,6 +87,6 @@ export default function Login() {
             title='Error'
             description={errorModalData}
         />
-    </KeyboardAvoidingView>
+    </>
   );
 }

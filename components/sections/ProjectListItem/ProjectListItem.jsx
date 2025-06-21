@@ -1,14 +1,21 @@
-import { View, Text, Image } from 'react-native';
+import {View, Text, Image, Pressable} from 'react-native';
 import styles from './ProjectListItem.styles';
 import RightIcon from '@/assets/images/chevron-right.svg';
-import {Link} from "expo-router";
+import {Link, useRouter} from "expo-router";
 
-export default function SgSectionProjectListItem({ title, staffImages = [], id, href=`/employeePages/projects/${id}` }) {
+export default function SgSectionProjectListItem({ title, staffImages = [], id, href }) {
   const visibleImages = staffImages.slice(0, 5);
   const hiddenCount = staffImages.length - visibleImages.length;
+  const router = useRouter();
+
+  function onClick() {
+    if (href) {
+      router.navigate(href)
+    }
+  }
 
   return (
-    <Link href={href || '#'} style={styles.card}>
+    <Pressable onPress={onClick} style={styles.card}>
       <View style={styles.rowWrapper}>
         <View style={styles.contentWrapper}>
           <Text style={styles.title}>{title}</Text>
@@ -40,10 +47,12 @@ export default function SgSectionProjectListItem({ title, staffImages = [], id, 
           </View>
         </View>
 
-        <View style={styles.iconWrapper}>
-          <RightIcon width={20} height={20} />
-        </View>
+        {href ?
+            <View style={styles.iconWrapper}>
+              <RightIcon width={20} height={20} />
+            </View>
+        : null}
       </View>
-    </Link>
+    </Pressable>
   );
 }

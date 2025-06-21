@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useAuth} from "@/hooks/useAuth";
 
-const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
+const API_URL = 'http://192.168.1.60:3000/api'; // Replace with your actual API URL
 const AUTH_TOKEN_KEY = 'Authorization';
 
 const ApiService = axios.create({
