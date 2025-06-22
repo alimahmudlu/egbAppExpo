@@ -7,7 +7,6 @@ import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
-import {useAuth} from "@/hooks/useAuth";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
 
@@ -29,7 +28,6 @@ const ProjectHeader = ({ projectId }) => {
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
-    const { accessToken } = useAuth();
     const { projectId, taskId } = useLocalSearchParams();
 
     console.log(useLocalSearchParams());
