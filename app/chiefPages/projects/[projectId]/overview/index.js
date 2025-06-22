@@ -1,14 +1,11 @@
 import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
+import {useLocalSearchParams, router} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
-import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment";
-import axios from "axios";
-import {useAuth} from "@/hooks/useAuth";
-import ApiService from "@/services/ApiService";
+import {useApi} from "@/hooks/useApi";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -28,21 +25,20 @@ const ProjectHeader = ({ projectId }) => {
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
-    const { accessToken } = useAuth();
+    const { request } = useApi();
     const [projectDetails, setProjectDetails] = useState({});
 
     useEffect(() => {
-        ApiService.get(`/chief/project/item/${projectId}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
+        request({
+            url: `/chief/project/item/${projectId}`,
+            method: 'get',
+            cache: true
         }).then(res => {
-            if (res.data.success) {
-                setProjectDetails(res?.data?.data);
-                console.log(res?.data?.data);
+            if (res.success) {
+                setProjectDetails(res?.data);
             } else {
                 // Handle error response
-                console.log(res.data.message);
+                console.log(res.message);
             }
         }).catch(err => {
             console.log(err);

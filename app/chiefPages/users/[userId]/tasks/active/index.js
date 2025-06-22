@@ -1,17 +1,12 @@
-import {View, Text, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useLocalSearchParams, router} from "expo-router";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import LeftIcon from "@/assets/images/chevron-left.svg";
-import SgListUserItem from "@/components/ui/ListUserItem";
-import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
-import CheckIcon from "@/assets/images/check.svg";
-import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
-import SgCard from "@/components/ui/Card/Card";
-import SgPopup from "@/components/ui/Modal/Modal";
-import React, {useState} from "react";
-import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
+import React, {useEffect, useState} from "react";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import moment from "moment/moment";
+import {useApi} from "@/hooks/useApi";
 
 
 // Custom header component with back button and overview button
@@ -32,125 +27,27 @@ const ScreenHeader = () => {
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
-    const taskList = [
-        {
-            id: 1,
-            projectId: 1,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Check",
-            statusType: "warning",
-            type: 'check'
-        },
-        {
-            id: 2,
-            projectId: 2,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 3,
-            projectId: 3,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 4,
-            projectId: 4,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 5,
-            projectId: 5,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 6,
-            projectId: 6,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 7,
-            projectId: 7,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 8,
-            projectId: 8,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 9,
-            projectId: 9,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        }
-    ]
+    const { request } = useApi();
+    const [taskList, setTaskList] = useState([]);
+
+    useEffect(() => {
+        request({
+            url: `/chief/task/list/${userId}`,
+            method: 'get',
+            params: {
+                type: 'active'
+            }
+        }).then(res => {
+            if (res.success) {
+                setTaskList(res?.data);
+            } else {
+                // Handle error response
+                console.log(res.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }, []);
 
     return (
         <SgTemplateScreenView
@@ -158,16 +55,17 @@ export default function TimeKeeperUserScreen() {
         >
             {taskList?.map((el, index) => (
                 <SgSectionTaskCard
+                    id={el?.id}
+                    projectId={el?.project_id}
                     key={index}
-                    time={el?.time}
+                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
                     duration={el?.duration}
-                    title={el?.title}
+                    title={el?.name}
                     description={el?.description}
-                    name={el?.name}
+                    name={el?.assigned_employee?.full_name}
                     image={null}
                     status={el?.status}
-                    statusType={el?.statusType}
-                    href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
                 />
             ))}
         </SgTemplateScreenView>

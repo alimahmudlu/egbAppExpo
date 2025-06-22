@@ -55,14 +55,14 @@ export default function Login() {
                 placeholder="Enter ID..."
                 type="text"
                 value={id}
-                onChangeText={setId}
+                onChangeText={(e) => setId(e.value)}
             />
             <SgInput
                 label="Password"
                 placeholder="Enter password..."
                 type="password"
                 value={password}
-                onChangeText={setPassword}
+                onChangeText={(e) => setPassword(e.value)}
             />
             <SgCheckbox label="Remember me" />
             </SgForm>

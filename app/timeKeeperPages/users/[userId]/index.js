@@ -10,8 +10,7 @@ import SgCard from "@/components/ui/Card/Card";
 import ClockHistory from "@/assets/images/clock-history.svg";
 import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
 import {useEffect, useState} from "react";
-import ApiService from "@/services/ApiService";
-import {useAuth} from "@/hooks/useAuth";
+import {useApi} from "@/hooks/useApi";
 
 
 // Custom header component with back button and overview button
@@ -32,7 +31,7 @@ const ScreenHeader = () => {
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
-    const { accessToken } = useAuth();
+    const { request } = useApi();
     const data = [
         { label: '1-2', value: 14, percentage: 90 },
         { label: '3-4', value: 9, percentage: 70 },
@@ -44,12 +43,11 @@ export default function TimeKeeperUserScreen() {
     const [employeeData, setEmployeeData] = useState({});
 
     useEffect(() => {
-        ApiService.get(`/timekeeper/employee/details/${userId}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
+        request({
+            url: `/timekeeper/employee/details/${userId}`,
+            method: 'get',
         }).then(res => {
-            setEmployeeData(res?.data?.data);
+            setEmployeeData(res?.data);
         }).catch(err => {
             console.log(err)
         })

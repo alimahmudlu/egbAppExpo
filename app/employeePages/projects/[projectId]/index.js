@@ -6,10 +6,8 @@ import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
-import axios from "axios";
-import {useAuth} from "@/hooks/useAuth";
 import moment from "moment";
-import ApiService from "@/services/ApiService";
+import {useApi} from "@/hooks/useApi";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -35,156 +33,35 @@ const ProjectHeader = ({ projectId }) => {
 };
 
 export default function ProjectItemScreen() {
-    const { accessToken } = useAuth();
+    const { request } = useApi();
     const { projectId } = useLocalSearchParams();
-    const taskList = [
-        {
-            id: 1,
-            projectId: 1,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Check",
-            statusType: "warning",
-            type: 'check'
-        },
-        {
-            id: 2,
-            projectId: 2,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 3,
-            projectId: 3,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 4,
-            projectId: 4,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 5,
-            projectId: 5,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 6,
-            projectId: 6,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 7,
-            projectId: 7,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 8,
-            projectId: 8,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 9,
-            projectId: 9,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        }
-    ]
     const [projectDetails, setProjectDetails] = useState({});
     const [tasksList, setTasksList] = useState([]);
 
     useEffect(() => {
-        ApiService.get(`/employee/project/item/${projectId}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
+        request({
+            url: `/employee/project/item/${projectId}`,
+            method: 'get',
         }).then(res => {
-            if (res.data.success) {
-                setProjectDetails(res?.data?.data);
+            if (res.success) {
+                setProjectDetails(res?.data);
             } else {
                 // Handle error response
-                console.log(res.data.message);
+                console.log(res.message);
             }
         }).catch(err => {
             console.log(err);
         })
-        ApiService.get(`/employee/project/item/${projectId}/tasks`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
+
+        request({
+            url: `/employee/project/item/${projectId}/tasks`,
+            method: 'get',
         }).then(res => {
-            if (res.data.success) {
-                setTasksList(res?.data?.data);
-                console.log(res?.data?.data);
+            if (res.success) {
+                setTasksList(res?.data);
             } else {
                 // Handle error response
-                console.log(res.data.message);
+                console.log(res.message);
             }
         }).catch(err => {
             console.log(err);
@@ -196,8 +73,8 @@ export default function ProjectItemScreen() {
             head={<ProjectHeader projectId={projectId} />}
         >
             <SgSectionProjectNameCard
-                title={projectDetails?.name}
-                description="There are many variations of passages of Lorem Ipsum available"
+                title='Project name'
+                description={projectDetails?.name}
             />
 
             <SgCard>
@@ -207,12 +84,14 @@ export default function ProjectItemScreen() {
             <View style={{gap: 16}}>
                 {tasksList.map((el, index) => (
                     <SgSectionTaskCard
+                        id={el?.id}
+                        projectId={el?.project_id}
                         key={index}
-                        time={moment(el?.time).format('DD.MM.YYYY / HH:mm') || el?.time}
-                        duration={'2h11m'}
+                        time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
+                        duration={el?.duration}
                         title={el?.name}
                         description={el?.description}
-                        name={el?.reporter_employee?.full_name}
+                        name={el?.assigned_employee?.full_name}
                         image={null}
                         status={el?.status}
                         href={`/employeePages/projects/${el?.project_id}/${el?.id}`}

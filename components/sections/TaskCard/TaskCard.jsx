@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
 import DotsIcon from "../../../assets/images/dots-icon.svg";
 import styles from './TaskCard.styles';
 import COLORS from '@/constants/colors';
@@ -8,13 +8,17 @@ import ClipboardIcon from "@/assets/images/clipboard-check.svg"
 import PencilIcon from "@/assets/images/pencil.svg"
 import TrashIcon from "@/assets/images/trash2.svg"
 import SgButton from '@/components/ui/Button/Button';
-import {Link} from "expo-router";
 import LogOutModalIcon from "@/assets/images/logout.svg";
 import TaskRemovedIcon from "@/assets/images/taskRemove.svg";
 import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
+import {useRouter} from "expo-router";
+import ApiService from "@/services/ApiService";
+import {useAuth} from "@/hooks/useAuth";
 
-export default function SgSectionTaskCard({time, title, description, name, image, status, statusType, duration, id, projectId, href}) {
+export default function SgSectionTaskCard({time, title, description, name, image, status, duration, id, projectId, href}) {
+    const { accessToken } = useAuth();
+    const router = useRouter();
     const [modalVisible, setModalVisible] = useState(false);
     const [removeTaskModal, setRemoveTaskModal] = useState(false);
     const [removeTaskInfoModal, setRemoveTaskInfoModal] = useState(false);
@@ -30,8 +34,15 @@ export default function SgSectionTaskCard({time, title, description, name, image
         setModalVisible(false)
     };
     const handleDeleteTask = () => {
-        console.log('Delete item with task ID:', id, 'and project ID:', projectId);
-        toggleRemoveTaskInfoModal();
+        ApiService.delete(`/chief/task/${id}`, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        } ).then(res => {
+            toggleRemoveTaskInfoModal();
+        }).catch(err => {
+            console.log(err);
+        });
     };
 
     const toggleCompleteTaskModal = () => {
@@ -48,6 +59,8 @@ export default function SgSectionTaskCard({time, title, description, name, image
 
     const getStatusStyles = () => {
         switch (status?.id) {
+            case 5:
+                return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
             case 4:
                 return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
             case 3:
@@ -62,17 +75,17 @@ export default function SgSectionTaskCard({time, title, description, name, image
                 <View style={styles.header}>
                     <Text style={styles.time}>{time}</Text>
                     <View style={styles.rightHeader}>
-                        {(status?.id && [3, 4].includes(status?.id)) && (
+                        {(status?.id && [3, 4, 5].includes(status?.id)) && (
                             <View
                                 style={[
                                     styles.statusBadge,
-                                    {backgroundColor: getStatusStyles(statusType).backgroundColor},
+                                    {backgroundColor: getStatusStyles(status?.id).backgroundColor},
                                 ]}
                             >
                                 <Text
                                     style={[
                                         styles.statusText,
-                                        {color: getStatusStyles(statusType).color},
+                                        {color: getStatusStyles(status?.id).color},
                                     ]}
                                 >
                                     {status?.name}
@@ -85,10 +98,10 @@ export default function SgSectionTaskCard({time, title, description, name, image
                     </View>
                 </View>
 
-                <Link href={href || '/chief/menu'} style={styles.content}>
+                <Pressable onPress={() => {router.push(href)}} style={styles.content}>
                     <Text style={styles.title} numberOfLines={1}>{title}</Text>
                     <Text style={styles.description} numberOfLines={2}>{description}</Text>
-                </Link>
+                </Pressable>
 
                 <View style={styles.footer}>
                     <Text style={styles.duration}>{duration}</Text>

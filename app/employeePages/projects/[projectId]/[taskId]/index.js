@@ -1,17 +1,15 @@
 import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
+import {useLocalSearchParams, router} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
-import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
-import axios from "axios";
 import {useAuth} from "@/hooks/useAuth";
 import moment from "moment/moment";
-import ApiService from "@/services/ApiService";
+import {useApi} from "@/hooks/useApi";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -30,6 +28,7 @@ const ProjectHeader = ({ projectId }) => {
 };
 
 export default function ProjectItemScreen() {
+    const { request } = useApi();
     const { accessToken } = useAuth();
     const { projectId, taskId } = useLocalSearchParams();
 
@@ -38,16 +37,15 @@ export default function ProjectItemScreen() {
     const [taskDetails, setTaskDetails] = useState({});
 
     useEffect(() => {
-        ApiService.get(`/employee/project/item/${projectId}/tasks/item/${taskId}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
+        request({
+            url: `employee/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
         }).then(res => {
-            if (res.data.success) {
-                setTaskDetails(res?.data?.data);
+            if (res.success) {
+                setTaskDetails(res?.data);
             } else {
                 // Handle error response
-                console.log(res.data.message);
+                console.log(res.message);
             }
         }).catch(err => {
             console.log(err);

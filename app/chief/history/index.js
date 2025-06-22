@@ -1,134 +1,75 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
-import SgFileCard from "@/components/sections/FileCard/FileCard";
-import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
-import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import moment from "moment/moment";
+import SgPopup from "@/components/ui/Modal/Modal";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
+import SgButton from "@/components/ui/Button/Button";
+import COLORS from "@/constants/colors";
+import SgSelect from "@/components/ui/Select/Select";
+import SgInput from "@/components/ui/Input/Input";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import {useApi} from "@/hooks/useApi";
 
 export default function EmployeeDocsScreen() {
+  const { request } = useApi();
+  const [taskList, setTaskList] = useState([]);
+  const [taskStatuses, setTaskStatus] = useState([]);
+  const [filters, setFilters] = useState({})
+  const [filterModal, setFilterModal] = useState(false)
 
-  const taskList = [
-    {
-      id: 1,
-      projectId: 1,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: "Check",
-      statusType: "warning",
-      type: 'check'
-    },
-    {
-      id: 2,
-      projectId: 2,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: null,
-      statusType: "success",
-      type: null
-    },
-    {
-      id: 3,
-      projectId: 3,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: "Complete",
-      statusType: "success",
-      type: 'complete'
-    },
-    {
-      id: 4,
-      projectId: 4,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: null,
-      statusType: "success",
-      type: null
-    },
-    {
-      id: 5,
-      projectId: 5,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: "Complete",
-      statusType: "success",
-      type: 'complete'
-    },
-    {
-      id: 6,
-      projectId: 6,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: "Complete",
-      statusType: "success",
-      type: 'complete'
-    },
-    {
-      id: 7,
-      projectId: 7,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: null,
-      statusType: "success",
-      type: null
-    },
-    {
-      id: 8,
-      projectId: 8,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: "Complete",
-      statusType: "success",
-      type: 'complete'
-    },
-    {
-      id: 9,
-      projectId: 9,
-      time: "12.04.2025 / 10:20 AM",
-      duration: "2h. 42m.",
-      title: "There are many variations of passages of Lorem Ipsum available but the",
-      description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-      name: "Jane Doe",
-      image: null,
-      status: "Complete",
-      statusType: "success",
-      type: 'complete'
-    }
-  ]
+  function getData() {
+    request({
+      url: `/chief/task/list`,
+      method: 'get',
+    }).then(res => {
+      if (res.data.success) {
+        setTaskList(res?.data?.data);
+      } else {
+        // Handle error response
+        console.log(res.data.message);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  function toggleFilterModal() {
+    setFilterModal(!filterModal);
+  }
+
+  function resetFilters() {
+    setFilters({});
+  }
+
+  function handleChange(e) {
+    setFilters({ ...filters, [e.name]: e.value });
+  }
+
+  function handleFilters() {
+    getData()
+  }
+
+  useEffect(() => {
+    getData();
+
+    request({
+      url: `/chief/options/task_statuses`,
+      method: 'get',
+      cache: true,
+    }).then(res => {
+      if (res.data.success) {
+        setTaskStatus(res?.data?.data);
+      } else {
+        // Handle error response
+        console.log(res.data.message);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+  }, []);
 
   return (
     <SgTemplateScreenView
@@ -138,24 +79,121 @@ export default function EmployeeDocsScreen() {
               title="History"
               description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
               icon="filter"
+              onPress={toggleFilterModal}
           />
         </View>
       }
     >
       {taskList?.map((el, index) => (
           <SgSectionTaskCard
+              id={el?.id}
+              projectId={el?.project_id}
               key={index}
-              time={el?.time}
+              time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
               duration={el?.duration}
-              title={el?.title}
+              title={el?.name}
               description={el?.description}
-              name={el?.name}
+              name={el?.assigned_employee?.full_name}
               image={null}
               status={el?.status}
-              statusType={el?.statusType}
-              href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+              href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
           />
       ))}
+
+
+      <SgPopup
+          visible={filterModal}
+          onClose={toggleFilterModal}
+          footerButton={
+            <SgButton
+                onPress={handleFilters}
+                bgColor={COLORS.primary}
+                color={COLORS.white}
+            >
+              Accept
+            </SgButton>
+          }
+      >
+        <View style={{paddingBottom: 20}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>Filters</Text>
+
+            <SgButton
+                onPress={resetFilters}
+                color={COLORS.brand_700}
+                style={{
+                  flex: 0,
+                  width: 'auto',
+                  marginLeft: 'auto',
+                  paddingVertical: 0,
+                  paddingHorizontal: 0,
+                  gap: 7
+                }}
+
+            >
+              Clear filters
+              <ReloadArrow width={20} height={20} style={{marginLeft: 7}} />
+            </SgButton>
+          </View>
+
+          <View style={{gap: 16}}>
+            <SgSelect
+                label="Progress"
+                placeholder="Select..."
+                modalTitle="Select project"
+                value={filters?.status}
+                name='status'
+                list={(taskStatuses || []).map((el) => ({
+                  id: el.id,
+                  name: el.name,
+                  render: (<Text style={{fontSize: 16, fontWeight: 500}}>{el.name}</Text>)
+                }))}
+                onChangeText={handleChange}
+            />
+            <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
+              <View style={{flex: 1}}>
+                <SgInput
+                    label="Scor range"
+                    placeholder="min."
+                    value={filters?.score_min}
+                    name='score_min'
+                    onChangeText={handleChange}
+                    type='number'
+                />
+              </View>
+              <View style={{flex: 1}}>
+                <SgInput
+                    label=""
+                    placeholder="max."
+                    value={filters?.score_max}
+                    name='score_max'
+                    onChangeText={handleChange}
+                    type='number'
+                />
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
+              <View style={{flex: 1}}>
+                <SgDatePicker
+                    label="Deadline date range"
+                    placeholder="min."
+                    value={filters?.deadline_min}
+                    name='deadline_min'
+                    onChangeText={handleChange}
+                />
+              </View>
+              <View style={{flex: 1}}>
+                <SgDatePicker
+                    placeholder="max."
+                    value={filters?.deadline_max}
+                    name='deadline_max'
+                    onChangeText={handleChange}
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+      </SgPopup>
     </SgTemplateScreenView>
   );
 }

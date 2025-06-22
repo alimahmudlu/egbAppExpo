@@ -38,15 +38,23 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 
+  content: {
+    flexDirection: "column",
+    gap: 8,
+    display: 'flex',
+  },
   title: {
+    flex: 1,
     fontFamily: 'Inter',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 500,
     lineHeight: 20,
     color: COLORS.gray_800,
+    display: 'flex',
   },
   description: {
+    flex: 1,
     fontFamily: 'Inter',
     fontSize: 10,
     fontStyle: 'normal',
@@ -54,6 +62,7 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: COLORS.gray_500,
     marginTop: 4,
+    display: 'flex',
   },
   footer: {
     flexDirection: 'row',

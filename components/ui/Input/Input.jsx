@@ -81,6 +81,20 @@ export default function SgInput({
           </>
         );
 
+      case 'number':
+        return (
+          <>
+            <TextInput
+              style={[styles.input]}
+              keyboardType="numeric"
+              value={value}
+              placeholder={placeholder}
+              onChangeText={(e) => onChangeText({ name, value: e })}
+              placeholderTextColor={COLORS.gray_400}
+            />
+          </>
+        );
+
       default:
         return (
           <TextInput

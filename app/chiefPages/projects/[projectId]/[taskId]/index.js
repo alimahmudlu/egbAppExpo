@@ -4,14 +4,13 @@ import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {useLocalSearchParams, router, Link} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import SgCard from "@/components/ui/Card/Card";
-import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
-import axios from "axios";
-import {useAuth} from "@/hooks/useAuth";
 import moment from "moment/moment";
-import ApiService from "@/services/ApiService";
+import COLORS from "@/constants/colors";
+import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
+import {useApi} from "@/hooks/useApi";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -30,24 +29,22 @@ const ProjectHeader = ({ projectId }) => {
 };
 
 export default function ProjectItemScreen() {
-    const { accessToken } = useAuth();
+    const { request } = useApi();
     const { projectId, taskId } = useLocalSearchParams();
-
-    console.log(useLocalSearchParams());
 
     const [taskDetails, setTaskDetails] = useState({});
 
     useEffect(() => {
-        ApiService.get(`/chief/project/item/${projectId}/tasks/item/${taskId}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
+        request({
+            url: `/chief/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
         }).then(res => {
-            if (res.data.success) {
-                setTaskDetails(res?.data?.data);
+            if (res.success) {
+                setTaskDetails(res?.data);
+
             } else {
                 // Handle error response
-                console.log(res.data.message);
+                console.log(res.message);
             }
         }).catch(err => {
             console.log(err);
@@ -57,20 +54,33 @@ export default function ProjectItemScreen() {
         <SgTemplateScreenView
             head={<ProjectHeader projectId={projectId} />}
         >
-            <SgCard
-                contentTitle='Reporter'
-            >
-                <SgSectionUserInfo
-                    name={taskDetails?.reporter_employee?.full_name}
-                    role="Employee"
-                    profileImage={Avatar}
-                    color="dark"
-                    size="md"
+            <SgSectionUserInfo
+                name={taskDetails?.assigned_employee?.full_name}
+                role="Employee"
+                profileImage={Avatar}
+                color="dark"
+                size="lg"
+                clickable={`/chiefPages/users/${taskDetails?.assigned_employee?.id}/`}
+            />
+            {taskDetails?.status?.id === 3 ?
+                <SgSectionStatusInfo
+                    title="Progress"
+                    status="Check Progress"
+                    statusType="warning"
                 />
-            </SgCard>
+                : null
+            }
+            {taskDetails?.status?.id === 4 ?
+                <SgSectionStatusInfo
+                    title="Progress"
+                    status="Check complete"
+                    statusType="success"
+                />
+                : null
+            }
             <SgCard
                 contentTitle='Deadline date'
-                contentDescription={moment(taskDetails?.time).format('DD.MM.YYYY / HH:mm') || taskDetails?.time}
+                contentDescription={taskDetails?.deadline ? moment(taskDetails?.deadline).format('DD.MM.YYYY / hh:mm A') : ''}
             />
             <SgCard
                 contentTitle='Points to be earned'
@@ -90,23 +100,42 @@ export default function ProjectItemScreen() {
                 bgColor={null}
             />
 
-            <View style={{
-                gap: 12,
-                flexDirection: 'row',
-            }}>
-                <SgButton
-                    bgColor='#FEF0C7'
-                    color='#B54708'
-                >
-                    Check request
-                </SgButton>
-                <SgButton
-                    bgColor='#D2F5EC'
-                    color='#1A554E'
-                >
-                    Add file
-                </SgButton>
-            </View>
+            {taskDetails?.status?.id === 3 ?
+                <View style={{
+                    gap: 12,
+                    flexDirection: 'row',
+                }}>
+                    <SgButton
+                        bgColor = {COLORS.primary}
+                        color= {COLORS.white}
+                    >
+                        Checked
+                    </SgButton>
+                </View>
+                : null
+            }
+
+            {taskDetails?.status?.id === 4 ?
+                <View style={{
+                    gap: 12,
+                    flexDirection: 'row',
+                }}>
+                    <SgButton
+                        bgColor = {COLORS.error_50}
+                        color= {COLORS.error_700}
+                    >
+                        Reject
+                    </SgButton>
+                    <SgButton
+                        bgColor = {COLORS.primary}
+                        color= {COLORS.white}
+                    >
+                        Complete task
+                    </SgButton>
+                </View>
+                : null
+            }
+
 
         </SgTemplateScreenView>
     );

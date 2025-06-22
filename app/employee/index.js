@@ -8,49 +8,36 @@ import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import { useAuth } from "@/hooks/useAuth";
 import { StyleSheet, Text, View } from "react-native";
-import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
-import LoginIcon from "@/assets/images/login.svg";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useEffect, useState} from "react";
-import axios from "axios";
-import ApiService from "@/services/ApiService";
+import {useApi} from "@/hooks/useApi";
 
 export default function EmployeeDashboardScreen() {
-  const { user, accessToken } = useAuth();
-  const staffImages = [
-    "https://randomuser.me/api/portraits/men/1.jpg",
-    "https://randomuser.me/api/portraits/women/2.jpg",
-    "https://randomuser.me/api/portraits/men/3.jpg",
-    "https://randomuser.me/api/portraits/women/4.jpg",
-    "https://randomuser.me/api/portraits/men/5.jpg",
-    "https://randomuser.me/api/portraits/women/6.jpg",
-    "https://randomuser.me/api/portraits/women/6.jpg",
-  ];
+  const { user } = useAuth();
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
     const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
   const [projectsList, setProjectsList] = useState([]);
+  const { request } = useApi();
 
     function toggleRejectInfoModal() {
       setRejectInfoModal(!rejectInfoModal);
     }
 
   useEffect(() => {
-    ApiService.get('/employee/project/list', {
-      headers: {
-        'authorization': accessToken || ''
-      }
-    }).then(res => {
-        if (res.data.success) {
-            setProjectsList(res?.data?.data);
-            console.log(res?.data?.data);
-        } else {
+        request({
+          url: '/employee/project/list',
+          method: 'get',
+        }).then(res => {
+          if (res.success) {
+            setProjectsList(res?.data);
+          } else {
             // Handle error response
-            console.log(res.data.message);
-        }
-    }).catch(err => {
-      console.log(err);
-    })
+            console.log(res.message);
+          }
+        }).catch(err => {
+          console.log(err);
+        })
   }, []);
 
 

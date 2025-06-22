@@ -1,87 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
-import ApiService from "@/services/ApiService";
-import {useAuth} from "@/hooks/useAuth";
-
-// Sample tasks data
-const tasksData = [
-  {
-    id: '1',
-    title: 'Fix Plumbing Issue',
-    client: 'John Smith',
-    location: 'Baku, Azerbaijan',
-    dueDate: '2023-05-20',
-    status: 'active',
-    priority: 'high',
-  },
-  {
-    id: '2',
-    title: 'Install Electrical Fixtures',
-    client: 'Sarah Johnson',
-    location: 'Baku, Azerbaijan',
-    dueDate: '2023-05-25',
-    status: 'active',
-    priority: 'medium',
-  },
-  {
-    id: '3',
-    title: 'Paint Living Room',
-    client: 'Michael Brown',
-    location: 'Ganja, Azerbaijan',
-    dueDate: '2023-06-01',
-    status: 'pending',
-    priority: 'low',
-  },
-  {
-    id: '4',
-    title: 'Repair Roof Leak',
-    client: 'Emily Davis',
-    location: 'Baku, Azerbaijan',
-    dueDate: '2023-05-18',
-    status: 'completed',
-    priority: 'high',
-  },
-  {
-    id: '5',
-    title: 'Install Kitchen Cabinets',
-    client: 'David Wilson',
-    location: 'Sumgait, Azerbaijan',
-    dueDate: '2023-05-30',
-    status: 'active',
-    priority: 'medium',
-  },
-];
+import {useApi} from "@/hooks/useApi";
 
 export default function TasksScreen() {
-  const { user, accessToken } = useAuth();
+  const { request } = useApi();
   const [projectsList, setProjectsList] = useState([]);
-  const staffImages = [
-    "https://randomuser.me/api/portraits/men/1.jpg",
-    "https://randomuser.me/api/portraits/women/2.jpg",
-    "https://randomuser.me/api/portraits/men/3.jpg",
-    "https://randomuser.me/api/portraits/women/4.jpg",
-    "https://randomuser.me/api/portraits/men/5.jpg",
-    "https://randomuser.me/api/portraits/women/6.jpg",
-    "https://randomuser.me/api/portraits/women/6.jpg",
-  ];
 
 
   useEffect(() => {
-    ApiService.get('/chief/project/list', {
-      headers: {
-        'authorization': accessToken || ''
-      }
+    request({
+      url: `/chief/project/list`,
+      method: 'get',
     }).then(res => {
-      if (res.data.success) {
-        console.log(res?.data?.data, 'salam');
-        setProjectsList(res?.data?.data);
+      if (res.success) {
+        setProjectsList(res?.data);
       } else {
         // Handle error response
-        console.log(res.data.message);
+        console.log(res.message);
       }
     }).catch(err => {
       console.log(err);

@@ -1,25 +1,19 @@
 import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
+import {router} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
-import SgCard from "@/components/ui/Card/Card";
-import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
-import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
-import {useAuth} from "@/hooks/useAuth";
-import moment from "moment";
-import ApiService from "@/services/ApiService";
 import COLORS from "@/constants/colors";
 import SgInput from "@/components/ui/Input/Input";
-import SgSectionDatePicker from "@/components/sections/DatePicker/DatePicker";
-import SgSectionTimePicker from "@/components/sections/TimePicker/TimePicker";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import SgSelect from "@/components/ui/Select/Select";
-import SgRadio from "@/components/ui/Radio/Radio";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgButton from "@/components/ui/Button/Button";
+import SgPopup from "@/components/ui/Modal/Modal";
+import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
+import {useApi} from "@/hooks/useApi";
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -39,26 +33,26 @@ const ProjectHeader = ({ projectId }) => {
 };
 
 export default function TaskCreateScreen() {
-    const { accessToken } = useAuth();
+    const { request } = useApi();
     const [data, setData] = useState({});
     const [projectsList, setProjectsList] = useState([]);
     const [employeesList, setEmployeesList] = useState([]);
+    const [createTaskInfoModal, setCreateTaskInfoModal] = useState(false);
 
     function handleChange(e) {
         setData({ ...data, [e.name]: e.value });
     }
 
     useEffect(() => {
-        ApiService.get('/chief/options/projects', {
-            headers: {
-                'authorization': accessToken || ''
-            }
+        request({
+            url: `/chief/options/projects`,
+            method: 'get',
         }).then(res => {
-            if (res.data.success) {
-                setProjectsList(res?.data?.data);
+            if (res.success) {
+                setProjectsList(res?.data);
             } else {
                 // Handle error response
-                console.log(res.data.message);
+                console.log(res.message);
             }
         }).catch(err => {
             console.log(err);
@@ -67,16 +61,15 @@ export default function TaskCreateScreen() {
 
     useEffect(() => {
         if (data?.project?.id) {
-            ApiService.get(`/chief/options/employees/${data?.project?.id}`, {
-                headers: {
-                    'authorization': accessToken || ''
-                }
+            request({
+                url: `/chief/options/employees/${data?.project?.id}`,
+                method: 'get',
             }).then(res => {
-                if (res.data.success) {
-                    setEmployeesList(res?.data?.data);
+                if (res.success) {
+                    setEmployeesList(res?.data);
                 } else {
                     // Handle error response
-                    console.log(res.data.message);
+                    console.log(res.message);
                 }
             }).catch(err => {
                 console.log(err);
@@ -85,16 +78,29 @@ export default function TaskCreateScreen() {
     }, [data?.project?.id]);
 
     function handleSubmit() {
-        ApiService.post('/chief/task/create', data, {
-            headers: {
-                'authorization': accessToken || ''
+        request({
+            url: `/chief/task/create`,
+            method: 'post',
+            data: {
+                title: data?.title,
+                deadline: data?.deadline,
+                point: data?.point,
+                description: data?.description,
+                assigned_employee_id: data?.assigned_employee?.id,
+                project_id: data?.project?.id,
             }
         }).then(res => {
-            console.log(res, 'res');
+            toggleCreateTaskInfoModal()
         }).catch(err => {
             console.log(err, 'err');
         })
     }
+    const toggleCreateTaskInfoModal = () => {
+        if (createTaskInfoModal) {
+            router.back();
+        }
+        setCreateTaskInfoModal(!createTaskInfoModal);
+    };
 
 
 
@@ -169,6 +175,14 @@ export default function TaskCreateScreen() {
                     name='description'
                     onChangeText={handleChange}
                 />
+                <SgInput
+                    label="Point"
+                    placeholder="Enter Point..."
+                    type="counter"
+                    value={data?.point}
+                    name='point'
+                    onChangeText={handleChange}
+                />
                 <SgDatePicker
                     label="Deadline date"
                     placeholder="dd/mm/yyyy - hh/mm A"
@@ -187,7 +201,14 @@ export default function TaskCreateScreen() {
             </View>
 
 
-
+            <SgPopup
+                visible={createTaskInfoModal}
+                onClose={toggleCreateTaskInfoModal}
+                fullScreen={true}
+                title="Task completed"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
         </SgTemplateScreenView>
     );
 }

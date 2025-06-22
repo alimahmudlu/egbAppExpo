@@ -1,19 +1,12 @@
-import {View, Text, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useLocalSearchParams, router} from "expo-router";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import LeftIcon from "@/assets/images/chevron-left.svg";
-import SgListUserItem from "@/components/ui/ListUserItem";
-import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
-import CheckIcon from "@/assets/images/check.svg";
-import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
-import SgCard from "@/components/ui/Card/Card";
-import SgPopup from "@/components/ui/Modal/Modal";
 import {useEffect, useState} from "react";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import moment from "moment";
-import ApiService from "@/services/ApiService";
-import {useAuth} from "@/hooks/useAuth";
+import {useApi} from "@/hooks/useApi";
 
 
 // Custom header component with back button and overview button
@@ -33,27 +26,16 @@ const ScreenHeader = () => {
 };
 
 export default function TimeKeeperUserScreen() {
-    const { accessToken } = useAuth();
+    const { request } = useApi();
     const { userId } = useLocalSearchParams();
-    const employeeList = [
-        { title: 'Jane Doe CI', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:12 AM', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
-        { title: 'John Smith CI', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/2.jpg' },
-        { title: 'Ali Veli CI', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/3.jpg' },
-        { title: 'John Smith CO', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/4.jpg' },
-        { title: 'Ali Veli CO', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/5.jpg' },
-        { title: 'John Smith AW', status: 0, reason: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum", role: 'Employee', date: new Date().toLocaleDateString(), time: '7:14 AM', image: 'https://randomuser.me/api/portraits/men/6.jpg' },
-        { title: 'Ali Veli AW', status: 1,  role: 'Employee', date: new Date().toLocaleDateString(), time: '7:20 AM', image: 'https://randomuser.me/api/portraits/men/7.jpg' },
-    ];
     const [employeeActivities, setEmployeeActivities] = useState([]);
 
     useEffect(() => {
-        ApiService.get(`/timekeeper/employee/history/${userId}/checkout`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
+        request({
+            url: `/timekeeper/employee/history/${userId}/checkout`,
+            method: 'get',
         }).then(res => {
-            console.log(res?.data?.data, 'apiservice control res')
-            setEmployeeActivities(res?.data?.data || []);
+            setEmployeeActivities(res?.data || []);
         }).catch(err => {
             console.log(err, 'apiservice control err')
         });

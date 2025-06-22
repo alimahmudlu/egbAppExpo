@@ -1,141 +1,37 @@
 import Avatar from "@/assets/images/avatar.png";
-import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import SgCard from "@/components/ui/Card/Card";
-import Clock from "@/assets/images/clock.svg";
-import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
-import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import moment from "moment";
+import {useApi} from "@/hooks/useApi";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
-    const taskList = [
-        {
-            id: 1,
-            projectId: 1,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Check",
-            statusType: "warning",
-            type: 'check'
-        },
-        {
-            id: 2,
-            projectId: 2,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 3,
-            projectId: 3,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 4,
-            projectId: 4,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 5,
-            projectId: 5,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 6,
-            projectId: 6,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 7,
-            projectId: 7,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: null,
-            statusType: "success",
-            type: null
-        },
-        {
-            id: 8,
-            projectId: 8,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        },
-        {
-            id: 9,
-            projectId: 9,
-            time: "12.04.2025 / 10:20 AM",
-            duration: "2h. 42m.",
-            title: "There are many variations of passages of Lorem Ipsum available but the",
-            description: "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form variations of passages",
-            name: "Jane Doe",
-            image: null,
-            status: "Complete",
-            statusType: "success",
-            type: 'complete'
-        }
-    ]
+    const { request } = useApi();
+    const [taskList, setTaskList] = useState([]);
+
+    useEffect(() => {
+        request({
+            url: `/chief/task/list`,
+            method: 'get'
+        }).then(res => {
+            if (res.success) {
+                setTaskList(res?.data);
+            } else {
+                // Handle error response
+                console.log(res.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }, []);
 
     return (
         <SgTemplateScreenView
@@ -150,15 +46,15 @@ export default function EmployeeDashboardScreen() {
             <SgCheckInOutGroup>
                 <SgSectionInfoCard
                     icon="log-in-outline"
-                    title="Daily check in"
+                    title="Active tasks"
                     count={32}
-                    type="checkin"
+                    type="activeTasks"
                 />
                 <SgSectionInfoCard
                     icon="log-out-outline"
-                    title="Daily check out"
+                    title="Completed tasks"
                     count={12}
-                    type="checkout"
+                    type="completedTasks"
                 />
             </SgCheckInOutGroup>
 
@@ -173,8 +69,8 @@ export default function EmployeeDashboardScreen() {
                 defaultTabId='all'
                 tabs={[
                     {label: 'All tasks', id: 'all', count: taskList?.length},
-                    {label: 'Check', id: 'check', count: taskList?.filter(el => el?.type === 'check')?.length},
-                    {label: 'Complete', id: 'complete', count: taskList?.filter(el => el?.type === 'complete')?.length},
+                    {label: 'Check', id: 'check', count: taskList?.filter(el => [3, 4].includes(el?.status?.id))?.length},
+                    {label: 'Complete', id: 'complete', count: taskList?.filter(el => el?.status?.id === 5)?.length},
                 ]}
                 tabContent={[
                     {
@@ -182,16 +78,17 @@ export default function EmployeeDashboardScreen() {
                             <View style={{gap: 16}}>
                                 {taskList?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        id={el?.id}
+                                        projectId={el?.project_id}
                                         key={index}
-                                        time={el?.time}
+                                        time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
                                         duration={el?.duration}
-                                        title={el?.title}
+                                        title={el?.name}
                                         description={el?.description}
-                                        name={el?.name}
+                                        name={el?.assigned_employee?.full_name}
                                         image={null}
                                         status={el?.status}
-                                        statusType={el?.statusType}
-                                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                                        href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
                                     />
                                 ))}
                             </View>
@@ -201,18 +98,19 @@ export default function EmployeeDashboardScreen() {
                     {
                         element: (
                             <View style={{gap: 16}}>
-                                {taskList?.filter(el => el?.type === 'check')?.map((el, index) => (
+                                {taskList?.filter(el => [3, 4].includes(el?.status?.id))?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        id={el?.id}
+                                        projectId={el?.project_id}
                                         key={index}
-                                        time={el?.time}
+                                        time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
                                         duration={el?.duration}
-                                        title={el?.title}
+                                        title={el?.name}
                                         description={el?.description}
-                                        name={el?.name}
+                                        name={el?.assigned_employee?.full_name}
                                         image={null}
                                         status={el?.status}
-                                        statusType={el?.statusType}
-                                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                                        href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
                                     />
                                 ))}
                             </View>
@@ -222,18 +120,19 @@ export default function EmployeeDashboardScreen() {
                     {
                         element: (
                             <View style={{gap: 16}}>
-                                {taskList?.filter(el => el?.type === 'complete')?.map((el, index) => (
+                                {taskList?.filter(el => el?.status?.id === 5)?.map((el, index) => (
                                     <SgSectionTaskCard
+                                        id={el?.id}
+                                        projectId={el?.project_id}
                                         key={index}
-                                        time={el?.time}
+                                        time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
                                         duration={el?.duration}
-                                        title={el?.title}
+                                        title={el?.name}
                                         description={el?.description}
-                                        name={el?.name}
+                                        name={el?.assigned_employee?.full_name}
                                         image={null}
                                         status={el?.status}
-                                        statusType={el?.statusType}
-                                        href={`/chiefPages/projects/${el?.projectId}/${el?.id}`}
+                                        href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
                                     />
                                 ))}
                             </View>
