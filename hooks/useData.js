@@ -7,6 +7,10 @@ const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [storeData, setStoreData] = useState({
+    checkInData: {
+        checkIn: null,
+        checkOut: null,
+    },
     cache: {}
   });
   const [loading, setLoading] = useState(true);
@@ -52,8 +56,33 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const insertData = (key, data) => {
+    setStoreData(prev => ({
+      ...prev,
+      cache: {
+        ...prev.cache,
+        [key]: {
+          ...prev.cache?.[key],
+          data: [
+              ...prev.cache?.[key]?.data,
+              data
+          ]
+        }
+      }
+    }));
+  }
+  const updateData = async (key, data) => {
+    setStoreData(prev => ({
+      ...prev,
+      cache: {
+        ...prev.cache,
+        [key]: data
+      }
+    }));
+  }
+
   return (
-      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData }}>
+      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, updateData }}>
         {children}
       </DataContext.Provider>
   );

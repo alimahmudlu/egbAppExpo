@@ -2,9 +2,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import {useAuth} from "@/hooks/useAuth";
 import {ActivityIndicator, View} from "react-native";
+import {registerForPushNotificationsAsync} from "@/utils/notification";
+import {useApi} from "@/hooks/useApi";
 
 export default function Index() {
     const { user, loading } = useAuth();
+    const {request} = useApi();
     const router = useRouter();
 
     useEffect(() => {
@@ -18,6 +21,10 @@ export default function Index() {
         } else {
             router.replace('/chief');
         }
+
+        // if (user?.id) {
+            // registerForPushNotificationsAsync(user?.id, request)
+        // }
     }, [user?.role.id, loading]);
 
     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

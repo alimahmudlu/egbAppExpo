@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useData} from "@/hooks/useData";
 import {useAuth} from "@/hooks/useAuth";
 
-const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
+const API_URL = 'http://192.168.1.60:3000/api'; // Replace with your actual API URL
 const ApiService = axios.create({
     baseURL: API_URL,
 });
@@ -12,8 +12,8 @@ export const useApi = () => {
     const { storeData, setStoreData } = useData();
     const { accessToken } = useAuth();
 
-    const request = async ({ url, method = 'get', params = {}, data = {}, headers = {}, cache }) => {
-        const storageKey = `${method.toUpperCase()}:${url}?${JSON.stringify(params)}`;
+    const request = async ({ url, method = 'get', params = {}, data = {}, headers = {}, cache = false }) => {
+        const storageKey = `${method.toUpperCase()}:${url}${params.length > 0 ? `?${JSON.stringify(params)}` : ''}`;
 
         if (cache) {
             try {
@@ -28,20 +28,15 @@ export const useApi = () => {
         }
 
         try {
-            // FIXME: BURA BAXMAQ LAZIMDIR, XETA VERE BILER.
-            await AsyncStorage.setItem(storageKey, JSON.stringify({
-                loading: true
-            }));
-
-            setStoreData(prev => ({
-                ...prev,
-                cache: {
-                    ...(prev.cache || {}),
-                    [storageKey]: {
-                        loading: true
-                    },
-                }
-            }));
+            // setStoreData(prev => ({
+            //     ...prev,
+            //     cache: {
+            //         ...(prev.cache || {}),
+            //         [storageKey]: {
+            //             loading: true
+            //         },
+            //     }
+            // }));
 
             const response = await ApiService({
                 url,
@@ -56,12 +51,9 @@ export const useApi = () => {
 
             const resData = response.data;
 
-            try {
-                await AsyncStorage.setItem(storageKey, JSON.stringify({
-                    ...resData,
-                    loading: false
-                }));
 
+
+            try {
                 setStoreData(prev => ({
                     ...prev,
                     cache: {
@@ -74,10 +66,29 @@ export const useApi = () => {
                 }));
             } catch (e) {
                 console.warn('Cache write failed:', e);
+                setStoreData(prev => ({
+                    ...prev,
+                    cache: {
+                        ...(prev.cache || {}),
+                        [storageKey]: {
+                            loading: false
+                        },
+                    }
+                }));
             }
 
             return resData;
         } catch (err) {
+            setStoreData(prev => ({
+                ...prev,
+                cache: {
+                    ...(prev.cache || {}),
+                    [storageKey]: {
+                        loading: false
+                    },
+                }
+            }));
+
             console.error('API error:', err);
             throw err;
         }

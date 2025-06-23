@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
 // API configuration
-const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
+const API_URL = 'http://192.168.1.60:3000/api'; // Replace with your actual API URL
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_DATA_KEY = 'user_data';
 
@@ -125,62 +125,10 @@ export function AuthProvider({ children }) {
 
       const userData = JSON.parse(response?.data);
 
-
-      // const users = [
-      //   {
-      //     id: 123,
-      //     password: 'password123',
-      //     email: 'employee@egb.app',
-      //     name: 'Jane',
-      //     surname: 'Doe',
-      //     role: {
-      //       id: 1,
-      //       name: 'employee',
-      //     },
-      //     image: 'https://randomuser.me/api/portraits/men/1.jpg',
-      //     tokens: {
-      //       accessToken: 'accessToken'
-      //     }
-      //   },
-      //   {
-      //     id: 456,
-      //     password: 'password456',
-      //     email: 'timekeeper@egb.app',
-      //     name: 'Jane',
-      //     surname: 'Doe Timekeeper',
-      //     role: {
-      //       id: 2,
-      //       name: 'timeKeeper',
-      //     },
-      //     image: 'https://randomuser.me/api/portraits/men/3.jpg',
-      //     tokens: {
-      //       accessToken: 'accessToken'
-      //     }
-      //   },
-      //   {
-      //     id: 789,
-      //     password: 'password789',
-      //     email: 'chief@egb.app',
-      //     name: 'Jane',
-      //     surname: 'Doe Chief',
-      //     role: {
-      //       id: 3,
-      //       name: 'chief',
-      //     },
-      //     image: 'https://randomuser.me/api/portraits/men/5.jpg',
-      //     tokens: {
-      //       accessToken: 'accessToken'
-      //     }
-      //   },
-      // ]
-      //
-      // const userData = users?.find(el => el.id === Number(id) && el.password === password);
-      //
       if (!userData?.user?.id) {
-        throw new Error('User not found! Plase check your ID and password and try again.');
+        throw new Error('User not found! Please check your ID and password and try again.');
       }
-      //
-      // // Store token and user data
+
       await storeAuthData(userData?.token?.accessToken, userData?.user);
 
       setTimeout(() => {

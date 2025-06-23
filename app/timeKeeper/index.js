@@ -10,22 +10,19 @@ import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCa
 import {useEffect, useState} from "react";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function EmployeeDashboardScreen() {
     const { user } = useAuth();
     const { request } = useApi();
+    const { storeData } = useData();
     const [employeeActivities, setEmployeeActivities] = useState([]);
 
+
     useEffect(() => {
-        request({
-            url: '/timekeeper/activity/list',
-            method: 'get',
-        }).then(res => {
-            setEmployeeActivities(res?.data || []);
-        }).catch(err => {
-            console.log(err, 'apiservice control err')
-        });
-    }, []);
+        console.log(storeData?.cache?.['GET:/timekeeper/activity/list']?.data, 'aaaaaaaaa')
+        setEmployeeActivities(storeData?.cache?.['GET:/timekeeper/activity/list']?.data)
+    }, [storeData?.cache?.['GET:/timekeeper/activity/list']])
 
   return (
     <SgTemplateScreenView

@@ -15,24 +15,19 @@ import moment from "moment";
 import {useAuth} from "@/hooks/useAuth";
 import MapView, { Marker } from 'react-native-maps';
 import ApiService from "@/services/ApiService";
+import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function SgCheckInOutCard(props) {
-  const { accessToken } = useAuth();
+  const { request } = useApi();
+  const { setStoreData, storeData } = useData();
   const {
     type = 'checkin',
     title,
     time,
-    status = 0,
-      mapData = {
-        checkIn: {
-          latitude: 40.633701,
-          longitude: 48.645202
-        },
-        checkOut: {
-          latitude: 40.38,
-          longitude: 49.86
-        }
-      }
+    status = undefined, // 0 - waiting, 1 - success, 2 - failed
+      mapData,
+    checkInStatus = undefined
   } = props;
 
   if (type !== 'checkin' && type !== 'checkout') {
@@ -58,20 +53,26 @@ export default function SgCheckInOutCard(props) {
   }
 
   function handleSubmitCheckIn() {
-    ApiService.post('/employee/activity/checkin', {
+    request({
+      url: `/employee/activity/checkin`,
+      method: 'post',
+      data: {
         time: moment().format('YYYY-MM-DD HH:mm:ss'),
         latitude: checkInData?.latitude,
         longitude: checkInData?.longitude
-    }, {
-      headers: {
-        'authorization': accessToken || ''
       }
     }).then(res => {
-      if (res.data.success) {
-        console.log(res?.data?.data);
+      if (res.success) {
+        setStoreData(prev => ({
+          ...prev,
+          checkInData: {
+            checkIn: res?.data || {
+              loading: true
+            },
+          }
+        }));
       } else {
-        // Handle error response
-        console.log(res.data.message);
+        console.log(res.message);
       }
     }).catch(err => {
       console.log(err);
@@ -89,20 +90,29 @@ export default function SgCheckInOutCard(props) {
   }
 
   function handleSubmitCheckOut() {
-    ApiService.post('/employee/activity/checkout', {
-      time: moment().format('YYYY-MM-DD HH:mm:ss'),
-      latitude: checkOutData?.latitude,
-      longitude: checkOutData?.longitude
-    }, {
-      headers: {
-        'authorization': accessToken || ''
+    request({
+      url: `/employee/activity/checkout`,
+      method: 'post',
+      data: {
+        time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        latitude: checkOutData?.latitude,
+        longitude: checkOutData?.longitude
       }
     }).then(res => {
-      if (res.data.success) {
-        console.log(res?.data?.data);
+      if (res.success) {
+        console.log(res?.data);
+        setStoreData(prev => ({
+          ...prev,
+          checkInData: {
+            ...(prev.checkInData || {}),
+            checkOut: res?.data || {
+              loading: true
+            },
+          }
+        }));
       } else {
         // Handle error response
-        console.log(res.data.message);
+        console.log(res.message);
       }
     }).catch(err => {
       console.log(err);
@@ -145,7 +155,7 @@ export default function SgCheckInOutCard(props) {
 
       // Get the current position
       let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+        accuracy: Location.Accuracy.Lowest,
       });
 
       const { latitude, longitude } = location.coords;
@@ -220,31 +230,31 @@ export default function SgCheckInOutCard(props) {
         </Text>
       </View>
       <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
-        {(isCheckIn && status === 2) && Platform.OS !== 'web' ?
+        {(isCheckIn && status === 1 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web' ?
           <MapView
             style={{flex: 1, height: 125}}
             initialRegion={{
-              latitude: mapData?.checkIn?.latitude,
-              longitude: mapData?.checkIn?.longitude,
+              latitude: Number(mapData?.checkIn?.latitude),
+              longitude: Number(mapData?.checkIn?.longitude),
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
             }}
         >
-          <Marker coordinate={{ latitude: mapData?.checkIn?.latitude, longitude: mapData?.checkIn?.longitude }} />
+          <Marker coordinate={{ latitude: Number(mapData?.checkIn?.latitude), longitude: Number(mapData?.checkIn?.longitude) }} />
         </MapView>
             : null
         }
-        {(isCheckOut && status === 2) && Platform.OS !== 'web' ?
+        {(isCheckOut && status === 1 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web' ?
           <MapView
             style={{flex: 1, height: 125}}
             initialRegion={{
-              latitude: mapData?.checkOut?.latitude || 0,
-              longitude: mapData?.checkOut?.longitude || 0,
+              latitude: Number(mapData?.checkOut?.latitude) || 0,
+              longitude: Number(mapData?.checkOut?.longitude) || 0,
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
             }}
         >
-          <Marker coordinate={{ latitude: mapData?.checkOut?.latitude || 0, longitude: mapData?.checkOut?.longitude || 0 }} />
+          <Marker coordinate={{ latitude: Number(mapData?.checkOut?.latitude) || 0, longitude: Number(mapData?.checkOut?.longitude) || 0 }} />
         </MapView>
             : null
         }
@@ -252,13 +262,13 @@ export default function SgCheckInOutCard(props) {
       <View style={{paddingHorizontal: 4, paddingVertical: 4,}}>
         {isCheckIn ?
             <>
-              {status === 0 ?
+              {status === undefined ?
                   <SgButton color={COLORS.brand_600} onPress={handleCheckInRequest}>
                     Check In
                   </SgButton>
                   : null
               }
-              {status === 1 ?
+              {status === 0 ?
                   <SgButton
                       style={{borderRadius: 12}}
                       color={COLORS.white}
@@ -268,7 +278,7 @@ export default function SgCheckInOutCard(props) {
                   </SgButton>
                   : null
               }
-              {status === 2 ?
+              {status === 1 ?
                   <SgButton
                       color={COLORS.brand_600}
                       onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}
@@ -280,15 +290,15 @@ export default function SgCheckInOutCard(props) {
             </>
             : null
         }
-        {isCheckOut ?
+        {(isCheckOut && checkInStatus) ?
             <>
-              {status === 0 ?
+              {status === undefined ?
                   <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest}>
                     Check Out
                   </SgButton>
                   : null
               }
-              {status === 1 ?
+              {status === 0 ?
                   <SgButton
                       style={{borderRadius: 12}}
                       color={COLORS.white}
@@ -298,7 +308,7 @@ export default function SgCheckInOutCard(props) {
                   </SgButton>
                   : null
               }
-              {status === 2 ?
+              {status === 1 ?
                   <SgButton
                       color={COLORS.error_700}
                       onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}

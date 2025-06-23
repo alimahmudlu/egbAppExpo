@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity, Text, Platform} from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
 import HomeIcon from '@/assets/images/home.svg';
@@ -8,9 +8,83 @@ import DocsIcon from '@/assets/images/docs.svg';
 import DocsActiveIcon from '@/assets/images/docs-active.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
+import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
+import SgTemplateHeader from "@/components/templates/Header/Header";
+import Avatar from "@/assets/images/avatar.png";
+import {useSocket} from "@/hooks/useSocket";
 
 export default function employeeTabLayout() {
   const { logout } = useAuth();
+    const { request } = useApi();
+    const { setStoreData } = useData();
+    const {socket} = useSocket()
+
+    useEffect(() => {
+        request({
+            url: `/employee/activity/`,
+            method: 'get',
+        }).then(res => {
+            setStoreData(prev => ({
+                ...prev,
+                checkInData: {
+                    checkOut: (res?.data || []).find(el => el.type === 2) || {
+                        loading: true
+                    },
+                    checkIn: (res?.data || []).find(el => el.type === 1) || {
+                        loading: true
+                    },
+                }
+            }));
+        }).catch(err => {
+            setStoreData(prev => ({
+                ...prev,
+                checkInData: {
+                    checkIn: null,
+                    checkOut: null,
+                }
+            }));
+        })
+    }, []);
+
+
+
+    useEffect(() => {
+        if (!socket || !socket.connected) return;
+
+        const handler = (data) => {
+            console.log("Mesaj gəldi:", data);
+
+            if (data?.data?.type === 1) {
+                setStoreData(prev => ({
+                    ...prev,
+                    checkInData: {
+                        ...(prev.checkInData || {}),
+                        checkIn: data?.data || {
+                            loading: true
+                        },
+                    }
+                }));
+            }
+            else {
+                setStoreData(prev => ({
+                    ...prev,
+                    checkInData: {
+                        ...(prev.checkInData || {}),
+                        checkOut: data?.data || {
+                            loading: true
+                        },
+                    }
+                }));
+            }
+        };
+
+        socket.on("update_activity", handler);
+
+        return () => {
+            socket.off("update_activity", handler);
+        };
+    }, [socket]);
 
   return (
     <Tabs
