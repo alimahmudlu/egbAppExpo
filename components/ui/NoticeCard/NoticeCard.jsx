@@ -6,7 +6,7 @@ import SgButton from '@/components/ui/Button/Button';
 import SgPopup from '@/components/ui/Modal/Modal';
 import {useRouter} from "expo-router";
 
-export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton, href }) {
+export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton, href, onClick }) {
     const [modalVisible, setModalVisible] = useState(false);
     let cardBackground;
     let buttonBackground;
@@ -43,6 +43,9 @@ export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton
     function handleOnClick() {
         if (href) {
             router.navigate(href)
+        }
+        else {
+            onClick?.()
         }
     }
 

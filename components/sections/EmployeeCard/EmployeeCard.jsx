@@ -20,6 +20,7 @@ import SgSectionStatusCard from "@/components/sections/StatusCard/StatusCard";
 import LogIn from "@/assets/images/log-in_20.svg";
 import ApiService from "@/services/ApiService";
 import {useAuth} from "@/hooks/useAuth";
+import {useData} from "@/hooks/useData";
 import moment from "moment/moment";
 
 
@@ -30,7 +31,8 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
     const [acceptCheckInModal, setAcceptCheckInModal] = useState(false);
     const [acceptedCheckInModal, setAcceptedCheckInModal] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
-    const { accessToken } = useAuth();
+    const { accessToken, user: {id: userId} } = useAuth();
+    const { removeRowData, insertData } = useData();
 
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
 
@@ -65,6 +67,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
         }).then(res => {
             if (res.data.success) {
                 toggleRejectedCheckInModal();
+                removeRowData('GET:/timekeeper/activity/list', fullData)
             }
             else {
                 Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
@@ -101,6 +104,19 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
         }).then(res => {
             if (res.data.success) {
                 toggleAcceptedCheckInModal();
+                if (fullData?.type === 1) {
+                    removeRowData('GET:/timekeeper/activity/list', fullData)
+                    insertData('GET:/timekeeper/activity/list', {
+                        ...fullData,
+                        complete_status: 1,
+                        confirm_time: new Date(),
+                        confirm_employee_id: userId,
+                        status: 1
+                    })
+                }
+                else {
+                    removeRowData('GET:/timekeeper/activity/list', fullData)
+                }
             }
             else {
                 Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');

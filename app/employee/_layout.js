@@ -60,8 +60,10 @@ export default function employeeTabLayout() {
                     ...prev,
                     checkInData: {
                         ...(prev.checkInData || {}),
-                        checkIn: data?.data || {
-                            loading: true
+                        checkIn: data?.data?.status !== 2 ? data?.data : {
+                            status: 2,
+                            type: 1,
+                            reject_reason: data?.data?.reject_reason
                         },
                     }
                 }));
@@ -71,9 +73,15 @@ export default function employeeTabLayout() {
                     ...prev,
                     checkInData: {
                         ...(prev.checkInData || {}),
-                        checkOut: data?.data || {
-                            loading: true
+                        checkIn: {
+                            ...prev.checkInData?.checkIn,
+                            completed_status: data?.data?.status !== 2 ? 1 : 0,
                         },
+                        checkOut: data?.data?.status !== 2 ? data?.data : {
+                              status: 2,
+                              type: 2,
+                              reject_reason: data?.data?.reject_reason
+                          },
                     }
                 }));
             }

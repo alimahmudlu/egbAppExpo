@@ -80,9 +80,21 @@ export const DataProvider = ({ children }) => {
       }
     }));
   }
+  const removeRowData = async (key, item) => {
+    setStoreData(prev => ({
+      ...prev,
+      cache: {
+        ...prev.cache,
+        [key]: {
+                  ...prev.cache?.[key],
+                  data: prev.cache?.[key]?.data?.filter(e => e !== item)
+                }
+      }
+    }));
+  }
 
   return (
-      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, updateData }}>
+      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, updateData, removeRowData }}>
         {children}
       </DataContext.Provider>
   );

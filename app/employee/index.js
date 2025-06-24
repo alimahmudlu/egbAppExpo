@@ -16,6 +16,8 @@ import {useData} from "@/hooks/useData";
 import SgUtilsTimeDifference from "@/utils/TimeDifference";
 import {useSocket} from "@/hooks/useSocket";
 import moment from "moment";
+import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
+import LoginIcon from "@/assets/images/login.svg";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -25,12 +27,13 @@ export default function EmployeeDashboardScreen() {
     const [projectsList, setProjectsList] = useState([]);
     const {request} = useApi();
 
-    function toggleRejectInfoModal() {
+    function toggleRejectInfoModal(reject_reason) {
+        setRejectInfoData(reject_reason || '')
         setRejectInfoModal(!rejectInfoModal);
     }
 
     useEffect(() => {
-        console.log(storeData?.checkInData?.checkOut)
+        console.log(storeData?.checkInData, 'Checkk')
     }, [storeData]);
 
     useEffect(() => {
@@ -62,21 +65,35 @@ export default function EmployeeDashboardScreen() {
             }
         >
 
-            {/*<SgNoticeCard*/}
-            {/*    icon={<LoginIcon width={20} height={20} />}*/}
-            {/*    title="Check in rejected"*/}
-            {/*    buttonText="Reject detail"*/}
-            {/*    onClick={toggleRejectInfoModal}*/}
-            {/*    bgCard="danger"*/}
-            {/*    bgButton="danger"*/}
-            {/*/>*/}
+            {storeData?.checkInData?.checkIn?.status === 2 ?
+                <SgNoticeCard
+                    icon={<LoginIcon width={20} height={20} />}
+                    title="Check in rejected"
+                    buttonText="Reject detail"
+                    onClick={() => toggleRejectInfoModal(storeData?.checkInData?.checkIn?.reject_reason)}
+                    bgCard="danger"
+                    bgButton="danger"
+                />
+                : null
+            }
+            {storeData?.checkInData?.checkOut?.status === 2 ?
+                <SgNoticeCard
+                    icon={<LoginIcon width={20} height={20} />}
+                    title="Check out rejected"
+                    buttonText="Reject detail"
+                    onClick={() => toggleRejectInfoModal(storeData?.checkInData?.checkOut?.reject_reason)}
+                    bgCard="danger"
+                    bgButton="danger"
+                />
+                : null
+            }
             <SgCheckInOutGroup>
                 <SgCheckInOutCard
                     type="checkin"
                     title="Check In"
-                    time={storeData?.checkInData?.checkIn?.confirm_time ? moment(storeData?.checkInData?.checkIn?.confirm_time).utc().format('hh:mm A') : ''}
+                    time={storeData?.checkInData?.checkIn?.status !== 2 ? (storeData?.checkInData?.checkIn?.confirm_time ? moment(storeData?.checkInData?.checkIn?.confirm_time).utc().format('hh:mm A') : '') : ''}
                     buttonLabel="Check in"
-                    status={[0, 1, 2].includes(storeData?.checkInData?.checkIn?.status) ? storeData?.checkInData?.checkIn?.status : undefined} // 0: not checked in, 1: waiting, 2: checked in
+                    status={[0, 1].includes(storeData?.checkInData?.checkIn?.status) ? storeData?.checkInData?.checkIn?.status : undefined} // 0: not checked in, 1: waiting, 2: checked in
                     mapData={{
                         checkIn: {
                             latitude: storeData?.checkInData?.checkIn?.latitude || 0,
@@ -87,7 +104,7 @@ export default function EmployeeDashboardScreen() {
                 <SgCheckInOutCard
                     type="checkout"
                     title="Check Out"
-                    time=""
+                    time={storeData?.checkInData?.checkOut?.status !== 2 ? (storeData?.checkInData?.checkOut?.confirm_time ? moment(storeData?.checkInData?.checkOut?.confirm_time).utc().format('hh:mm A') : '') : ''}
                     buttonLabel="Check Out"
                     status={[0, 1, 2].includes(storeData?.checkInData?.checkOut?.status) ? storeData?.checkInData?.checkOut?.status : undefined} // 0: not checked in, 1: waiting, 2: checked in
                     checkInStatus={storeData?.checkInData?.checkIn?.status === 1 }
@@ -102,8 +119,8 @@ export default function EmployeeDashboardScreen() {
 
             <SgCard
                 title="Work Time"
-                time={<SgUtilsTimeDifference
-                    startTime={storeData?.checkInData?.checkIn?.confirm_time ? new Date(storeData?.checkInData?.checkIn?.confirm_time) : null}/>}
+                time={storeData?.checkInData?.checkOut?.completed_status ? storeData?.checkInData?.checkIn?.work_time : <SgUtilsTimeDifference
+                                                 startTime={storeData?.checkInData?.checkIn?.confirm_time ? moment(storeData?.checkInData?.checkIn?.confirm_time).utc() : null}/>}
                 icon={Clock}
             />
 

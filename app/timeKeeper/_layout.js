@@ -19,7 +19,7 @@ export default function TimeKeeperTabLayout() {
 
 
     useEffect(() => {
-        clearData()
+//        clearData()
         request({
             url: '/timekeeper/activity/list',
             method: 'get',

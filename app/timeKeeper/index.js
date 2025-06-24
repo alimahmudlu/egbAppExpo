@@ -20,7 +20,6 @@ export default function EmployeeDashboardScreen() {
 
 
     useEffect(() => {
-        console.log(storeData?.cache?.['GET:/timekeeper/activity/list']?.data, 'aaaaaaaaa')
         setEmployeeActivities(storeData?.cache?.['GET:/timekeeper/activity/list']?.data)
     }, [storeData?.cache?.['GET:/timekeeper/activity/list']])
 
@@ -55,7 +54,7 @@ export default function EmployeeDashboardScreen() {
           tabs={[
             { label: 'Check in', id: 'checkIn', count: employeeActivities?.filter(el => el.type === 1 && el.status === 0)?.length },
             { label: 'Check out', id: 'checkOut', count: employeeActivities?.filter(el => el.type === 2 && el.status === 0)?.length },
-            { label: 'At work', id: 'atWork', count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length },
+            { label: 'At work', id: 'atWork', count: employeeActivities?.filter(el => el.type === 1 && el.status === 1 && el.completed_status === 0)?.length },
           ]}
           tabContent={[
             {
@@ -90,7 +89,7 @@ export default function EmployeeDashboardScreen() {
             },
             {
               element: (
-                  employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 1 && el.status === 1 && el.completed_status === 0).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
                           fullData={emp}

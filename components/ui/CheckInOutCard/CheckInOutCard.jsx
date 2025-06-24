@@ -194,7 +194,7 @@ export default function SgCheckInOutCard(props) {
 
       // Get the current position
       let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+        accuracy: Location.Accuracy.Lowest,
       });
 
       const { latitude, longitude } = location.coords;

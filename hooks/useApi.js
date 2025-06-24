@@ -3,13 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useData} from "@/hooks/useData";
 import {useAuth} from "@/hooks/useAuth";
 
-const API_URL = 'http://192.168.1.60:3000/api'; // Replace with your actual API URL
+const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
 const ApiService = axios.create({
     baseURL: API_URL,
 });
 
 export const useApi = () => {
-    const { storeData, setStoreData } = useData();
+    const { storeData, setStoreData, updateData } = useData();
     const { accessToken } = useAuth();
 
     const request = async ({ url, method = 'get', params = {}, data = {}, headers = {}, cache = false }) => {
@@ -54,40 +54,15 @@ export const useApi = () => {
 
 
             try {
-                setStoreData(prev => ({
-                    ...prev,
-                    cache: {
-                        ...(prev.cache || {}),
-                        [storageKey]: {
-                            ...resData,
-                            loading: false
-                        },
-                    }
-                }));
+                updateData(storageKey, resData)
             } catch (e) {
                 console.warn('Cache write failed:', e);
-                setStoreData(prev => ({
-                    ...prev,
-                    cache: {
-                        ...(prev.cache || {}),
-                        [storageKey]: {
-                            loading: false
-                        },
-                    }
-                }));
+                updateData(storageKey, null)
             }
 
             return resData;
         } catch (err) {
-            setStoreData(prev => ({
-                ...prev,
-                cache: {
-                    ...(prev.cache || {}),
-                    [storageKey]: {
-                        loading: false
-                    },
-                }
-            }));
+                updateData(storageKey, null)
 
             console.error('API error:', err);
             throw err;
