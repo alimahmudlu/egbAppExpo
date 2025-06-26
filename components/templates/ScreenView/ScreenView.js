@@ -1,5 +1,5 @@
 import {
-    Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View
+    Keyboard, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, TouchableWithoutFeedback, View
 } from "react-native";
 import React from "react";
 import SafeScreen from "@/components/SafeScreen";
@@ -7,6 +7,14 @@ import {StatusBar} from "expo-status-bar";
 
 export default function SgTemplateScreenView(props) {
     const {head, children} = props;
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
 
     return (
 
@@ -16,7 +24,9 @@ export default function SgTemplateScreenView(props) {
         >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <SafeScreen>
-                    <ScrollView style={styles.container}>
+                    <ScrollView style={styles.container} refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }>
                         <View style={styles.head}>
                             {head}
                         </View>

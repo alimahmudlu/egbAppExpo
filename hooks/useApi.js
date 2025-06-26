@@ -49,9 +49,9 @@ export const useApi = () => {
                 },
             });
 
+            console.log('API response:', response);
+
             const resData = response.data;
-
-
 
             try {
                 updateData(storageKey, resData)
@@ -64,7 +64,7 @@ export const useApi = () => {
         } catch (err) {
                 updateData(storageKey, null)
 
-            console.error('API error:', err);
+            console.error('API error:', err, API_URL, url, accessToken);
             throw err;
         }
     };

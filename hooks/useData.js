@@ -43,7 +43,7 @@ export const DataProvider = ({ children }) => {
     };
 
     if (!loading) {
-      saveData();
+      // saveData();
     }
   }, [storeData]);
 
@@ -80,14 +80,14 @@ export const DataProvider = ({ children }) => {
       }
     }));
   }
-  const removeRowData = async (key, item) => {
+  const removeRowData = async (key, item, iterator = undefined) => {
     setStoreData(prev => ({
       ...prev,
       cache: {
         ...prev.cache,
         [key]: {
                   ...prev.cache?.[key],
-                  data: prev.cache?.[key]?.data?.filter(e => e !== item)
+                  data: prev.cache?.[key]?.data?.filter(e => iterator ? (e?.[iterator] !== item) : (e !== item))
                 }
       }
     }));

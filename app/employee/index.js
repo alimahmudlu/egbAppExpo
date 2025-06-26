@@ -15,7 +15,7 @@ import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import SgUtilsTimeDifference from "@/utils/TimeDifference";
 import {useSocket} from "@/hooks/useSocket";
-import moment from "moment";
+import moment from "moment-timezone";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import LoginIcon from "@/assets/images/login.svg";
 
@@ -65,23 +65,23 @@ export default function EmployeeDashboardScreen() {
             }
         >
 
-            {storeData?.checkInData?.checkIn?.status === 2 ?
+            {storeData?.checkIn?.status === 3 ?
                 <SgNoticeCard
                     icon={<LoginIcon width={20} height={20} />}
                     title="Check in rejected"
                     buttonText="Reject detail"
-                    onClick={() => toggleRejectInfoModal(storeData?.checkInData?.checkIn?.reject_reason)}
+                    onClick={() => toggleRejectInfoModal(storeData?.checkIn?.reject_reason)}
                     bgCard="danger"
                     bgButton="danger"
                 />
                 : null
             }
-            {storeData?.checkInData?.checkOut?.status === 2 ?
+            {storeData?.checkOut?.status === 3 ?
                 <SgNoticeCard
                     icon={<LoginIcon width={20} height={20} />}
                     title="Check out rejected"
                     buttonText="Reject detail"
-                    onClick={() => toggleRejectInfoModal(storeData?.checkInData?.checkOut?.reject_reason)}
+                    onClick={() => toggleRejectInfoModal(storeData?.checkOut?.reject_reason)}
                     bgCard="danger"
                     bgButton="danger"
                 />
@@ -91,27 +91,28 @@ export default function EmployeeDashboardScreen() {
                 <SgCheckInOutCard
                     type="checkin"
                     title="Check In"
-                    time={storeData?.checkInData?.checkIn?.status !== 2 ? (storeData?.checkInData?.checkIn?.confirm_time ? moment(storeData?.checkInData?.checkIn?.confirm_time).utc().format('hh:mm A') : '') : ''}
+                    time={storeData?.checkIn?.status !== 3 ? (storeData?.checkIn?.review_time ? moment.tz(storeData?.checkIn?.review_time, storeData?.checkIn?.reviewer_timezone).format('hh:mm A') : '') : ''}
                     buttonLabel="Check in"
-                    status={[0, 1].includes(storeData?.checkInData?.checkIn?.status) ? storeData?.checkInData?.checkIn?.status : undefined} // 0: not checked in, 1: waiting, 2: checked in
+                    status={storeData?.checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
                     mapData={{
                         checkIn: {
-                            latitude: storeData?.checkInData?.checkIn?.latitude || 0,
-                            longitude: storeData?.checkInData?.checkIn?.longitude || 0,
+                            latitude: storeData?.checkIn?.latitude || 0,
+                            longitude: storeData?.checkIn?.longitude || 0,
                         },
                     }}
                 />
                 <SgCheckInOutCard
                     type="checkout"
                     title="Check Out"
-                    time={storeData?.checkInData?.checkOut?.status !== 2 ? (storeData?.checkInData?.checkOut?.confirm_time ? moment(storeData?.checkInData?.checkOut?.confirm_time).utc().format('hh:mm A') : '') : ''}
+                    time={storeData?.checkOut?.status !== 3 ? (storeData?.checkOut?.review_time ? moment.tz(storeData?.checkOut?.review_time, storeData?.checkOut?.reviewer_timezone).format('hh:mm A') : '') : ''}
                     buttonLabel="Check Out"
-                    status={[0, 1, 2].includes(storeData?.checkInData?.checkOut?.status) ? storeData?.checkInData?.checkOut?.status : undefined} // 0: not checked in, 1: waiting, 2: checked in
-                    checkInStatus={storeData?.checkInData?.checkIn?.status === 1 }
+                    status={storeData?.checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    checkInStatus={storeData?.checkIn?.status === 2 }
+                    checkInId={storeData?.checkIn?.id}
                     mapData={{
                         checkOut: {
-                            latitude: storeData?.checkInData?.checkOut?.latitude || 0,
-                            longitude: storeData?.checkInData?.checkOut?.longitude || 0,
+                            latitude: storeData?.checkOut?.latitude || 0,
+                            longitude: storeData?.checkOut?.longitude || 0,
                         },
                     }}
                 />
@@ -119,8 +120,8 @@ export default function EmployeeDashboardScreen() {
 
             <SgCard
                 title="Work Time"
-                time={storeData?.checkInData?.checkOut?.completed_status ? storeData?.checkInData?.checkIn?.work_time : <SgUtilsTimeDifference
-                                                 startTime={storeData?.checkInData?.checkIn?.confirm_time ? moment(storeData?.checkInData?.checkIn?.confirm_time).utc() : null}/>}
+                time={storeData?.checkOut?.completed_status ? storeData?.checkIn?.work_time : <SgUtilsTimeDifference
+                                                 startTime={storeData?.checkIn?.review_time ? moment(storeData?.checkIn?.review_time).utc() : null}/>}
                 icon={Clock}
             />
 

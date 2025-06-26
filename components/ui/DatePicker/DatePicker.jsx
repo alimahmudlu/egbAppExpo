@@ -13,7 +13,8 @@ export default function SgDatePicker(props) {
         placeholder,
         value,
         name,
-        onChangeText
+        onChangeText,
+        isInvalid
     } = props;
     const [datePickerModal, setDatePickerModal] = useState(false);
 
@@ -23,9 +24,8 @@ export default function SgDatePicker(props) {
   return (
     <>
         <View style={styles.wrapper}>
-            {label && <Text style={styles.label}>{label}</Text>}
-
-            <View style={[styles.inputContainer]}>
+            {label && <Text style={[styles.label, isInvalid && styles.labelError]}>{label}</Text>}
+            <View style={[styles.inputContainer, isInvalid && styles.inputErrorContainer]}>
                 <Pressable
                     onPress={toggleDatePickerModal}
                     style={styles.input}

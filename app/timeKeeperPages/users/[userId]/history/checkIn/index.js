@@ -50,7 +50,7 @@ export default function TimeKeeperUserScreen() {
                 //     key={index}
                 //     title={emp.title}
                 //     role={emp.role}
-                //     time={emp.time}
+                //     time={emp.request_time}
                 //     image={emp.image}
                 // />
                 <SgSectionEmployeeCard
@@ -58,7 +58,7 @@ export default function TimeKeeperUserScreen() {
                     fullData={emp}
                     title={emp?.employee?.full_name}
                     role={emp?.employee?.role?.name}
-                    time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                     image={emp?.employee?.image}
                     editable={false}
                     status={emp.status}
@@ -70,7 +70,7 @@ export default function TimeKeeperUserScreen() {
                         title={emp.title}
                         role={emp.role}
                         date={emp.date}
-                        time={emp.time}
+                        time={emp.request_time}
                         image={emp.image}
                     />
                     {emp.status === 1 ?

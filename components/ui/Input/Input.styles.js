@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
     color: COLORS.gray_700,
     lineHeight: 20,
   },
+  labelError: {
+    color: COLORS.error_700,
+  },
 
   inputContainer: {
     flexDirection: 'row',
@@ -23,6 +26,10 @@ const styles = StyleSheet.create({
     height: 56,
     paddingHorizontal: 0,
     overflow: 'hidden',
+  },
+  inputErrorContainer: {
+    borderColor: COLORS.error_700,
+
   },
 
   input: {

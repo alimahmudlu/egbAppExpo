@@ -12,6 +12,7 @@ export default function SgInput({
   type = 'text', // 'text' | 'password' | 'email' | 'textarea' | 'counter'
   value,
   name,
+    isInvalid = false,
   onChangeText
 }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -110,8 +111,8 @@ export default function SgInput({
 
   return (
     <View style={styles.wrapper}>
-      {label && <Text style={styles.label}>{label}</Text>}
-      <View style={[styles.inputContainer, type === 'textarea' && styles.textareaContainer]}>
+      {label && <Text style={[styles.label, isInvalid && styles.labelError]}>{label}</Text>}
+      <View style={[styles.inputContainer, isInvalid && styles.inputErrorContainer, type === 'textarea' && styles.textareaContainer]}>
         {renderInput()}
       </View>
     </View>

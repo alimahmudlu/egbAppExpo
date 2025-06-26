@@ -10,13 +10,15 @@ import SgButton from "@/components/ui/Button/Button";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
 
-// Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
     return (
         <View style={styles.headerContainer}>
             <TouchableOpacity 
                 style={styles.backButton} 
-                onPress={() => router.back()}
+                onPress={() => {
+                    // console.log(router)
+                    router.back()
+                }}
             >
                 <LeftIcon width={20} height={20} />
             </TouchableOpacity>
@@ -58,15 +60,14 @@ export default function ProjectItemScreen() {
             >
                 <SgSectionUserInfo
                     name={taskDetails?.reporter_employee?.full_name}
-                    role="Employee"
-                    profileImage={Avatar}
+                    role='Chief'
                     color="dark"
                     size="md"
                 />
             </SgCard>
             <SgCard
                 contentTitle='Deadline date'
-                contentDescription={moment(taskDetails?.time).format('DD.MM.YYYY / HH:mm') || taskDetails?.time}
+                contentDescription={taskDetails?.deadline ? moment(taskDetails?.deadline).format('DD.MM.YYYY / HH:mm') : null}
             />
             <SgCard
                 contentTitle='Points to be earned'

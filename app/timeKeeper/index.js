@@ -52,20 +52,20 @@ export default function EmployeeDashboardScreen() {
           defaultTabId='checkIn'
           onTabChange={(index) => console.log('Selected tab:', index)}
           tabs={[
-            { label: 'Check in', id: 'checkIn', count: employeeActivities?.filter(el => el.type === 1 && el.status === 0)?.length },
-            { label: 'Check out', id: 'checkOut', count: employeeActivities?.filter(el => el.type === 2 && el.status === 0)?.length },
-            { label: 'At work', id: 'atWork', count: employeeActivities?.filter(el => el.type === 1 && el.status === 1 && el.completed_status === 0)?.length },
+            { label: 'Check in', id: 'checkIn', count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length },
+            { label: 'Check out', id: 'checkOut', count: employeeActivities?.filter(el => el.type === 2 && el.status === 1)?.length },
+            { label: 'At work', id: 'atWork', count: employeeActivities?.filter(el => el.type === 1 && el.status === 2 && el.completed_status === 0)?.length },
           ]}
           tabContent={[
             {
               element: (
-                  employeeActivities?.filter(el => el.type === 1 && el.status === 0).map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
                           fullData={emp}
                           title={emp?.employee?.full_name}
                           role={emp?.employee?.role?.name}
-                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                           image={emp?.employee?.image}
                       />
                   ))
@@ -74,13 +74,13 @@ export default function EmployeeDashboardScreen() {
             },
             {
               element: (
-                  employeeActivities?.filter(el => el.type === 2 && el.status === 0).map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 2 && el.status === 1).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
                           fullData={emp}
                           title={emp?.employee?.full_name}
                           role={emp?.employee?.role?.name}
-                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                           image={emp?.employee?.image}
                       />
                   ))
@@ -89,13 +89,13 @@ export default function EmployeeDashboardScreen() {
             },
             {
               element: (
-                  employeeActivities?.filter(el => el.type === 1 && el.status === 1 && el.completed_status === 0).map((emp, index) => (
+                  employeeActivities?.filter(el => el.type === 1 && el.status === 2 && el.completed_status === 0).map((emp, index) => (
                       <SgSectionEmployeeCard
                           key={index}
                           fullData={emp}
                           title={emp?.employee?.full_name}
                           role={emp?.employee?.role?.name}
-                          time={moment(emp.time).format('MM-DD-YYYY HH:mm')}
+                          time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                           image={emp?.employee?.image}
                           editable={false}
                       />

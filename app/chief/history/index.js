@@ -20,16 +20,17 @@ export default function EmployeeDocsScreen() {
   const [filters, setFilters] = useState({})
   const [filterModal, setFilterModal] = useState(false)
 
-  function getData() {
+  function getData(_filters = {}) {
     request({
       url: `/chief/task/list`,
       method: 'get',
+      params: {..._filters, status: _filters?.status?.id}
     }).then(res => {
-      if (res.data.success) {
-        setTaskList(res?.data?.data);
+      if (res.success) {
+        setTaskList(res?.data);
       } else {
         // Handle error response
-        console.log(res.data.message);
+        console.log(res.message);
       }
     }).catch(err => {
       console.log(err);
@@ -49,7 +50,7 @@ export default function EmployeeDocsScreen() {
   }
 
   function handleFilters() {
-    getData()
+    getData(filters)
   }
 
   useEffect(() => {
@@ -60,11 +61,11 @@ export default function EmployeeDocsScreen() {
       method: 'get',
       cache: true,
     }).then(res => {
-      if (res.data.success) {
-        setTaskStatus(res?.data?.data);
+      if (res.success) {
+        setTaskStatus(res?.data);
       } else {
         // Handle error response
-        console.log(res.data.message);
+        console.log(res.message);
       }
     }).catch(err => {
       console.log(err);

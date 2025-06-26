@@ -1,4 +1,4 @@
-import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
+import {Text, View, TouchableOpacity, StyleSheet, ToastAndroid} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {router} from "expo-router";
@@ -14,6 +14,8 @@ import SgButton from "@/components/ui/Button/Button";
 import SgPopup from "@/components/ui/Modal/Modal";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useApi} from "@/hooks/useApi";
+import {globalValidate} from "@/utils/validate";
+import validationConstraints from "@/app/chiefPages/create-task/constants"
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -35,11 +37,13 @@ const ProjectHeader = ({ projectId }) => {
 export default function TaskCreateScreen() {
     const { request } = useApi();
     const [data, setData] = useState({});
+    const [errors, setErrors] = useState({});
     const [projectsList, setProjectsList] = useState([]);
     const [employeesList, setEmployeesList] = useState([]);
     const [createTaskInfoModal, setCreateTaskInfoModal] = useState(false);
 
     function handleChange(e) {
+        setErrors({ ...errors, [e.name]: '' });
         setData({ ...data, [e.name]: e.value });
     }
 
@@ -77,24 +81,40 @@ export default function TaskCreateScreen() {
         }
     }, [data?.project?.id]);
 
-    function handleSubmit() {
-        request({
-            url: `/chief/task/create`,
-            method: 'post',
-            data: {
-                title: data?.title,
-                deadline: data?.deadline,
-                point: data?.point,
-                description: data?.description,
-                assigned_employee_id: data?.assigned_employee?.id,
-                project_id: data?.project?.id,
-            }
-        }).then(res => {
-            toggleCreateTaskInfoModal()
-        }).catch(err => {
-            console.log(err, 'err');
-        })
+    const validate = () => {
+        const constraints = validationConstraints('chiefCreateTask', data);
+        const { errors } = globalValidate(data, constraints);
+
+        return errors || {};
     }
+
+    function handleSubmit() {
+        let errors = validate();
+
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            ToastAndroid.show("error var", ToastAndroid.SHORT)
+        }
+        else {
+            request({
+                url: `/chief/task/create`,
+                method: 'post',
+                data: {
+                    title: data?.title,
+                    deadline: data?.deadline,
+                    point: data?.point,
+                    description: data?.description,
+                    assigned_employee_id: data?.assigned_employee?.id,
+                    project_id: data?.project?.id,
+                }
+            }).then(res => {
+                toggleCreateTaskInfoModal()
+            }).catch(err => {
+                console.log(err, 'err');
+            })
+        }
+    }
+
     const toggleCreateTaskInfoModal = () => {
         if (createTaskInfoModal) {
             router.back();
@@ -124,6 +144,7 @@ export default function TaskCreateScreen() {
                     modalTitle="Select project"
                     value={data?.project}
                     name='project'
+                    isInvalid={errors?.project}
                     onChangeText={handleChange}
                     list={(projectsList || []).map((project, index) => (
                         {
@@ -144,6 +165,7 @@ export default function TaskCreateScreen() {
                     modalTitle="Select user"
                     value={data?.assigned_employee}
                     name='assigned_employee'
+                    isInvalid={errors?.assigned_employee}
                     onChangeText={handleChange}
                     list={(employeesList || []).map((employee, index) => (
                         {
@@ -165,6 +187,7 @@ export default function TaskCreateScreen() {
                     type="text"
                     value={data?.title}
                     name='title'
+                    isInvalid={errors?.title}
                     onChangeText={handleChange}
                 />
                 <SgInput
@@ -173,6 +196,7 @@ export default function TaskCreateScreen() {
                     type="textarea"
                     value={data?.description}
                     name='description'
+                    isInvalid={errors?.description}
                     onChangeText={handleChange}
                 />
                 <SgInput
@@ -181,6 +205,7 @@ export default function TaskCreateScreen() {
                     type="counter"
                     value={data?.point}
                     name='point'
+                    isInvalid={errors?.point}
                     onChangeText={handleChange}
                 />
                 <SgDatePicker
@@ -188,6 +213,7 @@ export default function TaskCreateScreen() {
                     placeholder="dd/mm/yyyy - hh/mm A"
                     value={data?.deadline}
                     name='deadline'
+                    isInvalid={errors?.deadline}
                     onChangeText={handleChange}
                 />
 

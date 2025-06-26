@@ -21,6 +21,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     height: 56,
   },
+  labelError: {
+    color: COLORS.error_700,
+  },
+  inputErrorContainer: {
+    borderColor: COLORS.error_700,
+  },
+
+
+
   input: {
     flex: 1,                   
     fontFamily: 'Inter',

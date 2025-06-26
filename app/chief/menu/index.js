@@ -9,10 +9,12 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import LogOutModalIcon from "@/assets/images/logout.svg";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
+import {useTranslation} from "react-i18next";
 
 
 export default function ChiefMenuScreen() {
     const { user, logout } = useAuth();
+    const {t} = useTranslation();
 
     const [logOutModal, setLogOutModal] = useState(false);
 
@@ -58,7 +60,7 @@ export default function ChiefMenuScreen() {
                     color={COLORS.white}
                     onPress={handleLogout}
                 >
-                    Log out
+                    {t('logout')}
                 </SgButton>
             }
         />

@@ -8,6 +8,12 @@ import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
+import {useSocket} from "@/hooks/useSocket";
+
+export const screenOptions = {
+    tabBarStyle: { display: 'none' },
+};
 
 // Custom header component with back button and overview button
 const ProjectHeader = ({ projectId }) => {
@@ -37,6 +43,8 @@ export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
     const [projectDetails, setProjectDetails] = useState({});
     const [tasksList, setTasksList] = useState([]);
+    const { insertData, storeData, removeRowData } = useData();
+    const {socket} = useSocket();
 
     useEffect(() => {
         request({
@@ -56,17 +64,36 @@ export default function ProjectItemScreen() {
         request({
             url: `/employee/project/item/${projectId}/tasks`,
             method: 'get',
-        }).then(res => {
-            if (res.success) {
-                setTasksList(res?.data);
-            } else {
-                // Handle error response
-                console.log(res.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, [projectId]);
+
+    useEffect(() => {
+        setTasksList(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]?.data)
+    }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]])
+
+
+
+    useEffect(() => {
+        if (!socket || !socket.connected) return;
+
+        const addTask = (data) => {
+            insertData(`GET:/employee/project/item/${projectId}/tasks`, data?.data)
+        };
+
+        const removeTask = (data) => {
+            removeRowData(`GET:/employee/project/item/${projectId}/tasks`, data?.data?.id, 'id')
+        };
+
+        socket.on("add_task", addTask);
+        socket.on("remove_task", removeTask);
+
+        return () => {
+            socket.off("add_task", addTask);
+            socket.off("remove_task", removeTask);
+        };
+    }, [socket]);
 
     return (
         <SgTemplateScreenView

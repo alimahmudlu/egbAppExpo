@@ -21,7 +21,7 @@ import LogIn from "@/assets/images/log-in_20.svg";
 import ApiService from "@/services/ApiService";
 import {useAuth} from "@/hooks/useAuth";
 import {useData} from "@/hooks/useData";
-import moment from "moment/moment";
+import moment from "moment-timezone";
 
 
 export default function SgSectionEmployeeCard({fullData, image, title, role, time, editable = true, status, reason}) {
@@ -58,7 +58,8 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
             employee_id: fullData?.employee?.id,
             activity_id: fullData?.id,
             type: fullData?.type,
-            confirm_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+            confirm_time: moment(),
+            timezone: moment.tz.guess(),
             reject_reason: rejectReason
         }, {
             headers: {
@@ -94,9 +95,10 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
     function handleSubmitAccept() {
         ApiService.post('/timekeeper/activity/accept', {
             employee_id: fullData?.employee?.id,
+            confirm_time: moment(),
+            timezone: moment.tz.guess(),
             activity_id: fullData?.id,
             type: fullData?.type,
-            confirm_time: moment().format('YYYY-MM-DD HH:mm:ss')
         }, {
             headers: {
                 'authorization': accessToken || ''
@@ -109,12 +111,14 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                     insertData('GET:/timekeeper/activity/list', {
                         ...fullData,
                         complete_status: 1,
-                        confirm_time: new Date(),
+                        confirm_time: moment(),
+                        timezone: moment.tz.guess(),
                         confirm_employee_id: userId,
-                        status: 1
+                        status: 2
                     })
                 }
                 else {
+                    removeRowData('GET:/timekeeper/activity/list', fullData?.activity_id, 'id')
                     removeRowData('GET:/timekeeper/activity/list', fullData)
                 }
             }
@@ -168,7 +172,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                     </View>
                     :
                     <View style={styles.infoGroup}>
-                        {status === 2 ?
+                        {status === 3 ?
                             <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
                                               onPress={toggleRejectInfoModal}>
                                 <Text style={[styles.infoText, styles.rejectText]}>Rejected</Text>

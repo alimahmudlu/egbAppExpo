@@ -14,6 +14,7 @@ export default function SgSelect(props) {
         name,
         onChangeText,
         modalTitle,
+        isInvalid,
         list,
     } = props
     const [selectModal, setSelectModal] = useState(false);
@@ -42,11 +43,10 @@ export default function SgSelect(props) {
     return (
         <>
             <View style={styles.wrapper}>
-                {label && <Text style={styles.label}>{label}</Text>}
-
+                {label && <Text style={[styles.label, isInvalid && styles.labelError]}>{label}</Text>}
                 <Pressable
                     onPress={toggleSelectModal}
-                    style={[styles.inputContainer]}
+                    style={[styles.inputContainer, isInvalid && styles.inputErrorContainer]}
                 >
                     <View
                         style={styles.input}

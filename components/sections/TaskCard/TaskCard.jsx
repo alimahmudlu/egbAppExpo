@@ -17,7 +17,7 @@ import ApiService from "@/services/ApiService";
 import {useAuth} from "@/hooks/useAuth";
 
 export default function SgSectionTaskCard({time, title, description, name, image, status, duration, id, projectId, href}) {
-    const { accessToken } = useAuth();
+    const { user, accessToken } = useAuth();
     const router = useRouter();
     const [modalVisible, setModalVisible] = useState(false);
     const [removeTaskModal, setRemoveTaskModal] = useState(false);
@@ -25,6 +25,9 @@ export default function SgSectionTaskCard({time, title, description, name, image
 
     const [completeTaskModal, setCompleteTaskModal] = useState(false);
     const [completeTaskInfoModal, setCompleteTaskInfoModal] = useState(false);
+
+    const [checkedTaskModal, setCheckedTaskModal] = useState(false);
+    const [checkedTaskInfoModal, setCheckedTaskInfoModal] = useState(false);
 
     const toggleRemoveTaskModal = () => {
         setRemoveTaskModal(!removeTaskModal);
@@ -40,9 +43,22 @@ export default function SgSectionTaskCard({time, title, description, name, image
             }
         } ).then(res => {
             toggleRemoveTaskInfoModal();
+
         }).catch(err => {
             console.log(err);
         });
+    };
+
+    const toggleCheckedTaskModal = () => {
+        setCheckedTaskModal(!checkedTaskModal);
+    };
+    const toggleCheckedTaskInfoModal = () => {
+        setCheckedTaskInfoModal(!checkedTaskInfoModal);
+        setModalVisible(false)
+    };
+    const handleCheckedTask = () => {
+        console.log('Checked item with task ID:', id, 'and project ID:', projectId);
+        toggleCheckedTaskInfoModal();
     };
 
     const toggleCompleteTaskModal = () => {
@@ -126,26 +142,59 @@ export default function SgSectionTaskCard({time, title, description, name, image
                 title="Actions"
                 description=" "
             >
-                <View style={styles.modalList}>
-                    <TouchableOpacity onPress={toggleCompleteTaskModal}>
-                        <View style={styles.modalItem}>
-                            <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                            <Text style={styles.modalText}>Complete task</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <View style={styles.modalItem}>
-                            <PencilIcon width={20} height={20} style={styles.modalIcon}/>
-                            <Text style={styles.modalText}>Edit task</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={toggleRemoveTaskModal}>
-                        <View style={styles.modalItem}>
-                            <TrashIcon width={20} height={20} style={styles.modalIcon}/>
-                            <Text style={styles.modalText}>Remove task</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                {user?.role?.id === 3 ?
+                    <View style={styles.modalList}>
+                        {status === 3 ?
+                            <TouchableOpacity onPress={toggleCheckedTaskModal}>
+                                <View style={styles.modalItem}>
+                                    <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
+                                    <Text style={styles.modalText}>Checked task</Text>
+                                </View>
+                            </TouchableOpacity>
+                            : null
+                        }
+                        {status === 4 ?
+                            <TouchableOpacity onPress={toggleCompleteTaskModal}>
+                                <View style={styles.modalItem}>
+                                    <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
+                                    <Text style={styles.modalText}>Complete task</Text>
+                                </View>
+                            </TouchableOpacity>
+                            : null
+                        }
+                                {/*<TouchableOpacity>*/}
+                                {/*    <View style={styles.modalItem}>*/}
+                                {/*        <PencilIcon width={20} height={20} style={styles.modalIcon}/>*/}
+                                {/*        <Text style={styles.modalText}>Edit task</Text>*/}
+                                {/*    </View>*/}
+                                {/*</TouchableOpacity>*/}
+                                <TouchableOpacity onPress={toggleRemoveTaskModal}>
+                                    <View style={styles.modalItem}>
+                                        <TrashIcon width={20} height={20} style={styles.modalIcon}/>
+                                        <Text style={styles.modalText}>Remove task</Text>
+                                    </View>
+                                </TouchableOpacity>
+                    </View>
+                    : null
+                }
+                {user?.role?.id === 1 ?
+                    <View style={styles.modalList}>
+                        <TouchableOpacity onPress={toggleCompleteTaskModal}>
+                            <View style={styles.modalItem}>
+                                <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
+                                <Text style={styles.modalText}>Complete request</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={toggleCompleteTaskModal}>
+                            <View style={styles.modalItem}>
+                                <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
+                                <Text style={styles.modalText}>Check request</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    : null
+                }
+
             </SgPopup>
 
             <SgPopup
@@ -190,12 +239,36 @@ export default function SgSectionTaskCard({time, title, description, name, image
                     </SgButton>
                 }
             />
-
             <SgPopup
                 visible={completeTaskInfoModal}
                 onClose={toggleCompleteTaskInfoModal}
                 fullScreen={true}
                 title="Task completed"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
+
+            <SgPopup
+                visible={checkedTaskModal}
+                onClose={toggleCheckedTaskModal}
+                title="Checked task"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompleteModalIcon width={56} height={56} />}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleCheckedTask}
+                    >
+                        Yes, Checked
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={checkedTaskInfoModal}
+                onClose={toggleCheckedTaskInfoModal}
+                fullScreen={true}
+                title="Task checked"
                 description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
                 icon={<CompletedModalIcon width={202} height={168} />}
             />

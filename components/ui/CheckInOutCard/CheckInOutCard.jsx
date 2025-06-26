@@ -1,4 +1,4 @@
-import { View, Text, Alert, Platform } from 'react-native';
+import {View, Text, Alert, Platform} from 'react-native';
 import CheckIn from "@/assets/images/check-in.svg";
 import CheckInModalIcon from "@/assets/images/checkInModal.svg";
 import CheckOut from "@/assets/images/check-out.svg";
@@ -11,352 +11,353 @@ import * as Linking from 'expo-linking';
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import moment from "moment";
+import moment from "moment-timezone";
 import {useAuth} from "@/hooks/useAuth";
-import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import ApiService from "@/services/ApiService";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 
 export default function SgCheckInOutCard(props) {
-  const { request } = useApi();
-  const { setStoreData, storeData } = useData();
-  const {
-    type = 'checkin',
-    title,
-    time,
-    status = undefined, // 0 - waiting, 1 - success, 2 - failed
-      mapData,
-    checkInStatus = undefined
-  } = props;
+    const {request} = useApi();
+    const {setStoreData, storeData} = useData();
+    const {
+        type = 'checkin',
+        title,
+        time,
+        status, // 0 - waiting, 1 - success, 2 - failed
+        mapData,
+        checkInStatus = undefined,
+        checkInId = undefined,
+    } = props;
 
-  if (type !== 'checkin' && type !== 'checkout') {
-    return null;
-  }
-
-  const [checkInModal, setCheckInModal] = useState(false)
-  const [checkInData, setCheckInData] = useState({})
-  const [checkOutModal, setCheckOutModal] = useState(false)
-  const [checkOutData, setCheckOutData] = useState({})
-
-  const isCheckIn = type === 'checkin';
-  const isCheckOut = type === 'checkout';
-  const backgroundColor = isCheckIn ? COLORS.brand_50 : COLORS.error_100;
-  const Icon = isCheckIn ? CheckIn : CheckOut;
-
-  function toggleCheckInModal() {
-    if (checkInModal) {
-      setCheckInData({})
+    if (type !== 'checkin' && type !== 'checkout') {
+        return null;
     }
 
-    setCheckInModal(!checkInModal)
-  }
+    const [checkInModal, setCheckInModal] = useState(false)
+    const [checkInData, setCheckInData] = useState({})
+    const [checkOutModal, setCheckOutModal] = useState(false)
+    const [checkOutData, setCheckOutData] = useState({})
 
-  function handleSubmitCheckIn() {
-    request({
-      url: `/employee/activity/checkin`,
-      method: 'post',
-      data: {
-        time: moment().format('YYYY-MM-DD HH:mm:ss'),
-        latitude: checkInData?.latitude,
-        longitude: checkInData?.longitude
-      }
-    }).then(res => {
-      if (res.success) {
-        setStoreData(prev => ({
-          ...prev,
-          checkInData: {
-            checkIn: res?.data || {
-              loading: true
-            },
-          }
-        }));
-      } else {
-        console.log(res.message);
-      }
-    }).catch(err => {
-      console.log(err);
-    })
+    const isCheckIn = type === 'checkin';
+    const isCheckOut = type === 'checkout';
+    const backgroundColor = isCheckIn ? COLORS.brand_50 : COLORS.error_100;
+    const Icon = isCheckIn ? CheckIn : CheckOut;
 
-    toggleCheckInModal()
-  }
-
-  function toggleCheckOutModal() {
-    if (checkOutModal) {
-      setCheckOutData({})
-    }
-
-    setCheckOutModal(!checkOutModal)
-  }
-
-  function handleSubmitCheckOut() {
-    request({
-      url: `/employee/activity/checkout`,
-      method: 'post',
-      data: {
-        time: moment().format('YYYY-MM-DD HH:mm:ss'),
-        latitude: checkOutData?.latitude,
-        longitude: checkOutData?.longitude
-      }
-    }).then(res => {
-      if (res.success) {
-        console.log(res?.data);
-        setStoreData(prev => ({
-          ...prev,
-          checkInData: {
-            ...(prev.checkInData || {}),
-            checkOut: res?.data || {
-              loading: true
-            },
-          }
-        }));
-      } else {
-        // Handle error response
-        console.log(res.message);
-      }
-    }).catch(err => {
-      console.log(err);
-    })
-    toggleCheckOutModal()
-  }
-
-  function openInMaps(latitude, longitude) {
-    const scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
-    const url = Platform.OS === 'ios' 
-      ? `${scheme}?q=${latitude},${longitude}` 
-      : `${scheme}${latitude},${longitude}`;
-
-    // For Google Maps specific URL
-    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-
-    // Open the map based on platform
-    if (Platform.OS === 'ios') {
-      // On iOS, give option to choose between Apple Maps and Google Maps
-      Linking.openURL(url)
-    } else {
-      // On Android, directly open Google Maps
-      Linking.openURL(googleMapsUrl);
-    }
-  }
-
-  async function handleCheckInRequest() {
-    try {
-      // Request permission to access locations
-      let { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status !== 'granted') {
-        Alert.alert(
-          'Permission Denied',
-          'Please allow location access to check in.',
-          [{ text: 'OK' }]
-        );
-        return;
-      }
-
-      // Get the current position
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Lowest,
-      });
-
-      const { latitude, longitude } = location.coords;
-        // Log the location data
-      if (props.onLocationReceived) {
-        props.onLocationReceived({ latitude, longitude });
-      }
-
-      // onSuccess callback
-      // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-      toggleCheckInModal();
-      setCheckInData({latitude, longitude})
-    } catch (error) {
-      console.error('Error getting location:', error);
-      Alert.alert(
-        'Error',
-        'Could not get your location. Please try again.',
-        [{ text: 'OK' }]
-      );
-    }
-  }
-
-  async function handleCheckOutRequest() {
-    try {
-      // Request permission to access locations
-      let { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status !== 'granted') {
-        Alert.alert(
-          'Permission Denied',
-          'Please allow location access to check in.',
-          [{ text: 'OK' }]
-        );
-        return;
-      }
-
-      // Get the current position
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Lowest,
-      });
-
-      const { latitude, longitude } = location.coords;
-        // Log the location data
-      if (props.onLocationReceived) {
-        props.onLocationReceived({ latitude, longitude });
-      }
-
-      // onSuccess callback
-      // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-      toggleCheckOutModal();
-      setCheckOutData({latitude, longitude})
-    } catch (error) {
-      console.error('Error getting location:', error);
-      Alert.alert(
-        'Error',
-        'Could not get your location. Please try again.',
-        [{ text: 'OK' }]
-      );
-    }
-  }
-
-  return (
-    <View style={[styles.card, { backgroundColor }]}>
-      <View style={styles.content}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{title}</Text>
-        <Icon width={20} height={20} />
-      </View>
-        <Text style={[styles.time, { color: isCheckIn ? COLORS.brand_600 : COLORS.error_600 }]}
-        >
-            {time ? time : '--:--:--'}
-        </Text>
-      </View>
-      <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
-        {(isCheckIn && status === 1 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web' ?
-          <MapView
-            style={{flex: 1, height: 125}}
-            initialRegion={{
-              latitude: Number(mapData?.checkIn?.latitude),
-              longitude: Number(mapData?.checkIn?.longitude),
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
-            }}
-        >
-          <Marker coordinate={{ latitude: Number(mapData?.checkIn?.latitude), longitude: Number(mapData?.checkIn?.longitude) }} />
-        </MapView>
-            : null
+    function toggleCheckInModal() {
+        if (checkInModal) {
+            setCheckInData({})
         }
-        {(isCheckOut && status === 1 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web' ?
-          <MapView
-            style={{flex: 1, height: 125}}
-            initialRegion={{
-              latitude: Number(mapData?.checkOut?.latitude) || 0,
-              longitude: Number(mapData?.checkOut?.longitude) || 0,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
-            }}
-        >
-          <Marker coordinate={{ latitude: Number(mapData?.checkOut?.latitude) || 0, longitude: Number(mapData?.checkOut?.longitude) || 0 }} />
-        </MapView>
-            : null
-        }
-      </View>
-      <View style={{paddingHorizontal: 4, paddingVertical: 4,}}>
-        {isCheckIn ?
-            <>
-              {status === undefined ?
-                  <SgButton color={COLORS.brand_600} onPress={handleCheckInRequest}>
-                    Check In
-                  </SgButton>
-                  : null
-              }
-              {status === 0 ?
-                  <SgButton
-                      style={{borderRadius: 12}}
-                      color={COLORS.white}
-                      bgColor={COLORS?.brand_600}
-                  >
-                    Waiting...
-                  </SgButton>
-                  : null
-              }
-              {status === 1 ?
-                  <SgButton
-                      color={COLORS.brand_600}
-                      onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}
-                  >
-                    Open on map
-                  </SgButton>
-                  : null
-              }
-            </>
-            : null
-        }
-        {(isCheckOut && checkInStatus) ?
-            <>
-              {status === undefined ?
-                  <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest}>
-                    Check Out
-                  </SgButton>
-                  : null
-              }
-              {status === 0 ?
-                  <SgButton
-                      style={{borderRadius: 12}}
-                      color={COLORS.white}
-                      bgColor={COLORS?.error_600}
-                  >
-                    Waiting...
-                  </SgButton>
-                  : null
-              }
-              {status === 1 ?
-                  <SgButton
-                      color={COLORS.error_700}
-                      onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}
-                  >
-                    Open on map
-                  </SgButton>
-                  : null
-              }
-            </>
-            : null
-        }
-      </View>
 
-      <SgPopup
-          visible={checkInModal}
-          onClose={toggleCheckInModal}
-          title="Check In"
-          description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
-          icon={<CheckInModalIcon width={56} height={56} />}
-          footerButton={
-            <SgButton
-                loading={status === 1}
-                onPress={handleSubmitCheckIn}
-                bgColor={COLORS.primary}
-                color={COLORS.white}
-            >
-              Check in
-            </SgButton>
-          }
-      />
+        setCheckInModal(!checkInModal)
+    }
 
-      <SgPopup
-          visible={checkOutModal}
-          onClose={toggleCheckOutModal}
-          title="Check Out"
-          description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
-          icon={<CheckOutModalIcon width={56} height={56} />}
-          footerButton={
-            <SgButton
-                loading={status === 1}
-                onPress={handleSubmitCheckOut}
-                bgColor={COLORS.error_600}
-                color={COLORS.white}
-            >
-              Check Out
-            </SgButton>
-          }
-      />
-    </View>
-  );
+    function handleSubmitCheckIn() {
+        request({
+            url: `/employee/activity/checkin`,
+            method: 'post',
+            data: {
+                time: moment(),
+                timezone: moment.tz.guess(),
+                latitude: Number(checkInData?.latitude),
+                longitude: Number(checkInData?.longitude)
+            }
+        }).then(res => {
+            setStoreData(prev => ({
+                ...prev,
+                checkIn: res?.data || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            console.log(err);
+        })
+
+        toggleCheckInModal()
+    }
+
+    function toggleCheckOutModal() {
+        if (checkOutModal) {
+            setCheckOutData({})
+        }
+
+        setCheckOutModal(!checkOutModal)
+    }
+
+    function handleSubmitCheckOut() {
+        request({
+            url: `/employee/activity/checkout`,
+            method: 'post',
+            data: {
+                time: moment(),
+                timezone: moment.tz.guess(),
+                latitude: Number(checkOutData?.latitude),
+                longitude: Number(checkOutData?.longitude),
+                activity_id: checkInId
+            }
+        }).then(res => {
+            if (res.success) {
+                console.log(res?.data);
+                setStoreData(prev => ({
+                    ...prev,
+                    checkOut: res?.data || {
+                        loading: true
+                    },
+                }));
+            } else {
+                // Handle error response
+                console.log(res.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+        toggleCheckOutModal()
+    }
+
+    function openInMaps(latitude, longitude) {
+        const scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+        const url = Platform.OS === 'ios'
+            ? `${scheme}?q=${latitude},${longitude}`
+            : `${scheme}${latitude},${longitude}`;
+
+        // For Google Maps specific URL
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+
+        // Open the map based on platform
+        if (Platform.OS === 'ios') {
+            // On iOS, give option to choose between Apple Maps and Google Maps
+            Linking.openURL(url)
+        } else {
+            // On Android, directly open Google Maps
+            Linking.openURL(googleMapsUrl);
+        }
+    }
+
+    async function handleCheckInRequest() {
+        try {
+            // Request permission to access locations
+            let {status} = await Location.requestForegroundPermissionsAsync();
+
+            if (status !== 'granted') {
+                Alert.alert(
+                    'Permission Denied',
+                    'Please allow location access to check in.',
+                    [{text: 'OK'}]
+                );
+                return;
+            }
+
+            // Get the current position
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Lowest,
+            });
+
+            const {latitude, longitude} = location.coords;
+            // Log the location data
+            if (props.onLocationReceived) {
+                props.onLocationReceived({latitude, longitude});
+            }
+
+            // onSuccess callback
+            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+            toggleCheckInModal();
+            setCheckInData({latitude, longitude})
+        } catch (error) {
+            console.error('Error getting location:', error);
+            Alert.alert(
+                'Error',
+                'Could not get your location. Please try again.',
+                [{text: 'OK'}]
+            );
+        }
+    }
+
+    async function handleCheckOutRequest() {
+        try {
+            // Request permission to access locations
+            let {status} = await Location.requestForegroundPermissionsAsync();
+
+            if (status !== 'granted') {
+                Alert.alert(
+                    'Permission Denied',
+                    'Please allow location access to check in.',
+                    [{text: 'OK'}]
+                );
+                return;
+            }
+
+            // Get the current position
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Lowest,
+            });
+
+            const {latitude, longitude} = location.coords;
+            // Log the location data
+            if (props.onLocationReceived) {
+                props.onLocationReceived({latitude, longitude});
+            }
+
+            // onSuccess callback
+            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+            toggleCheckOutModal();
+            setCheckOutData({latitude, longitude})
+        } catch (error) {
+            console.error('Error getting location:', error);
+            Alert.alert(
+                'Error',
+                'Could not get your location. Please try again.',
+                [{text: 'OK'}]
+            );
+        }
+    }
+
+    return (
+        <View style={[styles.card, {backgroundColor}]}>
+            <View style={styles.content}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>{title}</Text>
+                    <Icon width={20} height={20}/>
+                </View>
+                <Text style={[styles.time, {color: isCheckIn ? COLORS.brand_600 : COLORS.error_600}]}
+                >
+                    {time ? time : '--:--:--'}
+                </Text>
+            </View>
+            <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
+                {(isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web' ?
+                    <MapView
+                        style={{flex: 1, height: 125}}
+                        initialRegion={{
+                            latitude: Number(mapData?.checkIn?.latitude),
+                            longitude: Number(mapData?.checkIn?.longitude),
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
+                    >
+                        <Marker coordinate={{
+                            latitude: Number(mapData?.checkIn?.latitude),
+                            longitude: Number(mapData?.checkIn?.longitude)
+                        }}/>
+                    </MapView>
+                    : null
+                }
+                {(isCheckOut && status === 2 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web' ?
+                    <MapView
+                        style={{flex: 1, height: 125}}
+                        initialRegion={{
+                            latitude: Number(mapData?.checkOut?.latitude) || 0,
+                            longitude: Number(mapData?.checkOut?.longitude) || 0,
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
+                    >
+                        <Marker coordinate={{
+                            latitude: Number(mapData?.checkOut?.latitude) || 0,
+                            longitude: Number(mapData?.checkOut?.longitude) || 0
+                        }}/>
+                    </MapView>
+                    : null
+                }
+            </View>
+            <View style={{paddingHorizontal: 4, paddingVertical: 4,}}>
+                {isCheckIn ?
+                    <>
+                        {!status ?
+                            <SgButton color={COLORS.brand_600} onPress={handleCheckInRequest}>
+                                Check In
+                            </SgButton>
+                            : null
+                        }
+                        {status === 1 ?
+                            <SgButton
+                                style={{borderRadius: 12}}
+                                color={COLORS.white}
+                                bgColor={COLORS?.brand_600}
+                            >
+                                Waiting...
+                            </SgButton>
+                            : null
+                        }
+                        {status === 2 ?
+                            <SgButton
+                                color={COLORS.brand_600}
+                                onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}
+                            >
+                                Open on map
+                            </SgButton>
+                            : null
+                        }
+                    </>
+                    : null
+                }
+                {(isCheckOut && checkInStatus) ?
+                    <>
+                        {!status ?
+                            <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest}>
+                                Check Out
+                            </SgButton>
+                            : null
+                        }
+                        {status === 1 ?
+                            <SgButton
+                                style={{borderRadius: 12}}
+                                color={COLORS.white}
+                                bgColor={COLORS?.error_600}
+                            >
+                                Waiting...
+                            </SgButton>
+                            : null
+                        }
+                        {status === 2 ?
+                            <SgButton
+                                color={COLORS.error_700}
+                                onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}
+                            >
+                                Open on map
+                            </SgButton>
+                            : null
+                        }
+                    </>
+                    : null
+                }
+            </View>
+
+            <SgPopup
+                visible={checkInModal}
+                onClose={toggleCheckInModal}
+                title="Check In"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CheckInModalIcon width={56} height={56}/>}
+                footerButton={
+                    <SgButton
+                        loading={status === 1}
+                        onPress={handleSubmitCheckIn}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        Check in
+                    </SgButton>
+                }
+            />
+
+            <SgPopup
+                visible={checkOutModal}
+                onClose={toggleCheckOutModal}
+                title="Check Out"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CheckOutModalIcon width={56} height={56}/>}
+                footerButton={
+                    <SgButton
+                        loading={status === 1}
+                        onPress={handleSubmitCheckOut}
+                        bgColor={COLORS.error_600}
+                        color={COLORS.white}
+                    >
+                        Check Out
+                    </SgButton>
+                }
+            />
+        </View>
+    );
 }
