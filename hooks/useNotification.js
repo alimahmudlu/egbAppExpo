@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {ActivityIndicator, View} from "react-native";
 import {registerForPushNotificationsAsync} from "@/utils/notification";
 import {useAuth} from "@/hooks/useAuth";
 import {useApi} from "@/hooks/useApi";
@@ -18,10 +17,23 @@ export const NotificationProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    AsyncStorage.getItem(NOTIFICATION_PERMISSION_KEY).then(res => {
-      alert(JSON.stringify(res))
+    AsyncStorage.getItem(NOTIFICATION_PERMISSION_KEY).then(async res => {
       if (res) {
         setNotificationPermission(JSON.parse(res));
+      }
+      else {
+        let token;
+        if (user?.id) {
+          token = await registerForPushNotificationsAsync(user?.id, request, res)
+        }
+
+        const obj = {
+          token: token || '',
+          permission: !!token
+        }
+
+        await AsyncStorage.setItem(NOTIFICATION_PERMISSION_KEY, JSON.stringify(obj));
+        setNotificationPermission(obj);
       }
     });
   }, []);

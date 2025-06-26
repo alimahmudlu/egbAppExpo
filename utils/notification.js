@@ -6,6 +6,16 @@ import axios from 'axios';
 export async function registerForPushNotificationsAsync(userId, request, userStatus) {
     let token;
 
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            sound: 'default',
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+
     if (userStatus) {
         if (Device.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -35,17 +45,6 @@ export async function registerForPushNotificationsAsync(userId, request, userSta
         } else {
             // alert('Push bildirişlər yalnız fiziki cihazda işləyir');
         }
-
-        if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
-                name: 'default',
-                importance: Notifications.AndroidImportance.MAX,
-                sound: 'default',
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
-            });
-        }
-
     }
     else {
         await request({
