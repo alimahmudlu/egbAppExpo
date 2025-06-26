@@ -9,7 +9,7 @@ export default {
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.egb.egb",
@@ -23,7 +23,12 @@ export default {
         "backgroundColor": "#0B322F"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.alimahmudlu.egbexpoapp"
+      "package": "com.alimahmudlu.egbexpoapp",
+      "permissions": [
+        "NOTIFICATIONS",
+        "POST_NOTIFICATIONS",
+        "VIBRATE"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -42,7 +47,15 @@ export default {
         }
       ],
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon-white.png",
+          "color": "#0B322F",
+          "sounds": ["default"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

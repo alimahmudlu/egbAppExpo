@@ -3,10 +3,10 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import axios from 'axios';
 
-export async function registerForPushNotificationsAsync(userId, request, status) {
+export async function registerForPushNotificationsAsync(userId, request, userStatus) {
     let token;
 
-    if (status) {
+    if (userStatus) {
         if (Device.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
@@ -40,6 +40,9 @@ export async function registerForPushNotificationsAsync(userId, request, status)
             Notifications.setNotificationChannelAsync('default', {
                 name: 'default',
                 importance: Notifications.AndroidImportance.MAX,
+                sound: 'default',
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
             });
         }
 
