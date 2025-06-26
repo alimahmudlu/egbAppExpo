@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {useAuth} from "@/hooks/useAuth";
+import Constants from 'expo-constants';
 
-const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
-const AUTH_TOKEN_KEY = 'Authorization';
+const { API_URL, AUTH_TOKEN_KEY } = Constants.expoConfig.extra;
 
 const ApiService = axios.create({
     baseURL: API_URL,

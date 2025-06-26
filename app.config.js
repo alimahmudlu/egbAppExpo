@@ -1,4 +1,6 @@
-{
+import 'dotenv/config';
+
+export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
@@ -46,6 +48,9 @@
       "typedRoutes": true
     },
     "extra": {
+      API_URL: process.env.API_URL,
+      AUTH_TOKEN_KEY: process.env.AUTH_TOKEN_KEY,
+      SOCKET_URL: process.env.SOCKET_URL,
       "router": {},
       "eas": {
         "projectId": "d461924c-79d5-4a37-8efa-85691df04b88"

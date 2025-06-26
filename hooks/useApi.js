@@ -2,8 +2,10 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useData} from "@/hooks/useData";
 import {useAuth} from "@/hooks/useAuth";
+import Constants from 'expo-constants';
 
-const API_URL = 'http://192.168.0.108:3000/api'; // Replace with your actual API URL
+const { API_URL, AUTH_TOKEN_KEY } = Constants.expoConfig.extra;
+
 const ApiService = axios.create({
     baseURL: API_URL,
 });
@@ -44,7 +46,7 @@ export const useApi = () => {
                 params,
                 data,
                 headers: {
-                    'authorization': accessToken || '',
+                    [AUTH_TOKEN_KEY]: accessToken || '',
                     ...headers
                 },
             });
