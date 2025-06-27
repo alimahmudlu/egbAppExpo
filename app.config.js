@@ -24,6 +24,7 @@ export default {
       },
       "edgeToEdgeEnabled": true,
       "package": "com.alimahmudlu.egbexpoapp",
+      "usesCleartextTraffic": true,
       "permissions": []
     },
     "web": {
@@ -50,8 +51,8 @@ export default {
           "color": "#ffffff",
           "defaultChannel": "default",
           "sounds": [
-            "./assets/notification_sound.wav",
-            "./assets/notification_sound_other.wav"
+            "./assets/sound/notification_sound.wav",
+            "./assets/sound/notification_sound_other.wav"
           ],
           "enableBackgroundRemoteNotifications": false
         }
