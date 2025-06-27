@@ -7,7 +7,7 @@ import Constants from 'expo-constants';
 const { API_URL, AUTH_TOKEN_KEY } = Constants.expoConfig.extra;
 
 const ApiService = axios.create({
-    baseURL: API_URL || 'https://alimahmudlu-egb.duckdns.org:3000/api',
+    baseURL: API_URL || 'https://alimahmudlu-egb.duckdns.org/api',
 });
 
 export const useApi = () => {
