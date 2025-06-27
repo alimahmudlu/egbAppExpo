@@ -7,7 +7,7 @@ import Constants from 'expo-constants';
 const { API_URL, AUTH_TOKEN_KEY } = Constants.expoConfig.extra;
 
 const ApiService = axios.create({
-    baseURL: API_URL,
+    baseURL: API_URL || 'http://51.21.182.119:3000/api',
 });
 
 export const useApi = () => {
@@ -46,7 +46,7 @@ export const useApi = () => {
                 params,
                 data,
                 headers: {
-                    [AUTH_TOKEN_KEY]: accessToken || '',
+                    [AUTH_TOKEN_KEY || 'authorization']: accessToken || '',
                     ...headers
                 },
             });

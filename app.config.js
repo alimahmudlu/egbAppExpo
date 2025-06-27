@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
@@ -25,8 +25,6 @@ export default {
       "edgeToEdgeEnabled": true,
       "package": "com.alimahmudlu.egbexpoapp",
       "permissions": [
-        "NOTIFICATIONS",
-        "POST_NOTIFICATIONS",
         "VIBRATE"
       ]
     },
@@ -47,22 +45,15 @@ export default {
         }
       ],
       "expo-font",
-      "expo-secure-store",
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/images/icon-white.png",
-          "color": "#0B322F"
-        }
-      ]
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
-      API_URL: process.env.API_URL,
-      AUTH_TOKEN_KEY: process.env.AUTH_TOKEN_KEY,
-      SOCKET_URL: process.env.SOCKET_URL,
+      API_URL: process.env.API_URL || 'http://51.21.182.119:3000/api',
+      AUTH_TOKEN_KEY: process.env.AUTH_TOKEN_KEY || 'authorization',
+      SOCKET_URL: process.env.SOCKET_URL || 'http://51.21.182.119:3000',
       "router": {},
       "eas": {
         "projectId": "d461924c-79d5-4a37-8efa-85691df04b88"

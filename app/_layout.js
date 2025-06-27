@@ -105,11 +105,11 @@ export default function RootLayout() {
                 <InitialRedirectProvider>
                     <AuthProvider>
                         <DataProvider>
-                            <NotificationProvider>
+                            {/*<NotificationProvider>*/}
                                 <SocketProvider>
                                     <Slot/>
                                 </SocketProvider>
-                            </NotificationProvider>
+                            {/*</NotificationProvider>*/}
                         </DataProvider>
                     </AuthProvider>
                 </InitialRedirectProvider>
