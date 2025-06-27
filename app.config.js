@@ -32,6 +32,7 @@ export default {
       "favicon": "./assets/images/icon-color.png"
     },
     "plugins": [
+      "expo-web-browser",
       "expo-router",
       [
         "expo-splash-screen",
