@@ -24,9 +24,7 @@ export default {
       },
       "edgeToEdgeEnabled": true,
       "package": "com.alimahmudlu.egbexpoapp",
-      "permissions": [
-        "VIBRATE"
-      ]
+      "permissions": []
     },
     "web": {
       "bundler": "metro",
@@ -44,8 +42,8 @@ export default {
           "backgroundColor": "#0B322F"
         }
       ],
-      "expo-font",
-      "expo-secure-store"
+      // "expo-font",
+      // "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
