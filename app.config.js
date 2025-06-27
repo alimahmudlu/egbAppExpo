@@ -43,6 +43,19 @@ export default {
           "backgroundColor": "#0B322F"
         }
       ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon-white.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "sounds": [
+            "./assets/notification_sound.wav",
+            "./assets/notification_sound_other.wav"
+          ],
+          "enableBackgroundRemoteNotifications": false
+        }
+      ]
       // "expo-font",
       // "expo-secure-store"
     ],

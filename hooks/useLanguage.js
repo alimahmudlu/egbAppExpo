@@ -13,7 +13,7 @@ const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
   const { i18n } = useTranslation();
-  const [selectedLanguage, setSelectedLanguage] = useState(undefined);
+  const [selectedLanguage, setSelectedLanguage] = useState({ id: 'en', title: 'English', icon: <GB width={24} height={24} /> });
   const LANGUAGES = [
     { id: 'en', title: 'English', icon: <GB width={24} height={24} /> },
     { id: 'ru', title: 'Russian', icon: <RU width={24} height={24} /> },
@@ -25,6 +25,10 @@ export const LanguageProvider = ({ children }) => {
       if (lang) {
         setSelectedLanguage((LANGUAGES || []).find(l => l.id === (lang || 'en')) || {});
         i18n.changeLanguage(lang);
+      }
+      else {
+        setSelectedLanguage((LANGUAGES || []).find(l => l.id === (lang || 'en')) || {});
+        i18n.changeLanguage((LANGUAGES || []).find(l => l.id === (lang || 'en')) || {});
       }
     });
   }, []);

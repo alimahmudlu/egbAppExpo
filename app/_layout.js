@@ -25,6 +25,7 @@ import {DataProvider} from "@/hooks/useData";
 import {SocketProvider} from "@/hooks/useSocket";
 import {useInitialRedirect, InitialRedirectProvider} from '@/hooks/useInitialRedirect';
 import {LanguageProvider} from "@/hooks/useLanguage";
+import {NotificationProvider} from "@/hooks/useNotification";
 
 // Wrap the root layout with the AuthProvider
 export default function RootLayout() {
@@ -104,9 +105,11 @@ export default function RootLayout() {
                 <InitialRedirectProvider>
                     <AuthProvider>
                         <DataProvider>
+                            <NotificationProvider>
                                 <SocketProvider>
                                     <Slot/>
                                 </SocketProvider>
+                            </NotificationProvider>
                         </DataProvider>
                     </AuthProvider>
                 </InitialRedirectProvider>
