@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import {useLocalSearchParams, router} from "expo-router";
+import { View, StyleSheet } from 'react-native';
+import {useLocalSearchParams} from "expo-router";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import LeftIcon from "@/assets/images/chevron-left.svg";
 import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
@@ -9,25 +8,9 @@ import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgCard from "@/components/ui/Card/Card";
 import ClockHistory from "@/assets/images/clock-history.svg";
 import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
-
-
-// Custom header component with back button and overview button
-const ScreenHeader = () => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>User detail</Text>
-        </View>
-    );
-};
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
@@ -55,7 +38,9 @@ export default function TimeKeeperUserScreen() {
 
     return (
         <SgTemplateScreenView
-            head={<ScreenHeader />}
+            head={<SgTemplatePageHeader data={{
+                header: 'User detail'
+            }} />}
         >
             <View>
                 <SgSectionUserInfo

@@ -1,29 +1,12 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {useLocalSearchParams, router} from "expo-router";
+import {StyleSheet} from 'react-native';
+import {useLocalSearchParams} from "expo-router";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import LeftIcon from "@/assets/images/chevron-left.svg";
 import COLORS from "@/constants/colors";
 import React, {useEffect, useState} from "react";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
-
-
-// Custom header component with back button and overview button
-const ScreenHeader = () => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Assigned tasks</Text>
-        </View>
-    );
-};
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
@@ -51,7 +34,9 @@ export default function TimeKeeperUserScreen() {
 
     return (
         <SgTemplateScreenView
-            head={<ScreenHeader />}
+            head={<SgTemplatePageHeader data={{
+                header: 'Assigned tasks'
+            }} />}
         >
             {taskList?.map((el, index) => (
                 <SgSectionTaskCard

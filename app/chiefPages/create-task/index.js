@@ -1,8 +1,7 @@
-import {Text, View, TouchableOpacity, StyleSheet, ToastAndroid} from "react-native";
+import {Text, View, StyleSheet, ToastAndroid} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {router} from "expo-router";
-import LeftIcon from "@/assets/images/chevron-left.svg";
 import COLORS from "@/constants/colors";
 import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
@@ -16,23 +15,7 @@ import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useApi} from "@/hooks/useApi";
 import {globalValidate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants"
-
-// Custom header component with back button and overview button
-const ProjectHeader = ({ projectId }) => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity 
-                style={styles.backButton} 
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Create task</Text>
-
-        </View>
-    );
-};
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function TaskCreateScreen() {
     const { request } = useApi();
@@ -126,7 +109,9 @@ export default function TaskCreateScreen() {
 
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader />}
+            head={<SgTemplatePageHeader data={{
+                header: 'Create task'
+            }} />}
         >
             <Text style={{
                 fontSize: 12,

@@ -1,8 +1,7 @@
-import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
+import {View, StyleSheet} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
-import LeftIcon from "@/assets/images/chevron-left.svg";
+import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import Avatar from "@/assets/images/avatar.png";
@@ -11,22 +10,7 @@ import moment from "moment/moment";
 import COLORS from "@/constants/colors";
 import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
 import {useApi} from "@/hooks/useApi";
-
-// Custom header component with back button and overview button
-const ProjectHeader = ({ projectId }) => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity 
-                style={styles.backButton} 
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Task detail</Text>
-        </View>
-    );
-};
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
@@ -52,7 +36,9 @@ export default function ProjectItemScreen() {
     }, [projectId]);
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader projectId={projectId} />}
+            head={<SgTemplatePageHeader data={{
+                header: 'Task detail',
+            }} />}
         >
             <SgSectionUserInfo
                 name={taskDetails?.assigned_employee?.full_name}

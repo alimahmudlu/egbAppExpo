@@ -9,12 +9,9 @@ import SgButton from '@/components/ui/Button/Button';
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
 import SgPopup from "@/components/ui/Modal/Modal";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import {useState} from "react";
 import moment from "moment-timezone";
-import {useAuth} from "@/hooks/useAuth";
 import MapView, {Marker} from 'react-native-maps';
-import ApiService from "@/services/ApiService";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 

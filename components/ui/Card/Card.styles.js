@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 16,
     backgroundColor: COLORS.gray_100,
+    color: COLORS.black,
   },
   content: {
       paddingVertical: 10,

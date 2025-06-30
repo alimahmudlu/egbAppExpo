@@ -5,15 +5,16 @@ const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     flex: 1,
     backgroundColor: COLORS.background,
-    padding: 16,
-    paddingTop: 48,
+    // padding: 16,
+    // paddingTop: 48,
     flexDirection: "column",
     justifyContent: "space-between",
   },
   buttonLayout: {
-      paddingVertical: 16,
+      // paddingVertical: 16,
       paddingHorizontal: 24,
   },
 });

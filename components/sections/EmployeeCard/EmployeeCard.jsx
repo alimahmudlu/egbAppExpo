@@ -31,7 +31,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
     const [acceptCheckInModal, setAcceptCheckInModal] = useState(false);
     const [acceptedCheckInModal, setAcceptedCheckInModal] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
-    const { accessToken, user: {id: userId} } = useAuth();
+    const { accessToken, user } = useAuth();
     const { removeRowData, insertData } = useData();
 
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
@@ -113,7 +113,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                         complete_status: 1,
                         confirm_time: moment(),
                         timezone: moment.tz.guess(),
-                        confirm_employee_id: userId,
+                        confirm_employee_id: user?.id,
                         status: 2
                     })
                 }
@@ -195,7 +195,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                 icon={<InfoCircleModalIcon width={56} height={56}/>}
             >
                 <Text style={styles.rejectModal}>Reject detail</Text>
-                <SgCard><Text>{reason}</Text></SgCard>
+                <SgCard><Text style={styles.title}>{reason}</Text></SgCard>
             </SgPopup>
 
 

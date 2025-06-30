@@ -148,6 +148,14 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     textAlign: "center",
   },
+  title: {
+    fontFamily: "Inter",
+    fontSize: 16,
+    fontStyle: "normal",
+    fontWeight: "600",
+    lineHeight: 20,
+    color: COLORS.black,
+  },
 });
 
 export default styles;

@@ -1,8 +1,7 @@
-import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
+import {Text, View, StyleSheet} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
-import LeftIcon from "@/assets/images/chevron-left.svg";
+import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
@@ -10,33 +9,8 @@ import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
-
-export const screenOptions = {
-    tabBarStyle: { display: 'none' },
-};
-
-// Custom header component with back button and overview button
-const ProjectHeader = ({ projectId }) => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity 
-                style={styles.backButton} 
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Project details</Text>
-
-            <Link
-                href={`/employeePages/projects/${projectId}/overview`}
-                style={styles.overviewButton}
-            >
-                <Text style={styles.overviewButtonText}>Overview</Text>
-            </Link>
-        </View>
-    );
-};
+import COLORS from "@/constants/colors";
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
@@ -70,6 +44,7 @@ export default function ProjectItemScreen() {
     }, [projectId]);
 
     useEffect(() => {
+        console.log(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]?.data)
         setTasksList(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]?.data)
     }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]])
 
@@ -97,7 +72,13 @@ export default function ProjectItemScreen() {
 
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader projectId={projectId} />}
+            head={<SgTemplatePageHeader data={{
+                header: 'Project details',
+                data: {
+                    header: 'Overview',
+                    href: `/employeePages/projects/${projectId}/overview`
+                }
+            }} />}
         >
             <SgSectionProjectNameCard
                 title='Project name'
@@ -109,7 +90,7 @@ export default function ProjectItemScreen() {
             </SgCard>
 
             <View style={{gap: 16}}>
-                {tasksList.map((el, index) => (
+                {(tasksList || []).map((el, index) => (
                     <SgSectionTaskCard
                         id={el?.id}
                         projectId={el?.project_id}
@@ -147,6 +128,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: 18,
         fontWeight: 'bold',
+        color: '#000000',
     },
     overviewButton: {
         paddingHorizontal: 12,
@@ -162,6 +144,14 @@ const styles = StyleSheet.create({
 },
     container: {
         flex: 1,
+    },
+    title: {
+        fontFamily: "Inter",
+        fontSize: 16,
+        fontStyle: "normal",
+        fontWeight: "600",
+        lineHeight: 20,
+        color: COLORS.black,
     },
     contentText: {
         fontSize: 16,

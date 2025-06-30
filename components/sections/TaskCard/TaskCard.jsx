@@ -15,16 +15,26 @@ import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useRouter} from "expo-router";
 import ApiService from "@/services/ApiService";
 import {useAuth} from "@/hooks/useAuth";
+import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
+import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
+import moment from "moment";
+import {useApi} from "@/hooks/useApi";
 
-export default function SgSectionTaskCard({time, title, description, name, image, status, duration, id, projectId, href}) {
+export default function SgSectionTaskCard(props) {
     const { user, accessToken } = useAuth();
+    const { request } = useApi();
     const router = useRouter();
+    const [data, setData] = useState(props || {});
     const [modalVisible, setModalVisible] = useState(false);
     const [removeTaskModal, setRemoveTaskModal] = useState(false);
     const [removeTaskInfoModal, setRemoveTaskInfoModal] = useState(false);
 
+    const [checkTaskModal, setCheckTaskModal] = useState(false);
+    const [checkTaskInfoModal, setCheckTaskInfoModal] = useState(false);
+
     const [completeTaskModal, setCompleteTaskModal] = useState(false);
     const [completeTaskInfoModal, setCompleteTaskInfoModal] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([])
 
     const [checkedTaskModal, setCheckedTaskModal] = useState(false);
     const [checkedTaskInfoModal, setCheckedTaskInfoModal] = useState(false);
@@ -37,7 +47,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
         setModalVisible(false)
     };
     const handleDeleteTask = () => {
-        ApiService.delete(`/chief/task/${id}`, {
+        ApiService.delete(`/chief/task/${data?.id}`, {
             headers: {
                 'authorization': accessToken || ''
             }
@@ -57,7 +67,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
         setModalVisible(false)
     };
     const handleCheckedTask = () => {
-        console.log('Checked item with task ID:', id, 'and project ID:', projectId);
+        console.log('Checked item with task ID:', data?.id, 'and project ID:', data?.projectId);
         toggleCheckedTaskInfoModal();
     };
 
@@ -69,12 +79,49 @@ export default function SgSectionTaskCard({time, title, description, name, image
         setModalVisible(false)
     };
     const handleCompleteTask = () => {
-        console.log('Complete item with task ID:', id, 'and project ID:', projectId);
-        toggleCompleteTaskInfoModal();
+        request({
+            url: `/employee/project/item/${data?.projectId}/tasks/item/${data?.id}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 4,
+                files: (selectedFiles || []).map(el => el?.id) || [],
+            }
+        }).then(res => {
+            console.log(res)
+            setSelectedFiles([])
+            setData({...data, status: {id: 4, name: 'Complete request'}})
+            toggleCompleteTaskInfoModal();
+        }).catch(err => {
+            console.log(err)
+        })
+    };
+
+    const toggleCheckTaskModal = () => {
+        setCheckTaskModal(!checkTaskModal);
+    };
+    const toggleCheckTaskInfoModal = () => {
+        setCheckTaskInfoModal(!checkTaskInfoModal);
+        setModalVisible(false)
+    };
+    const handleCheckTask = () => {
+        request({
+            url: `/employee/project/item/${data?.projectId}/tasks/item/${data?.id}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 3
+            }
+        }).then(res => {
+            setData({...data, status: {id: 3, name: 'Check request'}})
+            toggleCheckTaskInfoModal();
+        }).catch(err => {
+            console.log(err)
+        })
     };
 
     const getStatusStyles = () => {
-        switch (status?.id) {
+        switch (data?.status?.id) {
             case 5:
                 return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
             case 4:
@@ -89,22 +136,22 @@ export default function SgSectionTaskCard({time, title, description, name, image
         <View>
             <View style={styles.card}>
                 <View style={styles.header}>
-                    <Text style={styles.time}>{time}</Text>
+                    <Text style={styles.time}>{data?.time}</Text>
                     <View style={styles.rightHeader}>
-                        {(status?.id && [3, 4, 5].includes(status?.id)) && (
+                        {(data?.status?.id && [3, 4, 5].includes(data?.status?.id)) && (
                             <View
                                 style={[
                                     styles.statusBadge,
-                                    {backgroundColor: getStatusStyles(status?.id).backgroundColor},
+                                    {backgroundColor: getStatusStyles(data?.status?.id).backgroundColor},
                                 ]}
                             >
                                 <Text
                                     style={[
                                         styles.statusText,
-                                        {color: getStatusStyles(status?.id).color},
+                                        {color: getStatusStyles(data?.status?.id).color},
                                     ]}
                                 >
-                                    {status?.name}
+                                    {data?.status?.name}
                                 </Text>
                             </View>
                         )}
@@ -114,21 +161,21 @@ export default function SgSectionTaskCard({time, title, description, name, image
                     </View>
                 </View>
 
-                <Pressable onPress={() => {router.push(href)}} style={styles.content}>
-                    <Text style={styles.title} numberOfLines={1}>{title}</Text>
-                    <Text style={styles.description} numberOfLines={2}>{description}</Text>
+                <Pressable onPress={() => {router.push(data?.href)}} style={styles.content}>
+                    <Text style={styles.title} numberOfLines={1}>{data?.title}</Text>
+                    <Text style={styles.description} numberOfLines={2}>{data?.description}</Text>
                 </Pressable>
 
                 <View style={styles.footer}>
-                    <Text style={styles.duration}>{duration}</Text>
+                    <Text style={styles.duration}>{data?.duration}</Text>
                     <View style={styles.userInfo}>
-                        <Text style={styles.name}>{name}</Text>
-                        {image ? (
-                            <Image source={{uri: image}} style={styles.avatar}/>
+                        <Text style={styles.name}>{data?.name}</Text>
+                        {data?.image ? (
+                            <Image source={{uri: data?.image}} style={styles.avatar}/>
                         ) : (
                             <View style={styles.placeholderAvatar}>
                                 <Text style={styles.avatarText}>
-                                    {name?.split(' ').map(n => n[0]).join('')}
+                                    {data?.name?.split(' ').map(n => n[0]).join('')}
                                 </Text>
                             </View>
                         )}
@@ -144,7 +191,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
             >
                 {user?.role?.id === 3 ?
                     <View style={styles.modalList}>
-                        {status === 3 ?
+                        {data?.status?.id === 3 ?
                             <TouchableOpacity onPress={toggleCheckedTaskModal}>
                                 <View style={styles.modalItem}>
                                     <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
@@ -153,7 +200,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
                             </TouchableOpacity>
                             : null
                         }
-                        {status === 4 ?
+                        {data?.status?.id === 4 ?
                             <TouchableOpacity onPress={toggleCompleteTaskModal}>
                                 <View style={styles.modalItem}>
                                     <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
@@ -185,7 +232,7 @@ export default function SgSectionTaskCard({time, title, description, name, image
                                 <Text style={styles.modalText}>Complete request</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={toggleCompleteTaskModal}>
+                        <TouchableOpacity onPress={toggleCheckTaskModal}>
                             <View style={styles.modalItem}>
                                 <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
                                 <Text style={styles.modalText}>Check request</Text>
@@ -238,12 +285,54 @@ export default function SgSectionTaskCard({time, title, description, name, image
                         Yes, Complete
                     </SgButton>
                 }
-            />
+            >
+                <SgTemplateUploadScreen
+                    setSelectedFiles={setSelectedFiles}
+                    selectedFiles={selectedFiles}
+                />
+
+                {(selectedFiles || []).map((el, index) => (
+                    <SgSectionAddFile
+                        key={index}
+                        title={el?.name}
+                        type={el?.type}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / hh:mm A') : null}
+                        url={el?.filepath}
+                        onPress={() => console.log('file.filename')}
+                    />
+                ))}
+            </SgPopup>
             <SgPopup
                 visible={completeTaskInfoModal}
                 onClose={toggleCompleteTaskInfoModal}
                 fullScreen={true}
-                title="Task completed"
+                title="Task complete request sended"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
+
+            {/* EMPLOYEE CHECK REQUEST */}
+            <SgPopup
+                visible={checkTaskModal}
+                onClose={toggleCheckTaskModal}
+                title="Check request task"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompleteModalIcon width={56} height={56} />}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleCheckTask}
+                    >
+                        Yes, Check
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={checkTaskInfoModal}
+                onClose={toggleCheckTaskInfoModal}
+                fullScreen={true}
+                title="Task complete request sended"
                 description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
                 icon={<CompletedModalIcon width={202} height={168} />}
             />

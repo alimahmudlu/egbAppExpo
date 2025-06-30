@@ -6,7 +6,7 @@ import {
     Platform,
     TouchableWithoutFeedback,
     Keyboard,
-    Alert
+    Alert, Dimensions
 } from "react-native";
 import styles from "@/assets/styles/auth/auth.styles";
 import SgSectionAuth from "@/components/sections/AuthSection/AuthSection";
@@ -20,6 +20,7 @@ import {useAuth} from "@/hooks/useAuth";
 import SgPopup from "@/components/ui/Modal/Modal";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
+import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 
 export default function Login() {
     const [id, setId] = useState('');
@@ -45,48 +46,52 @@ export default function Login() {
   };
   return (
     <>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-        <View>
-            <SgSectionAuth />
-            <SgForm>
-            <SgInput
-                label="Your ID"
-                placeholder="Enter ID..."
-                type="text"
-                value={id}
-                onChangeText={(e) => setId(e.value)}
-            />
-            <SgInput
-                label="Password"
-                placeholder="Enter password..."
-                type="password"
-                value={password}
-                onChangeText={(e) => setPassword(e.value)}
-            />
-            <SgCheckbox label="Remember me" />
-            </SgForm>
-        </View>
-        <View style={styles.buttonLayout}>
-            <SgButton
-                onPress={handleLogin}
-                disabled={!id || !password}
-                bgColor = {COLORS.primary}
-                color= {COLORS.white}
-                >
-                Login
-            </SgButton>
-        </View>
-      </View>
-      </TouchableWithoutFeedback>
+      {/*<TouchableWithoutFeedback onPress={Keyboard.dismiss}>*/}
+        <SgTemplateScreenView head={null}>
+            <View style={[styles.container]}>
+                <View>
+                    <SgSectionAuth />
+                    <SgForm>
+                        <SgInput
+                            label="Your ID"
+                            placeholder="Enter ID..."
+                            type="text"
+                            value={id}
+                            onChangeText={(e) => setId(e.value)}
+                        />
+                        <SgInput
+                            label="Password"
+                            placeholder="Enter password..."
+                            type="password"
+                            value={password}
+                            onChangeText={(e) => setPassword(e.value)}
+                        />
+                        <SgCheckbox label="Remember me" />
+                    </SgForm>
+                </View>
+                <View style={styles.buttonLayout}>
+                    <SgButton
+                        onPress={handleLogin}
+                        disabled={!id || !password}
+                        bgColor = {COLORS.primary}
+                        color= {COLORS.white}
+                    >
+                        Login
+                    </SgButton>
+                </View>
+            </View>
 
-        <SgPopup
-            visible={errorModal}
-            onClose={toggleErrorModal}
-            icon={<InfoCircleModalIcon width={56} height={56} />}
-            title='Error'
-            description={errorModalData}
-        />
+
+            <SgPopup
+                visible={errorModal}
+                onClose={toggleErrorModal}
+                icon={<InfoCircleModalIcon width={56} height={56} />}
+                title='Error'
+                description={errorModalData}
+            />
+        </SgTemplateScreenView>
+      {/*</TouchableWithoutFeedback>*/}
+
     </>
   );
 }

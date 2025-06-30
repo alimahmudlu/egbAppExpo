@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     flex: 1,
-    padding: 12,
+    paddingHorizontal: 4,
+    paddingVertical: 12,
     borderRadius: 100,
     position: 'relative',
     alignItems: 'center',
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: 20,
+    textAlign: 'center',
     color: COLORS.gray_600,
   },
   activeTabText: {

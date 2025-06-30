@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 600,
     lineHeight: 20,
+    color: COLORS.black,
   },
   imageRow: {
     flexDirection: 'row',

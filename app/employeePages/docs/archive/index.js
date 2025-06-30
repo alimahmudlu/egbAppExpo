@@ -1,37 +1,16 @@
-import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
+import {View, StyleSheet} from "react-native";
 import React from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
-import LeftIcon from "@/assets/images/chevron-left.svg";
-import SgCard from "@/components/ui/Card/Card";
-import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
-import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
-import Avatar from "@/assets/images/avatar.png";
-import SgButton from "@/components/ui/Button/Button";
+import {useLocalSearchParams} from "expo-router";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
-
-// Custom header component with back button and overview button
-const ProjectHeader = ({ projectId }) => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity 
-                style={styles.backButton} 
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Docs archive</Text>
-        </View>
-    );
-};
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function ProjectItemScreen() {
-    const { projectId } = useLocalSearchParams();
-
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader projectId={projectId} />}
+            head={<SgTemplatePageHeader data={{
+                header: 'Docs archive'
+            }} />}
         >
             <View style={{gap: 12}}>
                 <SgFileCard

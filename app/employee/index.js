@@ -18,6 +18,7 @@ import {useSocket} from "@/hooks/useSocket";
 import moment from "moment-timezone";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import LoginIcon from "@/assets/images/login.svg";
+import COLORS from "@/constants/colors";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -31,10 +32,6 @@ export default function EmployeeDashboardScreen() {
         setRejectInfoData(reject_reason || '')
         setRejectInfoModal(!rejectInfoModal);
     }
-
-    useEffect(() => {
-        console.log(storeData?.checkInData, 'Checkk')
-    }, [storeData]);
 
     useEffect(() => {
         request({
@@ -146,7 +143,7 @@ export default function EmployeeDashboardScreen() {
                 icon={<InfoCircleModalIcon width={56} height={56}/>}
             >
                 <Text style={styles.rejectModal}>Reject detail</Text>
-                <SgCard><Text>{rejectInfoData}</Text></SgCard>
+                <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
             </SgPopup>
         </SgTemplateScreenView>
     );
@@ -163,6 +160,7 @@ const styles = StyleSheet.create({
         fontStyle: "normal",
         fontWeight: "600",
         lineHeight: 20,
+        color: COLORS.black,
     },
     rejectModal: {
         fontFamily: "Inter",

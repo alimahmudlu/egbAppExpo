@@ -1,34 +1,20 @@
-import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
+import {Text, View, StyleSheet} from "react-native";
 import React from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
-import LeftIcon from "@/assets/images/chevron-left.svg";
+import {useLocalSearchParams} from "expo-router";
 import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp";
 import {Image} from "expo-image";
 import AppInfoImage from "@/assets/images/appInfoImage.png";
-
-// Custom header component with back button and overview button
-const ProjectHeader = ({ projectId }) => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity 
-                style={styles.backButton} 
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>App Info</Text>
-        </View>
-    );
-};
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
 
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader projectId={projectId} />}
+            head={<SgTemplatePageHeader data={{
+                header: 'App Info'
+            }} />}
         >
             <View gap={32}>
                 <View>

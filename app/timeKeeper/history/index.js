@@ -1,26 +1,57 @@
 import React, {useEffect, useState} from 'react';
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
+import SgPopup from "@/components/ui/Modal/Modal";
+import SgButton from "@/components/ui/Button/Button";
+import COLORS from "@/constants/colors";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
+import SgSelect from "@/components/ui/Select/Select";
+import SgInput from "@/components/ui/Input/Input";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 
 export default function EmployeeDocsScreen() {
   const { request } = useApi();
   const [employeeActivities, setEmployeeActivities] = useState([]);
+  const [filters, setFilters] = useState({})
+  const [filterModal, setFilterModal] = useState(false)
 
-  useEffect(() => {
+  function getData(_filters = {}) {
     request({
       url: '/timekeeper/history/list',
       method: 'get',
+      params: {..._filters}
     }).then(res => {
       setEmployeeActivities(res?.data || []);
     }).catch(err => {
       console.log(err, 'apiservice control err')
     });
+  }
+
+  function toggleFilterModal() {
+    setFilterModal(!filterModal);
+  }
+
+  function resetFilters() {
+    setFilters({});
+  }
+
+  function handleChange(e) {
+    setFilters({ ...filters, [e.name]: e.value });
+  }
+
+  function handleFilters() {
+    getData(filters)
+  }
+
+  useEffect(() => {
+    getData();
   }, []);
+
 
   return (
     <SgTemplateScreenView
@@ -30,6 +61,7 @@ export default function EmployeeDocsScreen() {
               title="History"
               description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
               icon="filter"
+              onPress={toggleFilterModal}
           />
         </View>
       }
@@ -80,6 +112,64 @@ export default function EmployeeDocsScreen() {
             }
           ]}
       />
+
+      <SgPopup
+          visible={filterModal}
+          onClose={toggleFilterModal}
+          footerButton={
+            <SgButton
+                onPress={handleFilters}
+                bgColor={COLORS.primary}
+                color={COLORS.white}
+            >
+              Accept
+            </SgButton>
+          }
+      >
+        <View style={{paddingBottom: 20}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>Filters</Text>
+
+            <SgButton
+                onPress={resetFilters}
+                color={COLORS.brand_700}
+                style={{
+                  flex: 0,
+                  width: 'auto',
+                  marginLeft: 'auto',
+                  paddingVertical: 0,
+                  paddingHorizontal: 0,
+                  gap: 7
+                }}
+
+            >
+              Clear filters
+              <ReloadArrow width={20} height={20} style={{marginLeft: 7}} />
+            </SgButton>
+          </View>
+
+          <View style={{gap: 16}}>
+            <View style={{flex: 1}}>
+              <SgDatePicker
+                  label="Start date"
+                  placeholder="dd/mm/yyyy - hh/mm"
+                  value={filters?.start_date}
+                  name='start_date'
+                  onChangeText={handleChange}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <SgDatePicker
+                  label="End date"
+                  placeholder="dd/mm/yyyy - hh/mm"
+                  value={filters?.end_date}
+                  name='end_date'
+                  onChangeText={handleChange}
+              />
+            </View>
+          </View>
+        </View>
+      </SgPopup>
     </SgTemplateScreenView>
   );
 }

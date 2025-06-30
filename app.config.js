@@ -10,22 +10,32 @@ export default {
     "scheme": "egbappexpo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.egb.egb",
+    ios: {
+      bundleIdentifier: "com.egb.egb",
+      supportsTablet: true,
+      config: {
+        googleMapsApiKey: "AIzaSyA_js-21GPeRyjEUFZGfjSBm8z2L8FQ7eg"
+      },
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
       }
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon-white.png",
-        "backgroundColor": "#0B322F"
+
+    android: {
+      package: "com.alimahmudlu.egbexpoapp",
+      edgeToEdgeEnabled: true,
+      usesCleartextTraffic: true,
+      adaptiveIcon: {
+        foregroundImage: "./assets/images/icon-white.png",
+        backgroundColor: "#0B322F"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.alimahmudlu.egbexpoapp",
-      "usesCleartextTraffic": true,
-      "permissions": []
+      config: {
+        googleMaps: {
+          apiKey: "AIzaSyA_js-21GPeRyjEUFZGfjSBm8z2L8FQ7eg"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
@@ -58,7 +68,8 @@ export default {
         }
       ]
       // "expo-font",
-      // "expo-secure-store"
+      // "expo-secure-store",
+
     ],
     "experiments": {
       "typedRoutes": true

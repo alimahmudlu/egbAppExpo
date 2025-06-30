@@ -1,36 +1,14 @@
-import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
+import {Text, View, StyleSheet} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router, Link} from "expo-router";
-import LeftIcon from "@/assets/images/chevron-left.svg";
+import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import SgSectionProjectNameCard from "@/components/sections/ProjectNameCard/ProjectNameCard";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
-
-// Custom header component with back button and overview button
-const ProjectHeader = ({ projectId }) => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity 
-                style={styles.backButton} 
-                onPress={() => router.back()}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Project details</Text>
-
-            <Link
-                href={`/chiefPages/projects/${projectId}/overview`}
-                style={styles.overviewButton}
-            >
-                <Text style={styles.overviewButtonText}>Overview</Text>
-            </Link>
-        </View>
-    );
-};
+import COLORS from "@/constants/colors";
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
@@ -71,7 +49,13 @@ export default function ProjectItemScreen() {
 
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader projectId={projectId} />}
+            head={<SgTemplatePageHeader data={{
+                header: 'Project details',
+                data: {
+                    header: 'Overview',
+                    href: `/chiefPages/projects/${projectId}/overview`
+                }
+            }} />}
         >
             <SgSectionProjectNameCard
                 title='Project name'
@@ -136,6 +120,14 @@ const styles = StyleSheet.create({
 },
     container: {
         flex: 1,
+    },
+    title: {
+        fontFamily: "Inter",
+        fontSize: 16,
+        fontStyle: "normal",
+        fontWeight: "600",
+        lineHeight: 20,
+        color: COLORS.black,
     },
     contentText: {
         fontSize: 16,

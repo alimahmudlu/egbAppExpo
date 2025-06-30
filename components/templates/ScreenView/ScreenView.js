@@ -1,9 +1,12 @@
 import {
+    Dimensions,
     Keyboard, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, TouchableWithoutFeedback, View
 } from "react-native";
 import React from "react";
 import SafeScreen from "@/components/SafeScreen";
 import {StatusBar} from "expo-status-bar";
+import COLORS from "@/constants/colors";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function SgTemplateScreenView(props) {
     const {head, children} = props;
@@ -15,6 +18,7 @@ export default function SgTemplateScreenView(props) {
             setRefreshing(false);
         }, 2000);
     }, []);
+    const insets = useSafeAreaInsets();
 
     return (
 
@@ -27,14 +31,17 @@ export default function SgTemplateScreenView(props) {
                     <ScrollView style={styles.container} refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
-                        <View style={styles.head}>
-                            {head}
-                        </View>
-                        <View style={styles.body}>
+                        {head ?
+                            <View style={styles.head}>
+                                {head}
+                            </View>
+                            : null
+                        }
+                        <View style={[styles.body]}>
                             {children}
                         </View>
                     </ScrollView>
-                    {/*<StatusBar hidden={true} style="light" />*/}
+                    <StatusBar hidden={false} style="light" />
                 </SafeScreen>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -45,7 +52,7 @@ export default function SgTemplateScreenView(props) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column', gap: 12
+        flex: 1, backgroundColor: COLORS.white, flexDirection: 'column', gap: 12, boxSizing: 'border-box'
     }, head: {
         flex: 1
     }, body: {

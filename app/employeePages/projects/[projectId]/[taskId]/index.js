@@ -1,40 +1,72 @@
-import {Text, View, TouchableOpacity, StyleSheet} from "react-native";
+import {Text, View, TouchableOpacity, StyleSheet, Pressable} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams, router} from "expo-router";
-import LeftIcon from "@/assets/images/chevron-left.svg";
+import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
-import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
-
-const ProjectHeader = ({ projectId }) => {
-    return (
-        <View style={styles.headerContainer}>
-            <TouchableOpacity 
-                style={styles.backButton} 
-                onPress={() => {
-                    // console.log(router)
-                    router.back()
-                }}
-            >
-                <LeftIcon width={20} height={20} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Task detail</Text>
-        </View>
-    );
-};
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import COLORS from "@/constants/colors";
+import SgPopup from "@/components/ui/Modal/Modal";
+import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
+import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
     const { projectId, taskId } = useLocalSearchParams();
-
-    console.log(useLocalSearchParams());
-
     const [taskDetails, setTaskDetails] = useState({});
+    const [completeTaskModal, setCompleteTaskModal] = useState(false)
+    const [selectedFiles, setSelectedFiles] = useState([])
+
+    function toggleCompleteTaskModal() {
+        setCompleteTaskModal(!completeTaskModal)
+    }
+
+    function handleCheckRequest() {
+        request({
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 3,
+            }
+        }).then(res => {
+            setTaskDetails({...taskDetails, status: {
+                id: 3,
+                name: 'Check progress'
+                }})
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    function handleCompleteRequest() {
+        request({
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 4,
+                files: (selectedFiles || []).map(el => el?.id) || [],
+            }
+        }).then(res => {
+            setSelectedFiles([])
+            setTaskDetails({
+                ...taskDetails,
+                status: {
+                    id: 4,
+                    name: 'check complete'
+                },
+                files: []
+            })
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+
 
     useEffect(() => {
         request({
@@ -53,7 +85,9 @@ export default function ProjectItemScreen() {
     }, [projectId]);
     return (
         <SgTemplateScreenView
-            head={<ProjectHeader projectId={projectId} />}
+            head={<SgTemplatePageHeader data={{
+                header: 'Task detail'
+            }}/>}
         >
             <SgCard
                 contentTitle='Reporter'
@@ -87,23 +121,62 @@ export default function ProjectItemScreen() {
                 bgColor={null}
             />
 
-            <View style={{
-                gap: 12,
-                flexDirection: 'row',
-            }}>
-                <SgButton
-                    bgColor='#FEF0C7'
-                    color='#B54708'
-                >
-                    Check request
-                </SgButton>
-                <SgButton
-                    bgColor='#D2F5EC'
-                    color='#1A554E'
-                >
-                    Add file
-                </SgButton>
-            </View>
+            {(taskDetails?.status?.id === 1) ?
+                <View style={{
+                    gap: 12,
+                    flexDirection: 'row',
+                }}>
+                    <SgButton
+                        bgColor='#FEF0C7'
+                        color='#B54708'
+                        onPress={handleCheckRequest}
+                    >
+                        Check request
+                    </SgButton>
+                    <SgButton
+                        bgColor='#D2F5EC'
+                        color='#1A554E'
+                        onPress={toggleCompleteTaskModal}
+                    >
+                        Complete task
+                    </SgButton>
+                </View>
+                : null
+            }
+
+            <SgPopup
+                visible={completeTaskModal}
+                onClose={toggleCompleteTaskModal}
+                title="Complete task"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        disabled={selectedFiles?.length === 0}
+                        onPress={handleCompleteRequest}
+                    >
+                        Complete
+                    </SgButton>
+                }
+            >
+                <SgTemplateUploadScreen
+                    setSelectedFiles={setSelectedFiles}
+                    selectedFiles={selectedFiles}
+                />
+
+                {(selectedFiles || []).map((el, index) => (
+                    <SgSectionAddFile
+                        key={index}
+                        title={el?.name}
+                        type={el?.type}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / hh:mm A') : null}
+                        url={el?.filepath}
+                        onPress={() => console.log('file.filename')}
+                    />
+                ))}
+
+            </SgPopup>
 
         </SgTemplateScreenView>
     );

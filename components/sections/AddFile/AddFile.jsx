@@ -1,3 +1,5 @@
+import SgPopup from "@/components/ui/Modal/Modal";
+
 {/* <SgSectionAddFile
     title="Unde Omnis iste natus error sit"
     type="xlsx"
@@ -13,8 +15,17 @@ import PdfIcon from '@/assets/images/pdf-icon.svg';
 import PptIcon from '@/assets/images/ppt-icon.svg';
 import DocIcon from '@/assets/images/doc-icon.svg';
 import styles from '@/components/sections/AddFile/AddFile.styles';
+import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
+import {useState} from "react";
+import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePreview";
 
-export default function SgSectionAddFile({ title, type, datetime, onPress }) {
+export default function SgSectionAddFile({ title, type, datetime, onPress, url }) {
+  const [previewModal, setPreviewModal] = useState(false);
+
+  function togglePreviewModal() {
+    setPreviewModal(!previewModal);
+  }
+
   const renderIcon = () => {
     switch (type) {
       case 'pdf':
@@ -31,17 +42,28 @@ export default function SgSectionAddFile({ title, type, datetime, onPress }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.iconWrapper}>{renderIcon()}</View>
-        <View style={styles.textWrapper}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.dateTime}>{datetime}</Text>
+    <>
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <View style={styles.iconWrapper}>{renderIcon()}</View>
+          <View style={styles.textWrapper}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.dateTime}>{datetime}</Text>
+          </View>
+          <TouchableOpacity style={styles.eyeIconWrapper} activeOpacity={0.5} onPress={togglePreviewModal}>
+            <Eye width={20} height={20} style={styles.eyeIcon} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.eyeIconWrapper} activeOpacity={0.5} onPress={onPress}>
-          <Eye width={20} height={20} style={styles.eyeIcon} />
-        </TouchableOpacity>
       </View>
-    </View>
+
+
+      <SgPopup
+          visible={previewModal}
+          onClose={togglePreviewModal}
+          title='Document view'
+      >
+        <SgTemplateFilePreview url={url} />
+      </SgPopup>
+    </>
   );
 }
