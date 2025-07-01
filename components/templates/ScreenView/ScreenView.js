@@ -31,6 +31,7 @@ export default function SgTemplateScreenView(props) {
             pathname,
             params,
         });
+        setRefreshing(false);
     }, []);
     const insets = useSafeAreaInsets();
 

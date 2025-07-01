@@ -49,7 +49,6 @@ export default function SgDatePicker(props) {
             }
         >
             <SgSectionDatePicker value={value ?? new Date()} onChange={(data) => {
-                console.log(data, 'date');
                 onChangeText({
                 name: name,
                 value: data

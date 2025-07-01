@@ -95,7 +95,6 @@ export default function SgCheckInOutCard(props) {
             }
         }).then(res => {
             if (res.success) {
-                console.log(res?.data);
                 setStoreData(prev => ({
                     ...prev,
                     checkOut: res?.data || {
@@ -290,7 +289,7 @@ export default function SgCheckInOutCard(props) {
                 }
                 {(isCheckOut && checkInStatus) ?
                     <>
-                        {!status ?
+                        {!status || status === 3 ?
                             <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest}>
                                 Check Out
                             </SgButton>

@@ -38,18 +38,12 @@ export const NotificationProvider = ({ children }) => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(notificationPermission, 'notificationPermission');
-  }, [notificationPermission]);
-
   const handleChangeNotificationPermission = async (res) => {
     let token;
-    console.log('salam', user?.id, res)
+
     if (user?.id) {
       token = await registerForPushNotificationsAsync(user?.id, request, res)
     }
-
-    console.log(token, 'token')
 
     const obj = {
       token: token || '',

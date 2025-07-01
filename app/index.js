@@ -16,11 +16,6 @@ export default function Index() {
     useEffect(() => {
         if (loading) return;
 
-        if (user?.id) {
-            console.log('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOPPPPPPPPPPPPPPPPPPPPPPAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCC',
-                user?.id, router)
-        }
-
         if (!user?.role?.id) {
             setInitialRedirect(true);
             router.replace('/auth');

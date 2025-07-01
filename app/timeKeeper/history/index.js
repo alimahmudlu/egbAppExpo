@@ -72,7 +72,6 @@ export default function EmployeeDocsScreen() {
     >
       <SgFilterTab
           defaultTabId='checkIn'
-          onTabChange={(index) => console.log('Selected tab:', index)}
           tabs={[
             { label: 'Check in', id: 'checkIn' },
             { label: 'Check out', id: 'checkOut' },

@@ -124,9 +124,6 @@ export function AuthProvider({ children }) {
         password,
       });
 
-      console.log(response, `API ERROR: ${API_URL}, TRYY`);
-
-
       const userData = JSON.parse(response?.data);
 
       if (!userData?.user?.id) {

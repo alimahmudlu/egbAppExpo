@@ -88,7 +88,6 @@ export const DataProvider = ({ children }) => {
     }));
   }
   const updateData = async (key, data) => {
-    console.log(data, key, 'ccc')
     setStoreData(prev => ({
       ...prev,
       cache: {
@@ -96,6 +95,26 @@ export const DataProvider = ({ children }) => {
         [key]: data
       }
     }));
+  }
+  const changeRowData = async (key, data, id, index) => {
+    setStoreData(prev => {
+      const _data = prev.cache?.[key]?.data
+      const _index = _data.findIndex(item => item.id === id);
+      _data[_index] = data;
+
+      console.log('changeRowData', _data)
+
+      return  ({
+        ...prev,
+        cache: {
+          ...prev.cache,
+          [key]: {
+            ...prev.cache?.[key],
+            data: _data
+          }
+        }
+      })
+    });
   }
   const removeRowData = async (key, item, iterator = undefined) => {
     setStoreData(prev => ({
@@ -111,7 +130,7 @@ export const DataProvider = ({ children }) => {
   }
 
   return (
-      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, updateData, removeRowData, insertLoading, removeLoading }}>
+      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, changeRowData, updateData, removeRowData, insertLoading, removeLoading }}>
         {children}
       </DataContext.Provider>
   );

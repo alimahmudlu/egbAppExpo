@@ -50,7 +50,6 @@ export default function EmployeeDashboardScreen() {
 
       <SgFilterTab
           defaultTabId='checkIn'
-          onTabChange={(index) => console.log('Selected tab:', index)}
           tabs={[
             { label: 'Check in', id: 'checkIn', count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length },
             { label: 'Check out', id: 'checkOut', count: employeeActivities?.filter(el => el.type === 2 && el.status === 1)?.length },

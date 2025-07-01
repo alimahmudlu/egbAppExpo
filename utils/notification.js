@@ -1,13 +1,11 @@
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
-import axios from 'axios';
 
 export async function registerForPushNotificationsAsync(userId, request, userStatus) {
     let token;
 
     if (Platform.OS === 'android') {
-        console.log('Android');
         Notifications.setNotificationChannelAsync('default', {
             name: 'default',
             importance: Notifications.AndroidImportance.MAX,
@@ -19,12 +17,8 @@ export async function registerForPushNotificationsAsync(userId, request, userSta
 
     if (userStatus) {
         if (Device.isDevice) {
-            console.log(Device.isDevice, 'Device.isDevice')
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
-
-            console.log(existingStatus, 'existingStatus')
-            console.log(finalStatus, 'finalStatus')
 
             if (existingStatus !== 'granted') {
                 const { status } = await Notifications.requestPermissionsAsync();
@@ -35,16 +29,8 @@ export async function registerForPushNotificationsAsync(userId, request, userSta
                 // alert('Push bildiriş icazəsi verilmədi');
                 return;
             }
-            console.log('tokene cat-ha-cat')
 
-            try {
-                const tokenaaaa = await Notifications.getExpoPushTokenAsync();
-            }
-            catch (err) {
-                console.log(err, 'err')
-            }
-            console.log(await Notifications.getExpoPushTokenAsync(), 'token')
-            console.log('Expo Push Token:', token);
+            const token = await Notifications.getExpoPushTokenAsync();
 
             await request({
                 url: '/notification/token/create',

@@ -115,7 +115,7 @@ export default function EmployeeDashboardScreen() {
             <SgCard
                 title="Work Time"
                 time={storeData?.checkOut?.completed_status ? storeData?.checkIn?.work_time : <SgUtilsTimeDifference
-                    startTime={storeData?.checkIn?.review_time ? moment(storeData?.checkIn?.review_time).utc() : null}/>}
+                    startTime={storeData?.checkIn?.review_time ? moment(storeData?.checkIn?.review_time).format('') : null}/>}
                 icon={Clock}
             />
 

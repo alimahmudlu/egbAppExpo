@@ -52,8 +52,6 @@ export const useApi = () => {
                 transformRequest
             });
 
-            console.log('API response:', response);
-
             const resData = response.data;
 
             try {

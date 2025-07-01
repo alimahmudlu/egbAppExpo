@@ -25,7 +25,7 @@ const SgUtilsTimeDifference = ({ startTime }) => {
 //
 //                setDiff(`${hours}:${minutes}:${seconds}`);
 
-                    const now = moment().utc('+4');
+                    const now = moment();
                       // Use end or now, depending on your use case
                       const diff = moment.duration(now.diff(startTime));
                       const hours = Math.floor(diff.asHours());

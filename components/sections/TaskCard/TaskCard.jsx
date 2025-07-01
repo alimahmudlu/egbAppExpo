@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
 import DotsIcon from "../../../assets/images/dots-icon.svg";
 import styles from './TaskCard.styles';
@@ -19,12 +19,14 @@ import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function SgSectionTaskCard(props) {
     const { user, accessToken } = useAuth();
     const { request } = useApi();
+    const {changeRowData} = useData();
     const router = useRouter();
-    const [data, setData] = useState(props || {});
+    const [data, setData] = useState({});
     const [modalVisible, setModalVisible] = useState(false);
     const [removeTaskModal, setRemoveTaskModal] = useState(false);
     const [removeTaskInfoModal, setRemoveTaskInfoModal] = useState(false);
@@ -67,7 +69,6 @@ export default function SgSectionTaskCard(props) {
         setModalVisible(false)
     };
     const handleCheckedTask = () => {
-        console.log('Checked item with task ID:', data?.id, 'and project ID:', data?.projectId);
         toggleCheckedTaskInfoModal();
     };
 
@@ -88,9 +89,8 @@ export default function SgSectionTaskCard(props) {
                 files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
-            console.log(res)
+            changeRowData(`GET:/employee/project/item/${data?.projectId}/tasks`, res?.data, res?.data?.id)
             setSelectedFiles([])
-            setData({...data, status: {id: 4, name: 'Complete request'}})
             toggleCompleteTaskInfoModal();
         }).catch(err => {
             console.log(err)
@@ -113,7 +113,7 @@ export default function SgSectionTaskCard(props) {
                 status: 3
             }
         }).then(res => {
-            setData({...data, status: {id: 3, name: 'Check request'}})
+            changeRowData(`GET:/employee/project/item/${data?.projectId}/tasks`, res?.data, res?.data?.id)
             toggleCheckTaskInfoModal();
         }).catch(err => {
             console.log(err)
@@ -132,6 +132,10 @@ export default function SgSectionTaskCard(props) {
                 return {backgroundColor: COLORS.white, color: COLORS.black};
         }
     };
+
+    useEffect(() => {
+        setData(props || {})
+    }, [props]);
     return (
         <View>
             <View style={styles.card}>

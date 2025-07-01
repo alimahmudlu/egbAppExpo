@@ -33,10 +33,6 @@ export const LanguageProvider = ({ children }) => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(selectedLanguage, 'selectedLanguage');
-  }, [selectedLanguage]);
-
   const handleChangeLanguage = async (lang) => {
     setSelectedLanguage((LANGUAGES || []).find(l => l.id === (lang || 'en')) || {});
     await i18n.changeLanguage(lang);

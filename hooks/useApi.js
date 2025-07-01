@@ -26,7 +26,6 @@ export function ApiProvider({children}) {
     const request = async ({ url, method = 'get', params = {}, data = {}, headers = {}, cache = false, transformRequest }) => {
         // const storageKey = `${method.toUpperCase()}:${url}${Object.keys(params).length > 0 ? `?${JSON.stringify(params)}` : ''}`;
         const storageKey = `${method.toUpperCase()}:${url}`;
-        console.log(url)
 
         // if (cache) {
         //     try {
@@ -60,7 +59,6 @@ export function ApiProvider({children}) {
             const resData = response.data;
 
             try {
-                console.log(resData, 'aaa')
                 updateData(storageKey, resData)
             } catch (e) {
                 console.warn('Cache write failed:', e);
@@ -70,7 +68,6 @@ export function ApiProvider({children}) {
             return resData;
         } catch (err) {
             updateData(storageKey, null)
-            console.log('bbb')
             throw err;
         } finally {
             removeLoading(storageKey)
