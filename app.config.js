@@ -23,7 +23,6 @@ export default {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
-
     android: {
       package: "com.alimahmudlu.egbexpoapp",
       edgeToEdgeEnabled: true,
