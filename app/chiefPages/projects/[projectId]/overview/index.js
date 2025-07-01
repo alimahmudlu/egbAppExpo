@@ -6,10 +6,12 @@ import SgCard from "@/components/ui/Card/Card";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useData} from "@/hooks/useData";
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
     const { request } = useApi();
+    const {storeData} = useData();
     const [projectDetails, setProjectDetails] = useState({});
 
     useEffect(() => {
@@ -17,17 +19,14 @@ export default function ProjectItemScreen() {
             url: `/chief/project/item/${projectId}`,
             method: 'get',
             cache: true
-        }).then(res => {
-            if (res.success) {
-                setProjectDetails(res?.data);
-            } else {
-                // Handle error response
-                console.log(res.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, []);
+
+    useEffect(() => {
+        setProjectDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}`]])
 
     return (
         <SgTemplateScreenView

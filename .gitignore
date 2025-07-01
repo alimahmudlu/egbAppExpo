@@ -83,4 +83,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+#
+egbexpoapp-firebase-adminsdk-fbsvc-8d9517537c.json
+google-services.json
+
 # @end expo-cli

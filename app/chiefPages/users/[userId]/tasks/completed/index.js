@@ -7,11 +7,13 @@ import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useData} from "@/hooks/useData";
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
     const { request } = useApi();
     const [taskList, setTaskList] = useState([]);
+    const {storeData} = useData();
 
     useEffect(() => {
         request({
@@ -20,17 +22,14 @@ export default function TimeKeeperUserScreen() {
             params: {
                 type: 'completed'
             }
-        }).then(res => {
-            if (res.success) {
-                setTaskList(res?.data);
-            } else {
-                // Handle error response
-                console.log(res.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, []);
+
+    useEffect(() => {
+        setTaskList(storeData?.cache?.[`GET:/chief/task/list/${userId}`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/task/list/${userId}`]])
     
     return (
         <SgTemplateScreenView

@@ -11,10 +11,12 @@ import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar"
 import React, {useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useData} from "@/hooks/useData";
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
     const { request } = useApi();
+    const {storeData} = useData();
     const data = [
         { label: '1-2', value: 14, percentage: 90 },
         { label: '3-4', value: 9, percentage: 70 },
@@ -29,12 +31,15 @@ export default function TimeKeeperUserScreen() {
         request({
             url: `/timekeeper/employee/details/${userId}`,
             method: 'get',
-        }).then(res => {
-            setEmployeeData(res?.data);
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err)
         })
     }, [userId]);
+
+
+    useEffect(() => {
+        setEmployeeData(storeData?.cache?.[`GET:/timekeeper/employee/details/${userId}`]?.data)
+    }, [storeData?.cache?.[`GET:/timekeeper/employee/details/${userId}`]])
 
     return (
         <SgTemplateScreenView

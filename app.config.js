@@ -36,7 +36,8 @@ export default {
         googleMaps: {
           apiKey: "AIzaSyA_js-21GPeRyjEUFZGfjSBm8z2L8FQ7eg"
         }
-      }
+      },
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",

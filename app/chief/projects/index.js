@@ -5,9 +5,11 @@ import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function TasksScreen() {
   const { request } = useApi();
+  const {storeData} = useData();
   const [projectsList, setProjectsList] = useState([]);
 
 
@@ -26,6 +28,10 @@ export default function TasksScreen() {
       console.log(err);
     })
   }, []);
+
+  useEffect(() => {
+    setProjectsList(storeData?.cache?.[`GET:/chief/project/list`]?.data)
+  }, [storeData?.cache?.[`GET:/chief/project/list`]])
 
   return (
       <SgTemplateScreenView

@@ -11,29 +11,28 @@ import COLORS from "@/constants/colors";
 import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useData} from "@/hooks/useData";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
+    const {storeData} = useData();
     const { projectId, taskId } = useLocalSearchParams();
-
     const [taskDetails, setTaskDetails] = useState({});
 
     useEffect(() => {
         request({
             url: `/chief/project/item/${projectId}/tasks/item/${taskId}`,
             method: 'get',
-        }).then(res => {
-            if (res.success) {
-                setTaskDetails(res?.data);
-
-            } else {
-                // Handle error response
-                console.log(res.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, [projectId]);
+
+    useEffect(() => {
+        setTaskDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]])
+
+
     return (
         <SgTemplateScreenView
             head={<SgTemplatePageHeader data={{

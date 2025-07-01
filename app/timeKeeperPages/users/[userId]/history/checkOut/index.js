@@ -7,9 +7,11 @@ import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCa
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useData} from "@/hooks/useData";
 
 export default function TimeKeeperUserScreen() {
     const { request } = useApi();
+    const {storeData} = useData();
     const { userId } = useLocalSearchParams();
     const [employeeActivities, setEmployeeActivities] = useState([]);
 
@@ -17,12 +19,14 @@ export default function TimeKeeperUserScreen() {
         request({
             url: `/timekeeper/employee/history/${userId}/checkout`,
             method: 'get',
-        }).then(res => {
-            setEmployeeActivities(res?.data || []);
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
     }, []);
+
+    useEffect(() => {
+        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]?.data)
+    }, [storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]])
 
     return (
         <SgTemplateScreenView

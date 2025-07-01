@@ -9,9 +9,11 @@ import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import COLORS from "@/constants/colors";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useData} from "@/hooks/useData";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
+    const {storeData} = useData();
     const { projectId } = useLocalSearchParams();
     const [projectDetails, setProjectDetails] = useState({});
     const [tasksList, setTasksList] = useState([]);
@@ -20,32 +22,26 @@ export default function ProjectItemScreen() {
         request({
             url: `/chief/project/item/${projectId}`,
             method: 'get',
-        }).then(res => {
-            if (res.data.success) {
-                setProjectDetails(res?.data?.data);
-            } else {
-                // Handle error response
-                console.log(res.data.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         });
 
         request({
             url: `/chief/project/item/${projectId}/tasks`,
             method: 'get',
-        }).then(res => {
-            if (res.data.success) {
-                setTasksList(res?.data?.data);
-                console.log(res?.data?.data);
-            } else {
-                // Handle error response
-                console.log(res.data.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, [projectId]);
+
+    useEffect(() => {
+        setProjectDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}`]])
+
+    useEffect(() => {
+        setTasksList(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks`]])
+
 
     return (
         <SgTemplateScreenView

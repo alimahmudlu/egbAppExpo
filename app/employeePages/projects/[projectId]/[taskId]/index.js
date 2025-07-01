@@ -12,9 +12,11 @@ import COLORS from "@/constants/colors";
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
+import {useData} from "@/hooks/useData";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
+    const {storeData} = useData();
     const { projectId, taskId } = useLocalSearchParams();
     const [taskDetails, setTaskDetails] = useState({});
     const [completeTaskModal, setCompleteTaskModal] = useState(false)
@@ -70,19 +72,18 @@ export default function ProjectItemScreen() {
 
     useEffect(() => {
         request({
-            url: `employee/project/item/${projectId}/tasks/item/${taskId}`,
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
             method: 'get',
-        }).then(res => {
-            if (res.success) {
-                setTaskDetails(res?.data);
-            } else {
-                // Handle error response
-                console.log(res.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, [projectId]);
+
+
+    useEffect(() => {
+        setTaskDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`]?.data)
+    }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`]])
+
     return (
         <SgTemplateScreenView
             head={<SgTemplatePageHeader data={{

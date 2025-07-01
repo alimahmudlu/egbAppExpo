@@ -44,10 +44,12 @@ export const NotificationProvider = ({ children }) => {
 
   const handleChangeNotificationPermission = async (res) => {
     let token;
+    console.log('salam', user?.id, res)
     if (user?.id) {
       token = await registerForPushNotificationsAsync(user?.id, request, res)
     }
 
+    console.log(token, 'token')
 
     const obj = {
       token: token || '',

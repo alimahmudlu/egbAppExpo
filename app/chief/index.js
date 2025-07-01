@@ -11,9 +11,11 @@ import React, {useEffect, useState} from "react";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
+    const {storeData} = useData();
     const { request } = useApi();
     const [taskList, setTaskList] = useState([]);
 
@@ -21,17 +23,14 @@ export default function EmployeeDashboardScreen() {
         request({
             url: `/chief/task/list`,
             method: 'get'
-        }).then(res => {
-            if (res.success) {
-                setTaskList(res?.data);
-            } else {
-                // Handle error response
-                console.log(res.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, []);
+
+    useEffect(() => {
+        setTaskList(storeData?.cache?.[`GET:/chief/task/list`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/task/list`]])
 
     return (
         <SgTemplateScreenView

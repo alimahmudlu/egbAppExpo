@@ -1,69 +1,105 @@
+import {createContext, useContext, useState} from 'react';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useData} from "@/hooks/useData";
 import {useAuth} from "@/hooks/useAuth";
-import Constants from 'expo-constants';
+import {ActivityIndicator, Text, View} from "react-native";
+import COLORS from "@/constants/colors";
 
 const { API_URL, AUTH_TOKEN_KEY } = Constants.expoConfig.extra;
 
-const ApiService = axios.create({
-    baseURL: API_URL || 'https://alimahmudlu-egb.duckdns.org/api',
+// Create axios instance with base URL
+const api = axios.create({
+    baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-export const useApi = () => {
-    const { storeData, setStoreData, updateData } = useData();
-    const { accessToken } = useAuth();
-    const request = async ({ url, method = 'get', params = {}, data = {}, headers = {}, cache = false, transformRequest }) => {
-        const storageKey = `${method.toUpperCase()}:${url}${Object.keys(params).length > 0 ? `?${JSON.stringify(params)}` : ''}`;
+const ApiContext = createContext(null);
 
-        if (cache) {
-            try {
-                const cached = await AsyncStorage.getItem(storageKey);
-                if (cached) {
-                    return JSON.parse(cached);
-                }
-            } catch (e) {
-                console.warn('Cache read failed:', e);
-            }
-        }
+export function ApiProvider({children}) {
+    const { storeData, updateData, insertLoading, removeLoading, } = useData();
+    const { accessToken } = useAuth();
+
+    const request = async ({ url, method = 'get', params = {}, data = {}, headers = {}, cache = false, transformRequest }) => {
+        // const storageKey = `${method.toUpperCase()}:${url}${Object.keys(params).length > 0 ? `?${JSON.stringify(params)}` : ''}`;
+        const storageKey = `${method.toUpperCase()}:${url}`;
+        console.log(url)
+
+        // if (cache) {
+        //     try {
+        //         const cached = await AsyncStorage.getItem(storageKey);
+        //
+        //         if (cached) {
+        //             return JSON.parse(cached);
+        //         }
+        //     } catch (e) {
+        //         console.warn('Cache read failed:', e);
+        //     }
+        // }
 
         try {
-            const authHeader = accessToken ? { [AUTH_TOKEN_KEY || 'authorization']: `Bearer ${accessToken}` } : {};
+            insertLoading(storageKey)
 
-            const response = await ApiService({
+
+            // Make API call to authenticate
+            const response = await api({
                 url,
-                method,
-                params,
-                data,
+                method: method || 'GET',
                 headers: {
-                    ...authHeader,
+                    'authorization': accessToken,
                     ...headers
                 },
+                params,
+                data,
                 transformRequest
             });
-
-            console.log('API response:', response);
 
             const resData = response.data;
 
             try {
-                updateData(storageKey, resData);
+                console.log(resData, 'aaa')
+                updateData(storageKey, resData)
             } catch (e) {
                 console.warn('Cache write failed:', e);
-                updateData(storageKey, null);
+                updateData(storageKey, null)
             }
 
             return resData;
         } catch (err) {
-            updateData(storageKey, null);
-            console.error('API error:', err, API_URL, url, accessToken);
+            updateData(storageKey, null)
+            console.log('bbb')
             throw err;
+        } finally {
+            removeLoading(storageKey)
         }
     };
 
+    return (
+        <ApiContext.Provider
+            value={{
+                request
+            }}>
+            <>
+                {storeData?.loading.size > 0 ?
+                    <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 2, opacity: 0.5, flex: 1, width: '100%', height: '100%', backgroundColor: COLORS.gray_blue_200, justifyContent: 'center', alignItems: 'center' }}>
+                        <ActivityIndicator size="large" color="#007BFF" />
+                    </View>
+                    : null
+                }
+                {children}
+            </>
+        </ApiContext.Provider>
+    );
+}
 
-    return { request };
-};
+// Custom hook to use the auth context
+export function useApi() {
+    const context = useContext(ApiContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+}

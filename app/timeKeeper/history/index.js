@@ -13,21 +13,21 @@ import ReloadArrow from "@/assets/images/reload-arrows.svg";
 import SgSelect from "@/components/ui/Select/Select";
 import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import {useData} from "@/hooks/useData";
 
 export default function EmployeeDocsScreen() {
   const { request } = useApi();
   const [employeeActivities, setEmployeeActivities] = useState([]);
   const [filters, setFilters] = useState({})
   const [filterModal, setFilterModal] = useState(false)
+  const {storeData} = useData();
 
   function getData(_filters = {}) {
     request({
       url: '/timekeeper/history/list',
       method: 'get',
       params: {..._filters}
-    }).then(res => {
-      setEmployeeActivities(res?.data || []);
-    }).catch(err => {
+    }).then().catch(err => {
       console.log(err, 'apiservice control err')
     });
   }
@@ -51,6 +51,10 @@ export default function EmployeeDocsScreen() {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/history/list`]?.data)
+  }, [storeData?.cache?.[`GET:/timekeeper/history/list`]])
 
 
   return (

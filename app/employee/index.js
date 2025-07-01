@@ -37,17 +37,14 @@ export default function EmployeeDashboardScreen() {
         request({
             url: '/employee/project/list',
             method: 'get',
-        }).then(res => {
-            if (res?.success) {
-                setProjectsList(res?.data);
-            } else {
-                // Handle error response
-                console.log(res.message, 'aaaa');
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
     }, []);
+
+    useEffect(() => {
+        setProjectsList(storeData?.cache?.[`GET:/employee/project/list`]?.data)
+    }, [storeData?.cache?.[`GET:/employee/project/list`]])
 
 
     return (
@@ -118,7 +115,7 @@ export default function EmployeeDashboardScreen() {
             <SgCard
                 title="Work Time"
                 time={storeData?.checkOut?.completed_status ? storeData?.checkIn?.work_time : <SgUtilsTimeDifference
-                                                 startTime={storeData?.checkIn?.review_time ? moment(storeData?.checkIn?.review_time).utc() : null}/>}
+                    startTime={storeData?.checkIn?.review_time ? moment(storeData?.checkIn?.review_time).utc() : null}/>}
                 icon={Clock}
             />
 

@@ -11,7 +11,8 @@ export const DataProvider = ({ children }) => {
         checkIn: null,
         checkOut: null,
     },
-    cache: {}
+    cache: {},
+    loading: new Map()
   });
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +33,6 @@ export const DataProvider = ({ children }) => {
     loadData();
   }, []);
 
-
   useEffect(() => {
     const saveData = async () => {
       try {
@@ -47,6 +47,23 @@ export const DataProvider = ({ children }) => {
     }
   }, [storeData]);
 
+  const insertLoading = async (key) => {
+    const _storeDataLoading = storeData?.loading
+    _storeDataLoading?.set(key, true);
+    setStoreData(prevState => ({
+      ...prevState,
+      loading: _storeDataLoading
+    }))
+  }
+  const removeLoading = async (key) => {
+    const _storeDataLoading = storeData?.loading
+    storeData?.loading?.delete(key)
+    setStoreData(prevState => ({
+      ...prevState,
+      loading: _storeDataLoading
+    }))
+  }
+
   const clearData = async () => {
     try {
       await AsyncStorage.removeItem(STORAGE_KEY);
@@ -55,8 +72,7 @@ export const DataProvider = ({ children }) => {
       console.error('Error clearing data:', e);
     }
   };
-
-  const insertData = (key, data) => {
+  const insertData = async (key, data) => {
     setStoreData(prev => ({
       ...prev,
       cache: {
@@ -72,6 +88,7 @@ export const DataProvider = ({ children }) => {
     }));
   }
   const updateData = async (key, data) => {
+    console.log(data, key, 'ccc')
     setStoreData(prev => ({
       ...prev,
       cache: {
@@ -94,7 +111,7 @@ export const DataProvider = ({ children }) => {
   }
 
   return (
-      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, updateData, removeRowData }}>
+      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, updateData, removeRowData, insertLoading, removeLoading }}>
         {children}
       </DataContext.Provider>
   );

@@ -24,14 +24,7 @@ export default function ProjectItemScreen() {
         request({
             url: `/employee/project/item/${projectId}`,
             method: 'get',
-        }).then(res => {
-            if (res.success) {
-                setProjectDetails(res?.data);
-            } else {
-                // Handle error response
-                console.log(res.message);
-            }
-        }).catch(err => {
+        }).then().catch(err => {
             console.log(err);
         })
 
@@ -44,7 +37,10 @@ export default function ProjectItemScreen() {
     }, [projectId]);
 
     useEffect(() => {
-        console.log(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]?.data)
+        setProjectDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}`]?.data)
+    }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}`]])
+
+    useEffect(() => {
         setTasksList(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]?.data)
     }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks`]])
 

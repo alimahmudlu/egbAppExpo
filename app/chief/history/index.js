@@ -12,9 +12,11 @@ import SgSelect from "@/components/ui/Select/Select";
 import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function EmployeeDocsScreen() {
   const { request } = useApi();
+  const {storeData} = useData();
   const [taskList, setTaskList] = useState([]);
   const [taskStatuses, setTaskStatus] = useState([]);
   const [filters, setFilters] = useState({})
@@ -25,14 +27,7 @@ export default function EmployeeDocsScreen() {
       url: `/chief/task/list`,
       method: 'get',
       params: {..._filters, status: _filters?.status?.id}
-    }).then(res => {
-      if (res.success) {
-        setTaskList(res?.data);
-      } else {
-        // Handle error response
-        console.log(res.message);
-      }
-    }).catch(err => {
+    }).then().catch(err => {
       console.log(err);
     })
   }
@@ -60,17 +55,18 @@ export default function EmployeeDocsScreen() {
       url: `/chief/options/task_statuses`,
       method: 'get',
       cache: true,
-    }).then(res => {
-      if (res.success) {
-        setTaskStatus(res?.data);
-      } else {
-        // Handle error response
-        console.log(res.message);
-      }
-    }).catch(err => {
+    }).then().catch(err => {
       console.log(err);
     })
   }, []);
+
+  useEffect(() => {
+    setTaskStatus(storeData?.cache?.[`GET:/chief/options/task_statuses`]?.data)
+  }, [storeData?.cache?.[`GET:/chief/options/task_statuses`]])
+
+  useEffect(() => {
+    setTaskList(storeData?.cache?.[`GET:/chief/task/list`]?.data)
+  }, [storeData?.cache?.[`GET:/chief/task/list`]])
 
   return (
     <SgTemplateScreenView
