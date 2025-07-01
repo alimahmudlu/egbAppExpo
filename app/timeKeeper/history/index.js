@@ -54,7 +54,7 @@ export default function EmployeeDocsScreen() {
 
   useEffect(() => {
     setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/history/list`]?.data)
-  }, [storeData?.cache?.[`GET:/timekeeper/history/list`]])
+  }, [storeData?.cache?.[`GET:/timekeeper/history/list`]]);
 
 
   return (

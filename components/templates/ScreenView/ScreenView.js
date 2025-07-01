@@ -7,16 +7,30 @@ import SafeScreen from "@/components/SafeScreen";
 import {StatusBar} from "expo-status-bar";
 import COLORS from "@/constants/colors";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { usePathname, useRouter, useLocalSearchParams } from "expo-router";
 
 export default function SgTemplateScreenView(props) {
     const {head, children} = props;
     const [refreshing, setRefreshing] = React.useState(false);
+    const router = useRouter();
+    const pathname = usePathname(); // Məsələn: /profile/123
+    const params = useLocalSearchParams();
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        setTimeout(() => {
+
+        if (!pathname) {
+            console.warn("Pathname tapılmadı. Refresh dayandırıldı.");
             setRefreshing(false);
-        }, 2000);
+            return;
+        }
+
+        console.log("Refreshing...", pathname, params);
+
+        router.replace({
+            pathname,
+            params,
+        });
     }, []);
     const insets = useSafeAreaInsets();
 

@@ -17,20 +17,26 @@ export default function Index() {
         if (loading) return;
 
         if (user?.id) {
+            console.log('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOPPPPPPPPPPPPPPPPPPPPPPAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCC',
+                user?.id, router)
         }
 
         if (!user?.role?.id) {
             setInitialRedirect(true);
             router.replace('/auth');
-        } else if (user?.role?.id === 1) {
-            setInitialRedirect(true);
-            router.replace('/employee');
-        } else if (user?.role?.id === 2) {
-            setInitialRedirect(true);
-            router.replace('/timeKeeper');
-        } else {
-            setInitialRedirect(true);
-            router.replace('/chief');
+        }
+        else {
+
+            if (user?.role?.id === 1) {
+                setInitialRedirect(true);
+                router.replace('/employee');
+            } else if (user?.role?.id === 2) {
+                setInitialRedirect(true);
+                router.replace('/timeKeeper');
+            } else {
+                setInitialRedirect(true);
+                router.replace('/chief');
+            }
         }
     }, [user?.role.id, loading]);
 
