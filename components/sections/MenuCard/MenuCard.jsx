@@ -63,6 +63,20 @@ export default function SgSectionMenuCard({extraItems = []}) {
             </View>
             <Divider />
 
+            {/*  */}
+            <TouchableOpacity onPress={() => router.push('/pages/vezife')} style={styles.item}>
+              <View style={styles.left}>
+                <View style={styles.iconContainer}>
+                  <AppInfo width={20} height={20} style={styles.icon} />
+                </View>
+                <Text style={styles.title}>Vəzifə öhdəlikləri</Text>
+              </View>
+              <View style={styles.right}>
+                <RightIcon width={20} height={20} />
+              </View>
+            </TouchableOpacity>
+            <Divider />
+
             {/* App Info */}
             <TouchableOpacity onPress={() => router.push('/pages/info')} style={styles.item}>
               <View style={styles.left}>

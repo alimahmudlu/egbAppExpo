@@ -48,7 +48,7 @@ export function ApiProvider({children}) {
                 url,
                 method: method || 'GET',
                 headers: {
-                    'authorization': accessToken,
+                    'authorization': accessToken || "NO_TOKEN",
                     ...headers
                 },
                 params,

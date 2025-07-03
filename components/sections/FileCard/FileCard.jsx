@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styles from './FileCard.styles';
+import moment from "moment/moment";
 
 import XLSXIcon from '@/assets/images/xlsx-icon.svg';
 import PDFIcon from '@/assets/images/pdf-icon.svg';
@@ -10,6 +11,7 @@ import EyeIcon from '@/assets/images/eye.svg';
 import COLORS from '@/constants/colors';
 import SgPopup from '@/components/ui/Modal/Modal';
 import SgButton from '@/components/ui/Button/Button';
+import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePreview";
 
 
 const getFileIcon = (type) => {
@@ -41,18 +43,55 @@ const getStatusStyles = (type) => {
   }
 };
 
-export default function SgFileCard({ fileType, title, description, date, migrationId, statusType, statusText}) {
-    const [modalVisible, setModalVisible] = useState(false);
+export default function SgFileCard({ fileType, title, description, issueDate, url, expiryDate, migrationId}) {
+    const [previewModal, setPreviewModal] = useState(false);
 
-    const status = getStatusStyles(statusType);
+    function togglePreviewModal() {
+        setPreviewModal(!previewModal);
+    }
+    const [status, setStatus] = useState({
+        name: "",
+        styles: {}
+    })
+
+    useEffect(() => {
+        const expiresAt = expiryDate
+            ? new Date(expiryDate)
+            : null;
+        let _status = {
+            name: 'Active',
+            styles: getStatusStyles('success')
+        };
+        if (expiresAt) {
+            const now = new Date();
+            const diff =
+                (expiresAt.getTime() - now.getTime()) /
+                (1000 * 60 * 60 * 24);
+            if (diff < 0) {
+                _status = {
+                    name: 'Expired',
+                    styles: getStatusStyles('danger')
+                };
+            } else if (diff <= 30) {
+                _status = {
+                    name: 'Expires Soon',
+                    styles: getStatusStyles('warning')
+                };
+            }
+        }
+        setStatus(_status)
+
+    }, [expiryDate]);
 
   return (
     <View>
         <View style={styles.card}>
             <View style={styles.topRow}>
-                {getFileIcon(fileType)}
-                <View style={[styles.statusBadge, { backgroundColor: status.backgroundColor }]}>
-                <Text style={[styles.statusText, { color: status.color }]}>{statusText}</Text>
+                <View>
+                    {getFileIcon(fileType)}
+                </View>
+                <View style={[styles.statusBadge, { backgroundColor: status?.styles?.backgroundColor }]}>
+                    <Text style={[styles.statusText, { color: status?.styles?.color }]}>{status?.name}</Text>
                 </View>
             </View>
 
@@ -71,29 +110,20 @@ export default function SgFileCard({ fileType, title, description, date, migrati
             <View style={styles.bottomRow}>
                 <View style={styles.expireBox}>
                     <Text style={styles.expireText}>Expire date:</Text>
-                    <Text style={styles.expireDate}>{date}</Text>
+                    <Text style={styles.expireDate}>{expiryDate ? moment(expiryDate).format('DD.MM.YYYY') : null}</Text>
                 </View>
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <TouchableOpacity onPress={togglePreviewModal}>
                     <EyeIcon width={20} height={20} />
                 </TouchableOpacity>
             </View>
         </View>
         <SgPopup
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        title="Task Completed"
-        description="You have successfully completed the task."
-        iconType="success"
-        footerButton={
-        <SgButton
-            onPress={''}
-            bgColor={COLORS.primary}
-            color={COLORS.white}
+            visible={previewModal}
+            onClose={togglePreviewModal}
+            title='Document view'
         >
-            Check in
-        </SgButton>
-        }
-        />
+            <SgTemplateFilePreview url={url} />
+        </SgPopup>
     </View>
   );
 }

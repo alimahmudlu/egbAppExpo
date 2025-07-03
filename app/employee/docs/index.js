@@ -1,11 +1,30 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, StyleSheet } from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
+import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function EmployeeDocsScreen() {
+  const [docList, setDocList] = useState([]);
+  const {request} = useApi();
+  const {storeData} = useData();
+
+  useEffect(() => {
+    request({
+      url: '/employee/doc/list',
+      method: 'get',
+    }).then().catch(err => {
+      console.log(err);
+    })
+  }, []);
+
+  useEffect(() => {
+    setDocList(storeData?.cache?.[`GET:/employee/doc/list`]?.data)
+  }, [storeData?.cache?.[`GET:/employee/doc/list`]])
+
   return (
     <SgTemplateScreenView
       head={
@@ -19,58 +38,24 @@ export default function EmployeeDocsScreen() {
         </View>
       }
     >
-      <SgNoticeCard
+      {/*<SgNoticeCard
           title="Active Docs"
           buttonText="Add doc +"
           bgButton="success"
-      />
+      />*/}
 
       <View style={{gap: 12}}>
-        <SgFileCard
-            fileType="xlsx"
-            title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
-            description=""
-            date="10.05.2025"
-            migrationId="Migration id"
-            statusText="Expired"
-            statusType="danger"
-        />
-        <SgFileCard
-            fileType="xlsx"
-            title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
-            description=""
-            date="10.05.2025"
-            migrationId="Migration id"
-            statusText="Expired"
-            statusType="danger"
-        />
-        <SgFileCard
-            fileType="xlsx"
-            title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
-            description=""
-            date="10.05.2025"
-            migrationId="Migration id"
-            statusText="Expired"
-            statusType="danger"
-        />
-        <SgFileCard
-            fileType="xlsx"
-            title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
-            description=""
-            date="10.05.2025"
-            migrationId="Migration id"
-            statusText="Expired"
-            statusType="danger"
-        />
-        <SgFileCard
-            fileType="xlsx"
-            title="Sed ut perspiciatis unde omnis iste natus error sit voluptatem"
-            description=""
-            date="10.05.2025"
-            migrationId="Migration id"
-            statusText="Expired"
-            statusType="danger"
-        />
+        {(docList || []).map((el, index) => (
+            <SgFileCard
+                key={index}
+                fileType={el.mimetype}
+                title={el?.filename}
+                url={el?.filepath}
+                expiryDate={el?.date_of_expiry}
+                issueDate={el?.date_of_issue}
+                migrationId={el?.type}
+            />
+        ))}
       </View>
 
     </SgTemplateScreenView>
