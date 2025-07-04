@@ -13,38 +13,73 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 import {useData} from "@/hooks/useData";
+import CompleteModalIcon from "@/assets/images/CheckModal.svg";
+import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
     const {storeData} = useData();
     const { projectId, taskId } = useLocalSearchParams();
     const [taskDetails, setTaskDetails] = useState({});
-    const [completeTaskModal, setCompleteTaskModal] = useState(false)
+
+    const [checkTaskModal, setCheckTaskModal] = useState(false);
+    const [checkTaskInfoModal, setCheckTaskInfoModal] = useState(false);
+
+    const [completeTaskModal, setCompleteTaskModal] = useState(false);
+    const [completeTaskInfoModal, setCompleteTaskInfoModal] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([])
 
-    function toggleCompleteTaskModal() {
-        setCompleteTaskModal(!completeTaskModal)
-    }
+    // function handleCheckRequest() {
+    //     request({
+    //         url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
+    //         method: 'post',
+    //         data: {
+    //             date: moment().format(''),
+    //             status: 3,
+    //         }
+    //     }).then(res => {
+    //         setTaskDetails({...taskDetails, status: {
+    //             id: 3,
+    //             name: 'Check progress'
+    //             }})
+    //     }).catch(err => {
+    //         console.log(err)
+    //     })
+    // }
+    //
+    // function handleCompleteRequest() {
+    //     request({
+    //         url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
+    //         method: 'post',
+    //         data: {
+    //             date: moment().format(''),
+    //             status: 4,
+    //             files: (selectedFiles || []).map(el => el?.id) || [],
+    //         }
+    //     }).then(res => {
+    //         setSelectedFiles([])
+    //         setTaskDetails({
+    //             ...taskDetails,
+    //             status: {
+    //                 id: 4,
+    //                 name: 'check complete'
+    //             },
+    //             files: []
+    //         })
+    //     }).catch(err => {
+    //         console.log(err)
+    //     })
+    // }
 
-    function handleCheckRequest() {
-        request({
-            url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
-            method: 'post',
-            data: {
-                date: moment().format(''),
-                status: 3,
-            }
-        }).then(res => {
-            setTaskDetails({...taskDetails, status: {
-                id: 3,
-                name: 'Check progress'
-                }})
-        }).catch(err => {
-            console.log(err)
-        })
-    }
 
-    function handleCompleteRequest() {
+
+    const toggleCompleteTaskModal = () => {
+        setCompleteTaskModal(!completeTaskModal);
+    };
+    const toggleCompleteTaskInfoModal = () => {
+        setCompleteTaskInfoModal(!completeTaskInfoModal);
+    };
+    const handleCompleteTask = () => {
         request({
             url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
             method: 'post',
@@ -63,10 +98,36 @@ export default function ProjectItemScreen() {
                 },
                 files: []
             })
+            toggleCompleteTaskInfoModal();
         }).catch(err => {
             console.log(err)
         })
-    }
+    };
+
+    const toggleCheckTaskModal = () => {
+        setCheckTaskModal(!checkTaskModal);
+    };
+    const toggleCheckTaskInfoModal = () => {
+        setCheckTaskInfoModal(!checkTaskInfoModal);
+    };
+    const handleCheckTask = () => {
+        request({
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 3
+            }
+        }).then(res => {
+            setTaskDetails({...taskDetails, status: {
+                                id: 3,
+                                name: 'Check progress'
+                                }})
+            toggleCheckTaskInfoModal();
+        }).catch(err => {
+            console.log(err)
+        })
+    };
 
 
 
@@ -130,7 +191,7 @@ export default function ProjectItemScreen() {
                     <SgButton
                         bgColor='#FEF0C7'
                         color='#B54708'
-                        onPress={handleCheckRequest}
+                        onPress={toggleCheckTaskModal}
                     >
                         Check request
                     </SgButton>
@@ -150,14 +211,15 @@ export default function ProjectItemScreen() {
                 onClose={toggleCompleteTaskModal}
                 title="Complete task"
                 description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
                         color={COLORS.white}
-                        disabled={selectedFiles?.length === 0}
-                        onPress={handleCompleteRequest}
+                        onPress={handleCompleteTask}
+                        disabled={selectedFiles.length === 0}
                     >
-                        Complete
+                        Yes, Complete
                     </SgButton>
                 }
             >
@@ -176,8 +238,41 @@ export default function ProjectItemScreen() {
                         onPress={() => console.log('file.filename')}
                     />
                 ))}
-
             </SgPopup>
+            <SgPopup
+                visible={completeTaskInfoModal}
+                onClose={toggleCompleteTaskInfoModal}
+                fullScreen={true}
+                title="Task complete request sended"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
+
+            {/* EMPLOYEE CHECK REQUEST */}
+            <SgPopup
+                visible={checkTaskModal}
+                onClose={toggleCheckTaskModal}
+                title="Check request task"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompleteModalIcon width={56} height={56} />}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleCheckTask}
+                    >
+                        Yes, Check
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={checkTaskInfoModal}
+                onClose={toggleCheckTaskInfoModal}
+                fullScreen={true}
+                title="Task complete request sended"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
 
         </SgTemplateScreenView>
     );

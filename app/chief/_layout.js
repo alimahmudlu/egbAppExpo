@@ -12,6 +12,8 @@ import MenuActiveIcon from "@/assets/images/menu-active.svg";
 import MenuIcon from "@/assets/images/menu.svg";
 import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
+import DocsActiveIcon from "@/assets/images/docs-active.svg";
+import DocsIcon from "@/assets/images/docs.svg";
 
 export default function WorkerTabLayout() {
     const {logout} = useAuth();
@@ -42,7 +44,7 @@ export default function WorkerTabLayout() {
                 tabBarStyle: Platform.select({
                     ios: {
                         // Use a transparent background on iOS to show the blur effect
-                        position: 'absolute',
+                        // position: 'absolute',
                     },
                     default: {
                         boxShadow: '0px -24px 40px -20px #00000014',
@@ -64,6 +66,15 @@ export default function WorkerTabLayout() {
                     headerTitle: 'Home',
                     tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
                         <HomeIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
+                name="docs/index"
+                options={{
+                    title: 'My Docs',
+                    tabBarLabel: 'My Docs',
+                    headerTitle: 'My Docs',
+                    tabBarIcon: ({ color, focused }) => focused ? <DocsActiveIcon width={20} height={20} /> : <DocsIcon width={20} height={20} />
                 }}
             />
             <Tabs.Screen

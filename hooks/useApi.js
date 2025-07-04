@@ -23,7 +23,8 @@ export function ApiProvider({children}) {
     const { storeData, updateData, insertLoading, removeLoading, } = useData();
     const { accessToken } = useAuth();
 
-    const request = async ({ url, method = 'get', params = {}, data = {}, headers = {}, cache = false, transformRequest }) => {
+    const request = async (props) => {
+        const { url, method = 'get', params = {}, headers = {}, } = props
         // const storageKey = `${method.toUpperCase()}:${url}${Object.keys(params).length > 0 ? `?${JSON.stringify(params)}` : ''}`;
         const storageKey = `${method.toUpperCase()}:${url}`;
 
@@ -52,8 +53,7 @@ export function ApiProvider({children}) {
                     ...headers
                 },
                 params,
-                data,
-                transformRequest
+                ...props
             });
 
             const resData = response.data;
@@ -80,7 +80,7 @@ export function ApiProvider({children}) {
                 request
             }}>
             <>
-                {storeData?.loading.size > 0 ?
+                {storeData?.loading?.size > 0 ?
                     <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 2, opacity: 0.5, flex: 1, width: '100%', height: '100%', backgroundColor: COLORS.gray_blue_200, justifyContent: 'center', alignItems: 'center' }}>
                         <ActivityIndicator size="large" color="#007BFF" />
                     </View>

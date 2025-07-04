@@ -20,6 +20,8 @@ export default {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         },
+        NSLocationWhenInUseUsageDescription: "Location is required.",
+        NSLocationAlwaysAndWhenInUseUsageDescription: "Location maybe work on app background",
         "ITSAppUsesNonExemptEncryption": false
       }
     },

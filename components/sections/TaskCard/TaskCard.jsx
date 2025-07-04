@@ -73,6 +73,7 @@ export default function SgSectionTaskCard(props) {
     };
 
     const toggleCompleteTaskModal = () => {
+        setModalVisible(false)
         setCompleteTaskModal(!completeTaskModal);
     };
     const toggleCompleteTaskInfoModal = () => {
@@ -98,6 +99,7 @@ export default function SgSectionTaskCard(props) {
     };
 
     const toggleCheckTaskModal = () => {
+        setModalVisible(false)
         setCheckTaskModal(!checkTaskModal);
     };
     const toggleCheckTaskInfoModal = () => {
@@ -285,6 +287,7 @@ export default function SgSectionTaskCard(props) {
                         bgColor={COLORS.brand_600}
                         color={COLORS.white}
                         onPress={handleCompleteTask}
+                        disabled={selectedFiles.length === 0}
                     >
                         Yes, Complete
                     </SgButton>
