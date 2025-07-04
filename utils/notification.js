@@ -30,7 +30,7 @@ export async function registerForPushNotificationsAsync(userId, request, userSta
                 return;
             }
 
-            const token = await Notifications.getExpoPushTokenAsync();
+            token = await Notifications.getExpoPushTokenAsync();
 
             await request({
                 url: '/notification/token/create',
