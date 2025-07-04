@@ -202,9 +202,12 @@ export default function SgSectionTaskCard(props) {
                                 </Text>
                             </View>
                         )}
-                        <TouchableOpacity onPress={() => setModalVisible(true)}>
-                            <DotsIcon width={20} height={20} style={styles.dotsIcon}/>
-                        </TouchableOpacity>
+                        {data.status?.id !== 5 ?
+                            <TouchableOpacity style={styles.dots} onPress={() => setModalVisible(true)}>
+                                <DotsIcon width={20} height={20} style={styles.dotsIcon}/>
+                            </TouchableOpacity>
+                            : null
+                        }
                     </View>
                 </View>
 

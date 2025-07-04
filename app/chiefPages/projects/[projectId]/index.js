@@ -63,7 +63,7 @@ export default function ProjectItemScreen() {
             </SgCard>
 
             <View style={{gap: 16}}>
-                {tasksList.map((el, index) => (
+                {(tasksList || [])?.map((el, index) => (
                     <SgSectionTaskCard
                         id={el?.id}
                         projectId={el?.project_id}

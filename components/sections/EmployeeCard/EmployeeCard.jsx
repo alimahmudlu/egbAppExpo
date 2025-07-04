@@ -146,7 +146,10 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                 <Pressable style={styles.employeeCardGroup} onPress={toggleUserOperationModal}>
                     <View style={styles.avatarContainer}>
                         {image ? (
-                            <Image source={{uri: image}} style={styles.avatar}/>
+                            // <Image source={{uri: image}} style={styles.avatar}/>
+                            <Text style={styles.initials}>
+                                {title ? title.split(' ').map(n => n[0]).join('') : 'NA'}
+                            </Text>
                         ) : (
                             <Text style={styles.initials}>
                                 {title ? title.split(' ').map(n => n[0]).join('') : 'NA'}

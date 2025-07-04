@@ -124,15 +124,18 @@ export default function EmployeeDashboardScreen() {
             </SgCard>
 
             <View style={{gap: 12}}>
-                {(projectsList || []).map((project, index) => (
-                    <SgSectionProjectListItem
-                        key={index}
-                        title={project.name}
-                        staffImages={[project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")]}
-                        id={project.id}
-                        href={`/employeePages/projects/${project.id}`}
-                    />
-                ))}
+                {(projectsList || []).map((project, index) => {
+                    console.log(project?.members)
+                    return (
+                        <SgSectionProjectListItem
+                            key={index}
+                            title={project.name}
+                            staffData={project?.members || []}
+                            id={project.id}
+                            href={`/employeePages/projects/${project.id}`}
+                        />
+                    )
+                })}
             </View>
             <SgPopup
                 visible={rejectInfoModal}

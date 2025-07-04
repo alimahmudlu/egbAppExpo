@@ -53,7 +53,7 @@ export default function TasksScreen() {
               <SgSectionProjectListItem
                   key={index}
                   title={project.name}
-                  staffImages={project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")}
+                  staffData={project?.members || []}
                   id={project.id}
                   href={`/chiefPages/projects/${project.id}`}
               />

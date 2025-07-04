@@ -34,6 +34,14 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
+  dots: {
+    width: 30,
+    height: 30,
+    backgroundColor: COLORS.gray_50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: "center"
+  },
   dotsIcon: {
     resizeMode: 'contain',
   },

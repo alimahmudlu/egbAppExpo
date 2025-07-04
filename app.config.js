@@ -4,12 +4,12 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.0.3",
+    "version": "0.0.5",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     ios: {
       bundleIdentifier: "com.egb.egb",
       supportsTablet: true,

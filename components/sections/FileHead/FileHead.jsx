@@ -3,7 +3,7 @@ import {View, Text, Pressable} from 'react-native';
 import styles from '@/components/sections/FileHead/FileHead.styles';
 import TrashIcon from '@/assets/images/trash.svg';
 import FilterIcon from '@/assets/images/filter.svg';
-import { Link } from 'expo-router';
+import {Link, router} from 'expo-router';
 
 export default function SgSectionFileHead ({ title, description, icon, href, onPress }) {
   const renderIcon = () => {
@@ -17,19 +17,22 @@ export default function SgSectionFileHead ({ title, description, icon, href, onP
     }
   };
 
+  function handleClick() {
+    if (href) {
+      router.push(href);
+    }
+    else (
+        onPress?.()
+    )
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.title}>{title}</Text>
-        {href ?
-            <Link href={href} style={styles.iconWrapper}>
-              {renderIcon()}
-            </Link>
-            :
-            <Pressable style={styles.iconWrapper} onPress={() => onPress?.()}>
-              {renderIcon()}
-            </Pressable>
-        }
+        <Pressable style={styles.iconWrapper} onPress={handleClick}>
+          {renderIcon()}
+        </Pressable>
       </View>
       <Text style={styles.description}>{description}</Text>
     </View>

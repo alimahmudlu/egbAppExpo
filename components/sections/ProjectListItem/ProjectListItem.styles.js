@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   imageRow: {
     flexDirection: 'row',
     position: 'relative',
-    height: 20,
+    height: 30,
     overflow: 'hidden',
     paddingRight: 8,
   },
@@ -61,6 +61,25 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontStyle: 'normal',
     fontWeight: 600,
+    lineHeight: 12,
+  },
+  initialsV: {
+    backgroundColor: COLORS.gray_100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: COLORS.white,
+    padding: 2,
+    width: 24,
+    height: 24,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  initialsT: {
+    fontFamily: 'Inter',
+    fontSize: 10,
+    fontStyle: 'normal',
+    fontWeight: 700,
     lineHeight: 12,
   },
 });

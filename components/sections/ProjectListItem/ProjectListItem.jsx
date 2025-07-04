@@ -1,12 +1,17 @@
 import {View, Text, Image, Pressable} from 'react-native';
 import styles from './ProjectListItem.styles';
 import RightIcon from '@/assets/images/chevron-right.svg';
-import {Link, useRouter} from "expo-router";
+import {useRouter} from "expo-router";
+import React, {useEffect} from "react";
 
-export default function SgSectionProjectListItem({ title, staffImages = [], id, href }) {
-  const visibleImages = staffImages.slice(0, 5);
-  const hiddenCount = staffImages.length - visibleImages.length;
+export default function SgSectionProjectListItem({ title, staffData = [], id, href }) {
+  const visibleImages = staffData.slice(0, 5);
+  const hiddenCount = staffData.length - visibleImages.length;
   const router = useRouter();
+
+  useEffect(() => {
+
+  }, [staffData]);
 
   function onClick() {
     if (href) {
@@ -21,14 +26,25 @@ export default function SgSectionProjectListItem({ title, staffImages = [], id, 
           <Text style={styles.title}>{title}</Text>
 
           <View style={styles.imageRow}>
-            {visibleImages.map((src, i) => (
-            <View
-                key={i}
-                style={[styles.imageWrapper, { left: i * 11, zIndex: i }]}
-            >
-                <Image source={{ uri: src }} style={styles.staffImage} />
-            </View>
-            ))}
+            {(visibleImages || []).map((el, i) => {
+              console.log('girdi', el?.src )
+              return (
+                  <View
+                      key={i}
+                      style={[styles.imageWrapper, { left: i * 13, zIndex: i }]}
+                  >
+                    {el?.src ?
+                        <Image source={{ uri: el?.src }} style={styles.staffImage} />
+                        :
+                        <View style={styles.initialsV}>
+                          <Text style={styles.initialsT}>
+                            {el?.full_name ? el?.full_name.split(' ').splice(0, 2).map(n => n[0]).join('') : 'NA'}
+                          </Text>
+                        </View>
+                    }
+                  </View>
+              )
+            })}
             {hiddenCount > 0 && (
             <View
                 style={[

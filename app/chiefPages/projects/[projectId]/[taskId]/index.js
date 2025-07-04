@@ -13,12 +13,75 @@ import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
+import SgPopup from "@/components/ui/Modal/Modal";
+import CompleteModalIcon from "@/assets/images/CheckModal.svg";
+import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
     const {storeData} = useData();
     const { projectId, taskId } = useLocalSearchParams();
     const [taskDetails, setTaskDetails] = useState({});
+
+    const [checkedTaskModal, setCheckedTaskModal] = useState(false);
+    const [checkedTaskInfoModal, setCheckedTaskInfoModal] = useState(false);
+
+    const [completedTaskModal, setCompletedTaskModal] = useState(false);
+    const [completedTaskInfoModal, setCompletedTaskInfoModal] = useState(false);
+
+    const toggleCompletedTaskModal = () => {
+        setCompletedTaskModal(!completedTaskModal);
+    };
+    const toggleCompletedTaskInfoModal = () => {
+        setCompletedTaskInfoModal(!completedTaskInfoModal);
+    };
+    const handleCompletedTask = () => {
+        request({
+            url: `/chief/project/item/${projectId}/tasks/item/${taskId}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 5,
+            }
+        }).then(res => {
+            setTaskDetails({
+                ...taskDetails,
+                status: {
+                    id: 5,
+                    name: 'Completed'
+                },
+                files: []
+            })
+            toggleCompletedTaskInfoModal();
+        }).catch(err => {
+            console.log(err)
+        })
+    };
+
+    const toggleCheckedTaskModal = () => {
+        setCheckedTaskModal(!checkedTaskModal);
+    };
+    const toggleCheckedTaskInfoModal = () => {
+        setCheckedTaskInfoModal(!checkedTaskInfoModal);
+    };
+    const handleCheckedTask = () => {
+        request({
+            url: `/chief/project/item/${projectId}/tasks/item/${taskId}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 2
+            }
+        }).then(res => {
+            setTaskDetails({...taskDetails, status: {
+                    id: 2,
+                    name: 'In progress'
+                }})
+            toggleCheckedTaskInfoModal();
+        }).catch(err => {
+            console.log(err)
+        })
+    };
 
     useEffect(() => {
         request({
@@ -116,6 +179,7 @@ export default function ProjectItemScreen() {
                     <SgButton
                         bgColor = {COLORS.primary}
                         color= {COLORS.white}
+                        onPress={toggleCheckedTaskModal}
                     >
                         Checked
                     </SgButton>
@@ -143,6 +207,56 @@ export default function ProjectItemScreen() {
                 </View>
                 : null
             }
+
+            <SgPopup
+                visible={checkedTaskModal}
+                onClose={toggleCheckedTaskModal}
+                title="Checked task"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompleteModalIcon width={56} height={56} />}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleCheckedTask}
+                    >
+                        Yes, Checked
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={checkedTaskInfoModal}
+                onClose={toggleCheckedTaskInfoModal}
+                fullScreen={true}
+                title="Task checked"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
+
+            <SgPopup
+                visible={completedTaskModal}
+                onClose={toggleCompletedTaskModal}
+                title="Completed task"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompleteModalIcon width={56} height={56} />}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleCompletedTask}
+                    >
+                        Yes, Completed
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={completedTaskInfoModal}
+                onClose={toggleCompletedTaskInfoModal}
+                fullScreen={true}
+                title="Task Completed"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
 
 
         </SgTemplateScreenView>
