@@ -32,6 +32,7 @@ export default function SgCheckInOutCard(props) {
         return null;
     }
 
+    const [openSettingsModal, setOpenSettingsModal] = useState(false)
     const [checkInModal, setCheckInModal] = useState(false)
     const [checkInData, setCheckInData] = useState({})
     const [checkOutModal, setCheckOutModal] = useState(false)
@@ -48,6 +49,10 @@ export default function SgCheckInOutCard(props) {
         }
 
         setCheckInModal(!checkInModal)
+    }
+
+    function toggleOpenSettingsModal() {
+        setOpenSettingsModal(!openSettingsModal)
     }
 
     function handleSubmitCheckIn() {
@@ -130,18 +135,31 @@ export default function SgCheckInOutCard(props) {
         }
     }
 
+    function handleOpenSettings() {
+        if (Platform.OS === 'ios') {
+            Linking.openURL('app-settings:')
+                .catch(() => {
+                    Alert.alert('Hata', 'Ayarlar açılamadı');
+                });
+        } else {
+            // Android için:
+            Linking.openSettings()
+                .catch(() => {
+                    Alert.alert('Hata', 'Ayarlar açılamadı');
+                });
+        }
+    }
+
     async function handleCheckInRequest() {
         try {
             // Request permission to access locations
-            let {status} = await Location.requestForegroundPermissionsAsync();
+            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
 
             if (status !== 'granted') {
-                Alert.alert(
-                    'Permission Denied',
-                    'Please allow location access to check in.',
-                    [{text: 'OK'}]
-                );
-                return;
+                if (!canAskAgain) {
+                    toggleOpenSettingsModal()
+                    return;
+                }
             }
 
             // Get the current position
@@ -161,26 +179,20 @@ export default function SgCheckInOutCard(props) {
             setCheckInData({latitude, longitude})
         } catch (error) {
             console.error('Error getting location:', error);
-            Alert.alert(
-                'Error',
-                'Could not get your location. Please try again.',
-                [{text: 'OK'}]
-            );
+            toggleOpenSettingsModal()
         }
     }
 
     async function handleCheckOutRequest() {
         try {
             // Request permission to access locations
-            let {status} = await Location.requestForegroundPermissionsAsync();
+            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
 
             if (status !== 'granted') {
-                Alert.alert(
-                    'Permission Denied',
-                    'Please allow location access to check in.',
-                    [{text: 'OK'}]
-                );
-                return;
+                if (!canAskAgain) {
+                    toggleOpenSettingsModal()
+                    return;
+                }
             }
 
             // Get the current position
@@ -200,11 +212,7 @@ export default function SgCheckInOutCard(props) {
             setCheckOutData({latitude, longitude})
         } catch (error) {
             console.error('Error getting location:', error);
-            Alert.alert(
-                'Error',
-                'Could not get your location. Please try again.',
-                [{text: 'OK'}]
-            );
+            toggleOpenSettingsModal()
         }
     }
 
@@ -333,6 +341,23 @@ export default function SgCheckInOutCard(props) {
                         color={COLORS.white}
                     >
                         Check in
+                    </SgButton>
+                }
+            />
+
+            <SgPopup
+                visible={openSettingsModal}
+                onClose={toggleOpenSettingsModal}
+                title="Permission Error"
+                description="Location permission error. You have not given permission to access your locations. If you want to turn it on, go to settings. Open settings??"
+                // icon={<CheckInModalIcon width={56} height={56}/>}
+                footerButton={
+                    <SgButton
+                        onPress={handleOpenSettings}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        Open
                     </SgButton>
                 }
             />
