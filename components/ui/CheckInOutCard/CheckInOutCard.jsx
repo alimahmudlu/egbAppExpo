@@ -139,13 +139,11 @@ export default function SgCheckInOutCard(props) {
         if (Platform.OS === 'ios') {
             Linking.openURL('app-settings:')
                 .catch(() => {
-                    Alert.alert('Hata', 'Ayarlar açılamadı');
                 });
         } else {
             // Android için:
             Linking.openSettings()
                 .catch(() => {
-                    Alert.alert('Hata', 'Ayarlar açılamadı');
                 });
         }
     }

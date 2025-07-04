@@ -40,6 +40,8 @@ export default function SgSectionTaskCard(props) {
 
     const [checkedTaskModal, setCheckedTaskModal] = useState(false);
     const [checkedTaskInfoModal, setCheckedTaskInfoModal] = useState(false);
+    const [completedTaskModal, setCompletedTaskModal] = useState(false);
+    const [completedTaskInfoModal, setCompletedTaskInfoModal] = useState(false);
 
     const toggleRemoveTaskModal = () => {
         setRemoveTaskModal(!removeTaskModal);
@@ -69,7 +71,46 @@ export default function SgSectionTaskCard(props) {
         setModalVisible(false)
     };
     const handleCheckedTask = () => {
-        toggleCheckedTaskInfoModal();
+        request({
+            url: `/chief/project/item/${data?.projectId}/tasks/item/${data?.id}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 2,
+            }
+        }).then(res => {
+            changeRowData(`GET:/chief/project/item/${data?.projectId}/tasks`, res?.data, res?.data?.id)
+            changeRowData(`GET:/chief/task/list`, res?.data, res?.data?.id)
+            toggleCheckedTaskInfoModal();
+        }).catch(err => {
+            alert('reqqqqq errrr')
+            console.log(err)
+        })
+    };
+
+    const toggleCompletedTaskModal = () => {
+        setCompletedTaskModal(!completedTaskModal);
+    };
+    const toggleCompletedTaskInfoModal = () => {
+        setCompletedTaskInfoModal(!completedTaskInfoModal);
+        setModalVisible(false)
+    };
+    const handleCompletedTask = () => {
+        request({
+            url: `/chief/project/item/${data?.projectId}/tasks/item/${data?.id}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 5,
+            }
+        }).then(res => {
+            changeRowData(`GET:/chief/project/item/${data?.projectId}/tasks`, res?.data, res?.data?.id)
+            changeRowData(`GET:/chief/task/list`, res?.data, res?.data?.id)
+            toggleCompletedTaskInfoModal();
+        }).catch(err => {
+            alert('reqqqqq errrr')
+            console.log(err)
+        })
     };
 
     const toggleCompleteTaskModal = () => {
@@ -207,10 +248,10 @@ export default function SgSectionTaskCard(props) {
                             : null
                         }
                         {data?.status?.id === 4 ?
-                            <TouchableOpacity onPress={toggleCompleteTaskModal}>
+                            <TouchableOpacity onPress={toggleCompletedTaskModal}>
                                 <View style={styles.modalItem}>
                                     <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                    <Text style={styles.modalText}>Complete task</Text>
+                                    <Text style={styles.modalText}>Completed task</Text>
                                 </View>
                             </TouchableOpacity>
                             : null
@@ -221,12 +262,15 @@ export default function SgSectionTaskCard(props) {
                                 {/*        <Text style={styles.modalText}>Edit task</Text>*/}
                                 {/*    </View>*/}
                                 {/*</TouchableOpacity>*/}
-                                <TouchableOpacity onPress={toggleRemoveTaskModal}>
-                                    <View style={styles.modalItem}>
-                                        <TrashIcon width={20} height={20} style={styles.modalIcon}/>
-                                        <Text style={styles.modalText}>Remove task</Text>
-                                    </View>
-                                </TouchableOpacity>
+                        {data?.status?.id === 1 ?
+                            <TouchableOpacity onPress={toggleRemoveTaskModal}>
+                                <View style={styles.modalItem}>
+                                    <TrashIcon width={20} height={20} style={styles.modalIcon}/>
+                                    <Text style={styles.modalText}>Remove task</Text>
+                                </View>
+                            </TouchableOpacity>
+                            : null
+                        }
                     </View>
                     : null
                 }
@@ -276,6 +320,8 @@ export default function SgSectionTaskCard(props) {
                 icon={<TaskRemovedIcon width={202} height={168} />}
             />
 
+
+            {/* EMPLOYEE COMPLETE REQUEST */}
             <SgPopup
                 visible={completeTaskModal}
                 onClose={toggleCompleteTaskModal}
@@ -317,6 +363,7 @@ export default function SgSectionTaskCard(props) {
                 description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
+
 
             {/* EMPLOYEE CHECK REQUEST */}
             <SgPopup
@@ -365,6 +412,31 @@ export default function SgSectionTaskCard(props) {
                 onClose={toggleCheckedTaskInfoModal}
                 fullScreen={true}
                 title="Task checked"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
+
+            <SgPopup
+                visible={completedTaskModal}
+                onClose={toggleCompletedTaskModal}
+                title="Completed task"
+                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                icon={<CompleteModalIcon width={56} height={56} />}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleCompletedTask}
+                    >
+                        Yes, Completed
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={completedTaskInfoModal}
+                onClose={toggleCompletedTaskInfoModal}
+                fullScreen={true}
+                title="Task Completed"
                 description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
                 icon={<CompletedModalIcon width={202} height={168} />}
             />

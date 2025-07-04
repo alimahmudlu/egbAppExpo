@@ -1,7 +1,7 @@
 import {Text, View, TouchableOpacity, StyleSheet, Pressable} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams} from "expo-router";
+import {router, useLocalSearchParams, useRouter} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgButton from "@/components/ui/Button/Button";
@@ -15,10 +15,13 @@ import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 import {useData} from "@/hooks/useData";
 import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
+import {useSocket} from "@/hooks/useSocket";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
-    const {storeData} = useData();
+    const { insertData, storeData, removeRowData, changeRowData, updateData } = useData();
+    const {socket} = useSocket();
+    const router = useRouter();
     const { projectId, taskId } = useLocalSearchParams();
     const [taskDetails, setTaskDetails] = useState({});
 
@@ -28,50 +31,6 @@ export default function ProjectItemScreen() {
     const [completeTaskModal, setCompleteTaskModal] = useState(false);
     const [completeTaskInfoModal, setCompleteTaskInfoModal] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([])
-
-    // function handleCheckRequest() {
-    //     request({
-    //         url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
-    //         method: 'post',
-    //         data: {
-    //             date: moment().format(''),
-    //             status: 3,
-    //         }
-    //     }).then(res => {
-    //         setTaskDetails({...taskDetails, status: {
-    //             id: 3,
-    //             name: 'Check progress'
-    //             }})
-    //     }).catch(err => {
-    //         console.log(err)
-    //     })
-    // }
-    //
-    // function handleCompleteRequest() {
-    //     request({
-    //         url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
-    //         method: 'post',
-    //         data: {
-    //             date: moment().format(''),
-    //             status: 4,
-    //             files: (selectedFiles || []).map(el => el?.id) || [],
-    //         }
-    //     }).then(res => {
-    //         setSelectedFiles([])
-    //         setTaskDetails({
-    //             ...taskDetails,
-    //             status: {
-    //                 id: 4,
-    //                 name: 'check complete'
-    //             },
-    //             files: []
-    //         })
-    //     }).catch(err => {
-    //         console.log(err)
-    //     })
-    // }
-
-
 
     const toggleCompleteTaskModal = () => {
         setCompleteTaskModal(!completeTaskModal);
@@ -129,8 +88,6 @@ export default function ProjectItemScreen() {
         })
     };
 
-
-
     useEffect(() => {
         request({
             url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
@@ -144,6 +101,26 @@ export default function ProjectItemScreen() {
     useEffect(() => {
         setTaskDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`]?.data)
     }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`]])
+
+    useEffect(() => {
+        if (!socket || !socket.connected) return;
+
+        const removeTask = (data) => {
+            router.back();
+        };
+
+        const taskStatus = (data) => {
+            updateData(`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`, data)
+        };
+
+        socket.on("remove_task", removeTask);
+        socket.on("change_task__by_employee", taskStatus);
+
+        return () => {
+            socket.off("remove_task", removeTask);
+            socket.off("change_task__by_chief", taskStatus);
+        };
+    }, [socket]);
 
     return (
         <SgTemplateScreenView
@@ -183,7 +160,26 @@ export default function ProjectItemScreen() {
                 bgColor={null}
             />
 
-            {(taskDetails?.status?.id === 1) ?
+            {(taskDetails?.files || []).length > 0 ?
+                <>
+                    <SgCard>
+                        <Text style={styles.title}>Added Files</Text>
+                    </SgCard>
+                    {(taskDetails?.files || []).map((el, index) => (
+                        <SgSectionAddFile
+                            key={index}
+                            title={el?.upload?.filename}
+                            type={el?.type}
+                            datetime={el?.created_at ? moment(el?.created_at).format('DD.MM.YYYY / hh:mm A') : null}
+                            url={el?.upload?.filepath}
+                            onPress={() => console.log('file.filename')}
+                        />
+                    ))}
+                </>
+                : null
+            }
+
+            {([1, 2].includes(taskDetails?.status?.id)) ?
                 <View style={{
                     gap: 12,
                     flexDirection: 'row',

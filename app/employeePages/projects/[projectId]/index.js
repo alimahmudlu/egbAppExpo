@@ -17,7 +17,7 @@ export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
     const [projectDetails, setProjectDetails] = useState({});
     const [tasksList, setTasksList] = useState([]);
-    const { insertData, storeData, removeRowData } = useData();
+    const { insertData, storeData, removeRowData, changeRowData } = useData();
     const {socket} = useSocket();
 
     useEffect(() => {
@@ -57,12 +57,18 @@ export default function ProjectItemScreen() {
             removeRowData(`GET:/employee/project/item/${projectId}/tasks`, data?.data?.id, 'id')
         };
 
+        const taskStatus = (data) => {
+            changeRowData(`GET:/employee/project/item/${projectId}/tasks`, data?.data, data?.data?.id)
+        };
+
         socket.on("add_task", addTask);
         socket.on("remove_task", removeTask);
+        socket.on("change_task__by_employee", taskStatus);
 
         return () => {
             socket.off("add_task", addTask);
             socket.off("remove_task", removeTask);
+            socket.off("change_task__by_chief", taskStatus);
         };
     }, [socket]);
 

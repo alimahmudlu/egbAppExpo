@@ -99,10 +99,10 @@ export const DataProvider = ({ children }) => {
   const changeRowData = async (key, data, id, index) => {
     setStoreData(prev => {
       const _data = prev.cache?.[key]?.data
-      const _index = _data.findIndex(item => item.id === id);
-      _data[_index] = data;
+      const _index = _data?.findIndex(item => item.id === id);
+      if (!_data || _data.length === 0 || _index === -1) return prev;
 
-      console.log('changeRowData', _data)
+      _data[_index] = data;
 
       return  ({
         ...prev,

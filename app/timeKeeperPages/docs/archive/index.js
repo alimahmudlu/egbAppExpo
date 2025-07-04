@@ -14,7 +14,7 @@ export default function ProjectItemScreen() {
 
     useEffect(() => {
         request({
-            url: '/employee/doc/history',
+            url: '/timekeeper/doc/history',
             method: 'get',
         }).then().catch(err => {
             console.log(err);
@@ -22,8 +22,8 @@ export default function ProjectItemScreen() {
     }, []);
 
     useEffect(() => {
-        setDocList(storeData?.cache?.[`GET:/employee/doc/history`]?.data)
-    }, [storeData?.cache?.[`GET:/employee/doc/history`]])
+        setDocList(storeData?.cache?.[`GET:/timekeeper/doc/history`]?.data)
+    }, [storeData?.cache?.[`GET:/timekeeper/doc/history`]])
     return (
         <SgTemplateScreenView
             head={<SgTemplatePageHeader data={{
@@ -36,6 +36,7 @@ export default function ProjectItemScreen() {
                         key={index}
                         fileType={el.mimetype}
                         title={el?.filename}
+                        url={el?.filepath}
                         expiryDate={el?.date_of_expiry}
                         issueDate={el?.date_of_issue}
                         migrationId={el?.type}

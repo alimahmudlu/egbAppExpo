@@ -14,7 +14,7 @@ export default function EmployeeDocsScreen() {
 
   useEffect(() => {
     request({
-      url: '/employee/doc/list',
+      url: '/timekeeper/doc/list',
       method: 'get',
     }).then().catch(err => {
       console.log(err);
@@ -22,8 +22,8 @@ export default function EmployeeDocsScreen() {
   }, []);
 
   useEffect(() => {
-    setDocList(storeData?.cache?.[`GET:/employee/doc/list`]?.data)
-  }, [storeData?.cache?.[`GET:/employee/doc/list`]])
+    setDocList(storeData?.cache?.[`GET:/timekeeper/doc/list`]?.data)
+  }, [storeData?.cache?.[`GET:/timekeeper/doc/list`]])
 
   return (
     <SgTemplateScreenView
@@ -33,7 +33,7 @@ export default function EmployeeDocsScreen() {
               title="My Docs"
               description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
               icon="filter"
-              href={`/employeePages/docs/archive`}
+              href={`/timeKeeperPages/docs/archive`}
           />
         </View>
       }

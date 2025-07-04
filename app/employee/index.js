@@ -120,7 +120,7 @@ export default function EmployeeDashboardScreen() {
             />
 
             <SgCard>
-                <Text style={styles.title}>Added Projects</Text>
+                <Text style={styles.title}>My tasks</Text>
             </SgCard>
 
             <View style={{gap: 12}}>
@@ -128,7 +128,7 @@ export default function EmployeeDashboardScreen() {
                     <SgSectionProjectListItem
                         key={index}
                         title={project.name}
-                        staffImages={project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")}
+                        staffImages={[project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")]}
                         id={project.id}
                         href={`/employeePages/projects/${project.id}`}
                     />

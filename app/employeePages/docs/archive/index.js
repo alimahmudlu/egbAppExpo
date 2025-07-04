@@ -36,6 +36,7 @@ export default function ProjectItemScreen() {
                         key={index}
                         fileType={el.mimetype}
                         title={el?.filename}
+                        url={el?.filepath}
                         expiryDate={el?.date_of_expiry}
                         issueDate={el?.date_of_issue}
                         migrationId={el?.type}

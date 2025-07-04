@@ -1,4 +1,4 @@
-import {View, StyleSheet} from "react-native";
+import {View, StyleSheet, Text} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {useLocalSearchParams} from "expo-router";
@@ -12,6 +12,7 @@ import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
+import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
@@ -30,6 +31,8 @@ export default function ProjectItemScreen() {
 
     useEffect(() => {
         setTaskDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
+
+        console.log(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
     }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]])
 
 
@@ -84,6 +87,26 @@ export default function ProjectItemScreen() {
                 padding={false}
                 bgColor={null}
             />
+
+            {(taskDetails?.files || []).length > 0 ?
+                <>
+                    <SgCard>
+                        <Text style={styles.title}>Added Files</Text>
+                    </SgCard>
+                    {(taskDetails?.files || []).map((el, index) => (
+                        <SgSectionAddFile
+                            key={index}
+                            title={el?.upload?.filename}
+                            type={el?.type}
+                            datetime={el?.created_at ? moment(el?.created_at).format('DD.MM.YYYY / hh:mm A') : null}
+                            url={el?.upload?.filepath}
+                            onPress={() => console.log('file.filename')}
+                        />
+                    ))}
+                </>
+                : null
+            }
+
 
             {taskDetails?.status?.id === 3 ?
                 <View style={{

@@ -25,7 +25,7 @@ const getFileIcon = (type) => {
     case 'ppt':
       return <PPTIcon width={32} height={32} />;
     default:
-      return null;
+        return <DOCIcon width={32} height={32} />;
   }
 };
 
