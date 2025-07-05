@@ -9,5 +9,6 @@ export const createSocket = (token) => {
         auth: { token },
         transports: ["websocket"],
         forceNew: true,
+        timeout: 10000,
     });
 };

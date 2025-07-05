@@ -45,7 +45,7 @@ export default function SgTemplateScreenView(props) {
                 <SafeScreen>
                     <ScrollView style={styles.container} refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    } contentInsetAdjustmentBehavior="never">
+                    }>
                         {head ?
                             <View style={styles.head}>
                                 {head}

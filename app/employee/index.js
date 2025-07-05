@@ -28,6 +28,71 @@ export default function EmployeeDashboardScreen() {
     const [projectsList, setProjectsList] = useState([]);
     const {request} = useApi();
 
+    const { setStoreData } = useData();
+    const {socket} = useSocket();
+
+    useEffect(() => {
+        request({
+            url: `/employee/activity/`,
+            method: 'get',
+        }).then(res => {
+            setStoreData(prev => ({
+                ...prev,
+                checkOut: (res?.data || []).find(el => el.type === 2) || {
+                    loading: true
+                },
+                checkIn: (res?.data || []).find(el => el.type === 1) || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            setStoreData(prev => ({
+                ...prev,
+                checkInData: {
+                    checkIn: null,
+                    checkOut: null,
+                }
+            }));
+        })
+    }, []);
+
+    useEffect(() => {
+        if (!socket || !socket.connected) return;
+
+        const handler = (data) => {
+            if (data?.data?.type === 1) {
+                setStoreData(prev => ({
+                    ...prev,
+                    checkIn: data?.data?.status !== 3 ? data?.data : {
+                        status: 2,
+                        type: 1,
+                        reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+            else {
+                setStoreData(prev => ({
+                    ...prev,
+                    checkIn: {
+                        ...prev?.checkIn,
+                        completed_status: data?.data?.status !== 3 ? 1 : 0,
+                    },
+                    checkOut: data?.data?.status !== 3 ? data?.data : {
+                        status: 3,
+                        type: 2,
+                        reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+        };
+
+        socket.on("update_activity", handler);
+
+        return () => {
+            socket.off("update_activity", handler);
+        };
+    }, [socket]);
+
     function toggleRejectInfoModal(reject_reason) {
         setRejectInfoData(reject_reason || '')
         setRejectInfoModal(!rejectInfoModal);
