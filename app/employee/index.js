@@ -112,7 +112,7 @@ export default function EmployeeDashboardScreen() {
                 name={user?.full_name}
                 role={user?.role?.name}
                 rating="3.12"
-                profileImage={Avatar}
+                profileImage={''}
             />}
         >
 

@@ -52,7 +52,7 @@ export default function TimeKeeperUserScreen() {
                     rating={3.12}
                     name={employeeData?.full_name || ''}
                     role={employeeData?.role?.name || ''}
-                    profileImage={Avatar}
+                    profileImage={''}
                     color="dark"
                     size="md"
                 />
@@ -75,29 +75,29 @@ export default function TimeKeeperUserScreen() {
                     />
                 </SgCheckInOutGroup>
             </View>
-            <View>
-                <SgSectionInfoCard
-                    customIcon={ClockHistory}
-                    title="Total Work Hours"
-                    count='34562h. 12m.'
-                    href={`/timeKeeperPages/users/${userId}`}
-                >
-                    <View >
-                        {data.map((item, index) => (
-                            <SgSectionProgressBar
-                                key={index}
-                                label={item.label}
-                                value={item.value}
-                                percentage={item.percentage}
-                            />
-                        ))}
-                    </View>
-                </SgSectionInfoCard>
-            </View>
+            {/*<View>*/}
+            {/*    <SgSectionInfoCard*/}
+            {/*        customIcon={ClockHistory}*/}
+            {/*        title="Total Work Hours"*/}
+            {/*        count='34562h. 12m.'*/}
+            {/*        href={`/timeKeeperPages/users/${userId}`}*/}
+            {/*    >*/}
+            {/*        <View >*/}
+            {/*            {data.map((item, index) => (*/}
+            {/*                <SgSectionProgressBar*/}
+            {/*                    key={index}*/}
+            {/*                    label={item.label}*/}
+            {/*                    value={item.value}*/}
+            {/*                    percentage={item.percentage}*/}
+            {/*                />*/}
+            {/*            ))}*/}
+            {/*        </View>*/}
+            {/*    </SgSectionInfoCard>*/}
+            {/*</View>*/}
             <View>
                 <SgCard
                     title="Average Work Hours"
-                    time="6h. 12m."
+                    time={employeeData?.work_time_avg || '00:00'}
                 />
             </View>
         </SgTemplateScreenView>

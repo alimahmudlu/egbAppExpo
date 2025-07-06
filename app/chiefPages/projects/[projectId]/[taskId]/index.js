@@ -108,7 +108,7 @@ export default function ProjectItemScreen() {
             <SgSectionUserInfo
                 name={taskDetails?.assigned_employee?.full_name}
                 role="Employee"
-                profileImage={Avatar}
+                profileImage={''}
                 color="dark"
                 size="lg"
                 clickable={`/chiefPages/users/${taskDetails?.assigned_employee?.id}/`}

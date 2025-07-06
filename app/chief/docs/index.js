@@ -173,6 +173,12 @@ export default function EmployeeDocsScreen() {
       setSelectedFiles([])
       setData({})
       setErrors({})
+      request({
+        url: '/chief/doc/list',
+        method: 'get',
+      }).then().catch(err => {
+        console.log(err);
+      })
       console.log(res);
     }).catch(err => {
       console.log(err);

@@ -40,20 +40,20 @@ export default function EmployeeDashboardScreen() {
             head={<SgTemplateHeader
                 name={user?.full_name}
                 role={user?.role?.name}
-                profileImage={Avatar}
+                profileImage={''}
             />}
         >
             <SgCheckInOutGroup>
                 <SgSectionInfoCard
                     icon="log-in-outline"
                     title="Active tasks"
-                    count={32}
+                    count={taskList?.length - taskList?.filter(el => el?.status?.id === 5)?.length}
                     type="activeTasks"
                 />
                 <SgSectionInfoCard
                     icon="log-out-outline"
                     title="Completed tasks"
-                    count={12}
+                    count={taskList?.filter(el => el?.status?.id === 5)?.length}
                     type="completedTasks"
                 />
             </SgCheckInOutGroup>

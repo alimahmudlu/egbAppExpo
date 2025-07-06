@@ -9,10 +9,14 @@ import SgCard from "@/components/ui/Card/Card";
 import ClockHistory from "@/assets/images/coins-stacked.svg";
 import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {useApi} from "@/hooks/useApi";
+import {useData} from "@/hooks/useData";
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
+    const { request } = useApi();
+    const {storeData} = useData();
     const data = [
         { label: '1-2', value: 14, percentage: 90 },
         { label: '3-4', value: 9, percentage: 70 },
@@ -20,6 +24,23 @@ export default function TimeKeeperUserScreen() {
         { label: '7-8', value: 11, percentage: 80 },
         { label: '9-10', value: 2, percentage: 20 },
     ];
+    const [employeeData, setEmployeeData] = useState({});
+
+    useEffect(() => {
+        request({
+            url: `/chief/employee/details/${userId}`,
+            method: 'get',
+        }).then(res => {
+            console.log(res?.data, 'ree')
+        }).catch(err => {
+            console.log(err, 'err')
+        })
+    }, [userId]);
+
+
+    useEffect(() => {
+        setEmployeeData(storeData?.cache?.[`GET:/chief/employee/details/${userId}`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/employee/details/${userId}`]])
 
     return (
         <SgTemplateScreenView
@@ -30,9 +51,8 @@ export default function TimeKeeperUserScreen() {
             <View>
                 <SgSectionUserInfo
                     rating={3.12}
-                    name="Jane Doe"
-                    role="Employee"
-                    profileImage={Avatar}
+                    name={employeeData?.full_name || ''}
+                    role={employeeData?.role?.name || ''}
                     color="dark"
                     size="md"
                 />
@@ -41,13 +61,13 @@ export default function TimeKeeperUserScreen() {
                 <SgCheckInOutGroup>
                     <SgSectionInfoCard
                         title="Active tasks"
-                        count={32}
+                        count={employeeData?.active_task_count}
                         type="activeTasks"
                         href={`/chiefPages/users/${userId}/tasks/active`}
                     />
                     <SgSectionInfoCard
                         title="Completed tasks"
-                        count={32}
+                        count={employeeData?.completed_task_count}
                         type="completedTasks"
                         href={`/chiefPages/users/${userId}/tasks/completed`}
                     />
@@ -55,41 +75,41 @@ export default function TimeKeeperUserScreen() {
                 <SgCheckInOutGroup>
                     <SgSectionInfoCard
                         title="All Earned Points"
-                        count={32}
+                        count={employeeData?.points_sum}
                         type="earnedPoints"
                         href={null}
                     />
                     <SgSectionInfoCard
                         title="Average Earned Points"
-                        count={32}
+                        count={employeeData?.points_avg ? Number(employeeData?.points_avg).toFixed(2) : 0}
                         type="averageEarnedPoints"
                         href={null}
                     />
                 </SgCheckInOutGroup>
             </View>
-            <View>
-                <SgSectionInfoCard
-                    customIcon={ClockHistory}
-                    title="Score range won"
-                    count='673'
-                    href={`/chiefPages/users/${userId}`}
-                >
-                    <View >
-                        {data.map((item, index) => (
-                            <SgSectionProgressBar
-                                key={index}
-                                label={item.label}
-                                value={item.value}
-                                percentage={item.percentage}
-                            />
-                        ))}
-                    </View>
-                </SgSectionInfoCard>
-            </View>
+            {/*<View>*/}
+            {/*    <SgSectionInfoCard*/}
+            {/*        customIcon={ClockHistory}*/}
+            {/*        title="Score range won"*/}
+            {/*        count='673'*/}
+            {/*        href={`/chiefPages/users/${userId}`}*/}
+            {/*    >*/}
+            {/*        <View >*/}
+            {/*            {data.map((item, index) => (*/}
+            {/*                <SgSectionProgressBar*/}
+            {/*                    key={index}*/}
+            {/*                    label={item.label}*/}
+            {/*                    value={item.value}*/}
+            {/*                    percentage={item.percentage}*/}
+            {/*                />*/}
+            {/*            ))}*/}
+            {/*        </View>*/}
+            {/*    </SgSectionInfoCard>*/}
+            {/*</View>*/}
             <View>
                 <SgCard
                     title="Average Work Hours"
-                    time="6h. 12m."
+                    time={employeeData?.work_time_avg || '00:00'}
                 />
             </View>
         </SgTemplateScreenView>
