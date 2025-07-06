@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "74857635932",
+    "project_id": "egbexpoapp",
+    "storage_bucket": "egbexpoapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74857635932:android:04dbaa44e28fda44db0699",
+        "android_client_info": {
+          "package_name": "com.alimahmudlu.egbexpoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl0Mrpcl3-TCcEFM5WBMB9jLLbe0OA3a4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
