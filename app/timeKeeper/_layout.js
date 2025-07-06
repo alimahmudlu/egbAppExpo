@@ -15,37 +15,6 @@ import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 
 export default function TimeKeeperTabLayout() {
-    const {request} = useApi();
-    const {insertData, clearData} = useData();
-    const {socket} = useSocket()
-
-
-    useEffect(() => {
-//        clearData()
-        request({
-            url: '/timekeeper/activity/list',
-            method: 'get',
-        }).then(res => {
-        }).catch(err => {
-            console.log(err, 'apiservice control err')
-        });
-    }, []);
-
-
-    useEffect(() => {
-        if (!socket || !socket.connected) return;
-
-        const handler = (data) => {
-            insertData('GET:/timekeeper/activity/list', data?.data)
-        };
-
-        socket.on("new_activity", handler);
-
-        return () => {
-            socket.off("new_activity", handler);
-        };
-    }, [socket]);
-
     return (
         <Tabs
             screenOptions={{

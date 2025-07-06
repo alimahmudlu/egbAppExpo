@@ -26,6 +26,7 @@ export default function SgCheckInOutCard(props) {
         mapData,
         checkInStatus = undefined,
         checkInId = undefined,
+        reviewer
     } = props;
 
     if (type !== 'checkin' && type !== 'checkout') {
@@ -218,7 +219,10 @@ export default function SgCheckInOutCard(props) {
         <View style={[styles.card, {backgroundColor}]}>
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>{title}</Text>
+                    <View>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.title2}>{reviewer?.full_name ? `(${reviewer?.full_name})` : ' '}</Text>
+                    </View>
                     <Icon width={20} height={20}/>
                 </View>
                 <Text style={[styles.time, {color: isCheckIn ? COLORS.brand_600 : COLORS.error_600}]}

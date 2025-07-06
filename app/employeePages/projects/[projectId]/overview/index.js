@@ -1,7 +1,7 @@
 import {StyleSheet} from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
@@ -9,30 +9,32 @@ import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 
 export default function ProjectItemScreen() {
-    const { request } = useApi();
+    const {request} = useApi();
     const {storeData} = useData();
-    const { projectId } = useLocalSearchParams();
+    const {projectId} = useLocalSearchParams();
     const [projectDetails, setProjectDetails] = useState({});
 
-    useEffect(() => {
+
+    useFocusEffect(useCallback(() => {
         request({
-            url: `/employee/project/item/${projectId}`,
-            method: 'get',
+            url: `/employee/project/item/${projectId}`, method: 'get',
         }).then().catch(err => {
             console.log(err);
         })
-    }, []);
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
 
     useEffect(() => {
         setProjectDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}`]?.data)
     }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}`]])
 
-    return (
-        <SgTemplateScreenView
+    return (<SgTemplateScreenView
             head={<SgTemplatePageHeader data={{
                 header: 'Project overview'
-            }} />}
+            }}/>}
         >
             <SgCard
                 contentTitle='Project name'
@@ -51,8 +53,7 @@ export default function ProjectItemScreen() {
                 contentDescription={projectDetails?.optional_notes || '-'}
             />
 
-        </SgTemplateScreenView>
-    );
+        </SgTemplateScreenView>);
 }
 
 const styles = StyleSheet.create({
@@ -65,32 +66,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
-    },
-    backButton: {
+    }, backButton: {
         padding: 8,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-    },
-    overviewButton: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 4,
-    },
-    overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter',
-        fontWeight: '500',
-        fontSize: 16,
-        // lineHeight: '24px',
-},
-    container: {
+    }, headerTitle: {
+        fontSize: 18, fontWeight: 'bold', marginRight: 'auto', marginLeft: 'auto',
+    }, overviewButton: {
+        paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4,
+    }, overviewButtonText: {
+        color: '#000000', fontFamily: 'Inter', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
+    }, container: {
         flex: 1,
-    },
-    contentText: {
+    }, contentText: {
         fontSize: 16,
     }
 });

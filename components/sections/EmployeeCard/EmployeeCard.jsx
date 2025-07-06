@@ -22,6 +22,7 @@ import ApiService from "@/services/ApiService";
 import {useAuth} from "@/hooks/useAuth";
 import {useData} from "@/hooks/useData";
 import moment from "moment-timezone";
+import {useApi} from "@/hooks/useApi";
 
 
 export default function SgSectionEmployeeCard({fullData, image, title, role, time, editable = true, status, reason}) {
@@ -33,6 +34,8 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
     const [rejectReason, setRejectReason] = useState('');
     const { accessToken, user } = useAuth();
     const { removeRowData, insertData } = useData();
+    const {request} = useApi();
+    const [clickType, setClickType] = useState(null)
 
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
 
@@ -41,7 +44,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
     }
 
 
-    function toggleUserOperationModal(status) {
+    function toggleUserOperationModal() {
         if (editable) {
             setUserOperationModal(status === 1 ? false : !userOperationModal);
         } else {
@@ -51,33 +54,31 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
 
     function toggleRejectCheckInModal() {
         setRejectCheckInModal(!rejectCheckInModal);
+        toggleUserOperationModal()
     }
 
     function handleSubmitReject() {
-        ApiService.post('/timekeeper/activity/reject', {
-            employee_id: fullData?.employee?.id,
-            activity_id: fullData?.id,
-            type: fullData?.type,
-            confirm_time: moment(),
-            timezone: moment.tz.guess(),
-            reject_reason: rejectReason
-        }, {
-            headers: {
-                'authorization': accessToken || ''
+        request({
+            url: '/timekeeper/activity/reject', method: 'post', data: {
+                employee_id: fullData?.employee?.id,
+                activity_id: fullData?.id,
+                type: fullData?.type,
+                confirm_time: moment(),
+                timezone: moment.tz.guess(),
+                reject_reason: rejectReason
             }
         }).then(res => {
             if (res.data.success) {
                 toggleRejectedCheckInModal();
                 removeRowData('GET:/timekeeper/activity/list', fullData)
-            }
-            else {
-                Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
+            } else {
+                console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
         }).catch(err => {
-            console.log(err?.message)
-            Alert.alert('Error', 'An error aaaa reject occurred while accepting the check-in.');
-        })
+            console.log(err, 'apiservice control err')
+        });
     }
+
 
     function toggleRejectedCheckInModal() {
         if (rejectedCheckInModal) {
@@ -89,6 +90,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
 
     function toggleAcceptCheckInModal() {
         setAcceptCheckInModal(!acceptCheckInModal);
+        toggleUserOperationModal()
     }
 
 
@@ -165,11 +167,17 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                 {editable ?
                     <View style={styles.buttonGroup}>
                         <TouchableOpacity style={[styles.button, styles.cancelButton]}
-                                          onPress={toggleRejectCheckInModal}>
+                                          onPress={() => {
+                                              setClickType('reject')
+                                              toggleUserOperationModal()
+                                          }}>
                             <CancelIcon with={20} height={20} style={styles.closeIcon}/>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.button, styles.confirmButton]}
-                                          onPress={toggleAcceptCheckInModal}>
+                                          onPress={() => {
+                                              setClickType('accept')
+                                              toggleUserOperationModal()
+                                          }}>
                             <ConfirmIcon with={20} height={20} style={styles.confirmIcon}/>
                         </TouchableOpacity>
                     </View>
@@ -198,7 +206,7 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                 icon={<InfoCircleModalIcon width={56} height={56}/>}
             >
                 <Text style={styles.rejectModal}>Reject detail</Text>
-                <SgCard><Text style={styles.title}>{reason}</Text></SgCard>
+                <SgCard><Text style={styles.title}>{reason || ''}</Text></SgCard>
             </SgPopup>
 
 
@@ -243,20 +251,26 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                     </View>
                     <View style={styles.modalGroup}>
                         <View style={styles.modalGroupButtons}>
-                            <SgButton
-                                color={COLORS.error_700}
-                                bgColor={COLORS.error_50}
-                                onPress={toggleRejectCheckInModal}
-                            >
-                                Reject
-                            </SgButton>
-                            <SgButton
-                                color={COLORS.white}
-                                bgColor={COLORS.brand_600}
-                                onPress={toggleAcceptCheckInModal}
-                            >
-                                Accept
-                            </SgButton>
+                            {clickType === 'reject' ?
+                                <SgButton
+                                    color={COLORS.error_700}
+                                    bgColor={COLORS.error_50}
+                                    onPress={toggleRejectCheckInModal}
+                                >
+                                    Reject
+                                </SgButton>
+                                : null
+                            }
+                            {clickType === 'accept' ?
+                                <SgButton
+                                    color={COLORS.white}
+                                    bgColor={COLORS.brand_600}
+                                    onPress={toggleAcceptCheckInModal}
+                                >
+                                    Accept
+                                </SgButton>
+                                : null
+                            }
                         </View>
                     </View>
                 </View>
@@ -286,9 +300,9 @@ export default function SgSectionEmployeeCard({fullData, image, title, role, tim
                         onChangeText={(e) => {
                             setRejectReason(e)
                         }}
-                        value={rejectReason}
+                        value={rejectReason || ''}
                         placeholder="Reject detail..."
-                        keyboardType="keyboard-type"
+                        keyboardType="default"
                     />
                 </View>
             </SgPopup>

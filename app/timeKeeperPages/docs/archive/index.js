@@ -1,7 +1,7 @@
 import {View, StyleSheet} from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useApi} from "@/hooks/useApi";
@@ -12,14 +12,17 @@ export default function ProjectItemScreen() {
     const {request} = useApi();
     const {storeData} = useData();
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         request({
             url: '/timekeeper/doc/history',
             method: 'get',
         }).then().catch(err => {
             console.log(err);
         })
-    }, []);
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
     useEffect(() => {
         setDocList(storeData?.cache?.[`GET:/timekeeper/doc/history`]?.data)
@@ -28,7 +31,7 @@ export default function ProjectItemScreen() {
         <SgTemplateScreenView
             head={<SgTemplatePageHeader data={{
                 header: 'Docs archive'
-            }} />}
+            }}/>}
         >
             <View style={{gap: 12}}>
                 {(docList || []).map((el, index) => (
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 16,
         // lineHeight: '24px',
-},
+    },
     container: {
         flex: 1,
     },

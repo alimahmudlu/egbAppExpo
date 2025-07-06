@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import COLORS from "@/constants/colors";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
@@ -10,35 +10,34 @@ import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 
 export default function TimeKeeperUserScreen() {
-    const { userId } = useLocalSearchParams();
-    const { request } = useApi();
+    const {userId} = useLocalSearchParams();
+    const {request} = useApi();
     const [taskList, setTaskList] = useState([]);
     const {storeData} = useData();
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         request({
-            url: `/chief/task/list/${userId}`,
-            method: 'get',
-            params: {
+            url: `/chief/task/list/${userId}`, method: 'get', params: {
                 type: 'completed'
             }
         }).then().catch(err => {
             console.log(err);
         })
-    }, []);
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
     useEffect(() => {
         setTaskList(storeData?.cache?.[`GET:/chief/task/list/${userId}`]?.data)
     }, [storeData?.cache?.[`GET:/chief/task/list/${userId}`]])
-    
-    return (
-        <SgTemplateScreenView
+
+    return (<SgTemplateScreenView
             head={<SgTemplatePageHeader data={{
                 header: 'Completed tasks'
-            }} />}
+            }}/>}
         >
-            {taskList?.map((el, index) => (
-                <SgSectionTaskCard
+            {taskList?.map((el, index) => (<SgSectionTaskCard
                     id={el?.id}
                     projectId={el?.project_id}
                     key={index}
@@ -50,10 +49,8 @@ export default function TimeKeeperUserScreen() {
                     image={null}
                     status={el?.status}
                     href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
-                />
-            ))}
-        </SgTemplateScreenView>
-    )
+                />))}
+        </SgTemplateScreenView>)
 }
 
 const styles = StyleSheet.create({
@@ -66,35 +63,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
-    },
-    backButton: {
+    }, backButton: {
         padding: 8,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-    },
-    overviewButton: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 4,
-    },
-    overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter',
-        fontWeight: '500',
-        fontSize: 16,
-        // lineHeight: '24px',
-    },
-    container: {
+    }, headerTitle: {
+        fontSize: 18, fontWeight: 'bold', marginRight: 'auto', marginLeft: 'auto',
+    }, overviewButton: {
+        paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4,
+    }, overviewButtonText: {
+        color: '#000000', fontFamily: 'Inter', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
+    }, container: {
         flex: 1,
-    },
-    contentText: {
+    }, contentText: {
         fontSize: 16,
-    },
-    acceptButton: {
+    }, acceptButton: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -103,16 +84,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 16,
-    },
-    acceptButtonText: {
+    }, acceptButtonText: {
         fontFamily: 'Inter',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 600,
         lineHeight: 14,
         color: COLORS.brand_600,
-    },
-    rejectButton: {
+    }, rejectButton: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -121,16 +100,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 16,
-    },
-    rejectButtonText: {
+    }, rejectButtonText: {
         fontFamily: 'Inter',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 600,
         lineHeight: 14,
         color: COLORS.error_600,
-    },
-    rejectModal: {
+    }, rejectModal: {
         fontFamily: "Inter",
         fontSize: 20,
         fontStyle: "normal",

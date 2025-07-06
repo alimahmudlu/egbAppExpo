@@ -1,23 +1,19 @@
 import { Tabs } from 'expo-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {Platform} from 'react-native';
-import { useAuth } from '@/hooks/useAuth';
 import HomeIcon from '@/assets/images/home.svg';
 import HomeActiveIcon from '@/assets/images/home-active.svg';
 import DocsIcon from '@/assets/images/docs.svg';
 import DocsActiveIcon from '@/assets/images/docs-active.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
-import {useApi} from "@/hooks/useApi";
-import {useData} from "@/hooks/useData";
-import {useSocket} from "@/hooks/useSocket";
 
 export default function employeeTabLayout() {
-  const { logout } = useAuth();
 
   return (
     <Tabs
         screenOptions={{
+            freezeOnBlur: false,
             headerShown: false,
             tabBarInActiveTintColor: '#98A2B3',
             tabBarActiveTintColor: '#182230',
@@ -42,6 +38,7 @@ export default function employeeTabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+            freezeOnBlur: false,
           title: 'Home',
           tabBarLabel: 'Home',
           headerTitle: 'Home',
@@ -51,6 +48,7 @@ export default function employeeTabLayout() {
       <Tabs.Screen
         name="docs/index"
         options={{
+            freezeOnBlur: false,
           title: 'My Docs',
           tabBarLabel: 'My Docs',
           headerTitle: 'My Docs',
@@ -60,6 +58,7 @@ export default function employeeTabLayout() {
       <Tabs.Screen
         name="menu/index"
         options={{
+            freezeOnBlur: false,
           title: 'Menu',
           tabBarLabel: 'Menu',
           headerTitle: 'Menu',

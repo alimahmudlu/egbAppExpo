@@ -2,19 +2,30 @@ import {
     Dimensions,
     Keyboard, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, TouchableWithoutFeedback, View
 } from "react-native";
-import React from "react";
+import React, {useState} from "react";
 import SafeScreen from "@/components/SafeScreen";
 import {StatusBar} from "expo-status-bar";
 import COLORS from "@/constants/colors";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useLocalSearchParams } from "expo-router";
-
+import {useIsFocused} from "@react-navigation/native";
 export default function SgTemplateScreenView(props) {
-    const {head, children} = props;
-    const [refreshing, setRefreshing] = React.useState(false);
+    const { head, children } = props;
+    const [refreshing, setRefreshing] = useState(false);
     const router = useRouter();
-    const pathname = usePathname(); // Məsələn: /profile/123
-    const params = useLocalSearchParams();
+    const pathname = usePathname();
+    const params = useLocalSearchParams(); // Burdan refreshKey alınır
+    const insets = useSafeAreaInsets();
+
+    const refreshKey = params?.refreshKey || 0; // default 0
+    const isFocused = useIsFocused();
+    const [remountKey, setRemountKey] = React.useState(0);
+
+    React.useEffect(() => {
+        if (isFocused) {
+            setRemountKey(prev => prev + 1);
+        }
+    }, [isFocused]);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -25,44 +36,50 @@ export default function SgTemplateScreenView(props) {
             return;
         }
 
-        console.log("Refreshing...", pathname, params);
+        const newKey = Date.now();
 
         router.replace({
             pathname,
-            params,
+            params: {
+                ...params,
+                refreshKey: newKey,
+            },
         });
+
         setRefreshing(false);
-    }, []);
-    const insets = useSafeAreaInsets();
+    }, [pathname, params]);
 
+    if (!isFocused) return null;
     return (
-
-        <KeyboardAvoidingView
-            style={{flex: 1}}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <SafeScreen>
-                    <ScrollView style={styles.container} refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    }>
-                        {head ?
-                            <View style={styles.head}>
-                                {head}
+        <React.Fragment key={remountKey}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <SafeScreen>
+                        <ScrollView
+                            key={refreshKey} // ⭐️ Refresh burada olur
+                            style={styles.container}
+                            refreshControl={
+                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                            }
+                            contentInsetAdjustmentBehavior="never"
+                        >
+                            {head && <View style={styles.head}>{head}</View>}
+                            <View style={[styles.body]}>
+                                {children}
                             </View>
-                            : null
-                        }
-                        <View style={[styles.body]}>
-                            {children}
-                        </View>
-                    </ScrollView>
-                    <StatusBar hidden={false} style="light" />
-                </SafeScreen>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
 
-    )
+                        </ScrollView>
+                        <StatusBar hidden={false} style="light" />
+                    </SafeScreen>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </React.Fragment>
+    );
 }
+
 
 
 const styles = StyleSheet.create({

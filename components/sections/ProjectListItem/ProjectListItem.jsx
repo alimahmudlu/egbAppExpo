@@ -27,7 +27,6 @@ export default function SgSectionProjectListItem({ title, staffData = [], id, hr
 
           <View style={styles.imageRow}>
             {(visibleImages || []).map((el, i) => {
-              console.log('girdi', el?.src )
               return (
                   <View
                       key={i}

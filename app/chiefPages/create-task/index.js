@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet, ToastAndroid} from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {router} from "expo-router";
+import {router, useFocusEffect} from "expo-router";
 import COLORS from "@/constants/colors";
 import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
@@ -18,7 +18,7 @@ import validationConstraints from "@/app/chiefPages/create-task/constants"
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function TaskCreateScreen() {
-    const { request } = useApi();
+    const {request} = useApi();
     const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
     const [projectsList, setProjectsList] = useState([]);
@@ -26,14 +26,13 @@ export default function TaskCreateScreen() {
     const [createTaskInfoModal, setCreateTaskInfoModal] = useState(false);
 
     function handleChange(e) {
-        setErrors({ ...errors, [e.name]: '' });
-        setData({ ...data, [e.name]: e.value });
+        setErrors({...errors, [e.name]: ''});
+        setData({...data, [e.name]: e.value});
     }
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         request({
-            url: `/chief/options/projects`,
-            method: 'get',
+            url: `/chief/options/projects`, method: 'get',
         }).then(res => {
             if (res.success) {
                 setProjectsList(res?.data);
@@ -44,13 +43,15 @@ export default function TaskCreateScreen() {
         }).catch(err => {
             console.log(err);
         })
-    }, []);
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
     useEffect(() => {
         if (data?.project?.id) {
             request({
-                url: `/chief/options/employees/${data?.project?.id}`,
-                method: 'get',
+                url: `/chief/options/employees/${data?.project?.id}`, method: 'get',
             }).then(res => {
                 if (res.success) {
                     setEmployeesList(res?.data);
@@ -66,7 +67,7 @@ export default function TaskCreateScreen() {
 
     const validate = () => {
         const constraints = validationConstraints('chiefCreateTask', data);
-        const { errors } = globalValidate(data, constraints);
+        const {errors} = globalValidate(data, constraints);
 
         return errors || {};
     }
@@ -77,12 +78,9 @@ export default function TaskCreateScreen() {
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
             ToastAndroid.show("error var", ToastAndroid.SHORT)
-        }
-        else {
+        } else {
             request({
-                url: `/chief/task/create`,
-                method: 'post',
-                data: {
+                url: `/chief/task/create`, method: 'post', data: {
                     title: data?.title,
                     deadline: data?.deadline,
                     point: data?.point,
@@ -106,18 +104,13 @@ export default function TaskCreateScreen() {
     };
 
 
-
-    return (
-        <SgTemplateScreenView
+    return (<SgTemplateScreenView
             head={<SgTemplatePageHeader data={{
                 header: 'Create task'
-            }} />}
+            }}/>}
         >
             <Text style={{
-                fontSize: 12,
-                lineHeight: 18,
-                color: COLORS.black,
-                weight: '500',
+                fontSize: 12, lineHeight: 18, color: COLORS.black, weight: '500',
             }}>
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
             </Text>
@@ -131,18 +124,14 @@ export default function TaskCreateScreen() {
                     name='project'
                     isInvalid={errors?.project}
                     onChangeText={handleChange}
-                    list={(projectsList || []).map((project, index) => (
-                        {
-                            id: project?.id,
-                            name: project?.name,
-                            render: <SgSectionProjectListItem
+                    list={(projectsList || []).map((project, index) => ({
+                            id: project?.id, name: project?.name, render: <SgSectionProjectListItem
                                 key={index}
                                 title={project.name}
                                 staffImages={project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")}
                                 id={project.id}
                             />
-                        }
-                    ))}
+                        }))}
                 />
                 <SgSelect
                     label="Assign to"
@@ -152,19 +141,15 @@ export default function TaskCreateScreen() {
                     name='assigned_employee'
                     isInvalid={errors?.assigned_employee}
                     onChangeText={handleChange}
-                    list={(employeesList || []).map((employee, index) => (
-                        {
-                            id: employee?.id,
-                            name: employee?.full_name,
-                            render: <SgSectionUserInfo
+                    list={(employeesList || []).map((employee, index) => ({
+                            id: employee?.id, name: employee?.full_name, render: <SgSectionUserInfo
                                 name={employee?.full_name}
                                 role="Employee"
                                 profileImage={Avatar}
                                 color="dark"
                                 size="md"
                             />
-                        }
-                    ))}
+                        }))}
                 />
                 <SgInput
                     label="Title"
@@ -204,8 +189,8 @@ export default function TaskCreateScreen() {
 
                 <SgButton
                     onPress={handleSubmit}
-                    bgColor = {COLORS.primary}
-                    color= {COLORS.white}
+                    bgColor={COLORS.primary}
+                    color={COLORS.white}
                 >
                     Create task
                 </SgButton>
@@ -218,10 +203,9 @@ export default function TaskCreateScreen() {
                 fullScreen={true}
                 title="Task completed"
                 description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
-                icon={<CompletedModalIcon width={202} height={168} />}
+                icon={<CompletedModalIcon width={202} height={168}/>}
             />
-        </SgTemplateScreenView>
-    );
+        </SgTemplateScreenView>);
 }
 
 const styles = StyleSheet.create({
@@ -234,32 +218,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
-    },
-    backButton: {
+    }, backButton: {
         padding: 8,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-    },
-    overviewButton: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 4,
-    },
-    overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter',
-        fontWeight: '500',
-        fontSize: 16,
-        // lineHeight: '24px',
-},
-    container: {
+    }, headerTitle: {
+        fontSize: 18, fontWeight: 'bold', marginRight: 'auto', marginLeft: 'auto',
+    }, overviewButton: {
+        paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4,
+    }, overviewButtonText: {
+        color: '#000000', fontFamily: 'Inter', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
+    }, container: {
         flex: 1,
-    },
-    contentText: {
+    }, contentText: {
         fontSize: 16,
     }
 });

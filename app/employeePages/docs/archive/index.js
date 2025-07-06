@@ -1,7 +1,7 @@
 import {View, StyleSheet} from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useApi} from "@/hooks/useApi";
@@ -12,27 +12,27 @@ export default function ProjectItemScreen() {
     const {request} = useApi();
     const {storeData} = useData();
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         request({
-            url: '/employee/doc/history',
-            method: 'get',
+            url: '/employee/doc/history', method: 'get',
         }).then().catch(err => {
             console.log(err);
         })
-    }, []);
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
     useEffect(() => {
         setDocList(storeData?.cache?.[`GET:/employee/doc/history`]?.data)
     }, [storeData?.cache?.[`GET:/employee/doc/history`]])
-    return (
-        <SgTemplateScreenView
+    return (<SgTemplateScreenView
             head={<SgTemplatePageHeader data={{
                 header: 'Docs archive'
-            }} />}
+            }}/>}
         >
             <View style={{gap: 12}}>
-                {(docList || []).map((el, index) => (
-                    <SgFileCard
+                {(docList || []).map((el, index) => (<SgFileCard
                         key={index}
                         fileType={el.mimetype}
                         title={el?.filename}
@@ -40,11 +40,9 @@ export default function ProjectItemScreen() {
                         expiryDate={el?.date_of_expiry}
                         issueDate={el?.date_of_issue}
                         migrationId={el?.type}
-                    />
-                ))}
+                    />))}
             </View>
-        </SgTemplateScreenView>
-    );
+        </SgTemplateScreenView>);
 }
 
 const styles = StyleSheet.create({
@@ -57,32 +55,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
-    },
-    backButton: {
+    }, backButton: {
         padding: 8,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-    },
-    overviewButton: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 4,
-    },
-    overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter',
-        fontWeight: '500',
-        fontSize: 16,
-        // lineHeight: '24px',
-},
-    container: {
+    }, headerTitle: {
+        fontSize: 18, fontWeight: 'bold', marginRight: 'auto', marginLeft: 'auto',
+    }, overviewButton: {
+        paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4,
+    }, overviewButtonText: {
+        color: '#000000', fontFamily: 'Inter', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
+    }, container: {
         flex: 1,
-    },
-    contentText: {
+    }, contentText: {
         fontSize: 16,
     }
 });

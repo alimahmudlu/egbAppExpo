@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
@@ -14,292 +14,296 @@ import SgSelect from "@/components/ui/Select/Select";
 import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useData} from "@/hooks/useData";
+import {useFocusEffect} from "expo-router";
 
 export default function EmployeeDocsScreen() {
-  const { request } = useApi();
-  const [employeeActivities, setEmployeeActivities] = useState([]);
-  const [filters, setFilters] = useState({})
-  const [filterModal, setFilterModal] = useState(false)
-  const {storeData} = useData();
+    const {request} = useApi();
+    const [employeeActivities, setEmployeeActivities] = useState([]);
+    const [filters, setFilters] = useState({})
+    const [filterModal, setFilterModal] = useState(false)
+    const {storeData} = useData();
 
-  function getData(_filters = {}) {
-    request({
-      url: '/timekeeper/history/list',
-      method: 'get',
-      params: {..._filters}
-    }).then().catch(err => {
-      console.log(err, 'apiservice control err')
-    });
-  }
+    function getData(_filters = {}) {
+        request({
+            url: '/timekeeper/history/list',
+            method: 'get',
+            params: {..._filters}
+        }).then().catch(err => {
+            console.log(err, 'apiservice control err')
+        });
+    }
 
-  function toggleFilterModal() {
-    setFilterModal(!filterModal);
-  }
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
+    }
 
-  function resetFilters() {
-    setFilters({});
-  }
+    function resetFilters() {
+        setFilters({});
+    }
 
-  function handleChange(e) {
-    setFilters({ ...filters, [e.name]: e.value });
-  }
+    function handleChange(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
 
-  function handleFilters() {
-    getData(filters)
-  }
+    function handleFilters() {
+        getData(filters)
+    }
 
-  useEffect(() => {
-    getData();
-  }, []);
+    useFocusEffect(useCallback(() => {
+        getData();
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
-  useEffect(() => {
-    setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/history/list`]?.data)
-  }, [storeData?.cache?.[`GET:/timekeeper/history/list`]]);
+    useEffect(() => {
+        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/history/list`]?.data)
+    }, [storeData?.cache?.[`GET:/timekeeper/history/list`]]);
 
 
-  return (
-    <SgTemplateScreenView
-      head={
-        <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
-          <SgSectionFileHead
-              title="History"
-              description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
-              icon="filter"
-              onPress={toggleFilterModal}
-          />
-        </View>
-      }
-    >
-      <SgFilterTab
-          defaultTabId='checkIn'
-          tabs={[
-            { label: 'Check in', id: 'checkIn' },
-            { label: 'Check out', id: 'checkOut' },
-          ]}
-          tabContent={[
-            {
-              element: (
-                  employeeActivities?.filter(el => el.type === 1).map((emp, index) => (
-                      <SgSectionEmployeeCard
-                          key={index}
-                          fullData={emp}
-                          title={emp?.employee?.full_name}
-                          role={emp?.employee?.role?.name}
-                          time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                          image={emp?.employee?.image}
-                          editable={false}
-                          status={emp.status}
-                          reason={emp.reject_reason}
-                      />
-                  ))
-              ),
-              id: 'checkIn'
-            },
-            {
-              element: (
-                  employeeActivities?.filter(el => el.type === 2).map((emp, index) => (
-                      <SgSectionEmployeeCard
-                          key={index}
-                          fullData={emp}
-                          title={emp?.employee?.full_name}
-                          role={emp?.employee?.role?.name}
-                          time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                          image={emp?.employee?.image}
-                          editable={false}
-                          status={emp.status}
-                          reason={emp.reject_reason}
-                      />
-                  ))
-              ),
-              id: 'checkOut'
+    return (
+        <SgTemplateScreenView
+            head={
+                <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
+                    <SgSectionFileHead
+                        title="History"
+                        description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+                        icon="filter"
+                        onPress={toggleFilterModal}
+                    />
+                </View>
             }
-          ]}
-      />
+        >
+            <SgFilterTab
+                defaultTabId='checkIn'
+                tabs={[
+                    {label: 'Check in', id: 'checkIn'},
+                    {label: 'Check out', id: 'checkOut'},
+                ]}
+                tabContent={[
+                    {
+                        element: (
+                            employeeActivities?.filter(el => el.type === 1).map((emp, index) => (
+                                <SgSectionEmployeeCard
+                                    key={index}
+                                    fullData={emp}
+                                    title={emp?.employee?.full_name}
+                                    role={emp?.employee?.role?.name}
+                                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                    image={emp?.employee?.image}
+                                    editable={false}
+                                    status={emp.status}
+                                    reason={emp.reject_reason}
+                                />
+                            ))
+                        ),
+                        id: 'checkIn'
+                    },
+                    {
+                        element: (
+                            employeeActivities?.filter(el => el.type === 2).map((emp, index) => (
+                                <SgSectionEmployeeCard
+                                    key={index}
+                                    fullData={emp}
+                                    title={emp?.employee?.full_name}
+                                    role={emp?.employee?.role?.name}
+                                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                    image={emp?.employee?.image}
+                                    editable={false}
+                                    status={emp.status}
+                                    reason={emp.reject_reason}
+                                />
+                            ))
+                        ),
+                        id: 'checkOut'
+                    }
+                ]}
+            />
 
-      <SgPopup
-          visible={filterModal}
-          onClose={toggleFilterModal}
-          footerButton={
-            <SgButton
-                onPress={handleFilters}
-                bgColor={COLORS.primary}
-                color={COLORS.white}
+            <SgPopup
+                visible={filterModal}
+                onClose={toggleFilterModal}
+                footerButton={
+                    <SgButton
+                        onPress={handleFilters}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        Accept
+                    </SgButton>
+                }
             >
-              Accept
-            </SgButton>
-          }
-      >
-        <View style={{paddingBottom: 20}}>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-            <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>Filters</Text>
+                <View style={{paddingBottom: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>Filters</Text>
 
-            <SgButton
-                onPress={resetFilters}
-                color={COLORS.brand_700}
-                style={{
-                  flex: 0,
-                  width: 'auto',
-                  marginLeft: 'auto',
-                  paddingVertical: 0,
-                  paddingHorizontal: 0,
-                  gap: 7
-                }}
+                        <SgButton
+                            onPress={resetFilters}
+                            color={COLORS.brand_700}
+                            style={{
+                                flex: 0,
+                                width: 'auto',
+                                marginLeft: 'auto',
+                                paddingVertical: 0,
+                                paddingHorizontal: 0,
+                                gap: 7
+                            }}
 
-            >
-              Clear filters
-              <ReloadArrow width={20} height={20} style={{marginLeft: 7}} />
-            </SgButton>
-          </View>
+                        >
+                            Clear filters
+                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                        </SgButton>
+                    </View>
 
-          <View style={{gap: 16}}>
-            <View style={{flex: 1}}>
-              <SgDatePicker
-                  label="Start date"
-                  placeholder="dd/mm/yyyy - hh/mm"
-                  value={filters?.start_date}
-                  name='start_date'
-                  onChangeText={handleChange}
-              />
-            </View>
-            <View style={{flex: 1}}>
-              <SgDatePicker
-                  label="End date"
-                  placeholder="dd/mm/yyyy - hh/mm"
-                  value={filters?.end_date}
-                  name='end_date'
-                  onChangeText={handleChange}
-              />
-            </View>
-          </View>
-        </View>
-      </SgPopup>
-    </SgTemplateScreenView>
-  );
+                    <View style={{gap: 16}}>
+                        <View style={{flex: 1}}>
+                            <SgDatePicker
+                                label="Start date"
+                                placeholder="dd/mm/yyyy - hh/mm"
+                                value={filters?.start_date}
+                                name='start_date'
+                                onChangeText={handleChange}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgDatePicker
+                                label="End date"
+                                placeholder="dd/mm/yyyy - hh/mm"
+                                value={filters?.end_date}
+                                name='end_date'
+                                onChangeText={handleChange}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </SgPopup>
+        </SgTemplateScreenView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  addButton: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 5,
-  },
-  addButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  listContainer: {
-    padding: 15,
-  },
-  jobCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  jobHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  jobTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    flex: 1,
-  },
-  statusBadge: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-  },
-  activeBadge: {
-    backgroundColor: '#e6f7ee',
-  },
-  closedBadge: {
-    backgroundColor: '#ffebee',
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  activeText: {
-    color: '#00a86b',
-  },
-  closedText: {
-    color: '#f44336',
-  },
-  jobDetails: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 10,
-  },
-  jobInfo: {
-    fontSize: 14,
-    color: '#666',
-    marginRight: 15,
-    marginBottom: 5,
-  },
-  applicantsContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    paddingVertical: 10,
-    marginVertical: 10,
-  },
-  applicantsText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  actionButton: {
-    flex: 1,
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  closeButton: {
-    backgroundColor: '#f44336',
-  },
-  reopenButton: {
-    backgroundColor: '#4caf50',
-  },
-  actionButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  closeButtonText: {
-    color: '#fff',
-  },
-  reopenButtonText: {
-    color: '#fff',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 15,
+        backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    headerTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    addButton: {
+        backgroundColor: '#007BFF',
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 5,
+    },
+    addButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    listContainer: {
+        padding: 15,
+    },
+    jobCard: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    jobHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    jobTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        flex: 1,
+    },
+    statusBadge: {
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        borderRadius: 4,
+    },
+    activeBadge: {
+        backgroundColor: '#e6f7ee',
+    },
+    closedBadge: {
+        backgroundColor: '#ffebee',
+    },
+    statusText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    activeText: {
+        color: '#00a86b',
+    },
+    closedText: {
+        color: '#f44336',
+    },
+    jobDetails: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginBottom: 10,
+    },
+    jobInfo: {
+        fontSize: 14,
+        color: '#666',
+        marginRight: 15,
+        marginBottom: 5,
+    },
+    applicantsContainer: {
+        borderTopWidth: 1,
+        borderTopColor: '#eee',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+        paddingVertical: 10,
+        marginVertical: 10,
+    },
+    applicantsText: {
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    actionButton: {
+        flex: 1,
+        backgroundColor: '#007BFF',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginHorizontal: 5,
+    },
+    closeButton: {
+        backgroundColor: '#f44336',
+    },
+    reopenButton: {
+        backgroundColor: '#4caf50',
+    },
+    actionButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    closeButtonText: {
+        color: '#fff',
+    },
+    reopenButtonText: {
+        color: '#fff',
+    },
 });

@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import COLORS from "@/constants/colors";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
@@ -10,19 +10,22 @@ import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 
 export default function TimeKeeperUserScreen() {
-    const { request } = useApi();
+    const {request} = useApi();
     const {storeData} = useData();
-    const { userId } = useLocalSearchParams();
+    const {userId} = useLocalSearchParams();
     const [employeeActivities, setEmployeeActivities] = useState([]);
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         request({
             url: `/timekeeper/employee/history/${userId}/checkout`,
             method: 'get',
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
-    }, []);
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
     useEffect(() => {
         setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]?.data)
@@ -32,7 +35,7 @@ export default function TimeKeeperUserScreen() {
         <SgTemplateScreenView
             head={<SgTemplatePageHeader data={{
                 header: 'Check Out',
-            }} />}
+            }}/>}
         >
             {employeeActivities?.map((emp, index) => (
                 <SgSectionEmployeeCard

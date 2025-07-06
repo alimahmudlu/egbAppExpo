@@ -22,7 +22,7 @@ export default function ProjectItemScreen() {
         }).then().catch(err => {
             console.log(err);
         })
-    }, []);
+    }, [projectId]);
 
     useEffect(() => {
         setProjectDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}`]?.data)

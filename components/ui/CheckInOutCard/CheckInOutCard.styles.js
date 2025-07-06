@@ -26,6 +26,14 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: COLORS.black,
   },
+  title2: {
+    fontFamily: 'Inter',
+    fontSize: 8,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    lineHeight: 14,
+    color: COLORS.black,
+  },
   time: {
     fontFamily: 'Inter',
     fontSize: 24,

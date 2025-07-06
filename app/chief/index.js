@@ -7,41 +7,41 @@ import {StyleSheet, View} from "react-native";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
+import {useFocusEffect} from "expo-router";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
     const {storeData} = useData();
-    const { request } = useApi();
+    const {request} = useApi();
     const [taskList, setTaskList] = useState([]);
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         request({
-            url: `/chief/task/list`,
-            method: 'get'
+            url: `/chief/task/list`, method: 'get'
         }).then().catch(err => {
             console.log(err);
         })
-    }, []);
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
     useEffect(() => {
         setTaskList(storeData?.cache?.[`GET:/chief/task/list`]?.data)
     }, [storeData?.cache?.[`GET:/chief/task/list`]])
 
 
-    return (
-        <SgTemplateScreenView
-            head={
-                <SgTemplateHeader
-                    name={user?.full_name}
-                    role={user?.role?.name}
-                    profileImage={Avatar}
-                />
-            }
+    return (<SgTemplateScreenView
+            head={<SgTemplateHeader
+                name={user?.full_name}
+                role={user?.role?.name}
+                profileImage={Avatar}
+            />}
         >
             <SgCheckInOutGroup>
                 <SgSectionInfoCard
@@ -67,94 +67,67 @@ export default function EmployeeDashboardScreen() {
 
             <SgFilterTab
                 defaultTabId='all'
-                tabs={[
-                    {label: 'All tasks', id: 'all', count: taskList?.length},
-                    {label: 'Check', id: 'check', count: taskList?.filter(el => [3, 4].includes(el?.status?.id))?.length},
-                    {label: 'Complete', id: 'complete', count: taskList?.filter(el => el?.status?.id === 5)?.length},
-                ]}
-                tabContent={[
-                    {
-                        element: (
-                            <View style={{gap: 16}}>
-                                {taskList?.map((el, index) => (
-                                    <SgSectionTaskCard
-                                        id={el?.id}
-                                        projectId={el?.project_id}
-                                        key={index}
-                                        time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                                        duration={el?.duration}
-                                        title={el?.name}
-                                        description={el?.description}
-                                        name={el?.assigned_employee?.full_name}
-                                        image={null}
-                                        status={el?.status}
-                                        href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
-                                    />
-                                ))}
-                            </View>
-                        ),
-                        id: 'all'
-                    },
-                    {
-                        element: (
-                            <View style={{gap: 16}}>
-                                {taskList?.filter(el => [3, 4].includes(el?.status?.id))?.map((el, index) => (
-                                    <SgSectionTaskCard
-                                        id={el?.id}
-                                        projectId={el?.project_id}
-                                        key={index}
-                                        time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                                        duration={el?.duration}
-                                        title={el?.name}
-                                        description={el?.description}
-                                        name={el?.assigned_employee?.full_name}
-                                        image={null}
-                                        status={el?.status}
-                                        href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
-                                    />
-                                ))}
-                            </View>
-                        ),
-                        id: 'check'
-                    },
-                    {
-                        element: (
-                            <View style={{gap: 16}}>
-                                {taskList?.filter(el => el?.status?.id === 5)?.map((el, index) => (
-                                    <SgSectionTaskCard
-                                        id={el?.id}
-                                        projectId={el?.project_id}
-                                        key={index}
-                                        time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                                        duration={el?.duration}
-                                        title={el?.name}
-                                        description={el?.description}
-                                        name={el?.assigned_employee?.full_name}
-                                        image={null}
-                                        status={el?.status}
-                                        href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
-                                    />
-                                ))}
-                            </View>
-                        ),
-                        id: 'complete'
-                    }
-                ]}
+                tabs={[{label: 'All tasks', id: 'all', count: taskList?.length}, {
+                    label: 'Check', id: 'check', count: taskList?.filter(el => [3, 4].includes(el?.status?.id))?.length
+                }, {label: 'Complete', id: 'complete', count: taskList?.filter(el => el?.status?.id === 5)?.length},]}
+                tabContent={[{
+                    element: (<View style={{gap: 16}}>
+                            {taskList?.map((el, index) => (<SgSectionTaskCard
+                                    id={el?.id}
+                                    projectId={el?.project_id}
+                                    key={index}
+                                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
+                                    duration={el?.duration}
+                                    title={el?.name}
+                                    description={el?.description}
+                                    name={el?.assigned_employee?.full_name}
+                                    image={null}
+                                    status={el?.status}
+                                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
+                                />))}
+                        </View>), id: 'all'
+                }, {
+                    element: (<View style={{gap: 16}}>
+                            {taskList?.filter(el => [3, 4].includes(el?.status?.id))?.map((el, index) => (
+                                <SgSectionTaskCard
+                                    id={el?.id}
+                                    projectId={el?.project_id}
+                                    key={index}
+                                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
+                                    duration={el?.duration}
+                                    title={el?.name}
+                                    description={el?.description}
+                                    name={el?.assigned_employee?.full_name}
+                                    image={null}
+                                    status={el?.status}
+                                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
+                                />))}
+                        </View>), id: 'check'
+                }, {
+                    element: (<View style={{gap: 16}}>
+                            {taskList?.filter(el => el?.status?.id === 5)?.map((el, index) => (<SgSectionTaskCard
+                                    id={el?.id}
+                                    projectId={el?.project_id}
+                                    key={index}
+                                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
+                                    duration={el?.duration}
+                                    title={el?.name}
+                                    description={el?.description}
+                                    name={el?.assigned_employee?.full_name}
+                                    image={null}
+                                    status={el?.status}
+                                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
+                                />))}
+                        </View>), id: 'complete'
+                }]}
             />
-        </SgTemplateScreenView>
-    );
+        </SgTemplateScreenView>);
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: "#fff",
-    },
-    title: {
-        fontFamily: "Inter",
-        fontSize: 16,
-        fontStyle: "normal",
-        fontWeight: "600",
-        lineHeight: 20,
+        flex: 1, backgroundColor: "#fff",
+    }, title: {
+        fontFamily: "Inter", fontSize: 16, fontStyle: "normal", fontWeight: "600", lineHeight: 20,
     },
 });

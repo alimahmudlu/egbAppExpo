@@ -10,7 +10,7 @@ import {useAuth} from "@/hooks/useAuth";
 import {StyleSheet, Text, View} from "react-native";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import SgUtilsTimeDifference from "@/utils/TimeDifference";
@@ -19,6 +19,7 @@ import moment from "moment-timezone";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import LoginIcon from "@/assets/images/login.svg";
 import COLORS from "@/constants/colors";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -26,35 +27,42 @@ export default function EmployeeDashboardScreen() {
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
     const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
     const [projectsList, setProjectsList] = useState([]);
+    const [checkIn, setCheckIn] = useState({});
+    const [checkOut, setCheckOut] = useState({});
     const {request} = useApi();
-
-    const { setStoreData } = useData();
+    const {setStoreData} = useData();
     const {socket} = useSocket();
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         request({
-            url: `/employee/activity/`,
-            method: 'get',
+            url: `/employee/activity/`, method: 'get',
         }).then(res => {
+            console.log('activity res')
             setStoreData(prev => ({
-                ...prev,
-                checkOut: (res?.data || []).find(el => el.type === 2) || {
+                ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
                     loading: true
-                },
-                checkIn: (res?.data || []).find(el => el.type === 1) || {
+                }, checkIn: (res?.data || []).find(el => el.type === 1) || {
                     loading: true
                 },
             }));
         }).catch(err => {
+            console.log('activity error')
             setStoreData(prev => ({
-                ...prev,
-                checkInData: {
-                    checkIn: null,
-                    checkOut: null,
+                ...prev, checkInData: {
+                    checkIn: null, checkOut: null,
                 }
             }));
         })
-    }, []);
+
+        request({
+            url: '/employee/project/list', method: 'get',
+        }).then().catch(err => {
+            console.log(err);
+        })
+        return () => {
+            console.log('Home tab lost focus');
+        };
+    }, []));
 
     useEffect(() => {
         if (!socket || !socket.connected) return;
@@ -62,25 +70,16 @@ export default function EmployeeDashboardScreen() {
         const handler = (data) => {
             if (data?.data?.type === 1) {
                 setStoreData(prev => ({
-                    ...prev,
-                    checkIn: data?.data?.status !== 3 ? data?.data : {
-                        status: 2,
-                        type: 1,
-                        reject_reason: data?.data?.reject_reason
+                    ...prev, checkIn: data?.data?.status !== 3 ? data?.data : {
+                        status: 2, type: 1, reject_reason: data?.data?.reject_reason
                     },
                 }));
-            }
-            else {
+            } else {
                 setStoreData(prev => ({
-                    ...prev,
-                    checkIn: {
-                        ...prev?.checkIn,
-                        completed_status: data?.data?.status !== 3 ? 1 : 0,
-                    },
-                    checkOut: data?.data?.status !== 3 ? data?.data : {
-                        status: 3,
-                        type: 2,
-                        reject_reason: data?.data?.reject_reason
+                    ...prev, checkIn: {
+                        ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+                    }, checkOut: data?.data?.status !== 3 ? data?.data : {
+                        status: 3, type: 2, reject_reason: data?.data?.reject_reason
                     },
                 }));
             }
@@ -99,88 +98,75 @@ export default function EmployeeDashboardScreen() {
     }
 
     useEffect(() => {
-        request({
-            url: '/employee/project/list',
-            method: 'get',
-        }).then().catch(err => {
-            console.log(err);
-        })
-    }, []);
-
-    useEffect(() => {
         setProjectsList(storeData?.cache?.[`GET:/employee/project/list`]?.data)
     }, [storeData?.cache?.[`GET:/employee/project/list`]])
 
+    useEffect(() => {
+        setCheckIn(storeData?.checkIn)
+        setCheckOut(storeData?.checkOut)
+    }, [storeData?.checkIn, storeData?.checkOut])
 
-    return (
-        <SgTemplateScreenView
-            head={
-                <SgTemplateHeader
-                    name={user?.full_name}
-                    role={user?.role?.name}
-                    rating="3.12"
-                    profileImage={Avatar}
-                />
-            }
+
+    return (<SgTemplateScreenView
+            head={<SgTemplateHeader
+                name={user?.full_name}
+                role={user?.role?.name}
+                rating="3.12"
+                profileImage={Avatar}
+            />}
         >
 
-            {storeData?.checkIn?.status === 3 ?
-                <SgNoticeCard
-                    icon={<LoginIcon width={20} height={20} />}
-                    title="Check in rejected"
-                    buttonText="Reject detail"
-                    onClick={() => toggleRejectInfoModal(storeData?.checkIn?.reject_reason)}
-                    bgCard="danger"
-                    bgButton="danger"
-                />
-                : null
-            }
-            {storeData?.checkOut?.status === 3 ?
-                <SgNoticeCard
-                    icon={<LoginIcon width={20} height={20} />}
-                    title="Check out rejected"
-                    buttonText="Reject detail"
-                    onClick={() => toggleRejectInfoModal(storeData?.checkOut?.reject_reason)}
-                    bgCard="danger"
-                    bgButton="danger"
-                />
-                : null
-            }
+            {storeData?.checkIn?.status === 3 ? <SgNoticeCard
+                icon={<LoginIcon width={20} height={20}/>}
+                title="Check in rejected"
+                buttonText="Reject detail"
+                onClick={() => toggleRejectInfoModal(storeData?.checkIn?.reject_reason)}
+                bgCard="danger"
+                bgButton="danger"
+            /> : null}
+            {storeData?.checkOut?.status === 3 ? <SgNoticeCard
+                icon={<LoginIcon width={20} height={20}/>}
+                title="Check out rejected"
+                buttonText="Reject detail"
+                onClick={() => toggleRejectInfoModal(storeData?.checkOut?.reject_reason)}
+                bgCard="danger"
+                bgButton="danger"
+            /> : null}
             <SgCheckInOutGroup>
                 <SgCheckInOutCard
                     type="checkin"
                     title="Check In"
-                    time={storeData?.checkIn?.status !== 3 ? (storeData?.checkIn?.review_time ? moment.tz(storeData?.checkIn?.review_time, storeData?.checkIn?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                    time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('hh:mm A') : '') : ''}
                     buttonLabel="Check in"
-                    status={storeData?.checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
                     mapData={{
                         checkIn: {
-                            latitude: storeData?.checkIn?.latitude || 0,
-                            longitude: storeData?.checkIn?.longitude || 0,
+                            latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
                         },
                     }}
+                    reviewer={checkIn?.reviewer || {}}
                 />
                 <SgCheckInOutCard
                     type="checkout"
                     title="Check Out"
-                    time={storeData?.checkOut?.status !== 3 ? (storeData?.checkOut?.review_time ? moment.tz(storeData?.checkOut?.review_time, storeData?.checkOut?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                    time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('hh:mm A') : '') : ''}
                     buttonLabel="Check Out"
-                    status={storeData?.checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
-                    checkInStatus={storeData?.checkIn?.status === 2 }
-                    checkInId={storeData?.checkIn?.id}
+                    status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    checkInStatus={checkIn?.status === 2}
+                    checkInId={checkIn?.id}
                     mapData={{
                         checkOut: {
-                            latitude: storeData?.checkOut?.latitude || 0,
-                            longitude: storeData?.checkOut?.longitude || 0,
+                            latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
                         },
                     }}
+                    reviewer={checkOut?.reviewer || {}}
                 />
             </SgCheckInOutGroup>
 
             <SgCard
                 title="Work Time"
-                time={storeData?.checkOut?.completed_status ? storeData?.checkIn?.work_time : <SgUtilsTimeDifference
-                    startTime={storeData?.checkIn?.review_time ? moment(storeData?.checkIn?.review_time).format('') : null}/>}
+                time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
+                    startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
                 icon={Clock}
             />
 
@@ -190,16 +176,13 @@ export default function EmployeeDashboardScreen() {
 
             <View style={{gap: 12}}>
                 {(projectsList || []).map((project, index) => {
-                    console.log(project?.members)
-                    return (
-                        <SgSectionProjectListItem
+                    return (<SgSectionProjectListItem
                             key={index}
                             title={project.name}
                             staffData={project?.members || []}
                             id={project.id}
                             href={`/employeePages/projects/${project.id}`}
-                        />
-                    )
+                        />)
                 })}
             </View>
             <SgPopup
@@ -210,24 +193,15 @@ export default function EmployeeDashboardScreen() {
                 <Text style={styles.rejectModal}>Reject detail</Text>
                 <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
             </SgPopup>
-        </SgTemplateScreenView>
-    );
+        </SgTemplateScreenView>);
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: "#fff",
-    },
-    title: {
-        fontFamily: "Inter",
-        fontSize: 16,
-        fontStyle: "normal",
-        fontWeight: "600",
-        lineHeight: 20,
-        color: COLORS.black,
-    },
-    rejectModal: {
+        flex: 1, backgroundColor: "#fff",
+    }, title: {
+        fontFamily: "Inter", fontSize: 16, fontStyle: "normal", fontWeight: "600", lineHeight: 20, color: COLORS.black,
+    }, rejectModal: {
         fontFamily: "Inter",
         fontSize: 20,
         fontStyle: "normal",

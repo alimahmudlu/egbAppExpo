@@ -7,7 +7,7 @@ import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
 
 export default function SgTemplateUpload(props) {
-    const {selectedFiles, setSelectedFiles} = props;
+    const {selectedFiles, setSelectedFiles, multiple} = props;
     const [uploading, setUploading] = useState(false);
     const [url, setUrl] = useState('');
     const { request } = useApi();
@@ -75,12 +75,15 @@ export default function SgTemplateUpload(props) {
             {uploading ?
                 <ActivityIndicator size="large" color="blue" style={{ marginTop: 20 }} />
                 :
-                <SgButton onPress={pickAndUpload}
-                          bgColor={COLORS.gray_50}
-                          color={COLORS.gray_600}
-                >
-                    Add file +
-                </SgButton>
+                (!multiple && selectedFiles.length > 0) ?
+                    null
+                    :
+                    <SgButton onPress={pickAndUpload}
+                              bgColor={COLORS.gray_50}
+                              color={COLORS.gray_600}
+                    >
+                        Add file +
+                    </SgButton>
             }
         </View>
     );
