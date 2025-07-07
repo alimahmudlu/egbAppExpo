@@ -104,7 +104,7 @@ export default function EmployeeDashboardScreen() {
     }, [storeData?.cache?.[`GET:/employee/project/list`]])
 
     useEffect(() => {
-        Alert.alert('checkIn change')
+        // Alert.alert('checkIn change')
         setCheckIn(storeData?.checkIn)
         setCheckOut(storeData?.checkOut)
     }, [storeData?.checkIn, storeData?.checkOut])
