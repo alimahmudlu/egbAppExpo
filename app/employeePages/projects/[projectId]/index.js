@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet} from "react-native";
+import {Text, View, StyleSheet, Alert} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
 import {useLocalSearchParams} from "expo-router";
@@ -47,7 +47,9 @@ export default function ProjectItemScreen() {
 
 
     useEffect(() => {
+        Alert.alert('socket deyisdi, amma connected colundeyem -> PROJECT')
         if (!socket || !socket.connected) return;
+        Alert.alert('socket deyisdi, CONNECTED -> PROJECT')
 
         const addTask = (data) => {
             insertData(`GET:/employee/project/item/${projectId}/tasks`, data?.data)
