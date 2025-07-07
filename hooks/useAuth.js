@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import Constants from 'expo-constants';
+import {disconnectSocket} from "@/services/createSocket";
 
 const { API_URL } = Constants.expoConfig.extra;
 
@@ -161,14 +162,15 @@ export function AuthProvider({ children }) {
 
   // Logout function
   const logout = async () => {
-    try {
-      // Call logout endpoint if needed
-      if (accessToken) {
-        await api.post('/auth/logout');
-      }
-    } catch (error) {
-      console.error('Logout API call failed:', error);
-    } finally {
+    disconnectSocket(); // ✅ socket-i kəs
+    // try {
+    //   // Call logout endpoint if needed
+    //   if (accessToken) {
+    //     await api.post('/auth/logout');
+    //   }
+    // } catch (error) {
+    //   console.error('Logout API call failed:', error);
+    // } finally {
       // Clear token and user data regardless of API call success
       setAccessToken(null);
       setUser(null);
@@ -182,7 +184,7 @@ export function AuthProvider({ children }) {
 
       // Navigate to auth screen
       router.replace('/auth/');
-    }
+    // }
   };
 
   return (

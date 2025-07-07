@@ -22,3 +22,11 @@ export const createSocket = (token) => {
     }
     return socket;
 };
+
+export const disconnectSocket = () => {
+    if (socket) {
+        socket.disconnect();
+        socket = null;
+        console.log("🔌 Socket bağlantısı kəsildi (logout)");
+    }
+};
