@@ -70,6 +70,16 @@ export default function TimeKeeperTabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="manual/index"
+                options={{
+                    title: 'Manual',
+                    tabBarLabel: 'Manual',
+                    headerTitle: 'Manual',
+                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
+                        <HistoryIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
                 name="menu/index"
                 options={{
                     title: 'Menu',

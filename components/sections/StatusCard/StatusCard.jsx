@@ -25,10 +25,6 @@ export default function SgSectionStatusCard({ icon, title, time, mapData }) {
       Linking.openURL(googleMapsUrl);
     }
   };
-  //
-  // function openInMaps(latitude, longitude) {
-  //
-  // }
 
   return (
       <View style={[styles.container, hasLocation && styles.containerNoPadding]}>
