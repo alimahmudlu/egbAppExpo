@@ -103,7 +103,7 @@ export default function ProjectItemScreen() {
     }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`]])
 
     useEffect(() => {
-        if (!socket || !socket.connected) return;
+        if (!socket) return;
 
         const removeTask = (data) => {
             router.back();
@@ -113,8 +113,10 @@ export default function ProjectItemScreen() {
             updateData(`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`, data)
         };
 
-        socket.on("remove_task", removeTask);
-        socket.on("change_task__by_employee", taskStatus);
+        socket.on('connect', () => {
+            socket.on("remove_task", removeTask);
+            socket.on("change_task__by_employee", taskStatus);
+        })
 
         return () => {
             socket.off("remove_task", removeTask);

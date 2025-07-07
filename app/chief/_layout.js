@@ -21,13 +21,15 @@ export default function WorkerTabLayout() {
     const {socket} = useSocket();
 
     useEffect(() => {
-        if (!socket || !socket.connected) return;
+        if (!socket) return;
 
         const handler = (data) => {
             changeRowData(`GET:/chief/task/list`, data?.data, data?.data?.id)
         };
 
-        socket.on("change_task__by_employee", handler);
+        socket.on('connect', () => {
+            socket.on("change_task__by_employee", handler);
+        })
 
         return () => {
             socket.off("change_task__by_employee", handler);

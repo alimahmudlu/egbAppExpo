@@ -65,9 +65,7 @@ export default function EmployeeDashboardScreen() {
     }, []));
 
     useEffect(() => {
-        Alert.alert('socket deyisdi, amma connected colundeyem -> HOME')
         if (!socket) return;
-        Alert.alert('socket deyisdi, CONNECTED YOXLANILMIR -> HOME')
 
         const handler = (data) => {
             if (data?.data?.type === 1) {
@@ -87,7 +85,6 @@ export default function EmployeeDashboardScreen() {
             }
         };
         const connectHandler = () => {
-            Alert.alert('socket deyisdi, YENI ON CONNECT')
             socket.on("update_activity", handler);
         };
         socket.on("connect", connectHandler);

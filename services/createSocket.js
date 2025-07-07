@@ -15,7 +15,6 @@ export const createSocket = (token) => {
             withCredentials: true
         });
     } else {
-        // Əgər socket varsa, sadəcə token-i update et
         socket.auth = { token };
         if (!socket.connected) {
             socket.connect();

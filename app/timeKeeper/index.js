@@ -36,13 +36,15 @@ export default function EmployeeDashboardScreen() {
 
 
     useEffect(() => {
-        if (!socket || !socket.connected) return;
+        if (!socket) return;
 
         const handler = (data) => {
             insertData('GET:/timekeeper/activity/list', data?.data)
         };
 
-        socket.on("new_activity", handler);
+        socket.on('connect', () => {
+            socket.on("new_activity", handler);
+        })
 
         return () => {
             socket.off("new_activity", handler);

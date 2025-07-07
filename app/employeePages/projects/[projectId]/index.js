@@ -47,9 +47,7 @@ export default function ProjectItemScreen() {
 
 
     useEffect(() => {
-        Alert.alert('socket deyisdi, amma connected colundeyem -> PROJECT')
-        if (!socket || !socket.connected) return;
-        Alert.alert('socket deyisdi, CONNECTED -> PROJECT')
+        if (!socket) return;
 
         const addTask = (data) => {
             insertData(`GET:/employee/project/item/${projectId}/tasks`, data?.data)
@@ -63,9 +61,11 @@ export default function ProjectItemScreen() {
             changeRowData(`GET:/employee/project/item/${projectId}/tasks`, data?.data, data?.data?.id)
         };
 
-        socket.on("add_task", addTask);
-        socket.on("remove_task", removeTask);
-        socket.on("change_task__by_employee", taskStatus);
+        socket.on('connect', () => {
+            socket.on("add_task", addTask);
+            socket.on("remove_task", removeTask);
+            socket.on("change_task__by_employee", taskStatus);
+        })
 
         return () => {
             socket.off("add_task", addTask);
