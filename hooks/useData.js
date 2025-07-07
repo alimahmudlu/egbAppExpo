@@ -48,21 +48,26 @@ export const DataProvider = ({ children }) => {
   }, [storeData]);
 
   const insertLoading = async (key) => {
-    const _storeDataLoading = storeData?.loading
-    _storeDataLoading?.set(key, true);
-    setStoreData(prevState => ({
-      ...prevState,
-      loading: _storeDataLoading
-    }))
-  }
+    setStoreData(prev => {
+      const newMap = new Map(prev.loading);
+      newMap.set(key, true);
+      return {
+        ...prev,
+        loading: newMap
+      };
+    });
+  };
+
   const removeLoading = async (key) => {
-    const _storeDataLoading = storeData?.loading
-    storeData?.loading?.delete(key)
-    setStoreData(prevState => ({
-      ...prevState,
-      loading: _storeDataLoading
-    }))
-  }
+    setStoreData(prev => {
+      const newMap = new Map(prev.loading);
+      newMap.delete(key);
+      return {
+        ...prev,
+        loading: newMap
+      };
+    });
+  };
 
   const clearData = async () => {
     try {
@@ -98,24 +103,25 @@ export const DataProvider = ({ children }) => {
   }
   const changeRowData = async (key, data, id, index) => {
     setStoreData(prev => {
-      const _data = prev.cache?.[key]?.data
-      const _index = _data?.findIndex(item => item.id === id);
-      if (!_data || _data.length === 0 || _index === -1) return prev;
+      const oldData = prev.cache?.[key]?.data;
+      if (!oldData) return prev;
 
-      _data[_index] = data;
+      const updatedData = oldData.map(item =>
+          item.id === id ? data : item
+      );
 
-      return  ({
+      return {
         ...prev,
         cache: {
           ...prev.cache,
           [key]: {
             ...prev.cache?.[key],
-            data: _data
+            data: updatedData
           }
         }
-      })
+      };
     });
-  }
+  };
   const removeRowData = async (key, item, iterator = undefined) => {
     setStoreData(prev => ({
       ...prev,

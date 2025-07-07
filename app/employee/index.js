@@ -7,7 +7,7 @@ import Clock from "@/assets/images/clock.svg";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {StyleSheet, Text, View} from "react-native";
+import {Alert, StyleSheet, Text, View} from "react-native";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useCallback, useEffect, useState} from "react";
@@ -102,6 +102,7 @@ export default function EmployeeDashboardScreen() {
     }, [storeData?.cache?.[`GET:/employee/project/list`]])
 
     useEffect(() => {
+        Alert.alert('checkIn change')
         setCheckIn(storeData?.checkIn)
         setCheckOut(storeData?.checkOut)
     }, [storeData?.checkIn, storeData?.checkOut])
