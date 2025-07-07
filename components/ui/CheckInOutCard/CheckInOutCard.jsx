@@ -230,25 +230,27 @@ export default function SgCheckInOutCard(props) {
                     {time ? time : '--:--:--'}
                 </Text>
             </View>
-            <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
-                {(isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web' ?
-                    <MapView
-                        style={{flex: 1, height: 125}}
-                        initialRegion={{
-                            latitude: Number(mapData?.checkIn?.latitude),
-                            longitude: Number(mapData?.checkIn?.longitude),
-                            latitudeDelta: 0.01,
-                            longitudeDelta: 0.01,
-                        }}
-                    >
-                        <Marker coordinate={{
-                            latitude: Number(mapData?.checkIn?.latitude),
-                            longitude: Number(mapData?.checkIn?.longitude)
-                        }}/>
-                    </MapView>
-                    : null
-                }
-                {(isCheckOut && status === 2 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web' ?
+            {(isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web' ?
+                <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
+                        <MapView
+                            style={{flex: 1, height: 125}}
+                            initialRegion={{
+                                latitude: Number(mapData?.checkIn?.latitude),
+                                longitude: Number(mapData?.checkIn?.longitude),
+                                latitudeDelta: 0.01,
+                                longitudeDelta: 0.01,
+                            }}
+                        >
+                            <Marker coordinate={{
+                                latitude: Number(mapData?.checkIn?.latitude),
+                                longitude: Number(mapData?.checkIn?.longitude)
+                            }}/>
+                        </MapView>
+                </View>
+                : null
+            }
+            {(isCheckOut && status === 2 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web' ?
+                <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
                     <MapView
                         style={{flex: 1, height: 125}}
                         initialRegion={{
@@ -263,9 +265,9 @@ export default function SgCheckInOutCard(props) {
                             longitude: Number(mapData?.checkOut?.longitude) || 0
                         }}/>
                     </MapView>
-                    : null
-                }
-            </View>
+                </View>
+                : null
+            }
             <View style={{paddingHorizontal: 4, paddingVertical: 4,}}>
                 {isCheckIn ?
                     <>
