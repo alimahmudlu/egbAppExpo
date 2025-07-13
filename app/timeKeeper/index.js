@@ -42,9 +42,9 @@ export default function EmployeeDashboardScreen() {
             insertData('GET:/timekeeper/activity/list', data?.data)
         };
 
-        socket.on('connect', () => {
+        // socket.on('connect', () => {
             socket.on("new_activity", handler);
-        })
+        // })
 
         return () => {
             socket.off("new_activity", handler);

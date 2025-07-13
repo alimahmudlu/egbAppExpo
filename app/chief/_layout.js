@@ -27,9 +27,9 @@ export default function WorkerTabLayout() {
             changeRowData(`GET:/chief/task/list`, data?.data, data?.data?.id)
         };
 
-        socket.on('connect', () => {
+        // socket.on('connect', () => {
             socket.on("change_task__by_employee", handler);
-        })
+        // })
 
         return () => {
             socket.off("change_task__by_employee", handler);

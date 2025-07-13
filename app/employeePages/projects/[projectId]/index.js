@@ -61,11 +61,11 @@ export default function ProjectItemScreen() {
             changeRowData(`GET:/employee/project/item/${projectId}/tasks`, data?.data, data?.data?.id)
         };
 
-        socket.on('connect', () => {
+        // socket.on('connect', () => {
             socket.on("add_task", addTask);
             socket.on("remove_task", removeTask);
             socket.on("change_task__by_employee", taskStatus);
-        })
+        // })
 
         return () => {
             socket.off("add_task", addTask);
