@@ -1,6 +1,6 @@
 import {Text, View, TouchableOpacity, StyleSheet, Pressable} from "react-native";
 import React, {useEffect, useState} from "react";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {router, useLocalSearchParams, useRouter} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
@@ -22,6 +22,7 @@ export default function ProjectItemScreen() {
     const { insertData, storeData, removeRowData, changeRowData, updateData } = useData();
     const {socket} = useSocket();
     const router = useRouter();
+    const {refreshKey} = useLocalSearchParams();
     const { projectId, taskId } = useLocalSearchParams();
     const [taskDetails, setTaskDetails] = useState({});
 
@@ -95,7 +96,7 @@ export default function ProjectItemScreen() {
         }).then().catch(err => {
             console.log(err);
         })
-    }, [projectId]);
+    }, [projectId, refreshKey]);
 
 
     useEffect(() => {
@@ -125,7 +126,7 @@ export default function ProjectItemScreen() {
     }, [socket]);
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Task detail'
             }}/>}
@@ -272,7 +273,7 @@ export default function ProjectItemScreen() {
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     );
 }
 

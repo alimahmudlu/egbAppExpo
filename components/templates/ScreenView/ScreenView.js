@@ -46,36 +46,35 @@ export default function SgTemplateScreenView(props) {
             },
         });
 
-        setRefreshing(false);
+
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1500)
     }, [pathname, params]);
 
     if (!isFocused) return null;
     return (
         <React.Fragment key={remountKey}>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <SafeScreen>
-                        <ScrollView
-                            key={refreshKey} // ⭐️ Refresh burada olur
-                            style={styles.container}
-                            refreshControl={
-                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                            }
-                            contentInsetAdjustmentBehavior="never"
-                        >
-                            {head && <View style={styles.head}>{head}</View>}
-                            <View style={[styles.body]}>
+            <SafeScreen>
+                <KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                            <ScrollView
+                                key={refreshKey} // ⭐️ Refresh burada olur
+                                style={styles.container}
+                                refreshControl={
+                                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                                }
+                                contentInsetAdjustmentBehavior="automatic"
+                            >
                                 {children}
-                            </View>
-
-                        </ScrollView>
-                        <StatusBar hidden={false} style="light" />
-                    </SafeScreen>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
+                            </ScrollView>
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
+                <StatusBar hidden={false} style="light" />
+            </SafeScreen>
         </React.Fragment>
     );
 }
@@ -84,10 +83,15 @@ export default function SgTemplateScreenView(props) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, backgroundColor: COLORS.white, flexDirection: 'column', gap: 12, boxSizing: 'border-box'
-    }, head: {
-        flex: 1
-    }, body: {
+        flex: 1,
+        backgroundColor: "transparent", // 👈 ScrollView background yox!
+    },
+    head: {
+        width: '100%',
+        flex: 0
+    },
+    body: {
+        width: '100%',
         flex: 1, padding: 16, gap: 12
     }
 });

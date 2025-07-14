@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet, ToastAndroid} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
-import {router, useFocusEffect} from "expo-router";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
+import {router, useFocusEffect, useLocalSearchParams} from "expo-router";
 import COLORS from "@/constants/colors";
 import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
@@ -24,6 +24,7 @@ export default function TaskCreateScreen() {
     const [projectsList, setProjectsList] = useState([]);
     const [employeesList, setEmployeesList] = useState([]);
     const [createTaskInfoModal, setCreateTaskInfoModal] = useState(false);
+    const {refreshKey} = useLocalSearchParams();
 
     function handleChange(e) {
         setErrors({...errors, [e.name]: ''});
@@ -46,7 +47,7 @@ export default function TaskCreateScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         if (data?.project?.id) {
@@ -104,7 +105,7 @@ export default function TaskCreateScreen() {
     };
 
 
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Create task'
             }}/>}
@@ -205,7 +206,7 @@ export default function TaskCreateScreen() {
                 description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
                 icon={<CompletedModalIcon width={202} height={168}/>}
             />
-        </SgTemplateScreenView>);
+        </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

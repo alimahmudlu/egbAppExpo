@@ -1,6 +1,6 @@
 import {Text, View, StyleSheet} from "react-native";
 import React, {useEffect, useState} from "react";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
@@ -17,6 +17,7 @@ export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
     const [projectDetails, setProjectDetails] = useState({});
     const [tasksList, setTasksList] = useState([]);
+    const {refreshKey} = useLocalSearchParams();
 
     useEffect(() => {
         request({
@@ -32,7 +33,7 @@ export default function ProjectItemScreen() {
         }).then().catch(err => {
             console.log(err);
         })
-    }, [projectId]);
+    }, [projectId, refreshKey]);
 
     useEffect(() => {
         setProjectDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}`]?.data)
@@ -44,7 +45,7 @@ export default function ProjectItemScreen() {
 
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Project details',
                 data: {
@@ -80,7 +81,7 @@ export default function ProjectItemScreen() {
                 ))}
             </View>
 
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     );
 }
 

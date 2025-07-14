@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
-import {useFocusEffect} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgPopup from "@/components/ui/Modal/Modal";
 import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import SgButton from "@/components/ui/Button/Button";
@@ -156,6 +156,7 @@ export default function EmployeeDocsScreen() {
       dateRequired: false
     }
   ])
+  const {refreshKey} = useLocalSearchParams();
 
   function toggleAddDocsModal() {
     setAddDocsModal(!addDocsModal)
@@ -206,7 +207,7 @@ export default function EmployeeDocsScreen() {
         return () => {
           console.log('doc tab lost focus');
         };
-      }, [])
+      }, [refreshKey])
   );
 
   useEffect(() => {
@@ -214,7 +215,7 @@ export default function EmployeeDocsScreen() {
   }, [storeData?.cache?.[`GET:/employee/doc/list`]])
 
   return (
-    <SgTemplateScreenView
+    <SgTemplateScreen
       head={
         <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
           <SgSectionFileHead
@@ -327,7 +328,7 @@ export default function EmployeeDocsScreen() {
         </View>
       </SgPopup>
 
-    </SgTemplateScreenView>
+    </SgTemplateScreen>
   );
 }
 

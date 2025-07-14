@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import {useLocalSearchParams} from "expo-router";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
@@ -25,6 +25,7 @@ export default function TimeKeeperUserScreen() {
         { label: '9-10', value: 2, percentage: 20 },
     ];
     const [employeeData, setEmployeeData] = useState({});
+    const {refreshKey} = useLocalSearchParams();
 
     useEffect(() => {
         request({
@@ -35,7 +36,7 @@ export default function TimeKeeperUserScreen() {
         }).catch(err => {
             console.log(err, 'err')
         })
-    }, [userId]);
+    }, [userId, refreshKey]);
 
 
     useEffect(() => {
@@ -43,7 +44,7 @@ export default function TimeKeeperUserScreen() {
     }, [storeData?.cache?.[`GET:/chief/employee/details/${userId}`]])
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'User profile'
             }} />}
@@ -112,7 +113,7 @@ export default function TimeKeeperUserScreen() {
                     time={employeeData?.work_time_avg || '00:00'}
                 />
             </View>
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     )
 }
 

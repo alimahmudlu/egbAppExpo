@@ -1,6 +1,6 @@
 import {Text, View, StyleSheet, Alert} from "react-native";
 import React, {useEffect, useState} from "react";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
@@ -19,6 +19,7 @@ export default function ProjectItemScreen() {
     const [tasksList, setTasksList] = useState([]);
     const { insertData, storeData, removeRowData, changeRowData } = useData();
     const {socket} = useSocket();
+    const {refreshKey} = useLocalSearchParams();
 
     useEffect(() => {
         request({
@@ -34,7 +35,7 @@ export default function ProjectItemScreen() {
         }).then().catch(err => {
             console.log(err);
         })
-    }, [projectId]);
+    }, [projectId, refreshKey]);
 
     useEffect(() => {
         setProjectDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}`]?.data)
@@ -75,7 +76,7 @@ export default function ProjectItemScreen() {
     }, [socket]);
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Project details',
                 data: {
@@ -111,7 +112,7 @@ export default function ProjectItemScreen() {
                 ))}
             </View>
 
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     );
 }
 

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import moment from "moment/moment";
@@ -14,7 +14,7 @@ import SgSelect from "@/components/ui/Select/Select";
 import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useData} from "@/hooks/useData";
-import {useFocusEffect} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -22,6 +22,7 @@ export default function EmployeeDocsScreen() {
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
     const {storeData} = useData();
+    const {refreshKey} = useLocalSearchParams();
 
     function getData(_filters = {}) {
         request({
@@ -54,7 +55,7 @@ export default function EmployeeDocsScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/history/list`]?.data)
@@ -62,7 +63,7 @@ export default function EmployeeDocsScreen() {
 
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
@@ -177,7 +178,7 @@ export default function EmployeeDocsScreen() {
                     </View>
                 </View>
             </SgPopup>
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     );
 }
 

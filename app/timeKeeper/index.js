@@ -1,6 +1,6 @@
 import Avatar from "@/assets/images/avatar.png";
 import SgTemplateHeader from "@/components/templates/Header/Header";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
 import {Platform, StyleSheet} from "react-native";
@@ -12,7 +12,7 @@ import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
-import {useFocusEffect} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -20,6 +20,7 @@ export default function EmployeeDashboardScreen() {
     const [employeeActivities, setEmployeeActivities] = useState([]);
     const {storeData, insertData} = useData();
     const {socket} = useSocket()
+    const {refreshKey} = useLocalSearchParams();
 
 
     useFocusEffect(useCallback(() => {
@@ -32,7 +33,7 @@ export default function EmployeeDashboardScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
 
     useEffect(() => {
@@ -56,7 +57,7 @@ export default function EmployeeDashboardScreen() {
         setEmployeeActivities(storeData?.cache?.['GET:/timekeeper/activity/list']?.data)
     }, [storeData?.cache?.['GET:/timekeeper/activity/list']])
 
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
         head={<SgTemplateHeader
             name={user?.full_name}
             role={user?.role?.name}
@@ -126,7 +127,7 @@ export default function EmployeeDashboardScreen() {
                     />))), id: 'atWork'
             },]}
         />
-    </SgTemplateScreenView>);
+    </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

@@ -1,7 +1,7 @@
 import Avatar from "@/assets/images/avatar.png";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgTemplateHeader from "@/components/templates/Header/Header";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCard from "@/components/ui/Card/Card";
 import Clock from "@/assets/images/clock.svg";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
@@ -32,6 +32,7 @@ export default function EmployeeDashboardScreen() {
     const {request} = useApi();
     const {setStoreData} = useData();
     const {socket} = useSocket();
+    const {refreshKey} = useLocalSearchParams();
 
     useFocusEffect(useCallback(() => {
         request({
@@ -62,7 +63,7 @@ export default function EmployeeDashboardScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         if (!socket) return;
@@ -110,7 +111,7 @@ export default function EmployeeDashboardScreen() {
     }, [storeData?.checkIn, storeData?.checkOut])
 
 
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
             head={<SgTemplateHeader
                 name={user?.full_name}
                 role={user?.role?.name}
@@ -196,7 +197,7 @@ export default function EmployeeDashboardScreen() {
                 <Text style={styles.rejectModal}>Reject detail</Text>
                 <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
             </SgPopup>
-        </SgTemplateScreenView>);
+        </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

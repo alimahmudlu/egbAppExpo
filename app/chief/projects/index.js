@@ -1,17 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
-import {useFocusEffect} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 
 export default function TasksScreen() {
     const {request} = useApi();
     const {storeData} = useData();
     const [projectsList, setProjectsList] = useState([]);
+    const {refreshKey} = useLocalSearchParams();
 
 
     useFocusEffect(useCallback(() => {
@@ -30,13 +31,13 @@ export default function TasksScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         setProjectsList(storeData?.cache?.[`GET:/chief/project/list`]?.data)
     }, [storeData?.cache?.[`GET:/chief/project/list`]])
 
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
         head={<View style={{paddingVertical: 16, paddingHorizontal: 16}}>
             <SgSectionFileHead
                 title="Projects"
@@ -57,7 +58,7 @@ export default function TasksScreen() {
                 href={`/chiefPages/projects/${project.id}`}
             />))}
         </View>
-    </SgTemplateScreenView>);
+    </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

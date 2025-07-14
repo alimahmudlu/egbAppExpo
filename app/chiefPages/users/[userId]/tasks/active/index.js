@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import COLORS from "@/constants/colors";
 import React, {useCallback, useEffect, useState} from "react";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
@@ -14,6 +14,7 @@ export default function TimeKeeperUserScreen() {
     const {request} = useApi();
     const [taskList, setTaskList] = useState([]);
     const {storeData} = useData();
+    const {refreshKey} = useLocalSearchParams();
 
     useFocusEffect(useCallback(() => {
         request({
@@ -28,14 +29,14 @@ export default function TimeKeeperUserScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         setTaskList(storeData?.cache?.[`GET:/chief/task/list/${userId}`]?.data)
     }, [storeData?.cache?.[`GET:/chief/task/list/${userId}`]])
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Assigned tasks'
             }}/>}
@@ -55,7 +56,7 @@ export default function TimeKeeperUserScreen() {
                     href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
                 />
             ))}
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     )
 }
 

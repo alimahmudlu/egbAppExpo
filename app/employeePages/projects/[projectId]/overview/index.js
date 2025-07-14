@@ -1,6 +1,6 @@
 import {StyleSheet} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import moment from "moment";
@@ -13,6 +13,7 @@ export default function ProjectItemScreen() {
     const {storeData} = useData();
     const {projectId} = useLocalSearchParams();
     const [projectDetails, setProjectDetails] = useState({});
+    const {refreshKey} = useLocalSearchParams();
 
 
     useFocusEffect(useCallback(() => {
@@ -24,14 +25,14 @@ export default function ProjectItemScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey, projectId]));
 
 
     useEffect(() => {
         setProjectDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}`]?.data)
     }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}`]])
 
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Project overview'
             }}/>}
@@ -53,7 +54,7 @@ export default function ProjectItemScreen() {
                 contentDescription={projectDetails?.optional_notes || '-'}
             />
 
-        </SgTemplateScreenView>);
+        </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

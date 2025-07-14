@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import COLORS from "@/constants/colors";
 import React, {useCallback, useEffect, useState} from "react";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
@@ -14,6 +14,7 @@ export default function TimeKeeperUserScreen() {
     const {storeData} = useData();
     const {userId} = useLocalSearchParams();
     const [employeeActivities, setEmployeeActivities] = useState([]);
+    const {refreshKey} = useLocalSearchParams();
 
     useFocusEffect(useCallback(() => {
         request({
@@ -25,14 +26,14 @@ export default function TimeKeeperUserScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]?.data)
     }, [storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]])
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Check Out',
             }}/>}
@@ -80,7 +81,7 @@ export default function TimeKeeperUserScreen() {
                 //     }
                 // </View>
             ))}
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     )
 }
 

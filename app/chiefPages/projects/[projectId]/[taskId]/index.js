@@ -1,6 +1,6 @@
 import {View, StyleSheet, Text} from "react-native";
 import React, {useEffect, useState} from "react";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
@@ -20,6 +20,7 @@ import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 export default function ProjectItemScreen() {
     const { request } = useApi();
     const {storeData} = useData();
+    const {refreshKey} = useLocalSearchParams();
     const { projectId, taskId } = useLocalSearchParams();
     const [taskDetails, setTaskDetails] = useState({});
 
@@ -90,7 +91,7 @@ export default function ProjectItemScreen() {
         }).then().catch(err => {
             console.log(err);
         })
-    }, [projectId]);
+    }, [projectId, refreshKey, taskId]);
 
     useEffect(() => {
         setTaskDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
@@ -100,7 +101,7 @@ export default function ProjectItemScreen() {
 
 
     return (
-        <SgTemplateScreenView
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Task detail',
             }} />}
@@ -259,7 +260,7 @@ export default function ProjectItemScreen() {
             />
 
 
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
     );
 }
 

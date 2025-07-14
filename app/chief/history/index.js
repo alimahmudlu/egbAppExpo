@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
 import SgPopup from "@/components/ui/Modal/Modal";
@@ -13,7 +13,7 @@ import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
-import {useFocusEffect} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -22,6 +22,7 @@ export default function EmployeeDocsScreen() {
     const [taskStatuses, setTaskStatus] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
+    const {refreshKey} = useLocalSearchParams();
 
     function getData(_filters = {}) {
         request({
@@ -58,7 +59,7 @@ export default function EmployeeDocsScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         setTaskStatus(storeData?.cache?.[`GET:/chief/options/task_statuses`]?.data)
@@ -68,7 +69,7 @@ export default function EmployeeDocsScreen() {
         setTaskList(storeData?.cache?.[`GET:/chief/task/list`]?.data)
     }, [storeData?.cache?.[`GET:/chief/task/list`]])
 
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
             head={<View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                 <SgSectionFileHead
                     title="History"
@@ -184,7 +185,7 @@ export default function EmployeeDocsScreen() {
                     </View>
                 </View>
             </SgPopup>
-        </SgTemplateScreenView>);
+        </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

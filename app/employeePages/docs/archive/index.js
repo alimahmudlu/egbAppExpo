@@ -1,6 +1,6 @@
 import {View, StyleSheet} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgFileCard from "@/components/sections/FileCard/FileCard";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
@@ -11,6 +11,7 @@ export default function ProjectItemScreen() {
     const [docList, setDocList] = useState([]);
     const {request} = useApi();
     const {storeData} = useData();
+    const {refreshKey} = useLocalSearchParams();
 
     useFocusEffect(useCallback(() => {
         request({
@@ -21,12 +22,12 @@ export default function ProjectItemScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         setDocList(storeData?.cache?.[`GET:/employee/doc/history`]?.data)
     }, [storeData?.cache?.[`GET:/employee/doc/history`]])
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: 'Docs archive'
             }}/>}
@@ -42,7 +43,7 @@ export default function ProjectItemScreen() {
                         migrationId={el?.type}
                     />))}
             </View>
-        </SgTemplateScreenView>);
+        </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

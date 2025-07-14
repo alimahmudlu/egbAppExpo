@@ -1,6 +1,6 @@
 import Avatar from "@/assets/images/avatar.png";
 import SgTemplateHeader from "@/components/templates/Header/Header";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
 import {StyleSheet, View} from "react-native";
@@ -12,13 +12,14 @@ import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
-import {useFocusEffect} from "expo-router";
+import {useFocusEffect, useLocalSearchParams} from "expo-router";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
     const {storeData} = useData();
     const {request} = useApi();
     const [taskList, setTaskList] = useState([]);
+    const {refreshKey} = useLocalSearchParams();
 
     useFocusEffect(useCallback(() => {
         request({
@@ -29,14 +30,14 @@ export default function EmployeeDashboardScreen() {
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, [refreshKey]));
 
     useEffect(() => {
         setTaskList(storeData?.cache?.[`GET:/chief/task/list`]?.data)
     }, [storeData?.cache?.[`GET:/chief/task/list`]])
 
 
-    return (<SgTemplateScreenView
+    return (<SgTemplateScreen
             head={<SgTemplateHeader
                 name={user?.full_name}
                 role={user?.role?.name}
@@ -121,7 +122,7 @@ export default function EmployeeDashboardScreen() {
                         </View>), id: 'complete'
                 }]}
             />
-        </SgTemplateScreenView>);
+        </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

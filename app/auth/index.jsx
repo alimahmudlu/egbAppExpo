@@ -20,7 +20,7 @@ import {useAuth} from "@/hooks/useAuth";
 import SgPopup from "@/components/ui/Modal/Modal";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 
 export default function Login() {
     const [id, setId] = useState('');
@@ -47,7 +47,7 @@ export default function Login() {
   return (
     <>
       {/*<TouchableWithoutFeedback onPress={Keyboard.dismiss}>*/}
-        <SgTemplateScreenView head={null}>
+        <SgTemplateScreen head={null}>
             <View style={[styles.container]}>
                 <View>
                     <SgSectionAuth />
@@ -89,7 +89,7 @@ export default function Login() {
                 title='Error'
                 description={errorModalData}
             />
-        </SgTemplateScreenView>
+        </SgTemplateScreen>
       {/*</TouchableWithoutFeedback>*/}
 
     </>

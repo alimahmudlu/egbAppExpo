@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image, Alert} from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
-import SgTemplateScreenView from "@/components/templates/ScreenView/ScreenView";
+import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionProfileBanner from "@/components/sections/ProfileBanner/ProfileBanner";
 import Avatar from "@/assets/images/avatar.png";
 import SgSectionMenuCard from "@/components/sections/MenuCard/MenuCard";
@@ -30,7 +30,7 @@ export default function TimeKeeperMenuScreen() {
     }
 
   return (
-    <SgTemplateScreenView
+    <SgTemplateScreen
       head={
         <View style={{padding: 16}}>
           <SgSectionProfileBanner
@@ -62,6 +62,6 @@ export default function TimeKeeperMenuScreen() {
                 </SgButton>
             }
         />
-    </SgTemplateScreenView>
+    </SgTemplateScreen>
   );
 }
