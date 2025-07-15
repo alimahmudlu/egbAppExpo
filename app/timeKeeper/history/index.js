@@ -90,6 +90,7 @@ export default function EmployeeDocsScreen() {
                                     fullData={emp}
                                     title={emp?.employee?.full_name}
                                     role={emp?.employee?.role?.name}
+                                    checkType={emp?.employee?.manual ? 'Manual' : 'Auto'}
                                     time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                     image={emp?.employee?.image}
                                     editable={false}
@@ -108,6 +109,7 @@ export default function EmployeeDocsScreen() {
                                     fullData={emp}
                                     title={emp?.employee?.full_name}
                                     role={emp?.employee?.role?.name}
+                                    checkType={emp?.employee?.manual ? 'Manual' : 'Auto'}
                                     time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                     image={emp?.employee?.image}
                                     editable={false}

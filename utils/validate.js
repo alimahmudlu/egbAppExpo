@@ -69,3 +69,11 @@ export const globalValidateWithArray = (array, constraints, key) => {
 
 	return errors[key].length === 0 ? null : { errors, toasts };
 }
+
+
+export const validate = (data, type, validationConstraints) => {
+	const constraints = validationConstraints(data, type);
+	const { errors } = globalValidate(data, constraints);
+
+	return errors || {};
+}

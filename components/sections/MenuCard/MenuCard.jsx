@@ -14,6 +14,7 @@ import SgSectionLanguageSelector from '../LanguageSelect/LanguageSelect';
 import {Link, router} from "expo-router";
 import {useLanguage} from "@/hooks/useLanguage";
 import {useNotification} from "@/hooks/useNotification";
+import {useAuth} from "@/hooks/useAuth";
 
 const Divider = () => <View style={styles.divider}/>;
 
@@ -21,6 +22,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
     const [modalVisible, setModalVisible] = useState(false);
     const {handleChangeNotificationPermission, notificationPermission} = useNotification();
     const {selectedLanguage} = useLanguage();
+  const { user } = useAuth();
 
   return (
       <View style={styles.container}>
@@ -64,12 +66,12 @@ export default function SgSectionMenuCard({extraItems = []}) {
             <Divider />
 
             {/*  */}
-            <TouchableOpacity onPress={() => router.push('/pages/vezife')} style={styles.item}>
+            <TouchableOpacity onPress={() => router.push(`/pages/responsibilities/${user?.position?.id}`)} style={styles.item}>
               <View style={styles.left}>
                 <View style={styles.iconContainer}>
                   <AppInfo width={20} height={20} style={styles.icon} />
                 </View>
-                <Text style={styles.title}>Vəzifə öhdəlikləri</Text>
+                <Text style={styles.title}>Job Responsibilities</Text>
               </View>
               <View style={styles.right}>
                 <RightIcon width={20} height={20} />

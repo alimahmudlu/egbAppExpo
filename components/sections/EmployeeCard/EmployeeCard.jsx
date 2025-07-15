@@ -28,7 +28,7 @@ import * as Linking from "expo-linking";
 
 
 export default function SgSectionEmployeeCard(props) {
-    const {fullData, image, title, role, time, editable = true, manual=false, manualData = {}, status, reason} = props;
+    const {fullData, image, title, role, time, checkType, editable = true, manual=false, manualData = {}, status, reason} = props;
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
@@ -228,18 +228,19 @@ export default function SgSectionEmployeeCard(props) {
                         {image ? (
                             // <Image source={{uri: image}} style={styles.avatar}/>
                             <Text style={styles.initials}>
-                                {title ? title.split(' ').map(n => n[0]).join('') : 'NA'}
+                                {title ? title?.split(' ')?.splice(0, 2)?.map(n => n?.[0]).join('') : 'NA'}
                             </Text>
                         ) : (
                             <Text style={styles.initials}>
-                                {title ? title.split(' ').map(n => n[0]).join('') : 'NA'}
+                                {title ? title?.split(' ')?.splice(0, 2)?.map(n => n?.[0]).join('') : 'NA'}
                             </Text>
                         )}
                     </View>
                     <View style={styles.employeeInfo}>
                         <Text style={styles.employeeName}>{title}</Text>
                         <Text style={styles.employeeRole}>{role}</Text>
-                        <Text style={styles.checkTime}>Check in: <Text style={styles.time}>{time}</Text></Text>
+                        <Text style={styles.checkTime}>Check time: <Text style={styles.time}>{time}</Text></Text>
+                        <Text style={styles.checkTime}>Check type: <Text style={styles.time}>{checkType}</Text></Text>
                     </View>
                 </Pressable>
                 {!manual ?

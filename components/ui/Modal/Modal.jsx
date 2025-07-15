@@ -15,6 +15,7 @@ export default function SgPopup({
   iconType = null,
   children = null,
   footerButton = null,
+    autoClose = true,
     fullScreen = false,
 }) {
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -58,7 +59,9 @@ export default function SgPopup({
         if (typeof originalOnPress === 'function') {
           originalOnPress();
         }
-        onClose();
+        if (autoClose) {
+          onClose();
+        }
       },
     });
   };

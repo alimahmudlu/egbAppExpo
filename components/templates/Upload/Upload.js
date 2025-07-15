@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import {View, Button, Text, Alert, ActivityIndicator, Platform, PermissionsAndroid} from 'react-native';
+import {View, Alert, ActivityIndicator} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 import {useApi} from "@/hooks/useApi";
-import moment from "moment-timezone";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
 
@@ -70,6 +70,55 @@ export default function SgTemplateUpload(props) {
         }
     };
 
+    const pickAndUploadImage = async () => {
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images, // Sadəcə şəkil
+            allowsEditing: false,
+            quality: 1,
+        });
+        if (result.canceled || !result.assets || result.assets.length === 0) return;
+
+        const file = result?.assets?.[0];
+
+        console.log(file, 'file');
+
+        try {
+            setUploading(true);
+
+            const formData = new FormData();
+            formData.append('file', {
+                uri: file.uri,
+                name: file.name || file.fileName,
+                type: file.mimeType || 'application/octet-stream',
+            });
+
+            const res = await fetch('https://alimahmudlu-egb.duckdns.org/api/upload/file', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await res.json();
+
+            setUrl(data?.data);
+            setSelectedFiles(prev => (
+                [...prev,{
+                    loading: false,
+                    id: data?.data?.id,
+                    name: data?.data?.filename,
+                    type: data?.data?.mimeType,
+                    date: data?.data?.uploaded_at,
+                    filepath: data?.data?.filepath,
+                }]
+            ))
+        } catch (err) {
+            console.error(err);
+            Alert.alert('Xəta', 'Yükləmə zamanı xəta baş verdi');
+        } finally {
+            setUploading(false);
+        }
+    };
+
     return (
         <View style={{ flex: 1, justifyContent: 'center', marginBottom: 16 }}>
             {uploading ?
@@ -78,12 +127,20 @@ export default function SgTemplateUpload(props) {
                 (!multiple && selectedFiles.length > 0) ?
                     null
                     :
-                    <SgButton onPress={pickAndUpload}
-                              bgColor={COLORS.gray_50}
-                              color={COLORS.gray_600}
-                    >
-                        Add file +
-                    </SgButton>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 12 }}>
+                        <SgButton onPress={pickAndUpload}
+                                  bgColor={COLORS.gray_50}
+                                  color={COLORS.gray_600}
+                        >
+                            Add file
+                        </SgButton>
+                        <SgButton onPress={pickAndUploadImage}
+                                  bgColor={COLORS.gray_50}
+                                  color={COLORS.gray_600}
+                        >
+                            Add image
+                        </SgButton>
+                    </View>
             }
         </View>
     );

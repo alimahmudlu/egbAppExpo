@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
@@ -8,17 +8,16 @@ import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgPopup from "@/components/ui/Modal/Modal";
-import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
 import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 import moment from "moment";
 import SgSelect from "@/components/ui/Select/Select";
-import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import {useAuth} from "@/hooks/useAuth";
-import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import validationConstraints from "@/app/chiefPages/create-task/constants";
+import {validate} from "@/utils/validate";
 
 export default function EmployeeDocsScreen() {
   const [docList, setDocList] = useState([]);
@@ -160,30 +159,44 @@ export default function EmployeeDocsScreen() {
 
   function toggleAddDocsModal() {
     setAddDocsModal(!addDocsModal)
+    setSelectedFiles([])
+    setData({})
+    setErrors({})
   }
+
+
+
   function handleSubmitDoc() {
-    request({
-      url: '/employee/doc/add',
-      method: 'post',
-      data: {
-        ...data,
-        file: selectedFiles[0]?.id,
-        application_id: user?.application_id
-      }
-    }).then(res => {
-      setSelectedFiles([])
-      setData({})
-      setErrors({})
+    let errors = validate({...data, fileTypes: fileTypes, file: selectedFiles?.[0]?.id}, 'addDocs', validationConstraints);
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      ToastAndroid.show("error var", ToastAndroid.SHORT)
+    } else {
       request({
-        url: '/employee/doc/list',
-        method: 'get',
-      }).then().catch(err => {
+        url: '/employee/doc/add',
+        method: 'post',
+        data: {
+          ...data,
+          file: selectedFiles[0]?.id,
+          application_id: user?.application_id
+        }
+      }).then(res => {
+        toggleAddDocsModal()
+        // setSelectedFiles([])
+        // setData({})
+        // setErrors({})
+        request({
+          url: '/employee/doc/list',
+          method: 'get',
+        }).then().catch(err => {
+          console.log(err);
+        })
+        console.log(res);
+      }).catch(err => {
         console.log(err);
       })
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    })
+    }
   }
 
 
@@ -250,6 +263,7 @@ export default function EmployeeDocsScreen() {
 
 
       <SgPopup
+          autoClose={false}
           visible={addDocsModal}
           onClose={toggleAddDocsModal}
           title="Add Document"

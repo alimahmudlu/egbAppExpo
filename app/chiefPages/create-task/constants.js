@@ -20,12 +20,42 @@ const CreateTaskValidation = {
         presence: true,
     },
 }
+const AddDocsValidation = {
+    document: {
+        presence: true
+    },
+    file: {
+        presence: true
+    },
+    date_of_issue: {
+        custom: function (date_of_issue, row) {
+            if (!row.document ||  row?.fileTypes.find(el => el?.key === row?.document)?.dateRequired && !date_of_issue) {
+                return { errors: { date_of_issue: 'blank' } }
+            } else {
+                return null;
+            }
+        }
+    },
+    date_of_expiry: {
+        custom: function (key, row) {
+            if (!row.document ||  row?.fileTypes.find(el => el?.key === row?.document)?.dateRequired && !date_of_expiry) {
+                return { errors: { date_of_expiry: 'blank' } }
+            } else {
+                return null;
+            }
+        }
+    }
+}
 
 
-export const validationConstraints = (key, data) => {
+export const validationConstraints = (data, key) => {
     switch (key) {
         case 'chiefCreateTask':
             return CreateTaskValidation;
+            break;
+
+        case 'addDocs':
+            return AddDocsValidation;
             break;
 
         default:

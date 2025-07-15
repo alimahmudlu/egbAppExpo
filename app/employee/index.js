@@ -115,6 +115,7 @@ export default function EmployeeDashboardScreen() {
             head={<SgTemplateHeader
                 name={user?.full_name}
                 role={user?.role?.name}
+                position={user?.position}
                 rating="3.12"
                 profileImage={''}
             />}
