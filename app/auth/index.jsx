@@ -21,12 +21,14 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
+import {useTranslation} from "react-i18next";
 
 export default function Login() {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [errorModal, setErrorModal] = useState(false);
     const [errorModalData, setErrorModalData] = useState("");
+    const {t} = useTranslation();
 
     function toggleErrorModal() {
         setErrorModal(!errorModal);
@@ -53,20 +55,20 @@ export default function Login() {
                     <SgSectionAuth />
                     <SgForm>
                         <SgInput
-                            label="Your ID"
-                            placeholder="Enter ID..."
+                            label={t('yourId')}
+                            placeholder={t('enterId')}
                             type="text"
                             value={id}
                             onChangeText={(e) => setId(e.value)}
                         />
                         <SgInput
-                            label="Password"
-                            placeholder="Enter password..."
+                            label={t('password')}
+                            placeholder={t('enterPassword')}
                             type="password"
                             value={password}
                             onChangeText={(e) => setPassword(e.value)}
                         />
-                        <SgCheckbox label="Remember me" />
+                        {/*<SgCheckbox label="Remember me" />*/}
                     </SgForm>
                 </View>
                 <View style={styles.buttonLayout}>
@@ -76,7 +78,7 @@ export default function Login() {
                         bgColor = {COLORS.primary}
                         color= {COLORS.white}
                     >
-                        Login
+                        {t('login')}
                     </SgButton>
                 </View>
             </View>

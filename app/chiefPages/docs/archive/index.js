@@ -6,12 +6,14 @@ import SgFileCard from "@/components/sections/FileCard/FileCard";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function ProjectItemScreen() {
     const [docList, setDocList] = useState([]);
     const {request} = useApi();
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     useFocusEffect(useCallback(() => {
       request({
@@ -31,7 +33,7 @@ export default function ProjectItemScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Docs archive'
+                header: t('docsArchive')
             }} />}
         >
             <View style={{gap: 12}}>

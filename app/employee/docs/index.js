@@ -18,12 +18,14 @@ import {useAuth} from "@/hooks/useAuth";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import validationConstraints from "@/app/chiefPages/create-task/constants";
 import {validate} from "@/utils/validate";
+import {useTranslation} from "react-i18next";
 
 export default function EmployeeDocsScreen() {
   const [docList, setDocList] = useState([]);
   const {request} = useApi();
   const {user} = useAuth();
   const {storeData} = useData();
+  const {t} = useTranslation();
   const [addDocsModal, setAddDocsModal] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState([])
   const [data, setData] = useState({})
@@ -232,8 +234,8 @@ export default function EmployeeDocsScreen() {
       head={
         <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
           <SgSectionFileHead
-              title="My Docs"
-              description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+              title={t('myDocs')}
+              description={t('myDocs__description')}
               icon="filter"
               href={`/employeePages/docs/archive`}
           />
@@ -241,8 +243,8 @@ export default function EmployeeDocsScreen() {
       }
     >
       <SgNoticeCard
-          title="Active Docs"
-          buttonText="Add doc +"
+          title={t('activeDocs')}
+          buttonText={t('addDocument')}
           bgButton="success"
           onClick={toggleAddDocsModal}
       />
@@ -266,8 +268,8 @@ export default function EmployeeDocsScreen() {
           autoClose={false}
           visible={addDocsModal}
           onClose={toggleAddDocsModal}
-          title="Add Document"
-          description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+          title={t('addDocument')}
+          description={t('addDocument__description')}
           footerButton={
             <SgButton
                 bgColor={COLORS.brand_600}
@@ -275,16 +277,16 @@ export default function EmployeeDocsScreen() {
                 onPress={handleSubmitDoc}
                 disabled={selectedFiles.length === 0}
             >
-              Add Doc
+              {t('addDocument')}
             </SgButton>
           }
       >
         <View style={{gap: 16}}>
           <View>
             <SgSelect
-                label="Document Type"
-                placeholder="Select document type..."
-                modalTitle="Select document type"
+                label={t('documentType')}
+                placeholder={t('selectDocumentType')}
+                modalTitle={t('selectDocumentType')}
                 value={data?.document}
                 name='document'
                 isInvalid={errors?.document}
@@ -298,8 +300,8 @@ export default function EmployeeDocsScreen() {
               <>
                 <View>
                   <SgDatePicker
-                      label="Date of Issue"
-                      placeholder="Enter Date..."
+                      label={t('dateOfIssue')}
+                      placeholder={t('enterDate')}
                       type="date"
                       value={data?.date_of_issue}
                       name='date_of_issue'
@@ -309,8 +311,8 @@ export default function EmployeeDocsScreen() {
                 </View>
                 <View>
                   <SgDatePicker
-                      label="Date of Expired"
-                      placeholder="Enter Date..."
+                      label={t('dateOfExpiry')}
+                      placeholder={t('enterDate')}
                       type="date"
                       value={data?.date_of_expiry}
                       name='date_of_expiry'

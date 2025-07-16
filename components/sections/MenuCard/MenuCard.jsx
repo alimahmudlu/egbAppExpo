@@ -11,10 +11,11 @@ import COLORS from '@/constants/colors';
 import styles from '@/components/sections/MenuCard/MenuCard.styles';
 import SgPopup from '@/components/ui/Modal/Modal';
 import SgSectionLanguageSelector from '../LanguageSelect/LanguageSelect';
-import {Link, router} from "expo-router";
+import {router} from "expo-router";
 import {useLanguage} from "@/hooks/useLanguage";
 import {useNotification} from "@/hooks/useNotification";
 import {useAuth} from "@/hooks/useAuth";
+import {useTranslation} from "react-i18next";
 
 const Divider = () => <View style={styles.divider}/>;
 
@@ -23,6 +24,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
     const {handleChangeNotificationPermission, notificationPermission} = useNotification();
     const {selectedLanguage} = useLanguage();
   const { user } = useAuth();
+  const {t} = useTranslation();
 
   return (
       <View style={styles.container}>
@@ -36,7 +38,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
                 <View style={styles.iconContainer}>
                   <Lang width={20} height={20} style={styles.icon} />
                 </View>
-                <Text style={styles.title}>Languages</Text>
+                <Text style={styles.title}>{t('languages')}</Text>
               </View>
               <View style={styles.right}>
                 {(selectedLanguage || {}).icon}
@@ -52,7 +54,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
                 <View style={styles.iconContainer}>
                   <Notify width={20} height={20} style={styles.icon} />
                 </View>
-                <Text style={styles.title}>Notifications</Text>
+                <Text style={styles.title}>{t('notifications')}</Text>
               </View>
               <Switch
                   value={notificationPermission?.permission}
@@ -71,7 +73,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
                 <View style={styles.iconContainer}>
                   <AppInfo width={20} height={20} style={styles.icon} />
                 </View>
-                <Text style={styles.title}>Job Responsibilities</Text>
+                <Text style={styles.title}>{t('duties')}</Text>
               </View>
               <View style={styles.right}>
                 <RightIcon width={20} height={20} />
@@ -85,7 +87,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
                 <View style={styles.iconContainer}>
                   <AppInfo width={20} height={20} style={styles.icon} />
                 </View>
-                <Text style={styles.title}>App Info</Text>
+                <Text style={styles.title}>{t('appInfo')}</Text>
               </View>
               <View style={styles.right}>
                 <RightIcon width={20} height={20} />
@@ -99,7 +101,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
                 <View style={styles.iconContainer}>
                   <Terms width={20} height={20} style={styles.icon} />
                 </View>
-                <Text style={styles.title}>Terms & Conditions</Text>
+                <Text style={styles.title}>{t('termsConditions')}</Text>
               </View>
               <View style={styles.right}>
                 <RightIcon width={20} height={20} />
@@ -113,7 +115,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
                 <View style={styles.iconContainer}>
                   <Privacy width={20} height={20} style={styles.icon} />
                 </View>
-                <Text style={styles.title}>Privacy Policy</Text>
+                <Text style={styles.title}>{t('privacyPolicy')}</Text>
               </View>
               <View style={styles.right}>
                 <RightIcon width={20} height={20} />
@@ -145,7 +147,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
         <SgPopup
             visible={modalVisible}
             onClose={() => setModalVisible(false)}
-            title="Languages"
+            title={t('languages')}
             /*footerButton={
               <SgButton
                 onPress={() => setModalVisible(false)}

@@ -11,6 +11,7 @@ import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
 import COLORS from "@/constants/colors";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useTranslation} from "react-i18next";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
@@ -20,6 +21,7 @@ export default function ProjectItemScreen() {
     const { insertData, storeData, removeRowData, changeRowData } = useData();
     const {socket} = useSocket();
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     useEffect(() => {
         request({
@@ -78,20 +80,20 @@ export default function ProjectItemScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Project details',
+                header: t('projectDetails'),
                 data: {
-                    header: 'Overview',
+                    header: t('overview'),
                     href: `/employeePages/projects/${projectId}/overview`
                 }
             }} />}
         >
             <SgSectionProjectNameCard
-                title='Project name'
+                title={t('projectName')}
                 description={projectDetails?.name}
             />
 
             <SgCard>
-                <Text style={styles.title}>Assigned tasks</Text>
+                <Text style={styles.title}>{t('assignedTasks')}</Text>
             </SgCard>
 
             <View style={{gap: 16}}>

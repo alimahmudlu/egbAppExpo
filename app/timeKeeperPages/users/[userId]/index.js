@@ -12,6 +12,7 @@ import React, {useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
@@ -27,6 +28,7 @@ export default function TimeKeeperUserScreen() {
     const {refreshKey} = useLocalSearchParams();
 
     const [employeeData, setEmployeeData] = useState({});
+    const {t} = useTranslation();
 
     useEffect(() => {
         request({
@@ -45,7 +47,7 @@ export default function TimeKeeperUserScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'User detail'
+                header: t('userDetail')
             }} />}
         >
             <View>
@@ -62,14 +64,14 @@ export default function TimeKeeperUserScreen() {
                 <SgCheckInOutGroup>
                     <SgSectionInfoCard
                         icon="log-in-outline"
-                        title="Total check in"
+                        title={t('totalCheckIn')}
                         count={employeeData?.check_in_count || 0}
                         type="checkin"
                         href={`/timeKeeperPages/users/${userId}/history/checkIn`}
                     />
                     <SgSectionInfoCard
                         icon="log-out-outline"
-                        title="Total check out"
+                        title={t('totalCheckOut')}
                         count={employeeData?.check_out_count || 0}
                         type="checkout"
                         href={`/timeKeeperPages/users/${userId}/history/checkOut`}
@@ -97,7 +99,7 @@ export default function TimeKeeperUserScreen() {
             {/*</View>*/}
             <View>
                 <SgCard
-                    title="Average Work Hours"
+                    title={t("averageWorkHours")}
                     time={employeeData?.work_time_avg || '00:00'}
                 />
             </View>

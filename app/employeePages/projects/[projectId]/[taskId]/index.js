@@ -16,12 +16,14 @@ import {useData} from "@/hooks/useData";
 import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useSocket} from "@/hooks/useSocket";
+import {useTranslation} from "react-i18next";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
     const { insertData, storeData, removeRowData, changeRowData, updateData } = useData();
     const {socket} = useSocket();
     const router = useRouter();
+    const { t } = useTranslation();
     const {refreshKey} = useLocalSearchParams();
     const { projectId, taskId } = useLocalSearchParams();
     const [taskDetails, setTaskDetails] = useState({});
@@ -54,7 +56,7 @@ export default function ProjectItemScreen() {
                 ...taskDetails,
                 status: {
                     id: 4,
-                    name: 'check complete'
+                    name: t('checkComplete')
                 },
                 files: []
             })
@@ -81,7 +83,7 @@ export default function ProjectItemScreen() {
         }).then(res => {
             setTaskDetails({...taskDetails, status: {
                                 id: 3,
-                                name: 'Check progress'
+                                name: t('checkProgress')
                                 }})
             toggleCheckTaskInfoModal();
         }).catch(err => {
@@ -128,7 +130,7 @@ export default function ProjectItemScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Task detail'
+                header: t('Task details'),
             }}/>}
         >
             <SgCard
@@ -142,22 +144,22 @@ export default function ProjectItemScreen() {
                 />
             </SgCard>
             <SgCard
-                contentTitle='Deadline date'
+                contentTitle={t('DeadlineDate')}
                 contentDescription={taskDetails?.deadline ? moment(taskDetails?.deadline).format('DD.MM.YYYY / HH:mm') : null}
             />
             <SgCard
-                contentTitle='Points to be earned'
+                contentTitle={t('pointsToBeEarned')}
                 contentDescription={taskDetails?.points}
             />
 
             <SgCard
-                contentTitle='Task'
+                contentTitle={t('task')}
                 contentDescription={taskDetails?.name}
                 padding={false}
                 bgColor={null}
             />
             <SgCard
-                contentTitle='Description'
+                contentTitle={t('description')}
                 contentDescription={taskDetails?.description}
                 padding={false}
                 bgColor={null}
@@ -192,14 +194,14 @@ export default function ProjectItemScreen() {
                         color='#B54708'
                         onPress={toggleCheckTaskModal}
                     >
-                        Check request
+                        {t('checkRequest')}
                     </SgButton>
                     <SgButton
                         bgColor='#D2F5EC'
                         color='#1A554E'
                         onPress={toggleCompleteTaskModal}
                     >
-                        Complete task
+                        {t('completeTask')}
                     </SgButton>
                 </View>
                 : null
@@ -208,8 +210,8 @@ export default function ProjectItemScreen() {
             <SgPopup
                 visible={completeTaskModal}
                 onClose={toggleCompleteTaskModal}
-                title="Complete task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('completeTask')}
+                description={t('completeTask__description')}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -218,7 +220,7 @@ export default function ProjectItemScreen() {
                         onPress={handleCompleteTask}
                         disabled={selectedFiles.length === 0}
                     >
-                        Yes, Complete
+                        {t('yesComplete')}
                     </SgButton>
                 }
             >
@@ -242,8 +244,8 @@ export default function ProjectItemScreen() {
                 visible={completeTaskInfoModal}
                 onClose={toggleCompleteTaskInfoModal}
                 fullScreen={true}
-                title="Task complete request sended"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskCompleteRequestSended')}
+                description={t('taskCompleteRequestSended__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 
@@ -251,8 +253,8 @@ export default function ProjectItemScreen() {
             <SgPopup
                 visible={checkTaskModal}
                 onClose={toggleCheckTaskModal}
-                title="Check request task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t("checkRequestTask")}
+                description={t("checkRequestTask__description")}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -260,7 +262,7 @@ export default function ProjectItemScreen() {
                         color={COLORS.white}
                         onPress={handleCheckTask}
                     >
-                        Yes, Check
+                        {t('yesCheck')}
                     </SgButton>
                 }
             />
@@ -268,8 +270,8 @@ export default function ProjectItemScreen() {
                 visible={checkTaskInfoModal}
                 onClose={toggleCheckTaskInfoModal}
                 fullScreen={true}
-                title="Task complete request sended"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskCompleteRequestSended')}
+                description={t('taskCompleteRequestSended__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 

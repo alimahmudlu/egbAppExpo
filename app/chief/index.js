@@ -13,6 +13,7 @@ import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useTranslation} from "react-i18next";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -20,6 +21,7 @@ export default function EmployeeDashboardScreen() {
     const {request} = useApi();
     const [taskList, setTaskList] = useState([]);
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     useFocusEffect(useCallback(() => {
         request({
@@ -47,30 +49,30 @@ export default function EmployeeDashboardScreen() {
             <SgCheckInOutGroup>
                 <SgSectionInfoCard
                     icon="log-in-outline"
-                    title="Active tasks"
+                    title={t('activeTasks')}
                     count={taskList?.length - taskList?.filter(el => el?.status?.id === 5)?.length}
                     type="activeTasks"
                 />
                 <SgSectionInfoCard
                     icon="log-out-outline"
-                    title="Completed tasks"
+                    title={t('completedTasks')}
                     count={taskList?.filter(el => el?.status?.id === 5)?.length}
                     type="completedTasks"
                 />
             </SgCheckInOutGroup>
 
             <SgNoticeCard
-                title="Active tasks"
-                buttonText="Add task +"
+                title={t('activeTasks')}
+                buttonText={t('addTask')}
                 bgButton="success"
                 href="/chiefPages/create-task"
             />
 
             <SgFilterTab
                 defaultTabId='all'
-                tabs={[{label: 'All tasks', id: 'all', count: taskList?.length}, {
-                    label: 'Check', id: 'check', count: taskList?.filter(el => [3, 4].includes(el?.status?.id))?.length
-                }, {label: 'Complete', id: 'complete', count: taskList?.filter(el => el?.status?.id === 5)?.length},]}
+                tabs={[{label: t('allTasks'), id: 'all', count: taskList?.length}, {
+                    label: t('check'), id: 'check', count: taskList?.filter(el => [3, 4].includes(el?.status?.id))?.length
+                }, {label: t('complete'), id: 'complete', count: taskList?.filter(el => el?.status?.id === 5)?.length},]}
                 tabContent={[{
                     element: (<View style={{gap: 16}}>
                             {taskList?.map((el, index) => (<SgSectionTaskCard

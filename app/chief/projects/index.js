@@ -7,12 +7,14 @@ import SgSectionProjectListItem from "@/components/sections/ProjectListItem/Proj
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useTranslation} from "react-i18next";
 
 export default function TasksScreen() {
     const {request} = useApi();
     const {storeData} = useData();
     const [projectsList, setProjectsList] = useState([]);
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
 
     useFocusEffect(useCallback(() => {
@@ -40,13 +42,13 @@ export default function TasksScreen() {
     return (<SgTemplateScreen
         head={<View style={{paddingVertical: 16, paddingHorizontal: 16}}>
             <SgSectionFileHead
-                title="Projects"
-                description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+                title={t('projects')}
+                description={t('projects__description')}
             />
         </View>}
     >
         <SgCard>
-            <Text style={styles.title}>Added Projects</Text>
+            <Text style={styles.title}>{t('addedProjects')}</Text>
         </SgCard>
 
         <View style={{gap: 12}}>

@@ -16,12 +16,14 @@ import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 import SgPopup from "@/components/ui/Modal/Modal";
 import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
+import {useTranslation} from "react-i18next";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const { projectId, taskId } = useLocalSearchParams();
+    const { t } = useTranslation();
     const [taskDetails, setTaskDetails] = useState({});
 
     const [checkedTaskModal, setCheckedTaskModal] = useState(false);
@@ -103,7 +105,7 @@ export default function ProjectItemScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Task detail',
+                header: t('taskDetail'),
             }} />}
         >
             <SgSectionUserInfo
@@ -116,37 +118,37 @@ export default function ProjectItemScreen() {
             />
             {taskDetails?.status?.id === 3 ?
                 <SgSectionStatusInfo
-                    title="Progress"
-                    status="Check Progress"
+                    title={t("progress")}
+                    status={t("checkProgress")}
                     statusType="warning"
                 />
                 : null
             }
             {taskDetails?.status?.id === 4 ?
                 <SgSectionStatusInfo
-                    title="Progress"
-                    status="Check complete"
+                    title={t("progress")}
+                    status={t("checkComplete")}
                     statusType="success"
                 />
                 : null
             }
             <SgCard
-                contentTitle='Deadline date'
+                contentTitle={t('deadlineDate')}
                 contentDescription={taskDetails?.deadline ? moment(taskDetails?.deadline).format('DD.MM.YYYY / hh:mm A') : ''}
             />
             <SgCard
-                contentTitle='Points to be earned'
+                contentTitle={t('pointsToBeEarned')}
                 contentDescription={taskDetails?.points}
             />
 
             <SgCard
-                contentTitle='Task'
+                contentTitle={t('task')}
                 contentDescription={taskDetails?.name}
                 padding={false}
                 bgColor={null}
             />
             <SgCard
-                contentTitle='Description'
+                contentTitle={t('description')}
                 contentDescription={taskDetails?.description}
                 padding={false}
                 bgColor={null}
@@ -155,7 +157,7 @@ export default function ProjectItemScreen() {
             {(taskDetails?.files || []).length > 0 ?
                 <>
                     <SgCard>
-                        <Text style={styles.title}>Added Files</Text>
+                        <Text style={styles.title}>{t('addedFiles')}</Text>
                     </SgCard>
                     {(taskDetails?.files || []).map((el, index) => (
                         <SgSectionAddFile
@@ -182,7 +184,7 @@ export default function ProjectItemScreen() {
                         color= {COLORS.white}
                         onPress={toggleCheckedTaskModal}
                     >
-                        Checked
+                        {t('checked')}
                     </SgButton>
                 </View>
                 : null
@@ -197,13 +199,13 @@ export default function ProjectItemScreen() {
                         bgColor = {COLORS.error_50}
                         color= {COLORS.error_700}
                     >
-                        Reject
+                        {t('rejected')}
                     </SgButton>
                     <SgButton
                         bgColor = {COLORS.primary}
                         color= {COLORS.white}
                     >
-                        Complete task
+                        {t('completeTask')}
                     </SgButton>
                 </View>
                 : null
@@ -212,8 +214,8 @@ export default function ProjectItemScreen() {
             <SgPopup
                 visible={checkedTaskModal}
                 onClose={toggleCheckedTaskModal}
-                title="Checked task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('checkedTask')}
+                description={t('checkedTask__description')}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -221,7 +223,7 @@ export default function ProjectItemScreen() {
                         color={COLORS.white}
                         onPress={handleCheckedTask}
                     >
-                        Yes, Checked
+                        {t('yesChecked')}
                     </SgButton>
                 }
             />
@@ -229,16 +231,16 @@ export default function ProjectItemScreen() {
                 visible={checkedTaskInfoModal}
                 onClose={toggleCheckedTaskInfoModal}
                 fullScreen={true}
-                title="Task checked"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskChecked')}
+                description={t('taskChecked__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 
             <SgPopup
                 visible={completedTaskModal}
                 onClose={toggleCompletedTaskModal}
-                title="Completed task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('completedTask')}
+                description={t('completedTask__description')}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -246,7 +248,7 @@ export default function ProjectItemScreen() {
                         color={COLORS.white}
                         onPress={handleCompletedTask}
                     >
-                        Yes, Completed
+                        {t('yesCompleted')}
                     </SgButton>
                 }
             />
@@ -254,8 +256,8 @@ export default function ProjectItemScreen() {
                 visible={completedTaskInfoModal}
                 onClose={toggleCompletedTaskInfoModal}
                 fullScreen={true}
-                title="Task Completed"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskCompleted')}
+                description={t('taskCompleted__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 

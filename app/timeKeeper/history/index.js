@@ -15,6 +15,7 @@ import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useTranslation} from "react-i18next";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -23,6 +24,7 @@ export default function EmployeeDocsScreen() {
     const [filterModal, setFilterModal] = useState(false)
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     function getData(_filters = {}) {
         request({
@@ -67,8 +69,8 @@ export default function EmployeeDocsScreen() {
             head={
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
-                        title="History"
-                        description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+                        title={t("history")}
+                        description={t('history__description')}
                         icon="filter"
                         onPress={toggleFilterModal}
                     />
@@ -78,8 +80,8 @@ export default function EmployeeDocsScreen() {
             <SgFilterTab
                 defaultTabId='checkIn'
                 tabs={[
-                    {label: 'Check in', id: 'checkIn'},
-                    {label: 'Check out', id: 'checkOut'},
+                    {label: t('checkIn'), id: 'checkIn'},
+                    {label: t('checkOut'), id: 'checkOut'},
                 ]}
                 tabContent={[
                     {
@@ -90,7 +92,7 @@ export default function EmployeeDocsScreen() {
                                     fullData={emp}
                                     title={emp?.employee?.full_name}
                                     role={emp?.employee?.role?.name}
-                                    checkType={emp?.employee?.manual ? 'Manual' : 'Auto'}
+                                    checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                                     time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                     image={emp?.employee?.image}
                                     editable={false}
@@ -109,7 +111,7 @@ export default function EmployeeDocsScreen() {
                                     fullData={emp}
                                     title={emp?.employee?.full_name}
                                     role={emp?.employee?.role?.name}
-                                    checkType={emp?.employee?.manual ? 'Manual' : 'Auto'}
+                                    checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                                     time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                     image={emp?.employee?.image}
                                     editable={false}
@@ -132,7 +134,7 @@ export default function EmployeeDocsScreen() {
                         bgColor={COLORS.primary}
                         color={COLORS.white}
                     >
-                        Accept
+                        {t('accept')}
                     </SgButton>
                 }
             >
@@ -153,7 +155,7 @@ export default function EmployeeDocsScreen() {
                             }}
 
                         >
-                            Clear filters
+                            {t('clearFilters')}
                             <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
                         </SgButton>
                     </View>
@@ -161,7 +163,7 @@ export default function EmployeeDocsScreen() {
                     <View style={{gap: 16}}>
                         <View style={{flex: 1}}>
                             <SgDatePicker
-                                label="Start date"
+                                label={t('startDate')}
                                 placeholder="dd/mm/yyyy - hh/mm"
                                 value={filters?.start_date}
                                 name='start_date'
@@ -170,7 +172,7 @@ export default function EmployeeDocsScreen() {
                         </View>
                         <View style={{flex: 1}}>
                             <SgDatePicker
-                                label="End date"
+                                label={t('endDate')}
                                 placeholder="dd/mm/yyyy - hh/mm"
                                 value={filters?.end_date}
                                 name='end_date'

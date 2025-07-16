@@ -14,10 +14,11 @@ import moment from "moment-timezone";
 import MapView, {Marker} from 'react-native-maps';
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function SgCheckInOutCard(props) {
     const {request} = useApi();
-    const {setStoreData, storeData} = useData();
+    const {setStoreData} = useData();
     const {
         type = 'checkin',
         title,
@@ -29,9 +30,6 @@ export default function SgCheckInOutCard(props) {
         reviewer
     } = props;
 
-    if (type !== 'checkin' && type !== 'checkout') {
-        return null;
-    }
 
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
     const [checkInModal, setCheckInModal] = useState(false)
@@ -43,6 +41,7 @@ export default function SgCheckInOutCard(props) {
     const isCheckOut = type === 'checkout';
     const backgroundColor = isCheckIn ? COLORS.brand_50 : COLORS.error_100;
     const Icon = isCheckIn ? CheckIn : CheckOut;
+    const {t} = useTranslation()
 
     function toggleCheckInModal() {
         if (checkInModal) {
@@ -215,6 +214,10 @@ export default function SgCheckInOutCard(props) {
         }
     }
 
+    if (type !== 'checkin' && type !== 'checkout') {
+        return null;
+    }
+
     return (
         <View style={[styles.card, {backgroundColor}]}>
             <View style={styles.content}>
@@ -273,7 +276,7 @@ export default function SgCheckInOutCard(props) {
                     <>
                         {!status ?
                             <SgButton color={COLORS.brand_600} onPress={handleCheckInRequest}>
-                                Check In
+                                {t('checkIn')}
                             </SgButton>
                             : null
                         }
@@ -283,7 +286,7 @@ export default function SgCheckInOutCard(props) {
                                 color={COLORS.white}
                                 bgColor={COLORS?.brand_600}
                             >
-                                Waiting...
+                                {t('waiting')}...
                             </SgButton>
                             : null
                         }
@@ -292,7 +295,7 @@ export default function SgCheckInOutCard(props) {
                                 color={COLORS.brand_600}
                                 onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}
                             >
-                                Open on map
+                                {t('openOnMap')}
                             </SgButton>
                             : null
                         }
@@ -303,7 +306,7 @@ export default function SgCheckInOutCard(props) {
                     <>
                         {!status || status === 3 ?
                             <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest}>
-                                Check Out
+                                {t('checkOut')}
                             </SgButton>
                             : null
                         }
@@ -313,7 +316,7 @@ export default function SgCheckInOutCard(props) {
                                 color={COLORS.white}
                                 bgColor={COLORS?.error_600}
                             >
-                                Waiting...
+                                {t('waiting')}...
                             </SgButton>
                             : null
                         }
@@ -322,7 +325,7 @@ export default function SgCheckInOutCard(props) {
                                 color={COLORS.error_700}
                                 onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}
                             >
-                                Open on map
+                                {t('openOnMap')}
                             </SgButton>
                             : null
                         }
@@ -334,8 +337,8 @@ export default function SgCheckInOutCard(props) {
             <SgPopup
                 visible={checkInModal}
                 onClose={toggleCheckInModal}
-                title="Check In"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('checkIn')}
+                description={t('checkIn__description')}
                 icon={<CheckInModalIcon width={56} height={56}/>}
                 footerButton={
                     <SgButton
@@ -344,7 +347,7 @@ export default function SgCheckInOutCard(props) {
                         bgColor={COLORS.primary}
                         color={COLORS.white}
                     >
-                        Check in
+                        {t('checkIn')}
                     </SgButton>
                 }
             />
@@ -352,8 +355,8 @@ export default function SgCheckInOutCard(props) {
             <SgPopup
                 visible={openSettingsModal}
                 onClose={toggleOpenSettingsModal}
-                title="Permission Error"
-                description="Location permission error. You have not given permission to access your locations. If you want to turn it on, go to settings. Open settings??"
+                title={t('permissionError')}
+                description= {t('permissionError__description')}
                 // icon={<CheckInModalIcon width={56} height={56}/>}
                 footerButton={
                     <SgButton
@@ -361,7 +364,7 @@ export default function SgCheckInOutCard(props) {
                         bgColor={COLORS.primary}
                         color={COLORS.white}
                     >
-                        Open
+                        {t('open')}
                     </SgButton>
                 }
             />
@@ -369,8 +372,8 @@ export default function SgCheckInOutCard(props) {
             <SgPopup
                 visible={checkOutModal}
                 onClose={toggleCheckOutModal}
-                title="Check Out"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('checkOut')}
+                description={t('checkOut__description')}
                 icon={<CheckOutModalIcon width={56} height={56}/>}
                 footerButton={
                     <SgButton
@@ -379,7 +382,7 @@ export default function SgCheckInOutCard(props) {
                         bgColor={COLORS.error_600}
                         color={COLORS.white}
                     >
-                        Check Out
+                        {t('checkOut')}
                     </SgButton>
                 }
             />

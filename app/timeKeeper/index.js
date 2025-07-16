@@ -13,6 +13,7 @@ import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useTranslation} from "react-i18next";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -21,6 +22,7 @@ export default function EmployeeDashboardScreen() {
     const {storeData, insertData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation()
 
 
     useFocusEffect(useCallback(() => {
@@ -67,13 +69,13 @@ export default function EmployeeDashboardScreen() {
         <SgCheckInOutGroup>
             <SgSectionInfoCard
                 icon="log-in-outline"
-                title="Daily check in"
+                title={t('dailyCheckIn')}
                 count={employeeActivities?.filter(el => el.type === 1)?.length}
                 type="checkin"
             />
             <SgSectionInfoCard
                 icon="log-out-outline"
-                title="Daily check out"
+                title={t('dailyCheckOut')}
                 count={employeeActivities?.filter(el => el.type === 2)?.length}
                 type="checkout"
             />
@@ -82,15 +84,15 @@ export default function EmployeeDashboardScreen() {
         <SgFilterTab
             defaultTabId='checkIn'
             tabs={[{
-                label: 'Check in',
+                label: t('checkIn'),
                 id: 'checkIn',
                 count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length
             }, {
-                label: 'Check out',
+                label: t('checkOut'),
                 id: 'checkOut',
                 count: employeeActivities?.filter(el => el.type === 2 && el.status === 1)?.length
             }, {
-                label: 'At work',
+                label: t('atWork'),
                 id: 'atWork',
                 count: employeeActivities?.filter(el => el.type === 1 && el.status === 2 && el.completed_status === 0)?.length
             },]}

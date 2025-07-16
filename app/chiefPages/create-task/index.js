@@ -16,6 +16,7 @@ import {useApi} from "@/hooks/useApi";
 import {globalValidate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants"
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useTranslation} from "react-i18next";
 
 export default function TaskCreateScreen() {
     const {request} = useApi();
@@ -25,6 +26,7 @@ export default function TaskCreateScreen() {
     const [employeesList, setEmployeesList] = useState([]);
     const [createTaskInfoModal, setCreateTaskInfoModal] = useState(false);
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     function handleChange(e) {
         setErrors({...errors, [e.name]: ''});
@@ -107,20 +109,20 @@ export default function TaskCreateScreen() {
 
     return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Create task'
+                header: t('createTask'),
             }}/>}
         >
             <Text style={{
                 fontSize: 12, lineHeight: 18, color: COLORS.black, weight: '500',
             }}>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
+                {t('createTask__description')}
             </Text>
 
             <View style={{gap: 16}}>
                 <SgSelect
-                    label="Project"
-                    placeholder="Enter project..."
-                    modalTitle="Select project"
+                    label={t("project")}
+                    placeholder={t("enterProject")}
+                    modalTitle={t("selectProject")}
                     value={data?.project}
                     name='project'
                     isInvalid={errors?.project}
@@ -135,9 +137,9 @@ export default function TaskCreateScreen() {
                         }))}
                 />
                 <SgSelect
-                    label="Assign to"
-                    placeholder="Select user..."
-                    modalTitle="Select user"
+                    label={t("assignTo")}
+                    placeholder={t("selectUser")}
+                    modalTitle={t('selectUser')}
                     value={data?.assigned_employee}
                     name='assigned_employee'
                     isInvalid={errors?.assigned_employee}
@@ -153,8 +155,8 @@ export default function TaskCreateScreen() {
                         }))}
                 />
                 <SgInput
-                    label="Title"
-                    placeholder="Enter Title..."
+                    label={t("title")}
+                    placeholder={t("enterTitle")}
                     type="text"
                     value={data?.title}
                     name='title'
@@ -162,8 +164,8 @@ export default function TaskCreateScreen() {
                     onChangeText={handleChange}
                 />
                 <SgInput
-                    label="Description"
-                    placeholder="Enter description..."
+                    label={t("description")}
+                    placeholder={t("enterDescription")}
                     type="textarea"
                     value={data?.description}
                     name='description'
@@ -171,8 +173,8 @@ export default function TaskCreateScreen() {
                     onChangeText={handleChange}
                 />
                 <SgInput
-                    label="Point"
-                    placeholder="Enter Point..."
+                    label={t('point')}
+                    placeholder={t('enterPoint')}
                     type="counter"
                     value={data?.point}
                     name='point'
@@ -180,7 +182,7 @@ export default function TaskCreateScreen() {
                     onChangeText={handleChange}
                 />
                 <SgDatePicker
-                    label="Deadline date"
+                    label={t('deadlineDate')}
                     placeholder="dd/mm/yyyy - hh/mm A"
                     value={data?.deadline}
                     name='deadline'
@@ -193,7 +195,7 @@ export default function TaskCreateScreen() {
                     bgColor={COLORS.primary}
                     color={COLORS.white}
                 >
-                    Create task
+                    {t('createTask')}
                 </SgButton>
             </View>
 
@@ -202,8 +204,8 @@ export default function TaskCreateScreen() {
                 visible={createTaskInfoModal}
                 onClose={toggleCreateTaskInfoModal}
                 fullScreen={true}
-                title="Task completed"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t("taskCompleted")}
+                description={t("taskCompleted__description")}
                 icon={<CompletedModalIcon width={202} height={168}/>}
             />
         </SgTemplateScreen>);

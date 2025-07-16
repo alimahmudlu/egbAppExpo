@@ -14,6 +14,7 @@ import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useTranslation} from "react-i18next";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -23,6 +24,7 @@ export default function EmployeeDocsScreen() {
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     function getData(_filters = {}) {
         request({
@@ -72,8 +74,8 @@ export default function EmployeeDocsScreen() {
     return (<SgTemplateScreen
             head={<View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                 <SgSectionFileHead
-                    title="History"
-                    description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
+                    title={t('history')}
+                    description={t('history__description')}
                     icon="filter"
                     onPress={toggleFilterModal}
                 />
@@ -102,12 +104,12 @@ export default function EmployeeDocsScreen() {
                     bgColor={COLORS.primary}
                     color={COLORS.white}
                 >
-                    Accept
+                    {t('accept')}
                 </SgButton>}
             >
                 <View style={{paddingBottom: 20}}>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>Filters</Text>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
 
                         <SgButton
                             onPress={resetFilters}
@@ -122,16 +124,16 @@ export default function EmployeeDocsScreen() {
                             }}
 
                         >
-                            Clear filters
+                            {t('clearFilters')}
                             <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
                         </SgButton>
                     </View>
 
                     <View style={{gap: 16}}>
                         <SgSelect
-                            label="Progress"
-                            placeholder="Select..."
-                            modalTitle="Select project"
+                            label={t('progress')}
+                            placeholder={t('select')}
+                            modalTitle={t("selectProject")}
                             value={filters?.status}
                             name='status'
                             list={(taskStatuses || []).map((el) => ({
@@ -144,8 +146,8 @@ export default function EmployeeDocsScreen() {
                         <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
                             <View style={{flex: 1}}>
                                 <SgInput
-                                    label="Scor range"
-                                    placeholder="min."
+                                    label={t("scoreRange")}
+                                    placeholder={t('min')}
                                     value={filters?.score_min}
                                     name='score_min'
                                     onChangeText={handleChange}
@@ -155,7 +157,7 @@ export default function EmployeeDocsScreen() {
                             <View style={{flex: 1}}>
                                 <SgInput
                                     label=""
-                                    placeholder="max."
+                                    placeholder={t('max')}
                                     value={filters?.score_max}
                                     name='score_max'
                                     onChangeText={handleChange}
@@ -166,7 +168,7 @@ export default function EmployeeDocsScreen() {
                         <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
                             <View style={{flex: 1}}>
                                 <SgDatePicker
-                                    label="Deadline date range"
+                                    label={t('deadlineDateRange')}
                                     placeholder="min."
                                     value={filters?.deadline_min}
                                     name='deadline_min'
@@ -175,7 +177,7 @@ export default function EmployeeDocsScreen() {
                             </View>
                             <View style={{flex: 1}}>
                                 <SgDatePicker
-                                    placeholder="max."
+                                    placeholder={t('max')}
                                     value={filters?.deadline_max}
                                     name='deadline_max'
                                     onChangeText={handleChange}

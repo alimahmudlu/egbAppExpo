@@ -20,6 +20,7 @@ import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
 import LoginIcon from "@/assets/images/login.svg";
 import COLORS from "@/constants/colors";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useTranslation} from "react-i18next";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -33,6 +34,7 @@ export default function EmployeeDashboardScreen() {
     const {setStoreData} = useData();
     const {socket} = useSocket();
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation()
 
     useFocusEffect(useCallback(() => {
         request({
@@ -123,16 +125,16 @@ export default function EmployeeDashboardScreen() {
 
             {storeData?.checkIn?.status === 3 ? <SgNoticeCard
                 icon={<LoginIcon width={20} height={20}/>}
-                title="Check in rejected"
-                buttonText="Reject detail"
+                title={t('checkInRejected')}
+                buttonText={t('rejectDetail')}
                 onClick={() => toggleRejectInfoModal(storeData?.checkIn?.reject_reason)}
                 bgCard="danger"
                 bgButton="danger"
             /> : null}
             {storeData?.checkOut?.status === 3 ? <SgNoticeCard
                 icon={<LoginIcon width={20} height={20}/>}
-                title="Check out rejected"
-                buttonText="Reject detail"
+                title={t('checkOutRejected')}
+                buttonText={t('rejectDetail')}
                 onClick={() => toggleRejectInfoModal(storeData?.checkOut?.reject_reason)}
                 bgCard="danger"
                 bgButton="danger"
@@ -140,9 +142,9 @@ export default function EmployeeDashboardScreen() {
             <SgCheckInOutGroup>
                 <SgCheckInOutCard
                     type="checkin"
-                    title="Check In"
+                    title={t('checkIn')}
                     time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('hh:mm A') : '') : ''}
-                    buttonLabel="Check in"
+                    buttonLabel={t('checkIn')}
                     status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
                     mapData={{
                         checkIn: {
@@ -153,9 +155,9 @@ export default function EmployeeDashboardScreen() {
                 />
                 <SgCheckInOutCard
                     type="checkout"
-                    title="Check Out"
+                    title={t('checkOut')}
                     time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('hh:mm A') : '') : ''}
-                    buttonLabel="Check Out"
+                    buttonLabel={t('checkOut')}
                     status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
                     checkInStatus={checkIn?.status === 2}
                     checkInId={checkIn?.id}
@@ -169,14 +171,14 @@ export default function EmployeeDashboardScreen() {
             </SgCheckInOutGroup>
 
             <SgCard
-                title="Work Time"
+                title={t('workTime')}
                 time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
                     startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
                 icon={Clock}
             />
 
             <SgCard>
-                <Text style={styles.title}>My tasks</Text>
+                <Text style={styles.title}>{t('myTasks')}</Text>
             </SgCard>
 
             <View style={{gap: 12}}>
@@ -195,7 +197,7 @@ export default function EmployeeDashboardScreen() {
                 onClose={toggleRejectInfoModal}
                 icon={<InfoCircleModalIcon width={56} height={56}/>}
             >
-                <Text style={styles.rejectModal}>Reject detail</Text>
+                <Text style={styles.rejectModal}>{t('rejectDetails')}</Text>
                 <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
             </SgPopup>
         </SgTemplateScreen>);

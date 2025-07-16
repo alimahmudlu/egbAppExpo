@@ -7,6 +7,7 @@ import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
@@ -14,6 +15,7 @@ export default function ProjectItemScreen() {
     const {storeData} = useData();
     const [projectDetails, setProjectDetails] = useState({});
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     useEffect(() => {
         request({
@@ -32,23 +34,23 @@ export default function ProjectItemScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Project overview'
+                header: t('projectOverview'),
             }} />}
         >
             <SgCard
-                contentTitle='Project name'
+                contentTitle={t('projectName')}
                 contentDescription={projectDetails?.name}
             />
             <SgCard
-                contentTitle='Location'
+                contentTitle={t('location')}
                 contentDescription={projectDetails?.location || '-'}
             />
             <SgCard
-                contentTitle='Timeline'
+                contentTitle={t('timeline')}
                 contentDescription={`${moment(projectDetails?.start_date).format('DD-MM-YYYY')} - ${moment(projectDetails?.end_date).format('DD-MM-YYYY')}`}
             />
             <SgCard
-                contentTitle='Optional notes'
+                contentTitle={t('optionalNotes')}
                 contentDescription={projectDetails?.optional_notes || '-'}
             />
 

@@ -12,11 +12,13 @@ import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import React, {useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperUserScreen() {
     const { userId } = useLocalSearchParams();
     const { request } = useApi();
     const {storeData} = useData();
+    const {t} = useTranslation();
     const data = [
         { label: '1-2', value: 14, percentage: 90 },
         { label: '3-4', value: 9, percentage: 70 },
@@ -46,7 +48,7 @@ export default function TimeKeeperUserScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'User profile'
+                header: t('userProfile'),
             }} />}
         >
             <View>
@@ -61,13 +63,13 @@ export default function TimeKeeperUserScreen() {
             <View style={{gap: 12}}>
                 <SgCheckInOutGroup>
                     <SgSectionInfoCard
-                        title="Active tasks"
+                        title={t("activeTasks")}
                         count={employeeData?.active_task_count}
                         type="activeTasks"
                         href={`/chiefPages/users/${userId}/tasks/active`}
                     />
                     <SgSectionInfoCard
-                        title="Completed tasks"
+                        title={t("completedTasks")}
                         count={employeeData?.completed_task_count}
                         type="completedTasks"
                         href={`/chiefPages/users/${userId}/tasks/completed`}
@@ -75,13 +77,13 @@ export default function TimeKeeperUserScreen() {
                 </SgCheckInOutGroup>
                 <SgCheckInOutGroup>
                     <SgSectionInfoCard
-                        title="All Earned Points"
+                        title={t("allEarnedPoints")}
                         count={employeeData?.points_sum}
                         type="earnedPoints"
                         href={null}
                     />
                     <SgSectionInfoCard
-                        title="Average Earned Points"
+                        title={t("averageEarnedPoints")}
                         count={employeeData?.points_avg ? Number(employeeData?.points_avg).toFixed(2) : 0}
                         type="averageEarnedPoints"
                         href={null}
@@ -109,7 +111,7 @@ export default function TimeKeeperUserScreen() {
             {/*</View>*/}
             <View>
                 <SgCard
-                    title="Average Work Hours"
+                    title={t("averageWorkHours")}
                     time={employeeData?.work_time_avg || '00:00'}
                 />
             </View>

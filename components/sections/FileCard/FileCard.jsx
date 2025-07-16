@@ -12,6 +12,7 @@ import COLORS from '@/constants/colors';
 import SgPopup from '@/components/ui/Modal/Modal';
 import SgButton from '@/components/ui/Button/Button';
 import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePreview";
+import {useTranslation} from "react-i18next";
 
 
 const getFileIcon = (type) => {
@@ -54,12 +55,14 @@ export default function SgFileCard({ fileType, title, description, issueDate, ur
         styles: {}
     })
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         const expiresAt = expiryDate
             ? new Date(expiryDate)
             : null;
         let _status = {
-            name: 'Active',
+            name: t('active'),
             styles: getStatusStyles('success')
         };
         if (expiresAt) {
@@ -69,12 +72,12 @@ export default function SgFileCard({ fileType, title, description, issueDate, ur
                 (1000 * 60 * 60 * 24);
             if (diff < 0) {
                 _status = {
-                    name: 'Expired',
+                    name: t('expired'),
                     styles: getStatusStyles('danger')
                 };
             } else if (diff <= 30) {
                 _status = {
-                    name: 'Expires Soon',
+                    name: t('expiringSoon'),
                     styles: getStatusStyles('warning')
                 };
             }
@@ -109,7 +112,7 @@ export default function SgFileCard({ fileType, title, description, issueDate, ur
 
             <View style={styles.bottomRow}>
                 <View style={styles.expireBox}>
-                    <Text style={styles.expireText}>Expire date:</Text>
+                    <Text style={styles.expireText}>{t('expireDate')}</Text>
                     <Text style={styles.expireDate}>{expiryDate ? moment(expiryDate).format('DD.MM.YYYY') : null}</Text>
                 </View>
                 <TouchableOpacity onPress={togglePreviewModal}>
@@ -120,7 +123,7 @@ export default function SgFileCard({ fileType, title, description, issueDate, ur
         <SgPopup
             visible={previewModal}
             onClose={togglePreviewModal}
-            title='Document view'
+            title={t('documentView')}
         >
             <SgTemplateFilePreview url={url} />
         </SgPopup>

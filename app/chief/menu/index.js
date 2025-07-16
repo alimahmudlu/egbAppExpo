@@ -36,7 +36,6 @@ export default function ChiefMenuScreen() {
       head={
         <View style={{padding: 16}}>
           <SgSectionProfileBanner
-              image={Avatar}
               name={user?.full_name}
               role={user?.role?.name}
               onLogout={toggleLogOutModal}
@@ -51,8 +50,8 @@ export default function ChiefMenuScreen() {
         <SgPopup
             visible={logOutModal}
             onClose={toggleLogOutModal}
-            title="Log out"
-            description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+            title={t('logout')}
+            description={t('logout__description')}
             icon={<LogOutModalIcon width={56} height={56} />}
             footerButton={
                 <SgButton

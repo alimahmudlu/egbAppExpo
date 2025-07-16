@@ -8,6 +8,7 @@ import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperUserScreen() {
     const {userId} = useLocalSearchParams();
@@ -15,6 +16,7 @@ export default function TimeKeeperUserScreen() {
     const [taskList, setTaskList] = useState([]);
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation();
 
     useFocusEffect(useCallback(() => {
         request({
@@ -38,7 +40,7 @@ export default function TimeKeeperUserScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Assigned tasks'
+                header: t('assignedTasks'),
             }}/>}
         >
             {taskList?.map((el, index) => (

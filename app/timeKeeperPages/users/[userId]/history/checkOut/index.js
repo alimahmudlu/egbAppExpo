@@ -35,7 +35,7 @@ export default function TimeKeeperUserScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'Check Out',
+                header: t('checkOut'),
             }}/>}
         >
             {employeeActivities?.map((emp, index) => (

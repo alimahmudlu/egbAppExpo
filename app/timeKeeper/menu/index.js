@@ -9,10 +9,12 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import LogOutModalIcon from "@/assets/images/logout.svg";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
+import {useTranslation} from "react-i18next";
 
 
 export default function TimeKeeperMenuScreen() {
   const { user, logout } = useAuth();
+  const {t} = useTranslation();
 
     const [logOutModal, setLogOutModal] = useState(false);
 
@@ -34,7 +36,7 @@ export default function TimeKeeperMenuScreen() {
       head={
         <View style={{padding: 16}}>
           <SgSectionProfileBanner
-              image={Avatar}
+              // image={Avatar}
               name={user?.full_name}
               role={user?.role?.name}
               onLogout={toggleLogOutModal}
@@ -49,8 +51,8 @@ export default function TimeKeeperMenuScreen() {
         <SgPopup
             visible={logOutModal}
             onClose={toggleLogOutModal}
-            title="Log out"
-            description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+            title={t('logout')}
+            description={t('logout__description')}
             icon={<LogOutModalIcon width={56} height={56} />}
             footerButton={
                 <SgButton
@@ -58,7 +60,7 @@ export default function TimeKeeperMenuScreen() {
                     color={COLORS.white}
                     onPress={handleLogout}
                 >
-                    Log out
+                    {t('logout')}
                 </SgButton>
             }
         />
