@@ -39,6 +39,7 @@ export default function TimeKeeperMenuScreen() {
               // image={Avatar}
               name={user?.full_name}
               role={user?.role?.name}
+              position={user?.position}
               onLogout={toggleLogOutModal}
           />
         </View>

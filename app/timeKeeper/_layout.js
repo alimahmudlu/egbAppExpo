@@ -13,8 +13,11 @@ import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
+import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperTabLayout() {
+    const {t} = useTranslation();
+
     return (
         <Tabs
             screenOptions={{
@@ -42,9 +45,9 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: 'Home',
-                    tabBarLabel: 'Home',
-                    headerTitle: 'Home',
+                    title: t('tabBar__home'),
+                    tabBarLabel: t('tabBar__home'),
+                    headerTitle: t('tabBar__home'),
                     tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
                         <HomeIcon width={20} height={20}/>
                 }}
@@ -52,9 +55,9 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="docs/index"
                 options={{
-                    title: 'My Docs',
-                    tabBarLabel: 'My Docs',
-                    headerTitle: 'My Docs',
+                    title: t('tabBar__myDocs'),
+                    tabBarLabel: t('tabBar__myDocs'),
+                    headerTitle: t('tabBar__myDocs'),
                     tabBarIcon: ({color, focused}) => focused ? <DocsActiveIcon width={20} height={20}/> :
                         <DocsIcon width={20} height={20}/>
                 }}
@@ -62,9 +65,9 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="history/index"
                 options={{
-                    title: 'History',
-                    tabBarLabel: 'History',
-                    headerTitle: 'History',
+                    title: t('tabBar__history'),
+                    tabBarLabel: t('tabBar__history'),
+                    headerTitle: t('tabBar__history'),
                     tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
                         <HistoryIcon width={20} height={20}/>
                 }}
@@ -72,9 +75,9 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="manual/index"
                 options={{
-                    title: 'Manual',
-                    tabBarLabel: 'Manual',
-                    headerTitle: 'Manual',
+                    title: t('tabBar__manual'),
+                    tabBarLabel: t('tabBar__manual'),
+                    headerTitle: t('tabBar__manual'),
                     tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
                         <HistoryIcon width={20} height={20}/>
                 }}
@@ -82,9 +85,9 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="menu/index"
                 options={{
-                    title: 'Menu',
-                    tabBarLabel: 'Menu',
-                    headerTitle: 'Menu',
+                    title: t('tabBar__menu'),
+                    tabBarLabel: t('tabBar__menu'),
+                    headerTitle: t('tabBar__menu'),
                     tabBarIcon: ({color, focused}) => focused ? <MenuActiveIcon width={20} height={20}/> :
                         <MenuIcon width={20} height={20}/>
                 }}

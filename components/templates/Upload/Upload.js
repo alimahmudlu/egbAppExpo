@@ -5,12 +5,14 @@ import * as ImagePicker from 'expo-image-picker';
 import {useApi} from "@/hooks/useApi";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
+import {useTranslation} from "react-i18next";
 
 export default function SgTemplateUpload(props) {
     const {selectedFiles, setSelectedFiles, multiple} = props;
     const [uploading, setUploading] = useState(false);
     const [url, setUrl] = useState('');
     const { request } = useApi();
+    const {t} = useTranslation()
 
     const pickAndUpload = async () => {
 
@@ -132,13 +134,13 @@ export default function SgTemplateUpload(props) {
                                   bgColor={COLORS.gray_50}
                                   color={COLORS.gray_600}
                         >
-                            Add file
+                            {t('addFile')}
                         </SgButton>
                         <SgButton onPress={pickAndUploadImage}
                                   bgColor={COLORS.gray_50}
                                   color={COLORS.gray_600}
                         >
-                            Add image
+                            {t('addImage')}
                         </SgButton>
                     </View>
             }

@@ -5,6 +5,7 @@ import SgButton from '@/components/ui/Button/Button';
 import COLORS from '@/constants/colors';
 
 import InfoIcon from '@/assets/images/info-circle.svg';
+import {useTranslation} from "react-i18next";
 
 export default function SgPopup({
   visible,
@@ -19,6 +20,7 @@ export default function SgPopup({
     fullScreen = false,
 }) {
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (visible) {
@@ -106,7 +108,7 @@ export default function SgPopup({
           <View style={styles.footerButtonsContainer}>
             <View style={{ flex: 1 }}>
               <SgButton onPress={onClose} color={COLORS.buttonNoColor}>
-                Close
+                {t('close')}
               </SgButton>
             </View>
             {footerButton && (

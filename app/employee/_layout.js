@@ -7,8 +7,10 @@ import DocsIcon from '@/assets/images/docs.svg';
 import DocsActiveIcon from '@/assets/images/docs-active.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
+import {useTranslation} from "react-i18next";
 
-export default function employeeTabLayout() {
+export default function EmployeeTabLayout() {
+    const { t } = useTranslation();
 
   return (
     <Tabs
@@ -39,9 +41,9 @@ export default function employeeTabLayout() {
         name="index"
         options={{
             freezeOnBlur: false,
-          title: 'Home',
-          tabBarLabel: 'Home',
-          headerTitle: 'Home',
+          title: t('tabBar__home'),
+          tabBarLabel: t('tabBar__home'),
+          headerTitle: t('tabBar__home'),
             tabBarIcon: ({ color, focused }) => focused ? <HomeActiveIcon width={20} height={20} /> : <HomeIcon width={20} height={20} />
         }}
       />
@@ -49,9 +51,9 @@ export default function employeeTabLayout() {
         name="docs/index"
         options={{
             freezeOnBlur: false,
-          title: 'My Docs',
-          tabBarLabel: 'My Docs',
-          headerTitle: 'My Docs',
+          title: t('tabBar__myDocs'),
+          tabBarLabel: t('tabBar__myDocs'),
+          headerTitle: t('tabBar__myDocs'),
             tabBarIcon: ({ color, focused }) => focused ? <DocsActiveIcon width={20} height={20} /> : <DocsIcon width={20} height={20} />
         }}
       />
@@ -59,9 +61,9 @@ export default function employeeTabLayout() {
         name="menu/index"
         options={{
             freezeOnBlur: false,
-          title: 'Menu',
-          tabBarLabel: 'Menu',
-          headerTitle: 'Menu',
+          title: t('tabBar__menu'),
+          tabBarLabel: t('tabBar__menu'),
+          headerTitle: t('tabBar__menu'),
             tabBarIcon: ({ color, focused }) => focused ? <MenuActiveIcon width={20} height={20} /> : <MenuIcon width={20} height={20} />
         }}
       />

@@ -18,9 +18,11 @@ import styles from '@/components/sections/AddFile/AddFile.styles';
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import {useState} from "react";
 import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePreview";
+import {useTranslation} from "react-i18next";
 
 export default function SgSectionAddFile({ title, type, datetime, onPress, url }) {
   const [previewModal, setPreviewModal] = useState(false);
+  const {t} = useTranslation()
 
   function togglePreviewModal() {
     setPreviewModal(!previewModal);
@@ -60,7 +62,7 @@ export default function SgSectionAddFile({ title, type, datetime, onPress, url }
       <SgPopup
           visible={previewModal}
           onClose={togglePreviewModal}
-          title='Document view'
+          title={t('documentView')}
       >
         <SgTemplateFilePreview url={url} />
       </SgPopup>
