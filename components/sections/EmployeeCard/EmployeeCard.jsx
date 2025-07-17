@@ -28,7 +28,7 @@ import * as Linking from "expo-linking";
 
 
 export default function SgSectionEmployeeCard(props) {
-    const {fullData, image, title, role, time, checkType, editable = true, manual=false, manualData = {}, status, reason} = props;
+    const {fullData, image, title, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason} = props;
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
@@ -302,6 +302,7 @@ export default function SgSectionEmployeeCard(props) {
                             rating={3.12}
                             name={title}
                             role={role}
+                            position={position || fullData?.position}
                             profileImage={image || Avatar}
                             color="dark"
                             size="md"

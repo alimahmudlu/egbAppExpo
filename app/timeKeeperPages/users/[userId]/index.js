@@ -54,6 +54,7 @@ export default function TimeKeeperUserScreen() {
                 <SgSectionUserInfo
                     rating={3.12}
                     name={employeeData?.full_name || ''}
+                    position={employeeData?.position}
                     role={employeeData?.role?.name || ''}
                     profileImage={''}
                     color="dark"

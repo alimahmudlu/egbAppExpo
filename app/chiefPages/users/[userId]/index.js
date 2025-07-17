@@ -56,6 +56,7 @@ export default function TimeKeeperUserScreen() {
                     rating={3.12}
                     name={employeeData?.full_name || ''}
                     role={employeeData?.role?.name || ''}
+                    position={employeeData?.position || ''}
                     color="dark"
                     size="md"
                 />

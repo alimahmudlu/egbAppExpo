@@ -44,6 +44,7 @@ export default function SgSectionTaskCard(props) {
     const [completedTaskInfoModal, setCompletedTaskInfoModal] = useState(false);
 
     const toggleRemoveTaskModal = () => {
+        setModalVisible(false)
         setRemoveTaskModal(!removeTaskModal);
     };
     const toggleRemoveTaskInfoModal = () => {
@@ -64,6 +65,7 @@ export default function SgSectionTaskCard(props) {
     };
 
     const toggleCheckedTaskModal = () => {
+        setModalVisible(false)
         setCheckedTaskModal(!checkedTaskModal);
     };
     const toggleCheckedTaskInfoModal = () => {
@@ -83,13 +85,13 @@ export default function SgSectionTaskCard(props) {
             changeRowData(`GET:/chief/task/list`, res?.data, res?.data?.id)
             toggleCheckedTaskInfoModal();
         }).catch(err => {
-            alert('reqqqqq errrr')
             console.log(err)
         })
     };
 
     const toggleCompletedTaskModal = () => {
         setCompletedTaskModal(!completedTaskModal);
+        setModalVisible(false)
     };
     const toggleCompletedTaskInfoModal = () => {
         setCompletedTaskInfoModal(!completedTaskInfoModal);

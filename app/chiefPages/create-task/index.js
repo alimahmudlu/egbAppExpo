@@ -148,6 +148,7 @@ export default function TaskCreateScreen() {
                             id: employee?.id, name: employee?.full_name, render: <SgSectionUserInfo
                                 name={employee?.full_name}
                                 role="Employee"
+                                position={employee?.position}
                                 profileImage={''}
                                 color="dark"
                                 size="md"

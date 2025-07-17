@@ -138,6 +138,7 @@ export default function ProjectItemScreen() {
             >
                 <SgSectionUserInfo
                     name={taskDetails?.reporter_employee?.full_name}
+                    position={taskDetails?.reporter_employee?.position}
                     role='Chief'
                     color="dark"
                     size="md"

@@ -142,18 +142,21 @@ export default function SgSectionUserInfo({
                         >
                             {role}
                         </Text>
-                        <Text
-                            style={[
-                                styles.role,
-                                {
-                                    color: appliedRoleColor,
-                                    fontSize: appliedSize.role.fontSize,
-                                    lineHeight: appliedSize.role.lineHeight,
-                                },
-                            ]}
-                        >
-                            /
-                        </Text>
+                        {position?.name ?
+                            <Text
+                                style={[
+                                    styles.role,
+                                    {
+                                        color: appliedRoleColor,
+                                        fontSize: appliedSize.role.fontSize,
+                                        lineHeight: appliedSize.role.lineHeight,
+                                    },
+                                ]}
+                            >
+                                /
+                            </Text>
+                            : null
+                        }
                         <Pressable
                             onPress={() => {
                                 router.navigate(`/pages/responsibilities/${position?.id || ''}`)

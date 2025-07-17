@@ -53,6 +53,7 @@ request({
                     fullData={emp}
                     title={emp?.employee?.full_name}
                     role={emp?.employee?.role?.name}
+                    position={emp?.employee?.position}
                     time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                     image={emp?.employee?.image}
                     editable={false}

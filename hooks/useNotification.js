@@ -52,7 +52,7 @@ export const NotificationProvider = ({ children }) => {
 
     await AsyncStorage.setItem(NOTIFICATION_PERMISSION_KEY, JSON.stringify(obj));
     setNotificationPermission(obj);
-    alert(JSON.stringify(obj))
+    // alert(JSON.stringify(obj))
   };
 
   return (
