@@ -20,6 +20,7 @@ import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function SgSectionTaskCard(props) {
     const { user, accessToken } = useAuth();
@@ -27,6 +28,7 @@ export default function SgSectionTaskCard(props) {
     const {changeRowData} = useData();
     const router = useRouter();
     const [data, setData] = useState({});
+    const {t} = useTranslation();
     const [modalVisible, setModalVisible] = useState(false);
     const [removeTaskModal, setRemoveTaskModal] = useState(false);
     const [removeTaskInfoModal, setRemoveTaskInfoModal] = useState(false);
@@ -238,7 +240,7 @@ export default function SgSectionTaskCard(props) {
             <SgPopup
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
-                title="Actions"
+                title={t('actions')}
                 description=" "
             >
                 {user?.role?.id === 3 ?
@@ -247,7 +249,7 @@ export default function SgSectionTaskCard(props) {
                             <TouchableOpacity onPress={toggleCheckedTaskModal}>
                                 <View style={styles.modalItem}>
                                     <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                    <Text style={styles.modalText}>Checked task</Text>
+                                    <Text style={styles.modalText}>{t('checkedTask')}</Text>
                                 </View>
                             </TouchableOpacity>
                             : null
@@ -256,7 +258,7 @@ export default function SgSectionTaskCard(props) {
                             <TouchableOpacity onPress={toggleCompletedTaskModal}>
                                 <View style={styles.modalItem}>
                                     <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                    <Text style={styles.modalText}>Completed task</Text>
+                                    <Text style={styles.modalText}>{t('completedTask')}</Text>
                                 </View>
                             </TouchableOpacity>
                             : null
@@ -271,7 +273,7 @@ export default function SgSectionTaskCard(props) {
                             <TouchableOpacity onPress={toggleRemoveTaskModal}>
                                 <View style={styles.modalItem}>
                                     <TrashIcon width={20} height={20} style={styles.modalIcon}/>
-                                    <Text style={styles.modalText}>Remove task</Text>
+                                    <Text style={styles.modalText}>{t('removeTask')}</Text>
                                 </View>
                             </TouchableOpacity>
                             : null
@@ -284,13 +286,13 @@ export default function SgSectionTaskCard(props) {
                         <TouchableOpacity onPress={toggleCompleteTaskModal}>
                             <View style={styles.modalItem}>
                                 <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                <Text style={styles.modalText}>Complete request</Text>
+                                <Text style={styles.modalText}>{t('completeRequest')}</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={toggleCheckTaskModal}>
                             <View style={styles.modalItem}>
                                 <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                <Text style={styles.modalText}>Check request</Text>
+                                <Text style={styles.modalText}>{t('checkRequest')}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -302,8 +304,8 @@ export default function SgSectionTaskCard(props) {
             <SgPopup
                 visible={removeTaskModal}
                 onClose={toggleRemoveTaskModal}
-                title="Remove Task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('removeTask')}
+                description={t('removeTask__description')}
                 icon={<LogOutModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -311,7 +313,7 @@ export default function SgSectionTaskCard(props) {
                         color={COLORS.white}
                         onPress={handleDeleteTask}
                     >
-                        Yes, Remove
+                        {t('yesRemove')}
                     </SgButton>
                 }
             />
@@ -320,8 +322,8 @@ export default function SgSectionTaskCard(props) {
                 visible={removeTaskInfoModal}
                 onClose={toggleRemoveTaskInfoModal}
                 fullScreen={true}
-                title="Task removed"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskRemoved')}
+                description={t('taskRemoved__description')}
                 icon={<TaskRemovedIcon width={202} height={168} />}
             />
 
@@ -330,8 +332,8 @@ export default function SgSectionTaskCard(props) {
             <SgPopup
                 visible={completeTaskModal}
                 onClose={toggleCompleteTaskModal}
-                title="Complete task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('completeTask')}
+                description={t('completeTask__description')}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -340,7 +342,7 @@ export default function SgSectionTaskCard(props) {
                         onPress={handleCompleteTask}
                         disabled={selectedFiles.length === 0}
                     >
-                        Yes, Complete
+                        {t('yesComplete')}
                     </SgButton>
                 }
             >
