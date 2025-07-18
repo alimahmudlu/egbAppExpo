@@ -174,6 +174,10 @@ export default function SgSectionTaskCard(props) {
                 return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
             case 3:
                 return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
+            case 2:
+                return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
+            case 1:
+                return {backgroundColor: COLORS.white, color: COLORS.black};
             default:
                 return {backgroundColor: COLORS.white, color: COLORS.black};
         }

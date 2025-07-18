@@ -46,7 +46,7 @@ export default function SgTemplateUpload(props) {
             // setUrl(res.url);
             // Alert.alert('Uğurla yükləndi', res.url);
 
-            const res = await fetch('https://alimahmudlu-egb.duckdns.org/api/upload/file', {
+            const res = await fetch('https://mobile-api.entergreenbuildings.com/api/upload/file', {
                 method: 'POST',
                 body: formData,
             });
@@ -95,7 +95,7 @@ export default function SgTemplateUpload(props) {
                 type: file.mimeType || 'application/octet-stream',
             });
 
-            const res = await fetch('https://alimahmudlu-egb.duckdns.org/api/upload/file', {
+            const res = await fetch('https://mobile-api.entergreenbuildings.com/api/upload/file', {
                 method: 'POST',
                 body: formData,
             });

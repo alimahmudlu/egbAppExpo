@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
@@ -78,7 +78,7 @@ export default {
       "typedRoutes": true
     },
     "extra": {
-      API_URL: process.env.API_URL || 'https://alimahmudlu-egb.duckdns.org/api',
+      API_URL: process.env.API_URL || 'https://mobile-api.entergreenbuildings.com/api',
       AUTH_TOKEN_KEY: process.env.AUTH_TOKEN_KEY || 'authorization',
       SOCKET_URL: process.env.SOCKET_URL || 'https://alimahmudlu-egb.duckdns.org',
       "router": {},
