@@ -112,7 +112,6 @@ export default function SgSectionTaskCard(props) {
             changeRowData(`GET:/chief/task/list`, res?.data, res?.data?.id)
             toggleCompletedTaskInfoModal();
         }).catch(err => {
-            alert('reqqqqq errrr')
             console.log(err)
         })
     };
@@ -189,7 +188,7 @@ export default function SgSectionTaskCard(props) {
                 <View style={styles.header}>
                     <Text style={styles.time}>{data?.time}</Text>
                     <View style={styles.rightHeader}>
-                        {(data?.status?.id && [3, 4, 5].includes(data?.status?.id)) && (
+                        {(data?.status?.id && [1, 2, 3, 4, 5].includes(data?.status?.id)) && (
                             <View
                                 style={[
                                     styles.statusBadge,
@@ -202,7 +201,11 @@ export default function SgSectionTaskCard(props) {
                                         {color: getStatusStyles(data?.status?.id).color},
                                     ]}
                                 >
-                                    {data?.status?.name}
+                                    {data?.status?.id === 1 && t("open")}
+                                    {data?.status?.id === 2 && t("inProgress")}
+                                    {data?.status?.id === 3 && t("checkProgress")}
+                                    {data?.status?.id === 4 && t("checkComplete")}
+                                    {data?.status?.id === 5 && t("completed")}
                                 </Text>
                             </View>
                         )}
