@@ -366,8 +366,8 @@ export default function SgSectionTaskCard(props) {
                 visible={completeTaskInfoModal}
                 onClose={toggleCompleteTaskInfoModal}
                 fullScreen={true}
-                title="Task complete request sended"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskCompleteRequestSended')}
+                description={t('taskCompleteRequestSended__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 
@@ -376,8 +376,8 @@ export default function SgSectionTaskCard(props) {
             <SgPopup
                 visible={checkTaskModal}
                 onClose={toggleCheckTaskModal}
-                title="Check request task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('checkRequestTask')}
+                description={t('checkRequestTask__description')}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -385,7 +385,7 @@ export default function SgSectionTaskCard(props) {
                         color={COLORS.white}
                         onPress={handleCheckTask}
                     >
-                        Yes, Check
+                        {t('yesCheck')}
                     </SgButton>
                 }
             />
@@ -393,16 +393,16 @@ export default function SgSectionTaskCard(props) {
                 visible={checkTaskInfoModal}
                 onClose={toggleCheckTaskInfoModal}
                 fullScreen={true}
-                title="Task complete request sended"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskCheck')}
+                description={t('taskCheck__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 
             <SgPopup
                 visible={checkedTaskModal}
                 onClose={toggleCheckedTaskModal}
-                title="Checked task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskChecked')}
+                description={t('taskChecked__description')}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -410,7 +410,7 @@ export default function SgSectionTaskCard(props) {
                         color={COLORS.white}
                         onPress={handleCheckedTask}
                     >
-                        Yes, Checked
+                        {t('yesChecked')}
                     </SgButton>
                 }
             />
@@ -418,16 +418,16 @@ export default function SgSectionTaskCard(props) {
                 visible={checkedTaskInfoModal}
                 onClose={toggleCheckedTaskInfoModal}
                 fullScreen={true}
-                title="Task checked"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskChecked')}
+                description={t('taskChecked__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 
             <SgPopup
                 visible={completedTaskModal}
                 onClose={toggleCompletedTaskModal}
-                title="Completed task"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('completedTask')}
+                description={t('completedTask__description')}
                 icon={<CompleteModalIcon width={56} height={56} />}
                 footerButton={
                     <SgButton
@@ -435,7 +435,7 @@ export default function SgSectionTaskCard(props) {
                         color={COLORS.white}
                         onPress={handleCompletedTask}
                     >
-                        Yes, Completed
+                        {t('yesCompleted')}
                     </SgButton>
                 }
             />
@@ -443,10 +443,12 @@ export default function SgSectionTaskCard(props) {
                 visible={completedTaskInfoModal}
                 onClose={toggleCompletedTaskInfoModal}
                 fullScreen={true}
-                title="Task Completed"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('taskCompleted')}
+                description={t('taskCompleted__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
+
+
         </View>
     );
 };

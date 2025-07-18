@@ -65,6 +65,7 @@ export default function SgSelect(props) {
                 visible={selectModal}
                 onClose={toggleSelectModal}
                 title={placeholder}
+                closeType="select"
             >
                 <View>
                     {(list || []).map((item, index) => (

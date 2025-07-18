@@ -6,9 +6,11 @@ import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp"
 import {Image} from "expo-image";
 import AppInfoImage from "@/assets/images/appInfoImage.png";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import {useTranslation} from "react-i18next";
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
+    const {t} = useTranslation();
 
     return (
         <SgTemplateScreen
@@ -32,31 +34,17 @@ export default function ProjectItemScreen() {
                 </View>
                 <View>
                     <SgSectionDownloadApp
-                        version="2.44.9"
-                        title="Tətbiqi aşağıdakı platformalarda qiymətləndirin"
+                        version="0.0.19"
+                        title={t('appInfo1')}
                         platforms={['android', 'ios']}
                     />
                 </View>
                 <View>
-                    <Text style={styles.contentTitle}>
-                        But who has any right to find fault with a man who chooses
+                    <Text style={styles.contentDescription}>
+                        {t('appInfo2')}
                     </Text>
                     <Text style={styles.contentDescription}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-                    </Text>
-
-                    <Text style={styles.contentTitle}>
-                        But who has any right to find fault with a man who chooses
-                    </Text>
-                    <Text style={styles.contentDescription}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-                    </Text>
-
-                    <Text style={styles.contentTitle}>
-                        But who has any right to find fault with a man who chooses
-                    </Text>
-                    <Text style={styles.contentDescription}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                        {t('appInfo3')}
                     </Text>
                 </View>
             </View>

@@ -131,7 +131,7 @@ export default function TaskCreateScreen() {
                             id: project?.id, name: project?.name, render: <SgSectionProjectListItem
                                 key={index}
                                 title={project.name}
-                                staffImages={project?.members?.map(() => "https://randomuser.me/api/portraits/men/1.jpg")}
+                                staffData={project?.members || []}
                                 id={project.id}
                             />
                         }))}
@@ -184,7 +184,7 @@ export default function TaskCreateScreen() {
                 />
                 <SgDatePicker
                     label={t('deadlineDate')}
-                    placeholder="dd/mm/yyyy - hh/mm A"
+                    placeholder="dd/mm/yyyy - HH/mm"
                     value={data?.deadline}
                     name='deadline'
                     isInvalid={errors?.deadline}

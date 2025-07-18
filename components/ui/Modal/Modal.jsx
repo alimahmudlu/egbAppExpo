@@ -18,6 +18,7 @@ export default function SgPopup({
   footerButton = null,
     autoClose = true,
     fullScreen = false,
+                                  closeType = null
 }) {
   const backdropOpacity = useRef(new Animated.Value(0)).current;
   const {t} = useTranslation();
@@ -108,7 +109,7 @@ export default function SgPopup({
           <View style={styles.footerButtonsContainer}>
             <View style={{ flex: 1 }}>
               <SgButton onPress={onClose} color={COLORS.buttonNoColor}>
-                {t('close')}
+                {closeType === 'select' ? t('select') : t('close')}
               </SgButton>
             </View>
             {footerButton && (

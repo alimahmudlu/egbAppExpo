@@ -222,7 +222,7 @@ export default function SgSectionDatePicker(props) {
 
     useEffect(() => {
         // FIXME: This should be a moment object
-        onChange?.(moment(`${selectedDate}T${hour}.${minute}.${ampm}`, 'YYYY-MM-DD hh:mm A'))
+        onChange?.(moment(`${selectedDate}T${hour}.${minute}.${ampm}`, 'dd/mm/yyyy - HH/mm'))
     }, [selectedDate, hour, minute, ampm]);
 
 

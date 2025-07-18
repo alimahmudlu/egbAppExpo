@@ -4,7 +4,6 @@ import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useLocalSearchParams} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
-import Avatar from "@/assets/images/avatar.png";
 import SgButton from "@/components/ui/Button/Button";
 import moment from "moment/moment";
 import COLORS from "@/constants/colors";
@@ -31,6 +30,38 @@ export default function ProjectItemScreen() {
 
     const [completedTaskModal, setCompletedTaskModal] = useState(false);
     const [completedTaskInfoModal, setCompletedTaskInfoModal] = useState(false);
+
+    const [rejectedTaskModal, setRejectedTaskModal] = useState(false);
+    const [rejectedTaskInfoModal, setRejectedTaskInfoModal] = useState(false);
+
+    const toggleRejectedTaskModal = () => {
+        setRejectedTaskModal(!rejectedTaskModal);
+    };
+    const toggleRejectedTaskInfoModal = () => {
+        setRejectedTaskInfoModal(!rejectedTaskInfoModal);
+    };
+    const handleRejectedTask = () => {
+        request({
+            url: `/chief/project/item/${projectId}/tasks/item/${taskId}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 2,
+            }
+        }).then(res => {
+            setTaskDetails({
+                ...taskDetails,
+                status: {
+                    id: 2,
+                    name: 'In Progress'
+                },
+                files: []
+            })
+            toggleRejectedTaskInfoModal();
+        }).catch(err => {
+            console.log(err)
+        })
+    };
 
     const toggleCompletedTaskModal = () => {
         setCompletedTaskModal(!completedTaskModal);
@@ -117,6 +148,22 @@ export default function ProjectItemScreen() {
                 size="lg"
                 clickable={`/chiefPages/users/${taskDetails?.assigned_employee?.id}/`}
             />
+            {taskDetails?.status?.id === 1 ?
+                <SgSectionStatusInfo
+                    title={t("open")}
+                    status={t("open")}
+                    statusType=""
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 2 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("inProgress")}
+                    statusType="warning"
+                />
+                : null
+            }
             {taskDetails?.status?.id === 3 ?
                 <SgSectionStatusInfo
                     title={t("progress")}
@@ -129,6 +176,14 @@ export default function ProjectItemScreen() {
                 <SgSectionStatusInfo
                     title={t("progress")}
                     status={t("checkComplete")}
+                    statusType="success"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 5 ?
+                <SgSectionStatusInfo
+                    title={t("completed")}
+                    status={t("completed")}
                     statusType="success"
                 />
                 : null
@@ -199,14 +254,16 @@ export default function ProjectItemScreen() {
                     <SgButton
                         bgColor = {COLORS.error_50}
                         color= {COLORS.error_700}
+                        onPress={toggleRejectedTaskModal}
                     >
                         {t('rejected')}
                     </SgButton>
                     <SgButton
                         bgColor = {COLORS.primary}
                         color= {COLORS.white}
+                        onPress={toggleCompletedTaskModal}
                     >
-                        {t('completeTask')}
+                        {t('completedTask')}
                     </SgButton>
                 </View>
                 : null
@@ -259,6 +316,30 @@ export default function ProjectItemScreen() {
                 fullScreen={true}
                 title={t('taskCompleted')}
                 description={t('taskCompleted__description')}
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
+
+            <SgPopup
+                visible={rejectedTaskModal}
+                onClose={toggleRejectedTaskModal}
+                title={t('rejectedTask')}
+                description={t('rejectedTask__description')}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleRejectedTask}
+                    >
+                        {t('yesCompleted')}
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={rejectedTaskInfoModal}
+                onClose={toggleRejectedTaskInfoModal}
+                fullScreen={true}
+                title={t('taskRejected')}
+                description={t('taskRejected__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 

@@ -17,6 +17,7 @@ import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useSocket} from "@/hooks/useSocket";
 import {useTranslation} from "react-i18next";
+import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
@@ -30,6 +31,9 @@ export default function ProjectItemScreen() {
 
     const [checkTaskModal, setCheckTaskModal] = useState(false);
     const [checkTaskInfoModal, setCheckTaskInfoModal] = useState(false);
+
+    const [startTaskModal, setStartTaskModal] = useState(false);
+    const [startTaskInfoModal, setStartTaskInfoModal] = useState(false);
 
     const [completeTaskModal, setCompleteTaskModal] = useState(false);
     const [completeTaskInfoModal, setCompleteTaskInfoModal] = useState(false);
@@ -91,6 +95,31 @@ export default function ProjectItemScreen() {
         })
     };
 
+    const toggleStartTaskModal = () => {
+        setStartTaskModal(!startTaskModal);
+    };
+    const toggleStartTaskInfoModal = () => {
+        setStartTaskInfoModal(!startTaskInfoModal);
+    };
+    const handleStartTask = () => {
+        request({
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}/status`,
+            method: 'post',
+            data: {
+                date: moment().format(''),
+                status: 2
+            }
+        }).then(res => {
+            setTaskDetails({...taskDetails, status: {
+                                id: 2,
+                                name: t('inProgress')
+                                }})
+            toggleStartTaskInfoModal();
+        }).catch(err => {
+            console.log(err)
+        })
+    };
+
     useEffect(() => {
         request({
             url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
@@ -133,6 +162,46 @@ export default function ProjectItemScreen() {
                 header: t('Task details'),
             }}/>}
         >
+            {taskDetails?.status?.id === 1 ?
+                <SgSectionStatusInfo
+                    title={t("open")}
+                    status={t("open")}
+                    statusType=""
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 2 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("inProgress")}
+                    statusType="warning"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 3 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("checkProgress")}
+                    statusType="warning"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 4 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("checkComplete")}
+                    statusType="success"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 5 ?
+                <SgSectionStatusInfo
+                    title={t("completed")}
+                    status={t("completed")}
+                    statusType="success"
+                />
+                : null
+            }
             <SgCard
                 contentTitle='Reporter'
             >
@@ -145,7 +214,7 @@ export default function ProjectItemScreen() {
                 />
             </SgCard>
             <SgCard
-                contentTitle={t('DeadlineDate')}
+                contentTitle={t('deadlineDate')}
                 contentDescription={taskDetails?.deadline ? moment(taskDetails?.deadline).format('DD.MM.YYYY / HH:mm') : null}
             />
             <SgCard
@@ -185,7 +254,23 @@ export default function ProjectItemScreen() {
                 : null
             }
 
-            {([1, 2].includes(taskDetails?.status?.id)) ?
+            {([1].includes(taskDetails?.status?.id)) ?
+                <View style={{
+                    gap: 12,
+                    flexDirection: 'row',
+                }}>
+                    <SgButton
+                        bgColor='#FEF0C7'
+                        color='#B54708'
+                        onPress={toggleStartTaskModal}
+                    >
+                        {t('started')}
+                    </SgButton>
+                </View>
+                : null
+            }
+
+            {([2].includes(taskDetails?.status?.id)) ?
                 <View style={{
                     gap: 12,
                     flexDirection: 'row',
@@ -273,6 +358,32 @@ export default function ProjectItemScreen() {
                 fullScreen={true}
                 title={t('taskCompleteRequestSended')}
                 description={t('taskCompleteRequestSended__description')}
+                icon={<CompletedModalIcon width={202} height={168} />}
+            />
+
+            {/* EMPLOYEE START REQUEST */}
+            <SgPopup
+                visible={startTaskModal}
+                onClose={toggleStartTaskModal}
+                title={t("startRequestTask")}
+                description={t("startRequestTask__description")}
+                icon={<CompleteModalIcon width={56} height={56} />}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleStartTask}
+                    >
+                        {t('yesCheck')}
+                    </SgButton>
+                }
+            />
+            <SgPopup
+                visible={startTaskInfoModal}
+                onClose={toggleStartTaskInfoModal}
+                fullScreen={true}
+                title={t('startCompleteRequestSended')}
+                description={t('startCompleteRequestSended__description')}
                 icon={<CompletedModalIcon width={202} height={168} />}
             />
 
