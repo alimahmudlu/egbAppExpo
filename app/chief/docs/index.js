@@ -200,6 +200,12 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Diplom',
       flow: ['russian'],
       dateRequired: false
+    },
+    {
+      key: 'entry_form_document',
+      label: 'Entry Form document',
+      flow: ['patent', 'bkc', 'russian'],
+      dateRequired: false
     }
   ])
   const {refreshKey} = useLocalSearchParams();

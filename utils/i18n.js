@@ -214,6 +214,7 @@ i18n.use(initReactI18next).init({
                 rejectedSuccessfully__description: "The request has been successfully rejected",
 
                 atWork: "At work",
+                projectMembers: "Project Members",
 
             },
         },
@@ -423,6 +424,7 @@ i18n.use(initReactI18next).init({
 
 
                 atWork: "На работе",
+                projectMembers: "Участники проекта",
 
             },
         },
@@ -634,6 +636,7 @@ i18n.use(initReactI18next).init({
 
 
                 atWork: "Ishda",
+                projectMembers: "Loyiha ishtirokchilari",
 
             },
         },

@@ -19,12 +19,14 @@ import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import validationConstraints from "@/app/chiefPages/create-task/constants";
 import {validate} from "@/utils/validate";
 import {useTranslation} from "react-i18next";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function EmployeeDocsScreen() {
   const [docList, setDocList] = useState([]);
   const {request} = useApi();
   const {user} = useAuth();
   const {storeData} = useData();
+  const {selectedLanguage} = useLanguage();
   const {t} = useTranslation();
   const [addDocsModal, setAddDocsModal] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState([])
@@ -155,6 +157,12 @@ export default function EmployeeDocsScreen() {
       label: 'Diploma',
       flow: ['russian'],
       dateRequired: false
+    },
+    {
+      key: 'entry_form_document',
+      label: 'Entry Form document',
+      flow: ['patent', 'bkc', 'russian'],
+      dateRequired: false
     }
   ])
   const {refreshKey} = useLocalSearchParams();
@@ -258,7 +266,7 @@ export default function EmployeeDocsScreen() {
                 url={el?.filepath}
                 expiryDate={el?.date_of_expiry}
                 issueDate={el?.date_of_issue}
-                migrationId={el?.type}
+                migrationId={fileTypes?.find(item => item.key === el?.type)?.[selectedLanguage?.id !== 'en' ? `label_${selectedLanguage?.id}` : 'label'] || el?.type}
             />
         ))}
       </View>

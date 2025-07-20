@@ -1,4 +1,4 @@
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
@@ -60,25 +60,32 @@ export default function ProjectItemScreen() {
                 contentDescription={projectDetails?.optional_notes || '-'}
             />
 
+            {(projectDetails?.members || []) ?
+                <View style={{gap: 16, marginTop: 32}}>
+                    <SgCard>
+                        <Text style={styles.title}>{t('projectMembers')}</Text>
+                    </SgCard>
+                    <View style={{gap: 16}}>
+                        {(projectDetails?.members || []).map((el, index) => {
+                            return (
+                                <View style={{borderBottomWidth: (projectDetails?.members || []).length - 1 > index ? 1 : 0, borderBottomColor: COLORS.gray_200, paddingBottom: 16}} key={index}>
+                                    <SgSectionUserInfo
+                                        key={index}
+                                        name={el?.full_name || ''}
+                                        position={el?.position}
+                                        role={el?.role?.name || ''}
+                                        profileImage={''}
+                                        color="dark"
+                                        size="md"
 
-            <View style={{gap: 16, marginTop: 32}}>
-                {(projectDetails?.members || []).map((el, index) => {
-                    return (
-                        <View style={{borderBottomWidth: (projectDetails?.members || []).length - 1 > index ? 1 : 0, borderBottomColor: COLORS.gray_200, paddingBottom: 16}} key={index}>
-                            <SgSectionUserInfo
-                                key={index}
-                                name={el?.full_name || ''}
-                                position={el?.position}
-                                role={el?.role?.name || ''}
-                                profileImage={''}
-                                color="dark"
-                                size="md"
-
-                            />
-                        </View>
-                    )
-                })}
-            </View>
+                                    />
+                                </View>
+                            )
+                        })}
+                    </View>
+                </View>
+                : null
+            }
 
 
         </SgTemplateScreen>);
