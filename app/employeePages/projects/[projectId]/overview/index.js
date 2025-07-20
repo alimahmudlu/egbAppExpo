@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {StyleSheet, View} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
@@ -8,6 +8,9 @@ import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 import {useTranslation} from "react-i18next";
+import SgListUserItem from "@/components/ui/ListUserItem";
+import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
+import COLORS from "@/constants/colors";
 
 export default function ProjectItemScreen() {
     const {request} = useApi();
@@ -34,7 +37,8 @@ export default function ProjectItemScreen() {
         setProjectDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}`]?.data)
     }, [storeData?.cache?.[`GET:/employee/project/item/${projectId}`]])
 
-    return (<SgTemplateScreen
+    return (
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: t('projectOverview'),
             }}/>}
@@ -55,6 +59,27 @@ export default function ProjectItemScreen() {
                 contentTitle={t('optionalNotes')}
                 contentDescription={projectDetails?.optional_notes || '-'}
             />
+
+
+            <View style={{gap: 16, marginTop: 32}}>
+                {(projectDetails?.members || []).map((el, index) => {
+                    return (
+                        <View style={{borderBottomWidth: (projectDetails?.members || []).length - 1 > index ? 1 : 0, borderBottomColor: COLORS.gray_200, paddingBottom: 16}} key={index}>
+                            <SgSectionUserInfo
+                                key={index}
+                                name={el?.full_name || ''}
+                                position={el?.position}
+                                role={el?.role?.name || ''}
+                                profileImage={''}
+                                color="dark"
+                                size="md"
+
+                            />
+                        </View>
+                    )
+                })}
+            </View>
+
 
         </SgTemplateScreen>);
 }
