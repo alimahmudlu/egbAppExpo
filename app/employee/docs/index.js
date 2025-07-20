@@ -311,7 +311,7 @@ export default function EmployeeDocsScreen() {
                 </View>
                 <View>
                   <SgDatePicker
-                      label={t('dateOfExpiry')}
+                      label={t('dateOfExpired')}
                       placeholder={t('enterDate')}
                       type="date"
                       value={data?.date_of_expiry}

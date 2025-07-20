@@ -28,31 +28,48 @@ export function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const loadStoredAuth = async () => {
+    try {
+      // Load token and user data from secure storage
+      const storedToken = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+      const storedUserData = await SecureStore.getItemAsync(USER_DATA_KEY);
+
+      if (storedToken && storedUserData) {
+        // Set token in state and axios headers
+        setAccessToken(storedToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+
+        // Parse and set user data
+        const userData = JSON.parse(JSON.parse(storedUserData));
+        setUser(userData);
+
+        const currentUser = await api({
+          url: '/currentUser',
+          method: 'get',
+          headers: {
+            'authorization': storedToken
+          }
+        })
+
+        console.log(currentUser?.data?.data, currentUser.status, 'currentUser');
+        // if (currentUser.status === 200) {
+        //   console.log(currentUser.data?.data, 'currentUser');
+        //   setUser(currentUser.data || userData);
+        // }
+        // else {
+        //   // logout();
+        // }
+      }
+    } catch (error) {
+      console.error('Failed to load authentication data:', error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500)
+    }
+  };
   // Check for existing session on app load
   useEffect(() => {
-    const loadStoredAuth = async () => {
-      try {
-        // Load token and user data from secure storage
-        const storedToken = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
-        const storedUserData = await SecureStore.getItemAsync(USER_DATA_KEY);
-
-        if (storedToken && storedUserData) {
-          // Set token in state and axios headers
-          setAccessToken(storedToken);
-          api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-
-          // Parse and set user data
-          const userData = JSON.parse(JSON.parse(storedUserData));
-          setUser(userData);
-        }
-      } catch (error) {
-        console.error('Failed to load authentication data:', error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1500)
-      }
-    };
 
     loadStoredAuth();
   }, []);
@@ -113,6 +130,16 @@ export function AuthProvider({ children }) {
       throw error;
     }
   };
+
+  const setStoreData = async (data) => {
+    try {
+      await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify({...user, ...data})));
+      loadStoredAuth();
+    } catch (error) {
+      console.error(`Failed to store data for key ${data}:`, error);
+      throw error;
+    }
+  }
 
   // Login function
   const login = async (id, password) => {
@@ -187,12 +214,27 @@ export function AuthProvider({ children }) {
     // }
   };
 
+  const getRating = async () => {
+    api.get('/currentUser/rating', {
+        headers: {
+            'authorization': accessToken
+        }
+    }).then(res => {
+      console.log(res.data, 'RATING');
+      setStoreData(res?.data?.data || {})
+    }).catch(err => {
+      console.log(err, 'RATING ERROR');
+    })
+  }
+
   return (
     <AuthContext.Provider
       value={{
         user,
         accessToken,
         loading,
+        storeAuthData,
+        getRating,
         login,
         logout
       }}>

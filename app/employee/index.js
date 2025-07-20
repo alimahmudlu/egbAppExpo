@@ -23,7 +23,7 @@ import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
 
 export default function EmployeeDashboardScreen() {
-    const {user} = useAuth();
+    const {user, getRating} = useAuth();
     const {storeData} = useData();
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
     const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
@@ -62,9 +62,11 @@ export default function EmployeeDashboardScreen() {
         }).then().catch(err => {
             console.log(err);
         })
+        getRating()
         return () => {
             console.log('Home tab lost focus');
         };
+
     }, [refreshKey]));
 
     useEffect(() => {
@@ -87,10 +89,10 @@ export default function EmployeeDashboardScreen() {
                 }));
             }
         };
-        const connectHandler = () => {
+
+        // socket.on('connect', () => {
             socket.on("update_activity", handler);
-        };
-        socket.on("connect", connectHandler);
+        // })
 
         return () => {
             socket.off("update_activity", handler);
@@ -118,7 +120,7 @@ export default function EmployeeDashboardScreen() {
                 name={user?.full_name}
                 role={user?.role?.name}
                 position={user?.position}
-                rating="3.12"
+                rating={user?.rating}
                 profileImage={''}
             />}
         >

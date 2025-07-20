@@ -25,6 +25,7 @@ import moment from "moment-timezone";
 import {useApi} from "@/hooks/useApi";
 import * as Location from "expo-location";
 import * as Linking from "expo-linking";
+import {useTranslation} from "react-i18next";
 
 
 export default function SgSectionEmployeeCard(props) {
@@ -40,6 +41,7 @@ export default function SgSectionEmployeeCard(props) {
     const {request} = useApi();
     const [clickType, setClickType] = useState(null)
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
+    const {t} = useTranslation();
 
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
 
@@ -303,7 +305,7 @@ export default function SgSectionEmployeeCard(props) {
                             name={title}
                             role={role}
                             position={position || fullData?.position}
-                            profileImage={image || Avatar}
+                            profileImage={image}
                             color="dark"
                             size="md"
                             clickable={`/timeKeeperPages/users/${fullData?.employee?.id}`}
@@ -434,8 +436,8 @@ export default function SgSectionEmployeeCard(props) {
             <SgPopup
                 visible={rejectCheckInModal}
                 onClose={() => toggleRejectCheckInModal()}
-                title="Reject"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={fullData?.type === 1 ? t('rejectCheckIn') : t('rejectCheckOut')}
+                description={fullData?.type === 1 ? t('rejectCheckIn__description') : t('rejectCheckOut__description')}
                 icon={<ErrorIconModal width={56} height={56}/>}
                 footerButton={
                     <SgButton
@@ -443,7 +445,7 @@ export default function SgSectionEmployeeCard(props) {
                         color={COLORS.white}
                         onPress={handleSubmitReject}
                     >
-                        Yes, reject
+                        {t('yesReject')}
                     </SgButton>
                 }
             >
@@ -465,16 +467,16 @@ export default function SgSectionEmployeeCard(props) {
             <SgPopup
                 visible={rejectedCheckInModal}
                 onClose={() => toggleRejectedCheckInModal()}
-                title="Check in rejected"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('rejectedSuccessfully')}
+                description={t('rejectedSuccessfully__description')}
                 icon={<ErrorIconModal width={56} height={56}/>}
             />
 
             <SgPopup
                 visible={acceptCheckInModal}
                 onClose={() => toggleAcceptCheckInModal()}
-                title="Accept"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={t('accept')}
+                description={fullData?.type === 1 ? t('checkInAccept__description') : t('checkOutAccept__description')}
                 icon={<SuccessIconModal width={56} height={56}/>}
                 footerButton={
                     <SgButton
@@ -482,7 +484,7 @@ export default function SgSectionEmployeeCard(props) {
                         color={COLORS.white}
                         onPress={handleSubmitAccept}
                     >
-                        Yes, accept
+                        {t('yesAccept')}
                     </SgButton>
                 }
             />
@@ -490,8 +492,8 @@ export default function SgSectionEmployeeCard(props) {
             <SgPopup
                 visible={acceptedCheckInModal}
                 onClose={() => toggleAcceptedCheckInModal()}
-                title="Check in accepted"
-                description="The standard chunk of Lorem Ipsum used since the are also reproduced in their?"
+                title={fullData?.type === 1 ? t('checkInAccepted') : t('checkOutAccepted')}
+                description={fullData?.type === 1 ? t('checkInAccepted__description') : t('checkOutAccepted__description')}
                 icon={<SuccessIconModal width={56} height={56}/>}
             />
 

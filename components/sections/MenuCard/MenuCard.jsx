@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, Switch, TouchableOpacity} from 'react-native';
+import {View, Text, Switch, TouchableOpacity, Linking} from 'react-native';
 
 import Lang from '@/assets/images/language.svg';
 import Notify from '@/assets/images/notification.svg';
@@ -25,6 +25,15 @@ export default function SgSectionMenuCard({extraItems = []}) {
     const {selectedLanguage} = useLanguage();
   const { user } = useAuth();
   const {t} = useTranslation();
+
+  const openLink = async (url) => {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      console.warn(`Don't know how to open this URL: ${url}`);
+    }
+  };
 
   return (
       <View style={styles.container}>
@@ -96,7 +105,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
             <Divider />
 
             {/* Terms & Conditions */}
-            <TouchableOpacity onPress={() => router.push('/pages/terms_conditions')} style={styles.item}>
+            <TouchableOpacity onPress={() => openLink('https://entergreenbuildings.com/terms')} style={styles.item}>
               <View style={styles.left}>
                 <View style={styles.iconContainer}>
                   <Terms width={20} height={20} style={styles.icon} />
@@ -110,7 +119,7 @@ export default function SgSectionMenuCard({extraItems = []}) {
             <Divider />
 
             {/* Privacy Policy */}
-            <TouchableOpacity onPress={() => router.push('/pages/privacy_policy')} style={styles.item}>
+            <TouchableOpacity onPress={() => openLink('https://entergreenbuildings.com/privacy-policy')} style={styles.item}>
               <View style={styles.left}>
                 <View style={styles.iconContainer}>
                   <Privacy width={20} height={20} style={styles.icon} />

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
@@ -21,6 +21,8 @@ import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useTranslation} from "react-i18next";
 import {useLanguage} from "@/hooks/useLanguage";
+import {validate} from "@/utils/validate";
+import validationConstraints from "@/app/chiefPages/create-task/constants";
 
 export default function EmployeeDocsScreen() {
   const [docList, setDocList] = useState([]);
@@ -205,30 +207,41 @@ export default function EmployeeDocsScreen() {
 
   function toggleAddDocsModal() {
     setAddDocsModal(!addDocsModal)
+    setSelectedFiles([])
+    setData({})
+    setErrors({})
   }
   function handleSubmitDoc() {
-    request({
-      url: '/chief/doc/add',
-      method: 'post',
-      data: {
-        ...data,
-        file: selectedFiles[0]?.id,
-        application_id: user?.application_id
-      }
-    }).then(res => {
-      setSelectedFiles([])
-      setData({})
-      setErrors({})
+    let errors = validate({...data, fileTypes: fileTypes, file: selectedFiles?.[0]?.id}, 'addDocs', validationConstraints);
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      ToastAndroid.show("error var", ToastAndroid.SHORT)
+    } else {
       request({
-        url: '/chief/doc/list',
-        method: 'get',
-      }).then().catch(err => {
+        url: '/chief/doc/add',
+        method: 'post',
+        data: {
+          ...data,
+          file: selectedFiles[0]?.id,
+          application_id: user?.application_id
+        }
+      }).then(res => {
+        toggleAddDocsModal()
+        // setSelectedFiles([])
+        // setData({})
+        // setErrors({})
+        request({
+          url: '/employee/doc/list',
+          method: 'get',
+        }).then().catch(err => {
+          console.log(err);
+        })
+        console.log(res);
+      }).catch(err => {
         console.log(err);
       })
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    })
+    }
   }
 
 
@@ -295,6 +308,7 @@ export default function EmployeeDocsScreen() {
 
 
       <SgPopup
+          autoClose={false}
           visible={addDocsModal}
           onClose={toggleAddDocsModal}
           title={t('addDocument')}
@@ -340,7 +354,7 @@ export default function EmployeeDocsScreen() {
                 </View>
                 <View>
                   <SgDatePicker
-                      label={t('dateOfExpiry')}
+                      label={t('dateOfExpired')}
                       placeholder={t('enterDate')}
                       type="date"
                       value={data?.date_of_expiry}

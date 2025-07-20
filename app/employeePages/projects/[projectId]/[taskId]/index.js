@@ -18,10 +18,12 @@ import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useSocket} from "@/hooks/useSocket";
 import {useTranslation} from "react-i18next";
 import SgSectionStatusInfo from "@/components/sections/StatusInfo/StatusInfo";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
-    const { insertData, storeData, removeRowData, changeRowData, updateData } = useData();
+    const {getRating} = useAuth();
+    const { storeData, updateData } = useData();
     const {socket} = useSocket();
     const router = useRouter();
     const { t } = useTranslation();
@@ -142,6 +144,7 @@ export default function ProjectItemScreen() {
         };
 
         const taskStatus = (data) => {
+            getRating()
             updateData(`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`, data)
         };
 

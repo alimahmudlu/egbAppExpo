@@ -184,27 +184,27 @@ export default function SgSectionUserInfo({
                             </Text>
                         </Pressable>
                     </View>
-                    {/*{rating && (*/}
-                    {/*    <View style={styles.ratingSection}>*/}
-                    {/*        <FontAwesome*/}
-                    {/*            name="star"*/}
-                    {/*            size={appliedSize.starSize}*/}
-                    {/*            style={styles.star}*/}
-                    {/*        />*/}
-                    {/*        <Text*/}
-                    {/*            style={[*/}
-                    {/*                styles.rating,*/}
-                    {/*                {*/}
-                    {/*                    color: appliedColor,*/}
-                    {/*                    fontSize: appliedSize.rating.fontSize,*/}
-                    {/*                    lineHeight: appliedSize.rating.lineHeight,*/}
-                    {/*                },*/}
-                    {/*            ]}*/}
-                    {/*        >*/}
-                    {/*            {rating}*/}
-                    {/*        </Text>*/}
-                    {/*    </View>*/}
-                    {/*)}*/}
+                    {rating && (
+                        <View style={styles.ratingSection}>
+                            <FontAwesome
+                                name="star"
+                                size={appliedSize.starSize}
+                                style={styles.star}
+                            />
+                            <Text
+                                style={[
+                                    styles.rating,
+                                    {
+                                        color: appliedColor,
+                                        fontSize: appliedSize.rating.fontSize,
+                                        lineHeight: appliedSize.rating.lineHeight,
+                                    },
+                                ]}
+                            >
+                                {rating}
+                            </Text>
+                        </View>
+                    )}
                 </View>
             </View>
         </Pressable>

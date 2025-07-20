@@ -25,7 +25,7 @@ import {useTranslation} from "react-i18next";
 export default function SgSectionTaskCard(props) {
     const { user, accessToken } = useAuth();
     const { request } = useApi();
-    const {changeRowData} = useData();
+    const {changeRowData, removeRowData} = useData();
     const router = useRouter();
     const [data, setData] = useState({});
     const {t} = useTranslation();
@@ -60,7 +60,8 @@ export default function SgSectionTaskCard(props) {
             }
         } ).then(res => {
             toggleRemoveTaskInfoModal();
-
+            removeRowData(`GET:/chief/task/list`, data?.id, 'id');
+            removeRowData(`GET:/chief/project/item/${data?.projectId}/tasks`, data?.id, 'id');
         }).catch(err => {
             console.log(err);
         });

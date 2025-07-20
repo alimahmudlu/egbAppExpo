@@ -123,16 +123,18 @@ export const DataProvider = ({ children }) => {
     });
   };
   const removeRowData = async (key, item, iterator = undefined) => {
-    setStoreData(prev => ({
-      ...prev,
-      cache: {
-        ...prev.cache,
-        [key]: {
-                  ...prev.cache?.[key],
-                  data: prev.cache?.[key]?.data?.filter(e => iterator ? (e?.[iterator] !== item) : (e !== item))
-                }
-      }
-    }));
+    setStoreData(prev => {
+      return ({
+        ...prev,
+        cache: {
+          ...prev.cache,
+          [key]: {
+            ...prev.cache?.[key],
+            data: prev.cache?.[key]?.data?.filter(e => iterator ? (e?.[iterator] !== item) : (e !== item))
+          }
+        }
+      })
+    });
   }
 
   return (

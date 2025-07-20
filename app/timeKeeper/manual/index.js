@@ -70,7 +70,6 @@ export default function EmployeeDocsScreen() {
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
                         title={t('manualCheckInAndCheckOut')}
-                        description={t('manualCheckInAndCheckOut__description')}
                     />
                 </View>
             }

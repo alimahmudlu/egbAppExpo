@@ -52,7 +52,7 @@ i18n.use(initReactI18next).init({
                 clearFilters: "Clear filters",
                 progress: "Progress",
                 select: "Select",
-                rejected: "Rejected",
+                rejected: "Reject",
                 selectProject: "Select project",
                 scoreRange: "Score range",
                 deadlineDateRange: "Deadline date range",
@@ -99,10 +99,10 @@ i18n.use(initReactI18next).init({
                     "This action will notify the requester that their progress has been checked.",
                 yesChecked: "Yes",
                 taskChecked: "Task checked",
-                taskChecked__description: "Are you sure you want to check this task?",
+                taskChecked__description: "The task has been successfully checked",
                 taskCheck: "Task Check Progress sent",
                 taskCheck__description: "Your request to check the task has been sent successfully. Please wait for a response from the reviewer",
-                completedTask: "Completed task",
+                completedTask: "Complete task",
                 completedTask__description: "Are you sure you want to mark this task as completed?",
                 yesCompleted: "Yes",
                 yesComplete: "Yes",
@@ -191,7 +191,30 @@ i18n.use(initReactI18next).init({
                 taskRejected__description: "Rejected task successfully",
                 started: "Started",
                 inProgress: "In progress",
-                completed: "Completed"
+                completed: "Completed",
+                checkInAccept__description: "Are you sure you want to accept this check request?",
+                checkOutAccept__description: "Are you sure you want to accept this check-out request?",
+                yesAccept: "Yes",
+
+                checkInAccepted: "Check-in accepted",
+                checkInAccepted__description: "The check-in request has been successfully accepted.",
+
+                checkOutAccepted: "Check-out accepted",
+                checkOutAccepted__description: "The check-out request has been successfully accepted.",
+
+                rejectCheckIn: "Reject check-in request?",
+                rejectCheckIn__description: "Are you sure you want to reject this check-in request?",
+
+                rejectCheckOut: "Reject check-out request?",
+                rejectCheckOut__description: "Are you sure you want to reject this check-out request?",
+
+                yesReject: "Yes",
+
+                rejectedSuccessfully: "Rejected successfully",
+                rejectedSuccessfully__description: "The request has been successfully rejected",
+
+                atWork: "At work",
+
             },
         },
         ru: {
@@ -287,7 +310,7 @@ i18n.use(initReactI18next).init({
                 checkedTask__description: "Задача проверена",
                 yesChecked: "Да",
                 taskChecked: "Задача проверена",
-                taskChecked__description: "Вы уверены, что хотите подтвердить выполнение этой задачи?",
+                taskChecked__description: "Задача была успешно проверена",
                 taskCheck: "Запрос на проверку задания отправлен",
                 taskCheck__description: "Ваш запрос на проверку задания был успешно отправлен. Пожалуйста, дождитесь ответа от проверяющего.",
                 completedTask: "Завершенная задача",
@@ -377,6 +400,30 @@ i18n.use(initReactI18next).init({
                 started: "Началось",
                 inProgress: "В процессе",
                 completed: "Завершено",
+                checkInAccept__description: "Вы уверены, что хотите принять этот запрос на вход?",
+                checkOutAccept__description: "Вы уверены, что хотите принять этот запрос на выход?",
+                yesAccept: "Да",
+
+                checkInAccepted: "Регистрация принята",
+                checkInAccepted__description: "Запрос на регистрацию успешно принят.",
+
+                checkOutAccepted: "Выход принят",
+                checkOutAccepted__description: "Запрос на выход успешно принят.",
+
+                rejectCheckIn: "Отклонить запрос на регистрацию?",
+                rejectCheckIn__description: "Вы уверены, что хотите отклонить этот запрос на регистрацию?",
+
+                rejectCheckOut: "Отклонить запрос на выход?",
+                rejectCheckOut__description: "Вы уверены, что хотите отклонить этот запрос на выход?",
+
+                yesReject: "Да",
+
+                rejectedSuccessfully: "Отклонено успешно",
+                rejectedSuccessfully__description: "Запрос был успешно отклонен",
+
+
+                atWork: "На работе",
+
             },
         },
         uz: {
@@ -470,7 +517,7 @@ i18n.use(initReactI18next).init({
                 checkedTask__description: "Vazifa tekshirildi",
                 yesChecked: "Ha",
                 taskChecked: "Vazifa tekshirildi",
-                taskChecked__description: "Bu vazifa bajarilganligini tasdiqlamoqchimisiz?",
+                taskChecked__description: "Vazifa muvaffaqiyatli tekshirildi",
                 taskCheck: "Vazifani tekshirish so‘rovi yuborildi",
                 taskCheck__description: "Vazifani tekshirish so‘rovingiz muvaffaqiyatli yuborildi. Iltimos, tekshiruvchining javobini kuting.",
                 completedTask: "Bajarilgan vazifa",
@@ -562,6 +609,32 @@ i18n.use(initReactI18next).init({
                 started: "Boshlandi",
                 inProgress: "Jarayonda",
                 completed: "Yakunlangan",
+                checkInAccept__description: "Ushbu kirish so‘rovini qabul qilmoqchimisiz?",
+                checkOutAccept__description: "Ushbu chiqish so‘rovini qabul qilmoqchimisiz?",
+                yesAccept: "Ha",
+
+                checkInAccepted: "Kirish qabul qilindi",
+                checkInAccepted__description: "Kirish so‘rovi muvaffaqiyatli qabul qilindi.",
+
+
+                checkOutAccepted: "Chiqish qabul qilindi",
+                checkOutAccepted__description: "Chiqish so‘rovi muvaffaqiyatli qabul qilindi.",
+
+                rejectCheckIn: "Kirish so‘rovini rad etmoqchimisiz?",
+                rejectCheckIn__description: "Ushbu kirish so‘rovini rad etmoqchi ekanligingizga ishonchingiz komilmi?",
+
+                rejectCheckOut: "Chiqish so‘rovini rad etmoqchimisiz?",
+                rejectCheckOut__description: "Ushbu chiqish so‘rovini rad etmochi ekanligingizga ishonchingiz komilmi?",
+
+                yesReject: "Ha",
+
+
+                rejectedSuccessfully__description: "So‘rov muvaffaqiyatli rad etildi",
+                rejectedSuccessfully: "Muvaffaqiyatli rad etildi",
+
+
+                atWork: "Ishda",
+
             },
         },
     },

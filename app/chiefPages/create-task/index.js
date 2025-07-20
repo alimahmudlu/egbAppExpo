@@ -205,8 +205,8 @@ export default function TaskCreateScreen() {
                 visible={createTaskInfoModal}
                 onClose={toggleCreateTaskInfoModal}
                 fullScreen={true}
-                title={t("taskCompleted")}
-                description={t("taskCompleted__description")}
+                title={t("taskCreated")}
+                description={t("taskCreated__description")}
                 icon={<CompletedModalIcon width={202} height={168}/>}
             />
         </SgTemplateScreen>);

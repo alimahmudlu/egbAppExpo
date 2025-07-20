@@ -34,7 +34,7 @@ export default function ProjectItemScreen() {
                 </View>
                 <View>
                     <SgSectionDownloadApp
-                        version="0.0.22"
+                        version="0.0.23"
                         title={t('appInfo1')}
                         platforms={['android', 'ios']}
                     />

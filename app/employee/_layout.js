@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Platform} from 'react-native';
 import HomeIcon from '@/assets/images/home.svg';
 import HomeActiveIcon from '@/assets/images/home-active.svg';
@@ -8,9 +8,29 @@ import DocsActiveIcon from '@/assets/images/docs-active.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
 import {useTranslation} from "react-i18next";
+import {useSocket} from "@/hooks/useSocket";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function EmployeeTabLayout() {
     const { t } = useTranslation();
+    const {socket} = useSocket();
+    const {getRating} = useAuth();
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const taskStatus = (data) => {
+            getRating()
+        };
+
+        // socket.on('connect', () => {
+        socket.on("change_task__by_employee", taskStatus);
+        // })
+
+        return () => {
+            socket.off("change_task__by_chief", taskStatus);
+        };
+    }, [socket]);
 
   return (
     <Tabs
