@@ -113,7 +113,9 @@ export default function SgSectionEmployeeCard(props) {
             }
         }).then(res => {
             if (res.data.success) {
-                toggleAcceptedCheckInModal();
+                // setAcceptCheckInModal(false);
+                // setUserOperationModal(false)
+                // setAcceptedCheckInModal(false);
                 if (fullData?.type === 1) {
                     removeRowData('GET:/timekeeper/activity/list', fullData)
                     insertData('GET:/timekeeper/activity/list', {
@@ -140,10 +142,6 @@ export default function SgSectionEmployeeCard(props) {
     }
 
     function toggleAcceptedCheckInModal() {
-        if (acceptedCheckInModal) {
-            setAcceptCheckInModal(false);
-            setUserOperationModal(false)
-        }
         setAcceptedCheckInModal(!acceptedCheckInModal);
     }
 
@@ -287,6 +285,7 @@ export default function SgSectionEmployeeCard(props) {
                 visible={rejectInfoModal}
                 onClose={toggleRejectInfoModal}
                 icon={<InfoCircleModalIcon width={56} height={56}/>}
+                autoClose={false}
             >
                 <Text style={styles.rejectModal}>Reject detail</Text>
                 <SgCard><Text style={styles.title}>{reason || ''}</Text></SgCard>
@@ -297,6 +296,7 @@ export default function SgSectionEmployeeCard(props) {
                 visible={userOperationModal}
                 onClose={() => toggleUserOperationModal()}
                 title=" "
+                autoClose={false}
             >
                 <View style={{gap: 16, width: '100%'}}>
                     <View style={styles.modalGroup}>
@@ -448,6 +448,7 @@ export default function SgSectionEmployeeCard(props) {
                         {t('yesReject')}
                     </SgButton>
                 }
+                autoClose={false}
             >
                 <View style={{marginBottom: 16, width: '100%'}}>
                     <TextInput
@@ -470,6 +471,7 @@ export default function SgSectionEmployeeCard(props) {
                 title={t('rejectedSuccessfully')}
                 description={t('rejectedSuccessfully__description')}
                 icon={<ErrorIconModal width={56} height={56}/>}
+                autoClose={false}
             />
 
             <SgPopup
@@ -487,6 +489,7 @@ export default function SgSectionEmployeeCard(props) {
                         {t('yesAccept')}
                     </SgButton>
                 }
+                autoClose={false}
             />
 
             <SgPopup
@@ -495,6 +498,7 @@ export default function SgSectionEmployeeCard(props) {
                 title={fullData?.type === 1 ? t('checkInAccepted') : t('checkOutAccepted')}
                 description={fullData?.type === 1 ? t('checkInAccepted__description') : t('checkOutAccepted__description')}
                 icon={<SuccessIconModal width={56} height={56}/>}
+                autoClose={false}
             />
 
             <SgPopup
@@ -512,6 +516,7 @@ export default function SgSectionEmployeeCard(props) {
                         Open
                     </SgButton>
                 }
+                autoClose={false}
             />
         </>
     );

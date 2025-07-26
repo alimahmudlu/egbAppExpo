@@ -19,7 +19,7 @@ export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
     const {request} = useApi();
     const [employeeActivities, setEmployeeActivities] = useState([]);
-    const {storeData, insertData} = useData();
+    const {storeData, insertData, removeRowData, changeAddRowData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
@@ -44,13 +44,30 @@ export default function EmployeeDashboardScreen() {
         const handler = (data) => {
             insertData('GET:/timekeeper/activity/list', data?.data)
         };
+        const handler2 = (data) => {
+            console.log('update_activity', data?.data?.id)
+            // removeRowData('GET:/timekeeper/activity/list', data?.data?.activity_id, 'id')
+            changeAddRowData('GET:/timekeeper/activity/list', {
+                completed_status: 1
+            }, data?.data?.activity_id, 'id')
+            insertData('GET:/timekeeper/activity/list', {
+                ...data?.data,
+                // complete_status: 1,
+                // confirm_time: moment(),
+                // timezone: moment.tz.guess(),
+                // confirm_employee_id: user?.id,
+                // status: 2
+            })
+        };
 
         // socket.on('connect', () => {
             socket.on("new_activity", handler);
+            socket.on("update_activity", handler2);
         // })
 
         return () => {
             socket.off("new_activity", handler);
+            socket.off("update_activity", handler2);
         };
     }, [socket]);
 

@@ -122,6 +122,27 @@ export const DataProvider = ({ children }) => {
       };
     });
   };
+  const changeAddRowData = async (key, data, id, index) => {
+    setStoreData(prev => {
+      const oldData = prev.cache?.[key]?.data;
+      if (!oldData) return prev;
+
+      const updatedData = oldData.map(item =>
+          item.id === id ? ({...item, ...data}) : item
+      );
+
+      return {
+        ...prev,
+        cache: {
+          ...prev.cache,
+          [key]: {
+            ...prev.cache?.[key],
+            data: updatedData
+          }
+        }
+      };
+    });
+  };
   const removeRowData = async (key, item, iterator = undefined) => {
     setStoreData(prev => {
       return ({
@@ -138,7 +159,7 @@ export const DataProvider = ({ children }) => {
   }
 
   return (
-      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, changeRowData, updateData, removeRowData, insertLoading, removeLoading }}>
+      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, insertData, changeRowData, updateData, removeRowData, changeAddRowData, insertLoading, removeLoading }}>
         {children}
       </DataContext.Provider>
   );

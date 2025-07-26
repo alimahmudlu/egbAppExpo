@@ -8,6 +8,7 @@ import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
+import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperUserScreen() {
     const {request} = useApi();
@@ -15,6 +16,7 @@ export default function TimeKeeperUserScreen() {
     const {userId} = useLocalSearchParams();
     const [employeeActivities, setEmployeeActivities] = useState([]);
     const {refreshKey} = useLocalSearchParams();
+    const {t} = useTranslation()
 
     useFocusEffect(useCallback(() => {
         request({
