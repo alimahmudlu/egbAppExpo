@@ -3,57 +3,59 @@ import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import COLORS from "@/constants/colors";
 import React, {useCallback, useEffect, useState} from "react";
-import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
-import moment from "moment/moment";
+import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
+import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperUserScreen() {
-    const {userId} = useLocalSearchParams();
     const {request} = useApi();
-    const [taskList, setTaskList] = useState([]);
     const {storeData} = useData();
+    const {userId} = useLocalSearchParams();
+    const [employeeActivities, setEmployeeActivities] = useState([]);
     const {refreshKey} = useLocalSearchParams();
-    const {t} = useTranslation();
+    const {t} = useTranslation()
 
     useFocusEffect(useCallback(() => {
         request({
-            url: `/chief/task/list/user/${userId}`, method: 'get', params: {
-                type: 'completed'
-            }
+            url: `/timekeeper/activity/checkout`,
+            method: 'get',
+            params: {start_date: moment().startOf('day').format(), end_date: moment().endOf('day').format()},
         }).then().catch(err => {
-            console.log(err);
-        })
+            console.log(err, 'apiservice control err')
+        });
         return () => {
             console.log('Home tab lost focus');
         };
     }, [refreshKey]));
 
     useEffect(() => {
-        setTaskList(storeData?.cache?.[`GET:/chief/task/list/user/${userId}`]?.data)
-    }, [storeData?.cache?.[`GET:/chief/task/list/user/${userId}`]])
+        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/activity/checkout`]?.data)
+    }, [storeData?.cache?.[`GET:/timekeeper/activity/checkout`]])
 
-    return (<SgTemplateScreen
+    return (
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: t('completedTasks'),
+                header: t('checkOut'),
             }}/>}
         >
-            {taskList?.map((el, index) => (<SgSectionTaskCard
-                    id={el?.id}
-                    projectId={el?.project_id}
+            {employeeActivities?.map((emp, index) => (
+                <SgSectionEmployeeCard
                     key={index}
-                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                    duration={el?.duration}
-                    title={el?.name}
-                    description={el?.description}
-                    name={el?.assigned_employee?.full_name}
-                    image={null}
-                    status={el?.status}
-                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
-                />))}
-        </SgTemplateScreen>)
+                    fullData={emp}
+                    title={emp?.employee?.full_name}
+                    role={emp?.employee?.role?.name}
+                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                    image={emp?.employee?.image}
+                    editable={false}
+                    status={emp.status}
+                    reason={emp.reject_reason}
+                />
+            ))}
+        </SgTemplateScreen>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -66,19 +68,35 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
-    }, backButton: {
+    },
+    backButton: {
         padding: 8,
-    }, headerTitle: {
-        fontSize: 18, fontWeight: 'bold', marginRight: 'auto', marginLeft: 'auto',
-    }, overviewButton: {
-        paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4,
-    }, overviewButtonText: {
-        color: '#000000', fontFamily: 'Inter', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
-    }, container: {
-        flex: 1,
-    }, contentText: {
+    },
+    headerTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+    },
+    overviewButton: {
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 4,
+    },
+    overviewButtonText: {
+        color: '#000000',
+        fontFamily: 'Inter',
+        fontWeight: '500',
         fontSize: 16,
-    }, acceptButton: {
+        // lineHeight: '24px',
+    },
+    container: {
+        flex: 1,
+    },
+    contentText: {
+        fontSize: 16,
+    },
+    acceptButton: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -87,14 +105,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 16,
-    }, acceptButtonText: {
+    },
+    acceptButtonText: {
         fontFamily: 'Inter',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 600,
         lineHeight: 14,
         color: COLORS.brand_600,
-    }, rejectButton: {
+    },
+    rejectButton: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -103,14 +123,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 16,
-    }, rejectButtonText: {
+    },
+    rejectButtonText: {
         fontFamily: 'Inter',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 600,
         lineHeight: 14,
         color: COLORS.error_600,
-    }, rejectModal: {
+    },
+    rejectModal: {
         fontFamily: "Inter",
         fontSize: 20,
         fontStyle: "normal",

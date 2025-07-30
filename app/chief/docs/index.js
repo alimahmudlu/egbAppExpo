@@ -210,6 +210,7 @@ export default function EmployeeDocsScreen() {
   ])
   const {refreshKey} = useLocalSearchParams();
   const {t} = useTranslation()
+  const [removeModal, setRemoveModal] = useState(false);
 
   function toggleAddDocsModal() {
     setAddDocsModal(!addDocsModal)
@@ -248,6 +249,28 @@ export default function EmployeeDocsScreen() {
         console.log(err);
       })
     }
+  }
+
+  function handleRemove(selectedFileId) {
+    request({
+      url: '/chief/doc/remove',
+      method: 'post',
+      data: {
+        file: selectedFileId,
+        application_id: user?.application_id
+      }
+    }).then(res => {
+      setRemoveModal(false)
+      request({
+        url: '/chief/doc/list',
+        method: 'get',
+      }).then().catch(err => {
+        console.log(err);
+      })
+      console.log(res);
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
 
@@ -307,6 +330,10 @@ export default function EmployeeDocsScreen() {
                 url={el?.filepath}
                 expiryDate={el?.date_of_expiry}
                 issueDate={el?.date_of_issue}
+                deletePermission={el?.employee_id === user?.id}
+                handleRemove={handleRemove}
+                setRemoveModal={setRemoveModal}
+                removeModal={removeModal}
                 migrationId={fileTypes?.find(item => item.key === el?.type)?.[selectedLanguage?.id !== 'en' ? `label_${selectedLanguage?.id}` : 'label'] || el?.type}
             />
         ))}

@@ -20,7 +20,7 @@ export default function TimeKeeperUserScreen() {
 
     useFocusEffect(useCallback(() => {
         request({
-            url: `/chief/task/list/${userId}`,
+            url: `/chief/task/list/user/${userId}`,
             method: 'get',
             params: {
                 type: 'active'
@@ -34,8 +34,8 @@ export default function TimeKeeperUserScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
-        setTaskList(storeData?.cache?.[`GET:/chief/task/list/${userId}`]?.data)
-    }, [storeData?.cache?.[`GET:/chief/task/list/${userId}`]])
+        setTaskList(storeData?.cache?.[`GET:/chief/task/list/user/${userId}`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/task/list/user/${userId}`]])
 
     return (
         <SgTemplateScreen

@@ -27,7 +27,7 @@ export default function EmployeeDashboardScreen() {
 
     useFocusEffect(useCallback(() => {
         request({
-            url: '/timekeeper/activity/list', method: 'get',
+            url: '/timekeeper/activity/list', method: 'get'
         }).then(res => {
         }).catch(err => {
             console.log(err, 'apiservice control err')
@@ -90,12 +90,14 @@ export default function EmployeeDashboardScreen() {
                 title={t('dailyCheckIn')}
                 count={employeeActivities?.filter(el => el.type === 1)?.length}
                 type="checkin"
+                href={`/timeKeeperPages/activity/checkIn`}
             />
             <SgSectionInfoCard
                 icon="log-out-outline"
                 title={t('dailyCheckOut')}
                 count={employeeActivities?.filter(el => el.type === 2)?.length}
                 type="checkout"
+                href={`/timeKeeperPages/activity/checkOut`}
             />
         </SgCheckInOutGroup>
 
@@ -121,6 +123,7 @@ export default function EmployeeDashboardScreen() {
                         fullData={emp}
                         title={emp?.employee?.full_name}
                         role={emp?.employee?.role?.name}
+                        checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                         time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                         image={emp?.employee?.image}
                     />))), id: 'checkIn'
@@ -131,6 +134,7 @@ export default function EmployeeDashboardScreen() {
                         fullData={emp}
                         title={emp?.employee?.full_name}
                         role={emp?.employee?.role?.name}
+                        checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                         time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                         image={emp?.employee?.image}
                     />))), id: 'checkOut'
@@ -139,9 +143,12 @@ export default function EmployeeDashboardScreen() {
                     <SgSectionEmployeeCard
                         key={index}
                         fullData={emp}
+                        atWork={emp.type === 1 && emp.status === 2 && emp.completed_status === 0}
                         title={emp?.employee?.full_name}
                         role={emp?.employee?.role?.name}
+                        checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                         time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                        timeRaw={emp.request_time}
                         image={emp?.employee?.image}
                         editable={false}
                     />))), id: 'atWork'

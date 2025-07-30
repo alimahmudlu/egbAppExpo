@@ -13,14 +13,13 @@ import {useTranslation} from "react-i18next";
 export default function TimeKeeperUserScreen() {
     const {request} = useApi();
     const {storeData} = useData();
-    const {userId} = useLocalSearchParams();
     const [employeeActivities, setEmployeeActivities] = useState([]);
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
 
     useFocusEffect(useCallback(() => {
         request({
-            url: `/timekeeper/employee/history/${userId}/checkout`,
+            url: `/timekeeper/activity/checkout`,
             method: 'get',
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
@@ -31,13 +30,13 @@ export default function TimeKeeperUserScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
-        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]?.data)
-    }, [storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]])
+        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/activity/checkout`]?.data)
+    }, [storeData?.cache?.[`GET:/timekeeper/activity/checkout`]])
 
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: t('checkOut'),
+                header: t('dailyCheckOut'),
             }}/>}
         >
             {employeeActivities?.map((emp, index) => (
@@ -52,36 +51,6 @@ export default function TimeKeeperUserScreen() {
                     status={emp.status}
                     reason={emp.reject_reason}
                 />
-                // <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}} key={index}>
-                //     <SgListUserItem
-                //         key={index}
-                //         title={emp.title}
-                //         role={emp.role}
-                //         date={emp.date}
-                //         time={emp.request_time}
-                //         image={emp.image}
-                //     />
-                //     {emp.status === 1 ?
-                //         <Pressable
-                //             style={styles.acceptButton}
-                //         >
-                //             <Text style={styles.acceptButtonText}>
-                //                 Accepted
-                //             </Text>
-                //             <CheckIcon width={8} height={8} />
-                //         </Pressable>
-                //         :
-                //         <Pressable
-                //             onPress={() => toggleRejectInfoModal(emp?.reason)}
-                //             style={styles.rejectButton}
-                //         >
-                //             <Text style={styles.rejectButtonText}>
-                //                 Rejected
-                //             </Text>
-                //             <CheckIcon width={8} height={8} />
-                //         </Pressable>
-                //     }
-                // </View>
             ))}
         </SgTemplateScreen>
     )

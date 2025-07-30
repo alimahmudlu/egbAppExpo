@@ -53,6 +53,7 @@ export default function EmployeeDashboardScreen() {
                     title={t('activeTasks')}
                     count={taskList?.length - taskList?.filter(el => el?.status?.id === 5)?.length}
                     type="activeTasks"
+                    href={`/chiefPages/tasks/active`}
                 />
                 <SgSectionInfoCard
                     icon="log-out-outline"

@@ -8,7 +8,7 @@ import SuccessIconModal from "@/assets/images/successModal.svg";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
 import SgPopup from "@/components/ui/Modal/Modal";
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import RejectIcon from '@/assets/images/x-close_12.svg';
@@ -29,7 +29,7 @@ import {useTranslation} from "react-i18next";
 
 
 export default function SgSectionEmployeeCard(props) {
-    const {fullData, image, title, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason} = props;
+    const {fullData, image, title, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw} = props;
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
@@ -37,7 +37,7 @@ export default function SgSectionEmployeeCard(props) {
     const [acceptedCheckInModal, setAcceptedCheckInModal] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
     const { accessToken, user } = useAuth();
-    const { removeRowData, insertData, changeRowData } = useData();
+    const { removeRowData, insertData, changeRowData, changeAddRowData } = useData();
     const {request} = useApi();
     const [clickType, setClickType] = useState(null)
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
@@ -51,7 +51,7 @@ export default function SgSectionEmployeeCard(props) {
 
 
     function toggleUserOperationModal() {
-        if (editable) {
+        if (editable || (isManualCheckoutAvailable() && atWork)) {
             setUserOperationModal(status === 1 ? false : !userOperationModal);
         } else {
             router.push(`/timeKeeperPages/users/${fullData?.employee?.id}`)
@@ -98,6 +98,19 @@ export default function SgSectionEmployeeCard(props) {
         setAcceptCheckInModal(!acceptCheckInModal);
         toggleUserOperationModal()
     }
+
+    const now = moment();
+    const today = moment().format("YYYY-MM-DD");
+
+    const isManualCheckoutAvailable = () => {
+        const isToday = moment(timeRaw).format("YYYY-MM-DD") === today;
+        const isPastDay = moment(moment(timeRaw).format("YYYY-MM-DD")).isBefore(today);
+
+        if (isPastDay) return true;
+        if (isToday && now.isAfter(moment().set({ hour: 6, minute: 0 }))) return true;
+
+        return false;
+    };
 
 
     function handleSubmitAccept() {
@@ -202,7 +215,7 @@ export default function SgSectionEmployeeCard(props) {
             url: `/timekeeper/manual/${type}`,
             method: 'post',
             data: {
-                employee_id:  fullData?.id,
+                employee_id:  (isManualCheckoutAvailable() && atWork) ? fullData?.employee_id : fullData?.id,
                 employee_timezone: moment.tz.guess(),
                 request_time: moment(),
                 longitude: locationData?.longitude,
@@ -212,6 +225,14 @@ export default function SgSectionEmployeeCard(props) {
             }
         }).then(res => {
             changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id')
+            if(isManualCheckoutAvailable() && atWork) {
+                request({
+                    url: '/timekeeper/activity/list', method: 'get'
+                }).then(res => {
+                }).catch(err => {
+                    console.log(err, 'apiservice control err')
+                });
+            }
             toggleUserOperationModal()
         }).catch(err => {
             console.log('err')
@@ -243,41 +264,50 @@ export default function SgSectionEmployeeCard(props) {
                         <Text style={styles.checkTime}>Check type: <Text style={styles.time}>{checkType}</Text></Text>
                     </View>
                 </Pressable>
-                {!manual ?
-                    (editable ?
-                        <View style={styles.buttonGroup}>
-                            <TouchableOpacity style={[styles.button, styles.cancelButton]}
-                                              onPress={() => {
-                                                  setClickType('reject')
-                                                  toggleUserOperationModal()
-                                              }}>
-                                <CancelIcon with={20} height={20} style={styles.closeIcon}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.button, styles.confirmButton]}
-                                              onPress={() => {
-                                                  setClickType('accept')
-                                                  toggleUserOperationModal()
-                                              }}>
-                                <ConfirmIcon with={20} height={20} style={styles.confirmIcon}/>
-                            </TouchableOpacity>
-                        </View>
-                        :
-                        <View style={styles.infoGroup}>
-                            {status === 3 ?
-                                <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
-                                                  onPress={toggleRejectInfoModal}>
-                                    <Text style={[styles.infoText, styles.rejectText]}>Rejected</Text>
-                                    <RejectIcon with={12} height={12} style={styles.rejectIcon}/>
+                <View style={{gap: 16}}>
+                    {!manual ?
+                        (editable ?
+                            <View style={styles.buttonGroup}>
+                                <TouchableOpacity style={[styles.button, styles.cancelButton]}
+                                                  onPress={() => {
+                                                      setClickType('reject')
+                                                      toggleUserOperationModal()
+                                                  }}>
+                                    <CancelIcon with={20} height={20} style={styles.closeIcon}/>
                                 </TouchableOpacity>
-                                :
-                                <TouchableOpacity style={[styles.infoButton, styles.acceptButton]}>
-                                    <Text style={[styles.infoText, styles.acceptText]}>Accepted</Text>
-                                    <AcceptIcon with={12} height={12} style={styles.acceptIcon}/>
+                                <TouchableOpacity style={[styles.button, styles.confirmButton]}
+                                                  onPress={() => {
+                                                      setClickType('accept')
+                                                      toggleUserOperationModal()
+                                                  }}>
+                                    <ConfirmIcon with={20} height={20} style={styles.confirmIcon}/>
                                 </TouchableOpacity>
-                            }
-                        </View>)
-                    : null
-                }
+                            </View>
+                            :
+                            <View style={styles.infoGroup}>
+                                {status === 3 ?
+                                    <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
+                                                      onPress={toggleRejectInfoModal}>
+                                        <Text style={[styles.infoText, styles.rejectText]}>Rejected</Text>
+                                        <RejectIcon with={12} height={12} style={styles.rejectIcon}/>
+                                    </TouchableOpacity>
+                                    :
+                                    <TouchableOpacity style={[styles.infoButton, styles.acceptButton]}>
+                                        <Text style={[styles.infoText, styles.acceptText]}>Accepted</Text>
+                                        <AcceptIcon with={12} height={12} style={styles.acceptIcon}/>
+                                    </TouchableOpacity>
+                                }
+                            </View>)
+                        : null
+                    }
+                    {(isManualCheckoutAvailable() && atWork) ?
+                        <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
+                                          onPress={toggleRejectInfoModal}>
+                            <Text style={[styles.infoText, styles.rejectText]}>Manual Check-out</Text>
+                        </TouchableOpacity>
+                        : null
+                    }
+                </View>
             </View>
 
 
@@ -311,7 +341,7 @@ export default function SgSectionEmployeeCard(props) {
                             clickable={`/timeKeeperPages/users/${fullData?.employee?.id}`}
                         />
                     </View>
-                    {manual ?
+                    {(manual) ?
                         <View style={styles.modalGroup}>
                             <View style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
                                 <View style={{flex: 1,}}>
@@ -339,28 +369,57 @@ export default function SgSectionEmployeeCard(props) {
                             </View>
                         </View>
                         :
-                        <View style={styles.modalGroup}>
-                            <View style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
-                                <View style={{flex: 1,}}>
-                                    <SgSectionStatusCard
-                                        title={fullData?.type === 1 ? "Check In" : "Check Out"}
-                                        time={time}
-                                        icon={<LogIn width={20} height={20}/>}
-                                    />
+                        ((isManualCheckoutAvailable() && atWork) ?
+                                <View style={styles.modalGroup}>
+                                    <View style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
+                                        <View style={{flex: 1,}}>
+                                            <SgSectionStatusCard
+                                                mapData={{
+                                                    latitude: fullData?.latitude,
+                                                    longitude: fullData?.longitude,
+                                                }}
+                                                title={"Check In"}
+                                                time={time}
+                                                icon={<LogIn width={20} height={20}/>}
+                                            />
+                                        </View>
+                                        <View style={{flex: 1}}>
+                                            <SgSectionStatusCard
+                                                mapData={{
+                                                    latitude: fullData?.checkout?.latitude,
+                                                    longitude: fullData?.checkout?.longitude,
+                                                }}
+                                                title={"Check Out"}
+                                                time={''}
+                                                icon={<LogIn width={20} height={20}/>}
+                                            />
+                                        </View>
+                                    </View>
                                 </View>
-                                <View style={{flex: 1}}>
-                                    <SgSectionStatusCard
-                                        mapData={{
-                                            latitude: fullData?.latitude,
-                                            longitude: fullData?.longitude,
-                                        }}
-                                        title={fullData?.type === 1 ? "Check In" : "Check Out"}
-                                        time={time}
-                                        icon={<LogIn width={20} height={20}/>}
-                                    />
+                                :
+                                <View style={styles.modalGroup}>
+                                    <View style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
+                                        <View style={{flex: 1,}}>
+                                            <SgSectionStatusCard
+                                                title={fullData?.type === 1 ? "Check In" : "Check Out"}
+                                                time={time}
+                                                icon={<LogIn width={20} height={20}/>}
+                                            />
+                                        </View>
+                                        <View style={{flex: 1}}>
+                                            <SgSectionStatusCard
+                                                mapData={{
+                                                    latitude: fullData?.latitude,
+                                                    longitude: fullData?.longitude,
+                                                }}
+                                                title={fullData?.type === 1 ? "Check In" : "Check Out"}
+                                                time={time}
+                                                icon={<LogIn width={20} height={20}/>}
+                                            />
+                                        </View>
+                                    </View>
                                 </View>
-                            </View>
-                        </View>
+                        )
                     }
                     <View style={styles.modalGroup}>
                         {manual ?
@@ -387,47 +446,59 @@ export default function SgSectionEmployeeCard(props) {
                                 }
                             </View>
                             :
-                            <View style={styles.modalGroupButtons}>
-                                {clickType === 'reject' ?
-                                    <SgButton
-                                        color={COLORS.error_700}
-                                        bgColor={COLORS.error_50}
-                                        onPress={toggleRejectCheckInModal}
-                                    >
-                                        Reject
-                                    </SgButton>
-                                    : null
-                                }
-                                {clickType === 'accept' ?
-                                    <SgButton
-                                        color={COLORS.white}
-                                        bgColor={COLORS.brand_600}
-                                        onPress={toggleAcceptCheckInModal}
-                                    >
-                                        Accept
-                                    </SgButton>
-                                    : null
-                                }
-                                {!clickType ?
-                                    <>
-                                        <SgButton
-                                            color={COLORS.error_700}
-                                            bgColor={COLORS.error_50}
-                                            onPress={toggleRejectCheckInModal}
-                                        >
-                                            Reject
-                                        </SgButton>
+                            ((isManualCheckoutAvailable() && atWork) ?
+                                    <View style={styles.modalGroupButtons}>
                                         <SgButton
                                             color={COLORS.white}
                                             bgColor={COLORS.brand_600}
-                                            onPress={toggleAcceptCheckInModal}
+                                            onPress={() => handleCheckInRequest('checkout')}
                                         >
-                                            Accept
+                                            Check out
                                         </SgButton>
-                                    </>
-                                    : null
-                                }
-                            </View>
+                                    </View>
+                                    :
+                                    <View style={styles.modalGroupButtons}>
+                                        {clickType === 'reject' ?
+                                            <SgButton
+                                                color={COLORS.error_700}
+                                                bgColor={COLORS.error_50}
+                                                onPress={toggleRejectCheckInModal}
+                                            >
+                                                Reject
+                                            </SgButton>
+                                            : null
+                                        }
+                                        {clickType === 'accept' ?
+                                            <SgButton
+                                                color={COLORS.white}
+                                                bgColor={COLORS.brand_600}
+                                                onPress={toggleAcceptCheckInModal}
+                                            >
+                                                Accept
+                                            </SgButton>
+                                            : null
+                                        }
+                                        {!clickType ?
+                                            <>
+                                                <SgButton
+                                                    color={COLORS.error_700}
+                                                    bgColor={COLORS.error_50}
+                                                    onPress={toggleRejectCheckInModal}
+                                                >
+                                                    Reject
+                                                </SgButton>
+                                                <SgButton
+                                                    color={COLORS.white}
+                                                    bgColor={COLORS.brand_600}
+                                                    onPress={toggleAcceptCheckInModal}
+                                                >
+                                                    Accept
+                                                </SgButton>
+                                            </>
+                                            : null
+                                        }
+                                    </View>
+                            )
                         }
                     </View>
                 </View>

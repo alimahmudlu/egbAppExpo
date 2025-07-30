@@ -215,6 +215,9 @@ i18n.use(initReactI18next).init({
 
                 atWork: "At work",
                 projectMembers: "Project Members",
+                download: "Download",
+                documentRemove: "Document Remove",
+                remove: "Remove"
 
             },
         },
@@ -425,6 +428,9 @@ i18n.use(initReactI18next).init({
 
                 atWork: "На работе",
                 projectMembers: "Участники проекта",
+                download: "Скачать",
+                documentRemove: "Удалить документ",
+                remove: "удалять"
 
             },
         },
@@ -637,6 +643,9 @@ i18n.use(initReactI18next).init({
 
                 atWork: "Ishda",
                 projectMembers: "Loyiha ishtirokchilari",
+                download: "Yuklab",
+                documentRemove: "Hujjatni olib tashlash",
+                remove: "o'chirish"
 
             },
         },

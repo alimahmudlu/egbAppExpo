@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {View, Text, TouchableOpacity, Alert, Platform} from 'react-native';
 import styles from './FileCard.styles';
 import moment from "moment/moment";
 
@@ -8,11 +8,17 @@ import PDFIcon from '@/assets/images/pdf-icon.svg';
 import DOCIcon from '@/assets/images/doc-icon.svg';
 import PPTIcon from '@/assets/images/ppt-icon.svg';
 import EyeIcon from '@/assets/images/eye.svg';
+import TrashIcon from '@/assets/images/trash2.svg';
 import COLORS from '@/constants/colors';
 import SgPopup from '@/components/ui/Modal/Modal';
 import SgButton from '@/components/ui/Button/Button';
 import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePreview";
 import {useTranslation} from "react-i18next";
+
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import * as Linking from "expo-linking";
+import {request} from "axios";
 
 
 const getFileIcon = (type) => {
@@ -44,18 +50,78 @@ const getStatusStyles = (type) => {
   }
 };
 
-export default function SgFileCard({ fileType, title, description, issueDate, url, expiryDate, migrationId}) {
+export default function SgFileCard({ auid, fileType, title, description, issueDate, url, expiryDate, migrationId, deletePermission, handleRemove, removeSet}) {
     const [previewModal, setPreviewModal] = useState(false);
+    const [openSettingsModal, setOpenSettingsModal] = useState(false)
+    const [removeModal, setRemoveModal] = useState(false);
+
+    function toggleOpenSettingsModal() {
+        setOpenSettingsModal(!openSettingsModal)
+    }
 
     function togglePreviewModal() {
         setPreviewModal(!previewModal);
     }
+    function toggleRemoveModal() {
+        setRemoveModal(!removeModal);
+    }
+
+    useEffect(() => {
+        setRemoveModal(false)
+    }, [removeSet]);
+
+
+
     const [status, setStatus] = useState({
         name: "",
         styles: {}
     })
 
     const {t} = useTranslation();
+
+    async function handleDownload() {
+        try {
+            // Faylı telefonun keçici yaddaşına yüklə
+            const fileUri = FileSystem.documentDirectory + title;
+
+            const downloadResumable = FileSystem.createDownloadResumable(
+                url,
+                fileUri
+            );
+
+            const { uri } = await downloadResumable.downloadAsync();
+            console.log('Fayl yükləndi:', uri);
+
+            // MediaLibrary üçün icazə istə
+            const { status , canAskAgain} = await MediaLibrary.requestPermissionsAsync();
+            if (status !== 'granted') {
+                if (!canAskAgain) {
+                    toggleOpenSettingsModal()
+                    return;
+                }
+            }
+
+            // Faylı qalereyaya və ya fayl sisteminə qeyd et
+            const asset = await MediaLibrary.createAssetAsync(uri);
+            await MediaLibrary.createAlbumAsync('Download', asset, false);
+        } catch (error) {
+            console.error('Yükləmə xətası:', error);
+            toggleOpenSettingsModal()
+        }
+    }
+
+    function handleOpenSettings() {
+        if (Platform.OS === 'ios') {
+            Linking.openURL('app-settings:')
+                .catch(() => {
+                });
+        } else {
+            // Android için:
+            Linking.openSettings()
+                .catch(() => {
+                });
+        }
+    }
 
     useEffect(() => {
         const expiresAt = expiryDate
@@ -115,18 +181,74 @@ export default function SgFileCard({ fileType, title, description, issueDate, ur
                     <Text style={styles.expireText}>{t('expireDate')}</Text>
                     <Text style={styles.expireDate}>{expiryDate ? moment(expiryDate).format('DD.MM.YYYY') : null}</Text>
                 </View>
-                <TouchableOpacity onPress={togglePreviewModal}>
-                    <EyeIcon width={20} height={20} />
-                </TouchableOpacity>
+                <View styles={{gap: 16, alignItems: 'center', flex: 1}}>
+                    {deletePermission ? (
+                        <TouchableOpacity style={{padding: 10}} onPress={toggleRemoveModal}>
+                            <TrashIcon width={20} height={20} />
+                        </TouchableOpacity>
+                    ) : null}
+                    <TouchableOpacity style={{padding: 10}} onPress={togglePreviewModal}>
+                        <EyeIcon width={20} height={20} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
         <SgPopup
             visible={previewModal}
             onClose={togglePreviewModal}
             title={t('documentView')}
+            footerButton={
+                <SgButton
+                    bgColor={COLORS.brand_600}
+                    color={COLORS.white}
+                    onPress={handleDownload}
+                >
+                    {t('download')}
+                </SgButton>
+            }
         >
-            <SgTemplateFilePreview url={url} />
+            <View style={{paddingBottom: 16}}>
+                <SgTemplateFilePreview url={url} />
+            </View>
         </SgPopup>
+        <SgPopup
+            visible={removeModal}
+            onClose={toggleRemoveModal}
+            title={t('documentRemove')}
+            footerButton={
+                <SgButton
+                    bgColor={COLORS.error_600}
+                    color={COLORS.white}
+                    onPress={() => handleRemove(auid, title)}
+                >
+                    {t('remove')}
+                </SgButton>
+            }
+        >
+            <View style={{paddingBottom: 16}}>
+                <SgTemplateFilePreview url={url} />
+            </View>
+        </SgPopup>
+
+
+
+        <SgPopup
+            visible={openSettingsModal}
+            onClose={toggleOpenSettingsModal}
+            title="Permission Error"
+            description="Location permission error. You have not given permission to access your locations. If you want to turn it on, go to settings. Open settings??"
+            // icon={<CheckInModalIcon width={56} height={56}/>}
+            footerButton={
+                <SgButton
+                    onPress={handleOpenSettings}
+                    bgColor={COLORS.primary}
+                    color={COLORS.white}
+                >
+                    Open
+                </SgButton>
+            }
+            autoClose={false}
+        />
     </View>
   );
 }
