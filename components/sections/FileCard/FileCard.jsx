@@ -16,9 +16,41 @@ import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePrevie
 import {useTranslation} from "react-i18next";
 
 import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import * as Linking from "expo-linking";
-import {request} from "axios";
+
+const mimeTypes = {
+    pdf: 'application/pdf',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xls: 'application/vnd.ms-excel',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ppt: 'application/vnd.ms-powerpoint',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    txt: 'text/plain',
+    csv: 'text/csv',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    gif: 'image/gif',
+    svg: 'image/svg+xml',
+    webp: 'image/webp',
+    mp3: 'audio/mpeg',
+    wav: 'audio/wav',
+    mp4: 'video/mp4',
+    mov: 'video/quicktime',
+    avi: 'video/x-msvideo',
+    zip: 'application/zip',
+    rar: 'application/vnd.rar',
+    '7z': 'application/x-7z-compressed',
+    json: 'application/json',
+    xml: 'application/xml',
+    html: 'text/html',
+    htm: 'text/html',
+    apk: 'application/vnd.android.package-archive'
+};
+
 
 
 const getFileIcon = (type) => {
@@ -79,36 +111,135 @@ export default function SgFileCard({ auid, fileType, title, description, issueDa
 
     const {t} = useTranslation();
 
+    // async function handleDownload() {
+    //     try {
+    //         // Faylı telefonun keçici yaddaşına yüklə
+    //         const fileUri = FileSystem.documentDirectory + title;
+    //
+    //         const downloadResumable = FileSystem.createDownloadResumable(
+    //             url,
+    //             fileUri
+    //         );
+    //
+    //         const { uri } = await downloadResumable.downloadAsync();
+    //         console.log('Fayl yükləndi:', uri);
+    //
+    //         // MediaLibrary üçün icazə istə
+    //         const { status , canAskAgain} = await MediaLibrary.requestPermissionsAsync();
+    //         if (status !== 'granted') {
+    //             if (!canAskAgain) {
+    //                 toggleOpenSettingsModal()
+    //                 return;
+    //             }
+    //         }
+    //
+    //         // Faylı qalereyaya və ya fayl sisteminə qeyd et
+    //         const asset = await MediaLibrary.createAssetAsync(uri);
+    //         await MediaLibrary.createAlbumAsync('Download', asset, false);
+    //     } catch (error) {
+    //         console.error('Yükləmə xətası:', error);
+    //         toggleOpenSettingsModal()
+    //     }
+    // }
+
+
     async function handleDownload() {
         try {
-            // Faylı telefonun keçici yaddaşına yüklə
-            const fileUri = FileSystem.documentDirectory + title;
+            const fileUri = FileSystem.cacheDirectory + title;
 
-            const downloadResumable = FileSystem.createDownloadResumable(
-                url,
-                fileUri
-            );
-
+            const downloadResumable = FileSystem.createDownloadResumable(url, fileUri);
             const { uri } = await downloadResumable.downloadAsync();
-            console.log('Fayl yükləndi:', uri);
 
-            // MediaLibrary üçün icazə istə
-            const { status , canAskAgain} = await MediaLibrary.requestPermissionsAsync();
-            if (status !== 'granted') {
-                if (!canAskAgain) {
-                    toggleOpenSettingsModal()
-                    return;
+            const isImageOrVideo = title.match(/\.(jpg|jpeg|png|gif|mp4|mov)$/i);
+            const isMedia = title.match(/\.(jpg|jpeg|png|mp4)$/i);
+
+            if (Platform.OS === 'ios') {
+                if (isImageOrVideo) {
+                    const { status, canAskAgain } = await MediaLibrary.requestPermissionsAsync();
+
+                    if (status !== 'granted') {
+                        if (!canAskAgain) {
+                            toggleOpenSettingsModal();
+                            return;
+                        }
+                    }
+
+                    const asset = await MediaLibrary.createAssetAsync(uri);
+                    await MediaLibrary.createAlbumAsync('Download', asset, false);
+                } else {
+                    if (await Sharing.isAvailableAsync()) {
+                        await Sharing.shareAsync(uri);
+                    } else {
+                    }
+                }
+
+            } else if (Platform.OS === 'android') {
+                if (isMedia) {
+                    const { status, canAskAgain } = await MediaLibrary.requestPermissionsAsync();
+                    if (status !== 'granted') {
+                        if (!canAskAgain) {
+                            toggleOpenSettingsModal();
+                            return;
+                        }
+                    }
+
+                    const asset = await MediaLibrary.createAssetAsync(uri);
+                    await MediaLibrary.createAlbumAsync('Download', asset, false);
+                } else {
+                    const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+                    if (!permissions.granted) {
+                        toggleOpenSettingsModal();
+                        return;
+                    }
+
+                    const newUri = await FileSystem.StorageAccessFramework.createFileAsync(
+                        permissions.directoryUri,
+                        title,
+                        mimeTypes?.[fileType] || 'application/pdf'
+                    );
+
+                    const content = await FileSystem.readAsStringAsync(uri, {
+                        encoding: FileSystem.EncodingType.Base64
+                    });
+
+                    await FileSystem.writeAsStringAsync(newUri, content, {
+                        encoding: FileSystem.EncodingType.Base64
+                    });
                 }
             }
 
-            // Faylı qalereyaya və ya fayl sisteminə qeyd et
-            const asset = await MediaLibrary.createAssetAsync(uri);
-            await MediaLibrary.createAlbumAsync('Download', asset, false);
         } catch (error) {
             console.error('Yükləmə xətası:', error);
-            toggleOpenSettingsModal()
+            toggleOpenSettingsModal();
         }
     }
+    //
+    // async function handleDownload() {
+    //     try {
+    //         // Faylın saxlanacağı yer
+    //         const fileUri = FileSystem.documentDirectory + title;
+    //
+    //         // Faylı yüklə
+    //         const downloadResumable = FileSystem.createDownloadResumable(url, fileUri);
+    //         const { uri } = await downloadResumable.downloadAsync();
+    //
+    //         console.log('Fayl yükləndi:', uri);
+    //
+    //         // Faylı paylaşmaq (yəni istifadəçiyə göstərmək, saxlatmaq və s.)
+    //         if (await Sharing.isAvailableAsync()) {
+    //             await Sharing.shareAsync(uri);
+    //         } else {
+    //             Alert.alert(
+    //                 "Paylaşma mümkün deyil",
+    //                 "Bu cihazda faylı paylaşmaq üçün uyğun tətbiq yoxdur"
+    //             );
+    //         }
+    //
+    //     } catch (error) {
+    //         console.error('Fayl yükləmə və paylaşma xətası:', error);
+    //         Alert.alert("Xəta", "Fayl yüklənərkən və ya paylaşılarkən problem oldu.");
+    //     }
+    // }
 
     function handleOpenSettings() {
         if (Platform.OS === 'ios') {
@@ -116,7 +247,6 @@ export default function SgFileCard({ auid, fileType, title, description, issueDa
                 .catch(() => {
                 });
         } else {
-            // Android için:
             Linking.openSettings()
                 .catch(() => {
                 });

@@ -302,7 +302,7 @@ export default function SgSectionEmployeeCard(props) {
                     }
                     {(isManualCheckoutAvailable() && atWork) ?
                         <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
-                                          onPress={toggleRejectInfoModal}>
+                                          onPress={toggleUserOperationModal}>
                             <Text style={[styles.infoText, styles.rejectText]}>Manual Check-out</Text>
                         </TouchableOpacity>
                         : null
