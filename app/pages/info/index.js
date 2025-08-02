@@ -7,10 +7,16 @@ import {Image} from "expo-image";
 import AppInfoImage from "@/assets/images/appInfoImage.png";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useTranslation} from "react-i18next";
+import Constants from 'expo-constants';
 
 export default function ProjectItemScreen() {
     const { projectId } = useLocalSearchParams();
     const {t} = useTranslation();
+
+    function getAppVersion() {
+        return Constants.manifest?.version || Constants.expoConfig?.version || 'unknown';
+    }
+
 
     return (
         <SgTemplateScreen
@@ -34,7 +40,7 @@ export default function ProjectItemScreen() {
                 </View>
                 <View>
                     <SgSectionDownloadApp
-                        version="0.0.25"
+                        version={getAppVersion()}
                         title={t('appInfo1')}
                         platforms={['android', 'ios']}
                     />
