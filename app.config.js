@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.0.28",
+    "version": "0.0.29",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
@@ -22,7 +22,11 @@ export default {
         },
         NSLocationWhenInUseUsageDescription: "Location is required.",
         NSLocationAlwaysAndWhenInUseUsageDescription: "Location maybe work on app background",
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        NSPhotoLibraryAddUsageDescription: "Bu tətbiq şəkil və videoları yaddaşa yazmaq üçün giriş istəyir.",
+        NSPhotoLibraryUsageDescription: "Bu tətbiq şəkil və videolara baxmaq və yazmaq üçün icazə istəyir.",
+        NSCameraUsageDescription: "Bu tətbiq kameraya giriş üçün icazə istəyir.",
+        NSDocumentsFolderUsageDescription: "Bu tətbiq sənədləri saxlamaq üçün cihazın fayl sisteminə giriş tələb edir."
       }
     },
     android: {
