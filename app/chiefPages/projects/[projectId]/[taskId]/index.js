@@ -130,7 +130,13 @@ export default function ProjectItemScreen() {
         setTaskDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
 
         console.log(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
-    }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]])
+    }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]]);
+
+    function handleRemoveFile(index) {
+        const _selectedFiles = [...taskDetails?.files];
+        _selectedFiles.splice(index, 1)
+        setTaskDetails({...taskDetails, files: _selectedFiles})
+    }
 
 
     return (
@@ -217,6 +223,7 @@ export default function ProjectItemScreen() {
                     </SgCard>
                     {(taskDetails?.files || []).map((el, index) => (
                         <SgSectionAddFile
+                            handleRemove={() => handleRemoveFile(index)}
                             key={index}
                             title={el?.upload?.filename}
                             type={el?.type}

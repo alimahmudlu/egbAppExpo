@@ -159,6 +159,12 @@ export default function ProjectItemScreen() {
         };
     }, [socket]);
 
+    function handleRemoveFile(index) {
+        const _selectedFiles = [...selectedFiles];
+        _selectedFiles.splice(index, 1)
+        setSelectedFiles(_selectedFiles)
+    }
+
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
@@ -245,6 +251,7 @@ export default function ProjectItemScreen() {
                     </SgCard>
                     {(taskDetails?.files || []).map((el, index) => (
                         <SgSectionAddFile
+                            handleRemove={() => handleRemoveFile(index)}
                             key={index}
                             title={el?.upload?.filename}
                             type={el?.type}
@@ -320,6 +327,7 @@ export default function ProjectItemScreen() {
 
                 {(selectedFiles || []).map((el, index) => (
                     <SgSectionAddFile
+                        handleRemove={() => handleRemoveFile(index)}
                         key={index}
                         title={el?.name}
                         type={el?.type}

@@ -258,7 +258,13 @@ export default function EmployeeDocsScreen() {
 
   useEffect(() => {
     setDocList(storeData?.cache?.[`GET:/employee/doc/list`]?.data)
-  }, [storeData?.cache?.[`GET:/employee/doc/list`]])
+  }, [storeData?.cache?.[`GET:/employee/doc/list`]]);
+
+  function handleRemoveFile(index) {
+    const _selectedFiles = [...selectedFiles];
+    _selectedFiles.splice(index, 1)
+    setSelectedFiles(_selectedFiles)
+  }
 
   return (
     <SgTemplateScreen
@@ -367,6 +373,7 @@ export default function EmployeeDocsScreen() {
 
             {(selectedFiles || []).map((el, index) => (
                 <SgSectionAddFile
+                    handleRemove={() => handleRemoveFile(index)}
                     key={index}
                     title={el?.name}
                     type={el?.type}

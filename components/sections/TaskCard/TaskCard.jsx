@@ -184,6 +184,12 @@ export default function SgSectionTaskCard(props) {
         }
     };
 
+    function handleRemoveFile(index) {
+        const _selectedFiles = [...selectedFiles];
+        _selectedFiles.splice(index, 1)
+        setSelectedFiles(_selectedFiles)
+    }
+
     useEffect(() => {
         setData(props || {})
     }, [props]);
@@ -361,6 +367,7 @@ export default function SgSectionTaskCard(props) {
 
                 {(selectedFiles || []).map((el, index) => (
                     <SgSectionAddFile
+                        handleRemove={() => handleRemoveFile(index)}
                         key={index}
                         title={el?.name}
                         type={el?.type}
