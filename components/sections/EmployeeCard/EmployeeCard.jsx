@@ -42,6 +42,7 @@ export default function SgSectionEmployeeCard(props) {
     const [clickType, setClickType] = useState(null)
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
     const {t} = useTranslation();
+    const [buttonStatus, setButtonStatus] = useState(false);
 
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
 
@@ -179,6 +180,7 @@ export default function SgSectionEmployeeCard(props) {
     }
 
     async function handleCheckInRequest(type) {
+        setButtonStatus(true)
         try {
             // Request permission to access locations
             let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
@@ -225,6 +227,7 @@ export default function SgSectionEmployeeCard(props) {
             }
         }).then(res => {
             changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id')
+            setButtonStatus(false)
             if(isManualCheckoutAvailable() && atWork) {
                 request({
                     url: '/timekeeper/activity/list', method: 'get'
@@ -451,6 +454,7 @@ export default function SgSectionEmployeeCard(props) {
                                         <SgButton
                                             color={COLORS.white}
                                             bgColor={COLORS.brand_600}
+                                            disabled={buttonStatus}
                                             onPress={() => handleCheckInRequest('checkout')}
                                         >
                                             Check out

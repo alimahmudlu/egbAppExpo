@@ -36,6 +36,7 @@ export default function SgCheckInOutCard(props) {
     const [checkInData, setCheckInData] = useState({})
     const [checkOutModal, setCheckOutModal] = useState(false)
     const [checkOutData, setCheckOutData] = useState({})
+    const [buttonStatus, setButtonStatus] = useState(false)
 
     const isCheckIn = type === 'checkin';
     const isCheckOut = type === 'checkout';
@@ -149,6 +150,7 @@ export default function SgCheckInOutCard(props) {
     }
 
     async function handleCheckInRequest() {
+        setButtonStatus(true)
         try {
             // Request permission to access locations
             let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
@@ -173,6 +175,7 @@ export default function SgCheckInOutCard(props) {
 
             // onSuccess callback
             // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+            setButtonStatus(false)
             toggleCheckInModal();
             setCheckInData({latitude, longitude})
         } catch (error) {
@@ -182,6 +185,7 @@ export default function SgCheckInOutCard(props) {
     }
 
     async function handleCheckOutRequest() {
+        setButtonStatus(true)
         try {
             // Request permission to access locations
             let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
@@ -206,6 +210,7 @@ export default function SgCheckInOutCard(props) {
 
             // onSuccess callback
             // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+            setButtonStatus(false)
             toggleCheckOutModal();
             setCheckOutData({latitude, longitude})
         } catch (error) {
@@ -275,7 +280,7 @@ export default function SgCheckInOutCard(props) {
                 {isCheckIn ?
                     <>
                         {!status ?
-                            <SgButton color={COLORS.brand_600} onPress={handleCheckInRequest}>
+                            <SgButton color={COLORS.brand_600} onPress={handleCheckInRequest} disabled={buttonStatus}>
                                 {t('checkIn')}
                             </SgButton>
                             : null
@@ -305,7 +310,7 @@ export default function SgCheckInOutCard(props) {
                 {(isCheckOut && checkInStatus) ?
                     <>
                         {!status || status === 3 ?
-                            <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest}>
+                            <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest} disabled={buttonStatus}>
                                 {t('checkOut')}
                             </SgButton>
                             : null

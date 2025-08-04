@@ -238,6 +238,12 @@ export default function EmployeeDocsScreen() {
     })
   }
 
+  function handleRemoveFile(index) {
+    const _selectedFiles = [...selectedFiles];
+    _selectedFiles.splice(index, 1)
+    setSelectedFiles(_selectedFiles)
+  }
+
 
 
 
@@ -323,7 +329,7 @@ export default function EmployeeDocsScreen() {
             </SgButton>
           }
       >
-        <View style={{gap: 16}}>
+        <View style={{gap: 16, marginBottom: 16}}>
           <View>
             <SgSelect
                 label={t("documentType")}
@@ -375,6 +381,7 @@ export default function EmployeeDocsScreen() {
             {(selectedFiles || []).map((el, index) => (
                 <SgSectionAddFile
                     key={index}
+                    handleRemove={() => handleRemoveFile(index)}
                     title={el?.name}
                     type={el?.type}
                     datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / hh:mm A') : null}

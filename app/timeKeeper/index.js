@@ -87,14 +87,14 @@ export default function EmployeeDashboardScreen() {
         <SgCheckInOutGroup>
             <SgSectionInfoCard
                 icon="log-in-outline"
-                title={t('dailyCheckIn')}
+                title={t('monthlyCheckIn')}
                 count={employeeActivities?.filter(el => el.type === 1)?.length}
                 type="checkin"
                 href={`/timeKeeperPages/activity/checkIn`}
             />
             <SgSectionInfoCard
                 icon="log-out-outline"
-                title={t('dailyCheckOut')}
+                title={t('monthlyCheckOut')}
                 count={employeeActivities?.filter(el => el.type === 2)?.length}
                 type="checkout"
                 href={`/timeKeeperPages/activity/checkOut`}

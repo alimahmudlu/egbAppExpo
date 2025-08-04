@@ -10,6 +10,7 @@ import SgPopup from "@/components/ui/Modal/Modal";
 
 import { View, Text, TouchableOpacity } from 'react-native';
 import Eye from '@/assets/images/eye.svg';
+import Trash from '@/assets/images/trash.svg';
 import XlsxIcon from '@/assets/images/xlsx-icon.svg';
 import PdfIcon from '@/assets/images/pdf-icon.svg';
 import PptIcon from '@/assets/images/ppt-icon.svg';
@@ -20,7 +21,7 @@ import {useState} from "react";
 import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePreview";
 import {useTranslation} from "react-i18next";
 
-export default function SgSectionAddFile({ title, type, datetime, onPress, url }) {
+export default function SgSectionAddFile({ title, type, datetime, onPress, url, handleRemove }) {
   const [previewModal, setPreviewModal] = useState(false);
   const {t} = useTranslation()
 
@@ -54,6 +55,9 @@ export default function SgSectionAddFile({ title, type, datetime, onPress, url }
           </View>
           <TouchableOpacity style={styles.eyeIconWrapper} activeOpacity={0.5} onPress={togglePreviewModal}>
             <Eye width={20} height={20} style={styles.eyeIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.eyeIconWrapper} activeOpacity={0.5} onPress={handleRemove}>
+            <Trash width={20} height={20} style={styles.eyeIcon} />
           </TouchableOpacity>
         </View>
       </View>
