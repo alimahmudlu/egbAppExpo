@@ -210,13 +210,13 @@ export default function EmployeeDocsScreen() {
     }
   }
 
-
-
-  function handleRemove(selectedFileId) {
+  function handleRemove(selectedFileId, title) {
+    console.log(selectedFileId, 'selectedFileId');
     request({
       url: '/employee/doc/remove',
       method: 'post',
       data: {
+        title,
         file: selectedFileId,
         application_id: user?.application_id
       }
@@ -290,6 +290,7 @@ export default function EmployeeDocsScreen() {
         {(docList || []).map((el, index) => (
             <SgFileCard
                 key={index}
+                auid={el?.id}
                 fileType={el.mimetype}
                 title={el?.filename}
                 url={el?.filepath}
