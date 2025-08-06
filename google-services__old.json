@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "107245903153",
-    "project_id": "enter-green-buildings",
-    "storage_bucket": "enter-green-buildings.firebasestorage.app"
+    "project_number": "74857635932",
+    "project_id": "egbexpoapp",
+    "storage_bucket": "egbexpoapp.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:107245903153:android:e7f0c4e3dc0d3a5158e410",
+        "mobilesdk_app_id": "1:74857635932:android:04dbaa44e28fda44db0699",
         "android_client_info": {
-          "package_name": "com.egb.egb"
+          "package_name": "com.alimahmudlu.egbexpoapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
+          "current_key": "AIzaSyCl0Mrpcl3-TCcEFM5WBMB9jLLbe0OA3a4"
         }
       ],
       "services": {

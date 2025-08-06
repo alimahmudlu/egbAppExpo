@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.0.32",
+    "version": "0.0.33",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
@@ -14,7 +14,7 @@ export default {
       bundleIdentifier: "com.egb.egb",
       supportsTablet: true,
       config: {
-        googleMapsApiKey: "AIzaSyA_js-21GPeRyjEUFZGfjSBm8z2L8FQ7eg"
+        googleMapsApiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
       },
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -30,7 +30,7 @@ export default {
       }
     },
     android: {
-      package: "com.alimahmudlu.egbexpoapp",
+      package: "com.egb.egb",
       edgeToEdgeEnabled: true,
       usesCleartextTraffic: true,
       adaptiveIcon: {
@@ -39,7 +39,7 @@ export default {
       },
       config: {
         googleMaps: {
-          apiKey: "AIzaSyA_js-21GPeRyjEUFZGfjSBm8z2L8FQ7eg"
+          apiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
         }
       },
       "googleServicesFile": "./google-services.json"
