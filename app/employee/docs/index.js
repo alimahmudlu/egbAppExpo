@@ -296,7 +296,7 @@ export default function EmployeeDocsScreen() {
                 url={el?.filepath}
                 expiryDate={el?.date_of_expiry}
                 issueDate={el?.date_of_issue}
-                deletePermission={el?.employee_id === user?.id}
+                deletePermission={el?.employee_id === user?.id && user.role.id === 2}
                 handleRemove={handleRemove}
                 setRemoveModal={setRemoveModal}
                 removeModal={removeModal}
