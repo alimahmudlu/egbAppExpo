@@ -8,6 +8,7 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                loading: 'Loading',
                 logout: 'Logout',
                 languages: 'Languages',
                 notifications: 'Notifications',
@@ -225,6 +226,7 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                loading: 'Loading',
                 logout: 'Выйти',
                 languages: 'Языки',
                 notifications: 'Уведомления',
@@ -440,6 +442,7 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                loading: 'Loading',
                 logout: 'Chiqish',
                 languages: 'Tillar',
                 notifications: 'Bildirishnomalar',

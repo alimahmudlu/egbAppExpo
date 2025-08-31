@@ -6,7 +6,7 @@ import {
     Platform,
     TouchableWithoutFeedback,
     Keyboard,
-    Alert, Dimensions
+    Alert, Dimensions, TouchableOpacity
 } from "react-native";
 import styles from "@/assets/styles/auth/auth.styles";
 import SgSectionAuth from "@/components/sections/AuthSection/AuthSection";
@@ -29,6 +29,7 @@ export default function Login() {
     const [errorModal, setErrorModal] = useState(false);
     const [errorModalData, setErrorModalData] = useState("");
     const {t} = useTranslation();
+    const [loading, setLoading] = useState(false);
 
     function toggleErrorModal() {
         setErrorModal(!errorModal);
@@ -37,13 +38,21 @@ export default function Login() {
     const { login } = useAuth(); // Assuming useAuth is defined in your hooks
 
   const handleLogin = () => {
+      Keyboard.dismiss();
+      setLoading(true)
     login(id, password).then((resp) => {
         if (!resp.success) {
             setErrorModalData(resp.error || 'Login failed');
+            console.log(resp.error || 'Login failed');
             toggleErrorModal()
         }
     }).catch((error) => {
-        setErrorModalData('Login failed');
+        setErrorModalData('Login failed 2');
+        console.log(error, 'error');
+    }).finally(() => {
+        setTimeout(() => {
+            setLoading(false)
+        }, 1000)
     })
   };
   return (
@@ -72,13 +81,18 @@ export default function Login() {
                     </SgForm>
                 </View>
                 <View style={styles.buttonLayout}>
+                    {/*<TouchableOpacity*/}
+                    {/*    style={{backgroundColor: '#f02f58', padding: 15, marginBottom: 30}}*/}
+                    {/*>*/}
+                    {/*    <Text>asas</Text>*/}
+                    {/*</TouchableOpacity>*/}
                     <SgButton
                         onPress={handleLogin}
-                        disabled={!id || !password}
+                        // disabled={!id || !password}
                         bgColor = {COLORS.primary}
                         color= {COLORS.white}
                     >
-                        {t('login')}
+                        {loading ? t('loading') : t('login')}
                     </SgButton>
                 </View>
             </View>

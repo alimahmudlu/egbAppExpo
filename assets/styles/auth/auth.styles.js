@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     // padding: 16,
     // paddingTop: 48,
     flexDirection: "column",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
   },
   buttonLayout: {
       // paddingVertical: 16,

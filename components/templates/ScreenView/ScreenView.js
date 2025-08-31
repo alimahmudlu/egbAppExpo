@@ -9,6 +9,7 @@ import COLORS from "@/constants/colors";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useLocalSearchParams } from "expo-router";
 import {useIsFocused} from "@react-navigation/native";
+
 export default function SgTemplateScreenView(props) {
     const { head, children } = props;
     const [refreshing, setRefreshing] = useState(false);
@@ -60,8 +61,12 @@ export default function SgTemplateScreenView(props) {
                     style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 >
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <TouchableWithoutFeedback
+                        onPress={Keyboard.dismiss}
+                        accessible={false}
+                    >
                             <ScrollView
+                                keyboardShouldPersistTaps="handled"
                                 key={refreshKey} // ⭐️ Refresh burada olur
                                 style={styles.container}
                                 refreshControl={
