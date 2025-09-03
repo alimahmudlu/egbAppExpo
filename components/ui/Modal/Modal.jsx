@@ -76,7 +76,7 @@ export default function SgPopup({
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, height: Dimensions.get('window').height }}>
         <TouchableWithoutFeedback onPress={onClose}>
           <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
         </TouchableWithoutFeedback>

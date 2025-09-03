@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, Pressable} from 'react-native';
+import {View, Text, TextInput, Pressable, ScrollView} from 'react-native';
 import styles from './Select.styles';
 import Eye from '@/assets/images/eye.svg';
 import COLORS from '@/constants/colors';
@@ -19,6 +19,8 @@ export default function SgSelect(props) {
     } = props
     const [selectModal, setSelectModal] = useState(false);
     const [selectedValue, setSelectedValue] = useState(value);
+
+    // console.log(list)
 
     function toggleSelectModal() {
         setSelectModal(!selectModal);
@@ -67,14 +69,14 @@ export default function SgSelect(props) {
                 title={placeholder}
                 closeType="select"
             >
-                <View>
+                <ScrollView style={{flex: 1, padding: 10, maxHeight: 400, height: '100%'}}  contentContainerStyle={{paddingBottom: 10}}>
                     {(list || []).map((item, index) => (
                         <Pressable onPress={(e) => handleSelect(e, item)} key={index} style={{flexDirection: 'row', alignItems: 'center', flex: 1, width: '100%', gap: 10, borderBottomWidth: list?.length === index + 1 ? 0 : 1, borderBottomColor: COLORS.gray_200, paddingVertical: 10}}>
                             <View><SgRadio selected={item?.id === selectedValue?.id} /></View>
                             <View style={{flex: 1}}>{item?.render}</View>
                         </Pressable>
                     ))}
-                </View>
+                </ScrollView>
             </SgPopup>
         </>
     );

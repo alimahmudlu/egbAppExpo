@@ -220,7 +220,8 @@ i18n.use(initReactI18next).init({
                 projectMembers: "Project Members",
                 download: "Download",
                 documentRemove: "Document Remove",
-                remove: "Remove"
+                remove: "Remove",
+                seeExpiredDocs: "See expired docs",
 
             },
         },
@@ -436,7 +437,8 @@ i18n.use(initReactI18next).init({
                 projectMembers: "Участники проекта",
                 download: "Скачать",
                 documentRemove: "Удалить документ",
-                remove: "удалять"
+                remove: "удалять",
+                seeExpiredDocs: "Просмотреть просроченные документы",
 
             },
         },
@@ -654,7 +656,8 @@ i18n.use(initReactI18next).init({
                 projectMembers: "Loyiha ishtirokchilari",
                 download: "Yuklab",
                 documentRemove: "Hujjatni olib tashlash",
-                remove: "o'chirish"
+                remove: "o'chirish",
+                seeExpiredDocs: "Muddati oʻtgan hujjatlarni koʻring",
 
             },
         },

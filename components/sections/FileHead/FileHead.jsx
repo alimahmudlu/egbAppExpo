@@ -5,7 +5,7 @@ import TrashIcon from '@/assets/images/trash.svg';
 import FilterIcon from '@/assets/images/filter.svg';
 import {Link, router} from 'expo-router';
 
-export default function SgSectionFileHead ({ title, description, icon, href, onPress }) {
+export default function SgSectionFileHead ({ title, description, icon, iconText, href, onPress }) {
   const renderIcon = () => {
     switch (icon) {
       case 'trash':
@@ -33,6 +33,9 @@ export default function SgSectionFileHead ({ title, description, icon, href, onP
         {icon ? <Pressable style={styles.iconWrapper} onPress={handleClick}>
           {renderIcon()}
         </Pressable> : ''}
+          {iconText ? <Pressable style={styles.iconWrapper} onPress={handleClick}>
+              <Text>{iconText}</Text>
+          </Pressable> : ''}
       </View>
       <Text style={styles.description}>{description}</Text>
     </View>

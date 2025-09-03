@@ -36,137 +36,137 @@ export default function EmployeeDocsScreen() {
   const [data, setData] = useState({})
   const [errors, setErrors] = useState({})
   const [fileTypes, setFileTypes] = useState([
-    {
-      key: 'passport',
-      label: 'Passport',
-      flow: ['patent', 'bkc', 'russian'],
-      dateRequired: true
-    },
-    {
-      key: 'notarized_translation',
-      label: 'Translated Passport',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'migration_card',
-      label: 'Migration Card',
-      flow: ['patent', 'bkc'],
-      dateRequired: true
-    },
+    // {
+    //   key: 'passport',
+    //   label: 'Passport',
+    //   flow: ['patent', 'bkc', 'russian'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'notarized_translation',
+    //   label: 'Translated Passport',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'migration_card',
+    //   label: 'Migration Card',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: true
+    // },
     {
       key: 'registration_card',
       label: 'Registration Card',
       flow: ['patent', 'bkc'],
       dateRequired: true
     },
-    {
-      key: 'patent',
-      label: 'Patent',
-      dateRequired: false
-    },
-    {
-      key: 'language_certificate',
-      label: 'Language Certificate',
-      flow: ['patent'],
-      dateRequired: true
-    },
-    {
-      key: 'contract',
-      label: 'Contract',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'payment_receipt',
-      label: 'Payment receipt',
-      flow: ['patent'],
-      dateRequired: false
-    },
-    {
-      key: 'visa',
-      label: 'Visa',
-      flow: ['bkc'],
-      dateRequired: true
-    },
-    {
-      key: 'work_authorization',
-      label: 'Work authorization',
-      dateRequired: false
-    },
-
-    {
-      key: 'health_insurance',
-      label: 'Health insurance',
-      flow: ['patent', 'bkc'],
-      dateRequired: true
-    },
-    {
-      key: 'medical_certification',
-      label: 'Medical certification',
-      flow: ['patent', 'bkc', 'russian'],
-      dateRequired: true
-    },
-    {
-      key: 'photo',
-      label: 'Photo',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'fingerprint_certification',
-      label: 'Fingerprint certification',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'patent',
-      label: 'Patent',
-      flow: ['patent'],
-      dateRequired: false
-    },
-    {
-      key: 'bkc_payment_receipt',
-      label: 'BKC payment receipt',
-      flow: ['bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'immigration_committee_notification',
-      label: 'immigration_committee_notification',
-      flow: ['bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'invitation_visa',
-      label: 'Invitation visa',
-      flow: ['bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'bkc',
-      label: 'BKC',
-      flow: ['bkc'],
-      dateRequired: true
-    },
-    {
-      key: 'military_id_card',
-      label: 'Military ID card',
-      flow: ['russian'],
-      dateRequired: true
-    },
-    {
-      key: 'diploma',
-      label: 'Diploma',
-      flow: ['russian'],
-      dateRequired: false
-    },
-    {
-      key: 'entry_form_document',
-      label: 'Entry Form document',
-      flow: ['patent', 'bkc', 'russian'],
-      dateRequired: false
-    }
+    // {
+    //   key: 'patent',
+    //   label: 'Patent',
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'language_certificate',
+    //   label: 'Language Certificate',
+    //   flow: ['patent'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'contract',
+    //   label: 'Contract',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'payment_receipt',
+    //   label: 'Payment receipt',
+    //   flow: ['patent'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'visa',
+    //   label: 'Visa',
+    //   flow: ['bkc'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'work_authorization',
+    //   label: 'Work authorization',
+    //   dateRequired: false
+    // },
+    //
+    // {
+    //   key: 'health_insurance',
+    //   label: 'Health insurance',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'medical_certification',
+    //   label: 'Medical certification',
+    //   flow: ['patent', 'bkc', 'russian'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'photo',
+    //   label: 'Photo',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'fingerprint_certification',
+    //   label: 'Fingerprint certification',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'patent',
+    //   label: 'Patent',
+    //   flow: ['patent'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'bkc_payment_receipt',
+    //   label: 'BKC payment receipt',
+    //   flow: ['bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'immigration_committee_notification',
+    //   label: 'immigration_committee_notification',
+    //   flow: ['bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'invitation_visa',
+    //   label: 'Invitation visa',
+    //   flow: ['bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'bkc',
+    //   label: 'BKC',
+    //   flow: ['bkc'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'military_id_card',
+    //   label: 'Military ID card',
+    //   flow: ['russian'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'diploma',
+    //   label: 'Diploma',
+    //   flow: ['russian'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'entry_form_document',
+    //   label: 'Entry Form document',
+    //   flow: ['patent', 'bkc', 'russian'],
+    //   dateRequired: false
+    // }
   ])
   const {refreshKey} = useLocalSearchParams();
   const {t} = useTranslation()
@@ -279,7 +279,7 @@ export default function EmployeeDocsScreen() {
           <SgSectionFileHead
               title={t('myDocs')}
               description={t('myDocs__description')}
-              icon="filter"
+              iconText={t('seeExpiredDocs')}
               href={`/employeePages/docs/archive`}
           />
         </View>

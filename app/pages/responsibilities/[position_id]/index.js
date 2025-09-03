@@ -4,11 +4,13 @@ import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useLocalSearchParams} from "expo-router";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useApi} from "@/hooks/useApi";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function PrivacyPolicyScreen() {
     const {request} = useApi();
     const {position_id} = useLocalSearchParams();
     const [details, setDetails] = React.useState({});
+    const { selectedLanguage } = useLanguage()
 
     useEffect(() => {
         request({
@@ -30,10 +32,10 @@ export default function PrivacyPolicyScreen() {
         >
             <View>
                 <Text style={styles.contentTitle}>
-                    {details?.name ? `${details?.name} - Job Responsibilities` : ''}
+                    {details?.name ? `${details?.[['name', selectedLanguage?.id !== 'en' ? selectedLanguage?.id : ''].join('_')]}` : ''}
                 </Text>
                 <Text style={styles.contentDescription}>
-                    {details?.responsibilities || ''}
+                    {details?.[['responsibilities', selectedLanguage?.id !== 'en' ? selectedLanguage?.id : ''].join('_')]}
                 </Text>
             </View>
         </SgTemplateScreen>

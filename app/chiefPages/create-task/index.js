@@ -13,7 +13,7 @@ import SgButton from "@/components/ui/Button/Button";
 import SgPopup from "@/components/ui/Modal/Modal";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useApi} from "@/hooks/useApi";
-import {globalValidate} from "@/utils/validate";
+import {globalValidate, validate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants"
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useTranslation} from "react-i18next";
@@ -68,15 +68,15 @@ export default function TaskCreateScreen() {
         }
     }, [data?.project?.id]);
 
-    const validate = () => {
-        const constraints = validationConstraints('chiefCreateTask', data);
-        const {errors} = globalValidate(data, constraints);
-
-        return errors || {};
-    }
+    // const validate = () => {
+    //     const constraints = validationConstraints('chiefCreateTask', data);
+    //     const {errors} = globalValidate(data, constraints);
+    //
+    //     return errors || {};
+    // }
 
     function handleSubmit() {
-        let errors = validate();
+        let errors = validate(data, 'chiefCreateTask', validationConstraints);
 
         if (Object.keys(errors).length > 0) {
             setErrors(errors);

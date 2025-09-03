@@ -35,30 +35,30 @@ export default function EmployeeDocsScreen() {
   const [data, setData] = useState({})
   const [errors, setErrors] = useState({})
   const [fileTypes, setFileTypes] = useState([
-    {
-      key: 'passport',
-      label: 'Passport',
-      label_ru: 'Паспорт',
-      label_uz: 'Pasport',
-      flow: ['patent', 'bkc', 'russian'],
-      dateRequired: true
-    },
-    {
-      key: 'notarized_translation',
-      label: 'Translated Passport',
-      label_ru: 'Перевод паспорта',
-      label_uz: 'Tarjima qilingan passport',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'migration_card',
-      label: 'Migration Card',
-      label_ru: 'Миграционная карта',
-      label_uz: 'Migratsiya kartasi',
-      flow: ['patent', 'bkc'],
-      dateRequired: true
-    },
+    // {
+    //   key: 'passport',
+    //   label: 'Passport',
+    //   label_ru: 'Паспорт',
+    //   label_uz: 'Pasport',
+    //   flow: ['patent', 'bkc', 'russian'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'notarized_translation',
+    //   label: 'Translated Passport',
+    //   label_ru: 'Перевод паспорта',
+    //   label_uz: 'Tarjima qilingan passport',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'migration_card',
+    //   label: 'Migration Card',
+    //   label_ru: 'Миграционная карта',
+    //   label_uz: 'Migratsiya kartasi',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: true
+    // },
     {
       key: 'registration_card',
       label: 'Registration Card',
@@ -67,146 +67,146 @@ export default function EmployeeDocsScreen() {
       flow: ['patent', 'bkc'],
       dateRequired: true
     },
-    {
-      key: 'patent',
-      label: 'Patent',
-      label_ru: 'Патент',
-      label_uz: 'Patent',
-      dateRequired: false
-    },
-    {
-      key: 'language_certificate',
-      label: 'Language Certificate',
-      label_ru: 'Сертификат о знании языка',
-      label_uz: 'Til sertifikati',
-      flow: ['patent'],
-      dateRequired: true
-    },
-    {
-      key: 'contract',
-      label: 'Contract',
-      label_ru: 'Трудовой договор',
-      label_uz: 'Mehnat shartnomasi',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'payment_receipt',
-      label: 'Payment receipt',
-      label_ru: 'Квитанция об оплате',
-      label_uz: 'To’lov kvitansiyasi',
-      flow: ['patent'],
-      dateRequired: false
-    },
-    {
-      key: 'visa',
-      label: 'Visa',
-      label_ru: 'Виза',
-      label_uz: 'Viza',
-      flow: ['bkc'],
-      dateRequired: true
-    },
-    {
-      key: 'work_authorization',
-      label: 'Work authorization',
-      label_ru: 'Разрешение на работу',
-      label_uz: 'Mehnatga ruxsatnoma',
-      dateRequired: false
-    },
-    {
-      key: 'health_insurance',
-      label: 'Health insurance',
-      label_ru: 'Медицинская страховка',
-      label_uz: 'Sog’liqni sug’urtasi',
-      flow: ['patent', 'bkc'],
-      dateRequired: true
-    },
-    {
-      key: 'medical_certification',
-      label: 'Medical certification',
-      label_ru: 'Медицинская справка',
-      label_uz: 'Tibbiy ma’lumotnoma',
-      flow: ['patent', 'bkc', 'russian'],
-      dateRequired: true
-    },
-    {
-      key: 'photo',
-      label: 'Photo',
-      label_ru: 'Фото',
-      label_uz: 'Rasm',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'fingerprint_certification',
-      label: 'Fingerprint certification',
-      label_ru: 'Дактилоскопия',
-      label_uz: 'Barmoq izi sertifikati',
-      flow: ['patent', 'bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'patent',
-      label: 'Patent',
-      label_ru: 'Патент',
-      label_uz: 'Patent',
-      flow: ['patent'],
-      dateRequired: false
-    },
-    {
-      key: 'bkc_payment_receipt',
-      label: 'BKC payment receipt',
-      label_ru: 'Квитанция об оплате БКЦ',
-      label_uz: 'BKC to‘lovi kvitansiyasi',
-      flow: ['bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'immigration_committee_notification',
-      label: 'immigration_committee_notification',
-      label_ru: 'Уведомление в иммиграционный комитет',
-      label_uz: 'Immigratsiya qo‘mitasiga xabarnoma',
-      flow: ['bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'invitation_visa',
-      label: 'Invitation visa',
-      label_ru: 'Пригласительная виза',
-      label_uz: 'Tashrif vizasi',
-      flow: ['bkc'],
-      dateRequired: false
-    },
-    {
-      key: 'bkc',
-      label: 'BKC',
-      label_ru: 'БКЦ',
-      label_uz: 'BKC',
-      flow: ['bkc'],
-      dateRequired: true
-    },
-    {
-      key: 'military_id_card',
-      label: 'Military ID card',
-      label_ru: 'Военный билет',
-      label_uz: 'Harbiy guvohnoma',
-      flow: ['russian'],
-      dateRequired: true
-    },
-    {
-      key: 'diploma',
-      label: 'Diploma',
-      label_ru: 'Диплом',
-      label_uz: 'Diplom',
-      flow: ['russian'],
-      dateRequired: false
-    },
-    {
-      key: 'entry_form_document',
-      label: 'Entry Form document',
-      flow: ['patent', 'bkc', 'russian'],
-      dateRequired: false
-    }
+    // {
+    //   key: 'patent',
+    //   label: 'Patent',
+    //   label_ru: 'Патент',
+    //   label_uz: 'Patent',
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'language_certificate',
+    //   label: 'Language Certificate',
+    //   label_ru: 'Сертификат о знании языка',
+    //   label_uz: 'Til sertifikati',
+    //   flow: ['patent'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'contract',
+    //   label: 'Contract',
+    //   label_ru: 'Трудовой договор',
+    //   label_uz: 'Mehnat shartnomasi',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'payment_receipt',
+    //   label: 'Payment receipt',
+    //   label_ru: 'Квитанция об оплате',
+    //   label_uz: 'To’lov kvitansiyasi',
+    //   flow: ['patent'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'visa',
+    //   label: 'Visa',
+    //   label_ru: 'Виза',
+    //   label_uz: 'Viza',
+    //   flow: ['bkc'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'work_authorization',
+    //   label: 'Work authorization',
+    //   label_ru: 'Разрешение на работу',
+    //   label_uz: 'Mehnatga ruxsatnoma',
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'health_insurance',
+    //   label: 'Health insurance',
+    //   label_ru: 'Медицинская страховка',
+    //   label_uz: 'Sog’liqni sug’urtasi',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'medical_certification',
+    //   label: 'Medical certification',
+    //   label_ru: 'Медицинская справка',
+    //   label_uz: 'Tibbiy ma’lumotnoma',
+    //   flow: ['patent', 'bkc', 'russian'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'photo',
+    //   label: 'Photo',
+    //   label_ru: 'Фото',
+    //   label_uz: 'Rasm',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'fingerprint_certification',
+    //   label: 'Fingerprint certification',
+    //   label_ru: 'Дактилоскопия',
+    //   label_uz: 'Barmoq izi sertifikati',
+    //   flow: ['patent', 'bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'patent',
+    //   label: 'Patent',
+    //   label_ru: 'Патент',
+    //   label_uz: 'Patent',
+    //   flow: ['patent'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'bkc_payment_receipt',
+    //   label: 'BKC payment receipt',
+    //   label_ru: 'Квитанция об оплате БКЦ',
+    //   label_uz: 'BKC to‘lovi kvitansiyasi',
+    //   flow: ['bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'immigration_committee_notification',
+    //   label: 'immigration_committee_notification',
+    //   label_ru: 'Уведомление в иммиграционный комитет',
+    //   label_uz: 'Immigratsiya qo‘mitasiga xabarnoma',
+    //   flow: ['bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'invitation_visa',
+    //   label: 'Invitation visa',
+    //   label_ru: 'Пригласительная виза',
+    //   label_uz: 'Tashrif vizasi',
+    //   flow: ['bkc'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'bkc',
+    //   label: 'BKC',
+    //   label_ru: 'БКЦ',
+    //   label_uz: 'BKC',
+    //   flow: ['bkc'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'military_id_card',
+    //   label: 'Military ID card',
+    //   label_ru: 'Военный билет',
+    //   label_uz: 'Harbiy guvohnoma',
+    //   flow: ['russian'],
+    //   dateRequired: true
+    // },
+    // {
+    //   key: 'diploma',
+    //   label: 'Diploma',
+    //   label_ru: 'Диплом',
+    //   label_uz: 'Diplom',
+    //   flow: ['russian'],
+    //   dateRequired: false
+    // },
+    // {
+    //   key: 'entry_form_document',
+    //   label: 'Entry Form document',
+    //   flow: ['patent', 'bkc', 'russian'],
+    //   dateRequired: false
+    // }
   ])
   const {refreshKey} = useLocalSearchParams();
   const {t} = useTranslation()
@@ -314,7 +314,7 @@ export default function EmployeeDocsScreen() {
           <SgSectionFileHead
               title={t('myDocs')}
               description={t('myDocs__description')}
-              icon="filter"
+              iconText={t('seeExpiredDocs')}
               href={`/employeePages/docs/archive`}
           />
         </View>
