@@ -3,7 +3,8 @@
   "main": "expo-router/entry",
   "version": "0.0.2",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "npx expo start --dev-client --clear",
+    "start_expo": "npx expo start --clear",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",

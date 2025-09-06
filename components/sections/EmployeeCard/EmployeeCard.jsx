@@ -128,7 +128,7 @@ export default function SgSectionEmployeeCard(props) {
         }).then(res => {
             if (res.data.success) {
                 // setAcceptCheckInModal(false);
-                // setUserOperationModal(false)
+                setUserOperationModal(false)
                 // setAcceptedCheckInModal(false);
                 if (fullData?.type === 1) {
                     removeRowData('GET:/timekeeper/activity/list', fullData)
@@ -136,6 +136,7 @@ export default function SgSectionEmployeeCard(props) {
                         ...fullData,
                         complete_status: 1,
                         confirm_time: moment(),
+                        review_time: moment(),
                         timezone: moment.tz.guess(),
                         confirm_employee_id: user?.id,
                         status: 2
@@ -476,7 +477,8 @@ export default function SgSectionEmployeeCard(props) {
                                             <SgButton
                                                 color={COLORS.white}
                                                 bgColor={COLORS.brand_600}
-                                                onPress={toggleAcceptCheckInModal}
+                                                // onPress={toggleAcceptCheckInModal}
+                                                onPress={handleSubmitAccept}
                                             >
                                                 Accept
                                             </SgButton>
@@ -494,7 +496,8 @@ export default function SgSectionEmployeeCard(props) {
                                                 <SgButton
                                                     color={COLORS.white}
                                                     bgColor={COLORS.brand_600}
-                                                    onPress={toggleAcceptCheckInModal}
+                                                    // onPress={toggleAcceptCheckInModal}
+                                                    onPress={handleSubmitAccept}
                                                 >
                                                     Accept
                                                 </SgButton>

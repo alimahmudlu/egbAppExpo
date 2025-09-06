@@ -14,15 +14,21 @@ import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
+import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
+import SgCard from "@/components/ui/Card/Card";
+import SgUtilsTimeDifference from "@/utils/TimeDifference";
+import Clock from "@/assets/images/clock.svg";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
     const {request} = useApi();
     const [employeeActivities, setEmployeeActivities] = useState([]);
-    const {storeData, insertData, removeRowData, changeAddRowData} = useData();
+    const {storeData, insertData, removeRowData, changeAddRowData, setStoreData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
+
+
 
 
     useFocusEffect(useCallback(() => {
@@ -32,6 +38,24 @@ export default function EmployeeDashboardScreen() {
         }).catch(err => {
             console.log(err, 'apiservice control err')
         });
+
+        /*request({
+            url: `/timekeeper/activity/checkin`,
+            method: 'get',
+            params: {start_date: moment().startOf('day').format(), end_date: moment().endOf('day').format()},
+        }).then().catch(err => {
+            console.log(err, 'apiservice control err')
+        });
+
+        request({
+            url: `/timekeeper/activity/checkout`,
+            method: 'get',
+            params: {start_date: moment().startOf('day').format(), end_date: moment().endOf('day').format()},
+        }).then().catch(err => {
+            console.log(err, 'apiservice control err')
+        });*/
+
+
         return () => {
             console.log('Home tab lost focus');
         };
@@ -45,7 +69,7 @@ export default function EmployeeDashboardScreen() {
             insertData('GET:/timekeeper/activity/list', data?.data)
         };
         const handler2 = (data) => {
-            console.log('update_activity', data?.data?.id)
+            console.log('update_activity', data?.data)
             // removeRowData('GET:/timekeeper/activity/list', data?.data?.activity_id, 'id')
             changeAddRowData('GET:/timekeeper/activity/list', {
                 completed_status: 1
@@ -61,8 +85,8 @@ export default function EmployeeDashboardScreen() {
         };
 
         // socket.on('connect', () => {
-            socket.on("new_activity", handler);
-            socket.on("update_activity", handler2);
+        socket.on("new_activity", handler);
+        socket.on("update_activity", handler2);
         // })
 
         return () => {
@@ -76,6 +100,81 @@ export default function EmployeeDashboardScreen() {
         setEmployeeActivities(storeData?.cache?.['GET:/timekeeper/activity/list']?.data)
     }, [storeData?.cache?.['GET:/timekeeper/activity/list']])
 
+
+    const [checkIn, setCheckIn] = useState({});
+    const [checkOut, setCheckOut] = useState({});
+    const [rejectInfoModal, setRejectInfoModal] = useState(false);
+    const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
+
+
+    useFocusEffect(useCallback(() => {
+        request({
+            url: `/employee/activity/`, method: 'get',
+        }).then(res => {
+            console.log('activity res')
+            setStoreData(prev => ({
+                ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
+                    loading: true
+                }, checkIn: (res?.data || []).find(el => el.type === 1) || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            console.log('activity error')
+            setStoreData(prev => ({
+                ...prev, checkInData: {
+                    checkIn: null, checkOut: null,
+                }
+            }));
+        })
+
+        return () => {
+            console.log('Home tab lost focus');
+        };
+
+    }, [refreshKey]));
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handler = (data) => {
+            if (data?.data?.type === 1) {
+                setStoreData(prev => ({
+                    ...prev, checkIn: data?.data?.status !== 3 ? data?.data : {
+                        status: 2, type: 1, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            } else {
+                setStoreData(prev => ({
+                    ...prev, checkIn: {
+                        ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+                    }, checkOut: data?.data?.status !== 3 ? data?.data : {
+                        status: 3, type: 2, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+        };
+
+        // socket.on('connect', () => {
+        socket.on("update_activity", handler);
+        // })
+
+        return () => {
+            socket.off("update_activity", handler);
+        };
+    }, [socket]);
+
+    function toggleRejectInfoModal(reject_reason) {
+        setRejectInfoData(reject_reason || '')
+        setRejectInfoModal(!rejectInfoModal);
+    }
+
+    useEffect(() => {
+        // Alert.alert('checkIn change')
+        setCheckIn(storeData?.checkIn)
+        setCheckOut(storeData?.checkOut)
+    }, [storeData?.checkIn, storeData?.checkOut])
+
     return (<SgTemplateScreen
         head={<SgTemplateHeader
             name={user?.full_name}
@@ -84,18 +183,59 @@ export default function EmployeeDashboardScreen() {
             profileImage={''}
         />}
     >
+
+        <SgCheckInOutGroup>
+            <SgCheckInOutCard
+                employeeType={'timekeeper'}
+                type="checkin"
+                title={t('checkIn')}
+                time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                buttonLabel={t('checkIn')}
+                status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
+                mapData={{
+                    checkIn: {
+                        latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
+                    },
+                }}
+                reviewer={checkIn?.reviewer || {}}
+            />
+            <SgCheckInOutCard
+                employeeType={'timekeeper'}
+                type="checkout"
+                title={t('checkOut')}
+                time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                buttonLabel={t('checkOut')}
+                status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                checkInStatus={checkIn?.status === 2}
+                checkInId={checkIn?.id}
+                mapData={{
+                    checkOut: {
+                        latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
+                    },
+                }}
+                reviewer={checkOut?.reviewer || {}}
+            />
+        </SgCheckInOutGroup>
+
+        <SgCard
+            title={t('workTime')}
+            time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
+                startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
+            icon={Clock}
+        />
+
         <SgCheckInOutGroup>
             <SgSectionInfoCard
                 icon="log-in-outline"
-                title={t('monthlyCheckIn')}
-                count={employeeActivities?.filter(el => el.type === 1)?.length}
+                title={t('dailyCheckIn')}
+                count={employeeActivities?.filter(el => el.type === 1 && moment().startOf('day').isBefore(el.review_time))?.length}
                 type="checkin"
                 href={`/timeKeeperPages/activity/checkIn`}
             />
             <SgSectionInfoCard
                 icon="log-out-outline"
-                title={t('monthlyCheckOut')}
-                count={employeeActivities?.filter(el => el.type === 2)?.length}
+                title={t('dailyCheckOut')}
+                count={employeeActivities?.filter(el => el.type === 2 && moment().startOf('day').isBefore(el.review_time))?.length}
                 type="checkout"
                 href={`/timeKeeperPages/activity/checkOut`}
             />

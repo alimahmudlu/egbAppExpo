@@ -14,14 +14,20 @@ import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
+import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
+import SgCard from "@/components/ui/Card/Card";
+import SgUtilsTimeDifference from "@/utils/TimeDifference";
+import Clock from "@/assets/images/clock.svg";
+import {useSocket} from "@/hooks/useSocket";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
-    const {storeData} = useData();
+    const {storeData, setStoreData} = useData();
     const {request} = useApi();
     const [taskList, setTaskList] = useState([]);
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
+    const {socket} = useSocket()
 
     useFocusEffect(useCallback(() => {
         request({
@@ -39,6 +45,81 @@ export default function EmployeeDashboardScreen() {
     }, [storeData?.cache?.[`GET:/chief/task/list`]])
 
 
+    const [checkIn, setCheckIn] = useState({});
+    const [checkOut, setCheckOut] = useState({});
+    const [rejectInfoModal, setRejectInfoModal] = useState(false);
+    const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
+
+
+    useFocusEffect(useCallback(() => {
+        request({
+            url: `/employee/activity/`, method: 'get',
+        }).then(res => {
+            console.log('activity res')
+            setStoreData(prev => ({
+                ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
+                    loading: true
+                }, checkIn: (res?.data || []).find(el => el.type === 1) || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            console.log('activity error')
+            setStoreData(prev => ({
+                ...prev, checkInData: {
+                    checkIn: null, checkOut: null,
+                }
+            }));
+        })
+
+        return () => {
+            console.log('Home tab lost focus');
+        };
+
+    }, [refreshKey]));
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handler = (data) => {
+            if (data?.data?.type === 1) {
+                setStoreData(prev => ({
+                    ...prev, checkIn: data?.data?.status !== 3 ? data?.data : {
+                        status: 2, type: 1, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            } else {
+                setStoreData(prev => ({
+                    ...prev, checkIn: {
+                        ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+                    }, checkOut: data?.data?.status !== 3 ? data?.data : {
+                        status: 3, type: 2, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+        };
+
+        // socket.on('connect', () => {
+        socket.on("update_activity", handler);
+        // })
+
+        return () => {
+            socket.off("update_activity", handler);
+        };
+    }, [socket]);
+
+    function toggleRejectInfoModal(reject_reason) {
+        setRejectInfoData(reject_reason || '')
+        setRejectInfoModal(!rejectInfoModal);
+    }
+
+    useEffect(() => {
+        // Alert.alert('checkIn change')
+        setCheckIn(storeData?.checkIn)
+        setCheckOut(storeData?.checkOut)
+    }, [storeData?.checkIn, storeData?.checkOut])
+
+
     return (<SgTemplateScreen
             head={<SgTemplateHeader
                 name={user?.full_name}
@@ -47,6 +128,46 @@ export default function EmployeeDashboardScreen() {
                 profileImage={''}
             />}
         >
+            <SgCheckInOutGroup>
+                <SgCheckInOutCard
+                    employeeType={'chief'}
+                    type="checkin"
+                    title={t('checkIn')}
+                    time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                    buttonLabel={t('checkIn')}
+                    status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    mapData={{
+                        checkIn: {
+                            latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
+                        },
+                    }}
+                    reviewer={checkIn?.reviewer || {}}
+                />
+                <SgCheckInOutCard
+                    employeeType={'chief'}
+                    type="checkout"
+                    title={t('checkOut')}
+                    time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                    buttonLabel={t('checkOut')}
+                    status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    checkInStatus={checkIn?.status === 2}
+                    checkInId={checkIn?.id}
+                    mapData={{
+                        checkOut: {
+                            latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
+                        },
+                    }}
+                    reviewer={checkOut?.reviewer || {}}
+                />
+            </SgCheckInOutGroup>
+
+            <SgCard
+                title={t('workTime')}
+                time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
+                    startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
+                icon={Clock}
+            />
+
             <SgCheckInOutGroup>
                 <SgSectionInfoCard
                     icon="log-in-outline"

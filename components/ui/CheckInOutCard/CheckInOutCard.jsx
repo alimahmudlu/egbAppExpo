@@ -27,7 +27,8 @@ export default function SgCheckInOutCard(props) {
         mapData,
         checkInStatus = undefined,
         checkInId = undefined,
-        reviewer
+        reviewer,
+        employeeType = 'employee'
     } = props;
 
 
@@ -58,7 +59,7 @@ export default function SgCheckInOutCard(props) {
 
     function handleSubmitCheckIn() {
         request({
-            url: `/employee/activity/checkin`,
+            url: `/${employeeType}/activity/checkin`,
             method: 'post',
             data: {
                 time: moment(),
@@ -90,7 +91,7 @@ export default function SgCheckInOutCard(props) {
 
     function handleSubmitCheckOut() {
         request({
-            url: `/employee/activity/checkout`,
+            url: `/${employeeType}/activity/checkout`,
             method: 'post',
             data: {
                 time: moment(),

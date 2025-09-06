@@ -236,8 +236,8 @@ export default function SgSectionTaskCard(props) {
 
                 <View style={styles.footer}>
                     <Text style={styles.duration}>{data?.duration}</Text>
-                    <View style={styles.userInfo}>
-                        <Text style={styles.name}>{data?.name}</Text>
+                    {data?.name ? <View style={styles.userInfo}>
+                        <Text style={styles.name}>{(data?.name || '').replace(/\s+/g, " ").split(' ').splice(0, 2).join(' ')}</Text>
                         {data?.image ? (
                             <Image source={{uri: data?.image}} style={styles.avatar}/>
                         ) : (
@@ -247,7 +247,7 @@ export default function SgSectionTaskCard(props) {
                                 </Text>
                             </View>
                         )}
-                    </View>
+                    </View> : null}
                 </View>
             </View>
 
