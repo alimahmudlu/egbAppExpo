@@ -12,6 +12,7 @@ import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperUserScreen() {
     const {request} = useApi();
+    const { userId } = useLocalSearchParams();
     const {storeData} = useData();
     const [employeeActivities, setEmployeeActivities] = useState([]);
     const {refreshKey} = useLocalSearchParams();
@@ -19,7 +20,7 @@ export default function TimeKeeperUserScreen() {
 
     useFocusEffect(useCallback(() => {
         request({
-            url: `/timekeeper/activity/checkout`,
+            url: `/timekeeper/employee/history/${userId}/checkout`,
             method: 'get',
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
@@ -30,8 +31,8 @@ export default function TimeKeeperUserScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
-        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/activity/checkout`]?.data)
-    }, [storeData?.cache?.[`GET:/timekeeper/activity/checkout`]])
+        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]?.data)
+    }, [storeData?.cache?.[`GET:/timekeeper/employee/history/${userId}/checkout`]])
 
     return (
         <SgTemplateScreen

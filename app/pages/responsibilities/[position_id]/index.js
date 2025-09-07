@@ -32,10 +32,10 @@ export default function PrivacyPolicyScreen() {
         >
             <View>
                 <Text style={styles.contentTitle}>
-                    {details?.name ? `${details?.[['name', selectedLanguage?.id !== 'en' ? selectedLanguage?.id : ''].join('_')]}` : ''}
+                    {selectedLanguage?.id !== 'en' ? `${details?.[['name', selectedLanguage?.id].join('_')]}` : `${details?.name}`}
                 </Text>
                 <Text style={styles.contentDescription}>
-                    {details?.[['responsibilities', selectedLanguage?.id !== 'en' ? selectedLanguage?.id : ''].join('_')]}
+                    {selectedLanguage?.id !== 'en' ? `${details?.[['responsibilities', selectedLanguage?.id].join('_')]}` : `${details?.responsibilities}`}
                 </Text>
             </View>
         </SgTemplateScreen>

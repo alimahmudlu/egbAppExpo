@@ -16,10 +16,12 @@ import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const [employeeActivities, setEmployeeActivities] = useState([]);
+    const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
     const {storeData} = useData();
@@ -49,11 +51,25 @@ export default function EmployeeDocsScreen() {
     }
 
     function handleFilters() {
-        getData(filters)
+        getData({...filters, project: filters?.project?.id})
     }
 
     useFocusEffect(useCallback(() => {
         getData();
+
+        request({
+            url: `/timekeeper/options/projects`, method: 'get',
+        }).then(res => {
+            if (res.success) {
+                setProjectsList(res?.data);
+            } else {
+                // Handle error response
+                console.log(res.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+
         return () => {
             console.log('Home tab lost focus');
         };
@@ -161,6 +177,33 @@ export default function EmployeeDocsScreen() {
                     </View>
 
                     <View style={{gap: 16}}>
+                        <View style={{flex: 1}}>
+                            <SgInput
+                                label={t('employeeName')}
+                                placeholder={t('employeeName_placeholder')}
+                                value={filters?.full_name}
+                                name='full_name'
+                                onChangeText={handleChange}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("project")}
+                                placeholder={t("enterProject")}
+                                modalTitle={t("selectProject")}
+                                value={filters?.project}
+                                name='project'
+                                onChangeText={handleChange}
+                                list={(projectsList || []).map((project, index) => ({
+                                    id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                        key={index}
+                                        title={project.name}
+                                        staffData={project?.members || []}
+                                        id={project.id}
+                                    />
+                                }))}
+                            />
+                        </View>
                         <View style={{flex: 1}}>
                             <SgDatePicker
                                 label={t('startDate')}

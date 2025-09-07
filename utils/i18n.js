@@ -8,6 +8,8 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                employeeName: 'Name',
+                employeeName_placeholder: 'Enter name',
                 loading: 'Loading',
                 logout: 'Logout',
                 languages: 'Languages',
@@ -227,6 +229,8 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                employeeName: 'Имя',
+                employeeName_placeholder: 'Введите имя',
                 loading: 'Loading',
                 logout: 'Выйти',
                 languages: 'Языки',
@@ -444,6 +448,8 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                employeeName: 'Ism',
+                employeeName_placeholder: 'Ismni kiriting',
                 loading: 'Loading',
                 logout: 'Chiqish',
                 languages: 'Tillar',

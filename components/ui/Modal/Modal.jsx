@@ -1,5 +1,15 @@
 import React, { useEffect, useRef, cloneElement } from 'react';
-import {Modal, View, Text, Animated, TouchableWithoutFeedback, Dimensions} from 'react-native';
+import {
+    Modal,
+    View,
+    Text,
+    Animated,
+    TouchableWithoutFeedback,
+    Dimensions,
+    KeyboardAvoidingView,
+    Platform,
+    Keyboard
+} from 'react-native';
 import styles from './Modal.styles';
 import SgButton from '@/components/ui/Button/Button';
 import COLORS from '@/constants/colors';
@@ -76,50 +86,60 @@ export default function SgPopup({
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={{ flex: 1, height: Dimensions.get('window').height }}>
-        <TouchableWithoutFeedback onPress={onClose}>
-          <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
-        </TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            style={styles.keyboard}
+        >
+            <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                accessible={false}
+            >
+              <View style={{ flex: 1, height: Dimensions.get('window').height }}>
+                <TouchableWithoutFeedback onPress={onClose}>
+                  <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
+                </TouchableWithoutFeedback>
 
-        <View style={[styles.container, fullScreen && { flex: 1, height: '100%',  }]}>
-          <View style={styles.dragHandle} />
+                <View style={[styles.container, fullScreen && { flex: 1, height: '100%',  }]}>
+                  <View style={styles.dragHandle} />
 
-          <View style={{marginVertical: 'auto'}}>
-            {(iconType || icon) && (
-                <View style={styles.iconContainer}>
-                  {renderIcon()}
+                  <View style={{marginVertical: 'auto'}}>
+                    {(iconType || icon) && (
+                        <View style={styles.iconContainer}>
+                          {renderIcon()}
+                        </View>
+                    )}
+
+                    {title && (
+                        <Text
+                            style={[
+                              styles.title,
+                              !iconType && styles.titleWithoutIcon,
+                            ]}
+                        >
+                          {title}
+                        </Text>
+                    )}
+                    {description && <Text style={styles.description}>{description}</Text>}
+
+                    {children}
+                  </View>
+
+                  <View style={styles.footerButtonsContainer}>
+                    <View style={{ flex: 1 }}>
+                      <SgButton onPress={onClose} color={COLORS.buttonNoColor}>
+                        {closeType === 'select' ? t('select') : t('close')}
+                      </SgButton>
+                    </View>
+                    {footerButton && (
+                      <View style={{ flex: 1 }}>
+                        {renderFooterButton()}
+                      </View>
+                    )}
+                  </View>
                 </View>
-            )}
-
-            {title && (
-                <Text
-                    style={[
-                      styles.title,
-                      !iconType && styles.titleWithoutIcon,
-                    ]}
-                >
-                  {title}
-                </Text>
-            )}
-            {description && <Text style={styles.description}>{description}</Text>}
-
-            {children}
-          </View>
-
-          <View style={styles.footerButtonsContainer}>
-            <View style={{ flex: 1 }}>
-              <SgButton onPress={onClose} color={COLORS.buttonNoColor}>
-                {closeType === 'select' ? t('select') : t('close')}
-              </SgButton>
-            </View>
-            {footerButton && (
-              <View style={{ flex: 1 }}>
-                {renderFooterButton()}
               </View>
-            )}
-          </View>
-        </View>
-      </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     </Modal>
   );
 }

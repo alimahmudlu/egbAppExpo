@@ -65,6 +65,7 @@ export default function SgSectionEmployeeCard(props) {
     }
 
     function handleSubmitReject() {
+        setButtonStatus(true)
         request({
             url: '/timekeeper/activity/reject', method: 'post', data: {
                 employee_id: fullData?.employee?.id,
@@ -75,6 +76,7 @@ export default function SgSectionEmployeeCard(props) {
                 reject_reason: rejectReason
             }
         }).then(res => {
+            setButtonStatus(false)
             if (res.data.success) {
                 toggleRejectedCheckInModal();
                 removeRowData('GET:/timekeeper/activity/list', fullData)
@@ -82,6 +84,7 @@ export default function SgSectionEmployeeCard(props) {
                 console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
         }).catch(err => {
+            setButtonStatus(false)
             console.log(err, 'apiservice control err')
         });
     }
@@ -126,6 +129,7 @@ export default function SgSectionEmployeeCard(props) {
                 'authorization': accessToken || ''
             }
         }).then(res => {
+            setButtonStatus(false)
             if (res.data.success) {
                 // setAcceptCheckInModal(false);
                 setUserOperationModal(false)
@@ -151,6 +155,7 @@ export default function SgSectionEmployeeCard(props) {
                 Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
         }).catch(err => {
+            setButtonStatus(false)
             console.log(err?.message)
             Alert.alert('Error', 'An error aaaa occurred while accepting the check-in.');
         })
@@ -209,6 +214,7 @@ export default function SgSectionEmployeeCard(props) {
             handleManualCheckIn({latitude, longitude}, type)
         } catch (error) {
             console.error('Error getting location:', error);
+            setButtonStatus(false)
             toggleOpenSettingsModal()
         }
     }
@@ -241,6 +247,7 @@ export default function SgSectionEmployeeCard(props) {
         }).catch(err => {
             console.log('err')
             console.log(err)
+            setButtonStatus(false)
         })
     }
 
@@ -430,6 +437,7 @@ export default function SgSectionEmployeeCard(props) {
                             <View style={styles.modalGroupButtons}>
                                 {!fullData?.checkin?.latitude ?
                                     <SgButton
+                                        disabled={buttonStatus}
                                         color={COLORS.error_700}
                                         bgColor={COLORS.error_50}
                                         onPress={() => handleCheckInRequest('checkin')}
@@ -440,6 +448,7 @@ export default function SgSectionEmployeeCard(props) {
                                 }
                                 {(!fullData?.checkout?.latitude && fullData?.checkin?.latitude) ?
                                     <SgButton
+                                        disabled={buttonStatus}
                                         color={COLORS.white}
                                         bgColor={COLORS.brand_600}
                                         onPress={() => handleCheckInRequest('checkout')}
@@ -519,6 +528,7 @@ export default function SgSectionEmployeeCard(props) {
                 icon={<ErrorIconModal width={56} height={56}/>}
                 footerButton={
                     <SgButton
+                        disabled={buttonStatus}
                         bgColor={COLORS.error_600}
                         color={COLORS.white}
                         onPress={handleSubmitReject}

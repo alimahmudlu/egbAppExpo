@@ -6,6 +6,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.8)',
   },
+    keyboard: {
+
+        flex: 1,
+    },
+    // modalBackground: {
+    //     flex: 1,
+    //     backgroundColor: "rgba(0,0,0,0.5)",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    // },
+    // modalContent: {
+    //     backgroundColor: "white",
+    //     borderRadius: 10,
+    //     padding: 20,
+    //     width: "90%",
+    //     maxHeight: "80%",
+    // },
+    // scrollContent: {
+    //     flexGrow: 1,
+    //     justifyContent: "flex-start",
+    // },
   container: {
     position: 'absolute',
     bottom: 0,

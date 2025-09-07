@@ -68,6 +68,7 @@ export default function SgCheckInOutCard(props) {
                 longitude: Number(checkInData?.longitude)
             }
         }).then(res => {
+            setButtonStatus(false)
             setStoreData(prev => ({
                 ...prev,
                 checkIn: res?.data || {
@@ -75,6 +76,7 @@ export default function SgCheckInOutCard(props) {
                 },
             }));
         }).catch(err => {
+            setButtonStatus(false)
             console.log(err);
         })
 
@@ -101,6 +103,7 @@ export default function SgCheckInOutCard(props) {
                 activity_id: checkInId
             }
         }).then(res => {
+            setButtonStatus(false)
             if (res.success) {
                 setStoreData(prev => ({
                     ...prev,
@@ -113,6 +116,7 @@ export default function SgCheckInOutCard(props) {
                 console.log(res.message);
             }
         }).catch(err => {
+            setButtonStatus(false)
             console.log(err);
         })
         toggleCheckOutModal()
@@ -176,11 +180,11 @@ export default function SgCheckInOutCard(props) {
 
             // onSuccess callback
             // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-            setButtonStatus(false)
             toggleCheckInModal();
             setCheckInData({latitude, longitude})
         } catch (error) {
             console.error('Error getting location:', error);
+            setButtonStatus(false)
             toggleOpenSettingsModal()
         }
     }
@@ -211,11 +215,11 @@ export default function SgCheckInOutCard(props) {
 
             // onSuccess callback
             // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-            setButtonStatus(false)
             toggleCheckOutModal();
             setCheckOutData({latitude, longitude})
         } catch (error) {
             console.error('Error getting location:', error);
+            setButtonStatus(false)
             toggleOpenSettingsModal()
         }
     }
