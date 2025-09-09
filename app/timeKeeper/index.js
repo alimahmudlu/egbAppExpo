@@ -189,7 +189,7 @@ export default function EmployeeDashboardScreen() {
                 employeeType={'timekeeper'}
                 type="checkin"
                 title={t('checkIn')}
-                time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
                 buttonLabel={t('checkIn')}
                 status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
                 mapData={{
@@ -203,7 +203,7 @@ export default function EmployeeDashboardScreen() {
                 employeeType={'timekeeper'}
                 type="checkout"
                 title={t('checkOut')}
-                time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('hh:mm A') : '') : ''}
+                time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
                 buttonLabel={t('checkOut')}
                 status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
                 checkInStatus={checkIn?.status === 2}

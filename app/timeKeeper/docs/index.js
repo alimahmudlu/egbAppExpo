@@ -384,7 +384,7 @@ export default function EmployeeDocsScreen() {
                     handleRemove={() => handleRemoveFile(index)}
                     title={el?.name}
                     type={el?.type}
-                    datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / hh:mm A') : null}
+                    datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
                     url={el?.filepath}
                     onPress={() => console.log('file.filename')}
                 />

@@ -8,6 +8,9 @@ const styles = StyleSheet.create({
     minHeight: 256,
     justifyContent: 'space-between',
   },
+  card2: {
+    minHeight: 200,
+  },
   content: {
     paddingTop: 20,
     paddingHorizontal: 20,

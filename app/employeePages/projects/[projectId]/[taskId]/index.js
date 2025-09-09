@@ -255,7 +255,7 @@ export default function ProjectItemScreen() {
                             key={index}
                             title={el?.upload?.filename}
                             type={el?.type}
-                            datetime={el?.created_at ? moment(el?.created_at).format('DD.MM.YYYY / hh:mm A') : null}
+                            datetime={el?.created_at ? moment(el?.created_at).format('DD.MM.YYYY / HH:mm') : null}
                             url={el?.upload?.filepath}
                             onPress={() => console.log('file.filename')}
                         />
@@ -331,7 +331,7 @@ export default function ProjectItemScreen() {
                         key={index}
                         title={el?.name}
                         type={el?.type}
-                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / hh:mm A') : null}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
                         url={el?.filepath}
                         onPress={() => console.log('file.filename')}
                     />

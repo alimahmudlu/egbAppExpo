@@ -77,12 +77,13 @@ export default function SgSectionEmployeeCard(props) {
             }
         }).then(res => {
             setButtonStatus(false)
-            if (res.data.success) {
+            if (res.success) {
                 toggleRejectedCheckInModal();
                 removeRowData('GET:/timekeeper/activity/list', fullData)
             } else {
                 console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
+
         }).catch(err => {
             setButtonStatus(false)
             console.log(err, 'apiservice control err')
@@ -299,12 +300,12 @@ export default function SgSectionEmployeeCard(props) {
                                 {status === 3 ?
                                     <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
                                                       onPress={toggleRejectInfoModal}>
-                                        <Text style={[styles.infoText, styles.rejectText]}>Rejected</Text>
+                                        <Text style={[styles.infoText, styles.rejectText]}>{t('rejected')}</Text>
                                         <RejectIcon with={12} height={12} style={styles.rejectIcon}/>
                                     </TouchableOpacity>
                                     :
                                     <TouchableOpacity style={[styles.infoButton, styles.acceptButton]}>
-                                        <Text style={[styles.infoText, styles.acceptText]}>Accepted</Text>
+                                        <Text style={[styles.infoText, styles.acceptText]}>{t('accepted')}</Text>
                                         <AcceptIcon with={12} height={12} style={styles.acceptIcon}/>
                                     </TouchableOpacity>
                                 }
@@ -314,7 +315,7 @@ export default function SgSectionEmployeeCard(props) {
                     {(isManualCheckoutAvailable() && atWork) ?
                         <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
                                           onPress={toggleUserOperationModal}>
-                            <Text style={[styles.infoText, styles.rejectText]}>Manual Check-out</Text>
+                            <Text style={[styles.infoText, styles.rejectText]}>{t('manualCheckIn')}</Text>
                         </TouchableOpacity>
                         : null
                     }
@@ -328,7 +329,7 @@ export default function SgSectionEmployeeCard(props) {
                 icon={<InfoCircleModalIcon width={56} height={56}/>}
                 autoClose={false}
             >
-                <Text style={styles.rejectModal}>Reject detail</Text>
+                <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
                 <SgCard><Text style={styles.title}>{reason || ''}</Text></SgCard>
             </SgPopup>
 
@@ -361,7 +362,7 @@ export default function SgSectionEmployeeCard(props) {
                                             latitude: fullData?.checkin?.latitude,
                                             longitude: fullData?.checkin?.longitude,
                                         }}
-                                        title={"Check In"}
+                                        title={t('checkIn')}
                                         time={time}
                                         icon={<LogIn width={20} height={20}/>}
                                     />
@@ -372,7 +373,7 @@ export default function SgSectionEmployeeCard(props) {
                                             latitude: fullData?.checkout?.latitude,
                                             longitude: fullData?.checkout?.longitude,
                                         }}
-                                        title={"Check Out"}
+                                        title={t('checkOut')}
                                         time={time}
                                         icon={<LogIn width={20} height={20}/>}
                                     />
@@ -389,7 +390,7 @@ export default function SgSectionEmployeeCard(props) {
                                                     latitude: fullData?.latitude,
                                                     longitude: fullData?.longitude,
                                                 }}
-                                                title={"Check In"}
+                                                title={t('checkIn')}
                                                 time={time}
                                                 icon={<LogIn width={20} height={20}/>}
                                             />
@@ -400,7 +401,7 @@ export default function SgSectionEmployeeCard(props) {
                                                     latitude: fullData?.checkout?.latitude,
                                                     longitude: fullData?.checkout?.longitude,
                                                 }}
-                                                title={"Check Out"}
+                                                title={t('checkOut')}
                                                 time={''}
                                                 icon={<LogIn width={20} height={20}/>}
                                             />
@@ -412,7 +413,7 @@ export default function SgSectionEmployeeCard(props) {
                                     <View style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
                                         <View style={{flex: 1,}}>
                                             <SgSectionStatusCard
-                                                title={fullData?.type === 1 ? "Check In" : "Check Out"}
+                                                title={fullData?.type === 1 ? t('checkIn') : t('checkOut')}
                                                 time={time}
                                                 icon={<LogIn width={20} height={20}/>}
                                             />
@@ -423,7 +424,7 @@ export default function SgSectionEmployeeCard(props) {
                                                     latitude: fullData?.latitude,
                                                     longitude: fullData?.longitude,
                                                 }}
-                                                title={fullData?.type === 1 ? "Check In" : "Check Out"}
+                                                title={fullData?.type === 1 ? t('checkIn') : t('checkOut')}
                                                 time={time}
                                                 icon={<LogIn width={20} height={20}/>}
                                             />
@@ -442,7 +443,7 @@ export default function SgSectionEmployeeCard(props) {
                                         bgColor={COLORS.error_50}
                                         onPress={() => handleCheckInRequest('checkin')}
                                     >
-                                        Check in
+                                        {t('checkIn')}
                                     </SgButton>
                                     : null
                                 }
@@ -453,7 +454,7 @@ export default function SgSectionEmployeeCard(props) {
                                         bgColor={COLORS.brand_600}
                                         onPress={() => handleCheckInRequest('checkout')}
                                     >
-                                        Check out
+                                        {t('checkOut')}
                                     </SgButton>
                                     : null
                                 }
@@ -467,7 +468,7 @@ export default function SgSectionEmployeeCard(props) {
                                             disabled={buttonStatus}
                                             onPress={() => handleCheckInRequest('checkout')}
                                         >
-                                            Check out
+                                            {t('checkOut')}
                                         </SgButton>
                                     </View>
                                     :
@@ -478,7 +479,7 @@ export default function SgSectionEmployeeCard(props) {
                                                 bgColor={COLORS.error_50}
                                                 onPress={toggleRejectCheckInModal}
                                             >
-                                                Reject
+                                                {t('reject')}
                                             </SgButton>
                                             : null
                                         }
@@ -489,7 +490,7 @@ export default function SgSectionEmployeeCard(props) {
                                                 // onPress={toggleAcceptCheckInModal}
                                                 onPress={handleSubmitAccept}
                                             >
-                                                Accept
+                                                {t('accept')}
                                             </SgButton>
                                             : null
                                         }
@@ -500,7 +501,7 @@ export default function SgSectionEmployeeCard(props) {
                                                     bgColor={COLORS.error_50}
                                                     onPress={toggleRejectCheckInModal}
                                                 >
-                                                    Reject
+                                                    {t('reject')}
                                                 </SgButton>
                                                 <SgButton
                                                     color={COLORS.white}
@@ -508,7 +509,7 @@ export default function SgSectionEmployeeCard(props) {
                                                     // onPress={toggleAcceptCheckInModal}
                                                     onPress={handleSubmitAccept}
                                                 >
-                                                    Accept
+                                                    {t('accept')}
                                                 </SgButton>
                                             </>
                                             : null

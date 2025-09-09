@@ -229,7 +229,7 @@ export default function SgCheckInOutCard(props) {
     }
 
     return (
-        <View style={[styles.card, {backgroundColor}]}>
+        <View style={[styles.card, ['timekeeper', 'chief'].includes(employeeType) ? styles.card2 : null, {backgroundColor}]}>
             <View style={styles.content}>
                 <View style={styles.header}>
                     <View>
@@ -240,10 +240,10 @@ export default function SgCheckInOutCard(props) {
                 </View>
                 <Text style={[styles.time, {color: isCheckIn ? COLORS.brand_600 : COLORS.error_600}]}
                 >
-                    {time ? time : '--:--:--'}
+                    {time ? time : '--:--'}
                 </Text>
             </View>
-            {(isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web' ?
+            {(!['timekeeper', 'chief'].includes(employeeType) && (isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web') ?
                 <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
                         <MapView
                             style={{flex: 1, height: 125}}
@@ -262,7 +262,7 @@ export default function SgCheckInOutCard(props) {
                 </View>
                 : null
             }
-            {(isCheckOut && status === 2 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web' ?
+            {(!['timekeeper', 'chief'].includes(employeeType) && (isCheckOut && status === 2 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web') ?
                 <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
                     <MapView
                         style={{flex: 1, height: 125}}
