@@ -54,6 +54,10 @@ export default function EmployeeDocsScreen() {
         getData({...filters, project: filters?.project?.id})
     }
 
+    useEffect(() => {
+        getData({...filters, project: filters?.project?.id})
+    }, [filters?.full_name])
+
     useFocusEffect(useCallback(() => {
         getData();
 
@@ -102,39 +106,69 @@ export default function EmployeeDocsScreen() {
                 tabContent={[
                     {
                         element: (
-                            employeeActivities?.filter(el => el.type === 1).map((emp, index) => (
-                                <SgSectionEmployeeCard
-                                    key={index}
-                                    fullData={emp}
-                                    title={emp?.employee?.full_name}
-                                    role={emp?.employee?.role?.name}
-                                    checkType={emp?.employee?.manual ? t('manual') : t('auto')}
-                                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                    image={emp?.employee?.image}
-                                    editable={false}
-                                    status={emp.status}
-                                    reason={emp.reject_reason}
-                                />
-                            ))
+                            <>
+                                <View>
+                                    <View style={{flex: 1}}>
+                                        <SgInput
+                                            label={t('employeeName')}
+                                            placeholder={t('employeeName_placeholder')}
+                                            value={filters?.full_name}
+                                            name='full_name'
+                                            onChangeText={handleChange}
+                                        />
+                                    </View>
+                                </View>
+                                <View>
+                                    {employeeActivities?.filter(el => el.type === 1).map((emp, index) => (
+                                        <SgSectionEmployeeCard
+                                            key={index}
+                                            fullData={emp}
+                                            title={emp?.employee?.full_name}
+                                            role={emp?.employee?.role?.name}
+                                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                            image={emp?.employee?.image}
+                                            editable={false}
+                                            status={emp.status}
+                                            reason={emp.reject_reason}
+                                        />
+                                    ))}
+                                </View>
+                            </>
                         ),
                         id: 'checkIn'
                     },
                     {
                         element: (
-                            employeeActivities?.filter(el => el.type === 2).map((emp, index) => (
-                                <SgSectionEmployeeCard
-                                    key={index}
-                                    fullData={emp}
-                                    title={emp?.employee?.full_name}
-                                    role={emp?.employee?.role?.name}
-                                    checkType={emp?.employee?.manual ? t('manual') : t('auto')}
-                                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                    image={emp?.employee?.image}
-                                    editable={false}
-                                    status={emp.status}
-                                    reason={emp.reject_reason}
-                                />
-                            ))
+                            <>
+                                <View>
+                                    <View style={{flex: 1}}>
+                                        <SgInput
+                                            label={t('employeeName')}
+                                            placeholder={t('employeeName_placeholder')}
+                                            value={filters?.full_name}
+                                            name='full_name'
+                                            onChangeText={handleChange}
+                                        />
+                                    </View>
+                                </View>
+                                <View>
+                                    {employeeActivities?.filter(el => el.type === 2).map((emp, index) => (
+                                        <SgSectionEmployeeCard
+                                            key={index}
+                                            fullData={emp}
+                                            title={emp?.employee?.full_name}
+                                            role={emp?.employee?.role?.name}
+                                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                            image={emp?.employee?.image}
+                                            editable={false}
+                                            status={emp.status}
+                                            reason={emp.reject_reason}
+                                        />
+                                    ))}
+                                </View>
+                            </>
                         ),
                         id: 'checkOut'
                     }
@@ -156,7 +190,7 @@ export default function EmployeeDocsScreen() {
             >
                 <View style={{paddingBottom: 20}}>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>Filters</Text>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
 
                         <SgButton
                             onPress={resetFilters}
@@ -177,15 +211,6 @@ export default function EmployeeDocsScreen() {
                     </View>
 
                     <View style={{gap: 16}}>
-                        <View style={{flex: 1}}>
-                            <SgInput
-                                label={t('employeeName')}
-                                placeholder={t('employeeName_placeholder')}
-                                value={filters?.full_name}
-                                name='full_name'
-                                onChangeText={handleChange}
-                            />
-                        </View>
                         <View style={{flex: 1}}>
                             <SgSelect
                                 label={t("project")}
