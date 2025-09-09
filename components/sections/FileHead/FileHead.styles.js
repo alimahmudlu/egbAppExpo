@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Inter',
-    fontSize: 36,
+    fontSize: 32,
     fontStyle: 'normal',
     fontWeight: 700,
     lineHeight: 44,

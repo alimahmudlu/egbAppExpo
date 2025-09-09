@@ -158,7 +158,7 @@ i18n.use(initReactI18next).init({
                 auto: "Auto",
                 startDate: "Start date",
                 endDate: "End date",
-                manualCheckInAndCheckOut: "Manual Check-in/Check-out",
+                manualCheckInAndCheckOut: "Manual Check-in/out",
                 manualCheckOut: "Manual Check-out",
                 manualCheckIn: "Manual Check-in",
                 logout__description: "You are about to logout. Are you sure?",

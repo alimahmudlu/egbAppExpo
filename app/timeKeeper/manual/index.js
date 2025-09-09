@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Pressable} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
@@ -16,10 +16,13 @@ import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
+import FilterIcon from "@/assets/images/filter.svg";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const [employees, setEmployees] = useState([]);
+    const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
     const {storeData} = useData();
@@ -36,6 +39,8 @@ export default function EmployeeDocsScreen() {
         });
     }
 
+
+
     function toggleFilterModal() {
         setFilterModal(!filterModal);
     }
@@ -49,11 +54,29 @@ export default function EmployeeDocsScreen() {
     }
 
     function handleFilters() {
-        getData(filters)
+        getData({...filters, project: filters?.project?.id})
     }
+
+    useEffect(() => {
+        getData({...filters, project: filters?.project?.id})
+    }, [filters?.full_name])
 
     useFocusEffect(useCallback(() => {
         getData();
+
+        request({
+            url: `/timekeeper/options/projects`, method: 'get',
+        }).then(res => {
+            if (res.success) {
+                setProjectsList(res?.data);
+            } else {
+                // Handle error response
+                console.log(res.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+
         return () => {
             console.log('Home tab lost focus');
         };
@@ -69,23 +92,39 @@ export default function EmployeeDocsScreen() {
             head={
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
-                        title={t('manualCheckInAndCheckOut')}
+                        title={t("manualCheckInAndCheckOut")}
+                        icon="filter"
+                        onPress={toggleFilterModal}
                     />
                 </View>
+
             }
         >
-            {employees?.map((emp, index) => (
-                <SgSectionEmployeeCard
-                    key={index}
-                    fullData={emp}
-                    title={emp?.full_name}
-                    role={emp?.role?.name}
-                    time={emp.request_time ? moment(emp.request_time).format('MM-DD-YYYY HH:mm') : ""}
-                    image={emp?.image}
-                    editable={true}
-                    manual={true}
-                />
-            ))}
+            <View>
+                <View style={{flex: 1}}>
+                    <SgInput
+                        label={t('employeeName')}
+                        placeholder={t('employeeName_placeholder')}
+                        value={filters?.full_name}
+                        name='full_name'
+                        onChangeText={handleChange}
+                    />
+                </View>
+            </View>
+            <View>
+                {employees?.map((emp, index) => (
+                    <SgSectionEmployeeCard
+                        key={index}
+                        fullData={emp}
+                        title={emp?.full_name}
+                        role={emp?.role?.name}
+                        time={emp.request_time ? moment(emp.request_time).format('MM-DD-YYYY HH:mm') : ""}
+                        image={emp?.image}
+                        editable={true}
+                        manual={true}
+                    />
+                ))}
+            </View>
 
             <SgPopup
                 visible={filterModal}
@@ -124,23 +163,41 @@ export default function EmployeeDocsScreen() {
 
                     <View style={{gap: 16}}>
                         <View style={{flex: 1}}>
-                            <SgDatePicker
-                                label={t('startDate')}
-                                placeholder="dd/mm/yyyy - hh/mm"
-                                value={filters?.start_date}
-                                name='start_date'
+                            <SgSelect
+                                label={t("project")}
+                                placeholder={t("enterProject")}
+                                modalTitle={t("selectProject")}
+                                value={filters?.project}
+                                name='project'
                                 onChangeText={handleChange}
+                                list={(projectsList || []).map((project, index) => ({
+                                    id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                        key={index}
+                                        title={project.name}
+                                        staffData={project?.members || []}
+                                        id={project.id}
+                                    />
+                                }))}
                             />
                         </View>
-                        <View style={{flex: 1}}>
-                            <SgDatePicker
-                                label={t('endDate')}
-                                placeholder="dd/mm/yyyy - hh/mm"
-                                value={filters?.end_date}
-                                name='end_date'
-                                onChangeText={handleChange}
-                            />
-                        </View>
+                        {/*<View style={{flex: 1}}>*/}
+                        {/*    <SgDatePicker*/}
+                        {/*        label={t('startDate')}*/}
+                        {/*        placeholder="dd/mm/yyyy - hh/mm"*/}
+                        {/*        value={filters?.start_date}*/}
+                        {/*        name='start_date'*/}
+                        {/*        onChangeText={handleChange}*/}
+                        {/*    />*/}
+                        {/*</View>*/}
+                        {/*<View style={{flex: 1}}>*/}
+                        {/*    <SgDatePicker*/}
+                        {/*        label={t('endDate')}*/}
+                        {/*        placeholder="dd/mm/yyyy - hh/mm"*/}
+                        {/*        value={filters?.end_date}*/}
+                        {/*        name='end_date'*/}
+                        {/*        onChangeText={handleChange}*/}
+                        {/*    />*/}
+                        {/*</View>*/}
                     </View>
                 </View>
             </SgPopup>

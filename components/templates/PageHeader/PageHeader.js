@@ -4,7 +4,7 @@ import LeftIcon from "@/assets/images/chevron-left.svg";
 import React from "react";
 
 export default function SgTemplatePageHeader(props) {
-    const {data: {header, data}} = props
+    const {data: {header, data}, filter} = props
 
     return (
         <>
@@ -29,6 +29,7 @@ export default function SgTemplatePageHeader(props) {
                     </Link>
                     : null
                 }
+                {filter ? filter : null}
             </View>
         </>
     )

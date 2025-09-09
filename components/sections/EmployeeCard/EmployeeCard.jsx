@@ -396,7 +396,7 @@ export default function SgSectionEmployeeCard(props) {
                                             />
                                         </View>
                                         <View style={{flex: 1}}>
-                                            <SgSectionSthttps://www.facebook.com/reel/1472451823706870atusCard
+                                            <SgSectionStatusCard
                                                 mapData={{
                                                     latitude: fullData?.checkout?.latitude,
                                                     longitude: fullData?.checkout?.longitude,
