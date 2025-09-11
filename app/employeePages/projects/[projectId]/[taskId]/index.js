@@ -168,7 +168,7 @@ export default function ProjectItemScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: t('Task details'),
+                header: t('taskDetails'),
             }}/>}
         >
             {taskDetails?.status?.id === 1 ?
@@ -212,7 +212,7 @@ export default function ProjectItemScreen() {
                 : null
             }
             <SgCard
-                contentTitle='Reporter'
+                contentTitle={t('reporter')}
             >
                 <SgSectionUserInfo
                     name={taskDetails?.reporter_employee?.full_name}

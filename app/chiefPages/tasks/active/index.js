@@ -135,7 +135,13 @@ export default function EmployeeDocsScreen() {
                             list={(taskStatuses || []).map((el) => ({
                                 id: el.id,
                                 name: el.name,
-                                render: (<Text style={{fontSize: 16, fontWeight: 500}}>{el.name}</Text>)
+                                render: (<Text style={{fontSize: 16, fontWeight: 500}}>
+                                    {el.id === 1 && t("open")}
+                                    {el.id === 2 && t("inProgress")}
+                                    {el.id === 3 && t("checkProgress")}
+                                    {el.id === 4 && t("checkComplete")}
+                                    {el.id === 5 && t("completed")}
+                                </Text>)
                             }))}
                             onChangeText={handleChange}
                         />

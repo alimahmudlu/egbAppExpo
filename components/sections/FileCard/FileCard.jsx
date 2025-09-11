@@ -82,7 +82,7 @@ const getStatusStyles = (type) => {
   }
 };
 
-export default function SgFileCard({ auid, fileType, title, description, issueDate, url, expiryDate, migrationId, deletePermission, handleRemove, removeSet}) {
+export default function SgFileCard({ auid, fileType, title, description, type, issueDate, url, expiryDate, migrationId, deletePermission, handleRemove, removeSet}) {
     const [previewModal, setPreviewModal] = useState(false);
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
     const [removeModal, setRemoveModal] = useState(false);
@@ -271,7 +271,12 @@ export default function SgFileCard({ auid, fileType, title, description, issueDa
                     name: t('expired'),
                     styles: getStatusStyles('danger')
                 };
-            } else if (diff <= 30) {
+            } else if (diff <= 30 && type !== 'registration_card') {
+                _status = {
+                    name: t('expiringSoon'),
+                    styles: getStatusStyles('warning')
+                };
+            } else if (diff <= 7 && type === 'registration_card') {
                 _status = {
                     name: t('expiringSoon'),
                     styles: getStatusStyles('warning')

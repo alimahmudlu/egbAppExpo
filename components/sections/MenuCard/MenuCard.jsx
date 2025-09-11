@@ -90,6 +90,20 @@ export default function SgSectionMenuCard({extraItems = []}) {
             </TouchableOpacity>
             <Divider />
 
+            {/* Activities */}
+            <TouchableOpacity onPress={() => router.push('/pages/activities')} style={styles.item}>
+              <View style={styles.left}>
+                <View style={styles.iconContainer}>
+                  <AppInfo width={20} height={20} style={styles.icon} />
+                </View>
+                <Text style={styles.title}>{t('activities')}</Text>
+              </View>
+              <View style={styles.right}>
+                <RightIcon width={20} height={20} />
+              </View>
+            </TouchableOpacity>
+            <Divider />
+
             {/* App Info */}
             <TouchableOpacity onPress={() => router.push('/pages/info')} style={styles.item}>
               <View style={styles.left}>

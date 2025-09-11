@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   card2: {
-    minHeight: 200,
+    minHeight: 160,
   },
   content: {
     paddingTop: 20,

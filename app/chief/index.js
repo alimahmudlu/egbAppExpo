@@ -181,6 +181,7 @@ export default function EmployeeDashboardScreen() {
                     title={t('completedTasks')}
                     count={taskList?.filter(el => el?.status?.id === 5)?.length}
                     type="completedTasks"
+                    href={`/chiefPages/tasks/completed`}
                 />
             </SgCheckInOutGroup>
 
@@ -193,11 +194,14 @@ export default function EmployeeDashboardScreen() {
 
             <SgFilterTab
                 defaultTabId='all'
-                tabs={[{label: t('allTasks'), id: 'all', count: taskList?.length}, {
-                    label: t('check'), id: 'check', count: taskList?.filter(el => [3, 4].includes(el?.status?.id))?.length
-                }, {label: t('complete'), id: 'complete', count: taskList?.filter(el => el?.status?.id === 5)?.length},]}
-                tabContent={[{
-                    element: (<View style={{gap: 16}}>
+                tabs={[
+                    {label: t('allTasks'), id: 'all', count: taskList?.length},
+                    {label: t('check'), id: 'check', count: taskList?.filter(el => [3, 4].includes(el?.status?.id))?.length},
+                    // {label: t('complete'), id: 'complete', count: taskList?.filter(el => el?.status?.id === 5)?.length}
+                ]}
+                tabContent={[
+                    {
+                        element: (<View style={{gap: 16}}>
                             {taskList?.map((el, index) => (<SgSectionTaskCard
                                     id={el?.id}
                                     projectId={el?.project_id}
@@ -211,9 +215,11 @@ export default function EmployeeDashboardScreen() {
                                     status={el?.status}
                                     href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
                                 />))}
-                        </View>), id: 'all'
-                }, {
-                    element: (<View style={{gap: 16}}>
+                        </View>),
+                        id: 'all'
+                    },
+                    {
+                        element: (<View style={{gap: 16}}>
                             {taskList?.filter(el => [3, 4].includes(el?.status?.id))?.map((el, index) => (
                                 <SgSectionTaskCard
                                     id={el?.id}
@@ -228,24 +234,28 @@ export default function EmployeeDashboardScreen() {
                                     status={el?.status}
                                     href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
                                 />))}
-                        </View>), id: 'check'
-                }, {
-                    element: (<View style={{gap: 16}}>
-                            {taskList?.filter(el => el?.status?.id === 5)?.map((el, index) => (<SgSectionTaskCard
-                                    id={el?.id}
-                                    projectId={el?.project_id}
-                                    key={index}
-                                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                                    duration={el?.duration}
-                                    title={el?.name}
-                                    description={el?.description}
-                                    name={el?.assigned_employee?.full_name}
-                                    image={null}
-                                    status={el?.status}
-                                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
-                                />))}
-                        </View>), id: 'complete'
-                }]}
+                        </View>),
+                        id: 'check'
+                    },
+                    // {
+                    //     element: (<View style={{gap: 16}}>
+                    //         {taskList?.filter(el => el?.status?.id === 5)?.map((el, index) => (<SgSectionTaskCard
+                    //                 id={el?.id}
+                    //                 projectId={el?.project_id}
+                    //                 key={index}
+                    //                 time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
+                    //                 duration={el?.duration}
+                    //                 title={el?.name}
+                    //                 description={el?.description}
+                    //                 name={el?.assigned_employee?.full_name}
+                    //                 image={null}
+                    //                 status={el?.status}
+                    //                 href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
+                    //             />))}
+                    //     </View>),
+                    //     id: 'complete'
+                    // }
+                ]}
             />
         </SgTemplateScreen>);
 }

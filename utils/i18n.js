@@ -8,6 +8,10 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                requests: 'Requests',
+                reporter: 'Reporter',
+                taskDetails: 'Task Details',
+                activities: 'Activities',
                 employeeName: 'Name',
                 employeeName_placeholder: 'Enter name',
                 loading: 'Loading',
@@ -34,6 +38,8 @@ i18n.use(initReactI18next).init({
                 waiting: 'Waiting',
                 workTime: 'Work Time',
                 myTasks: 'My tasks',
+                checkTime: "Check time",
+                checkType: "Check type",
 
                 yourId: "Your ID",
                 enterId: "Enter ID",
@@ -71,7 +77,7 @@ i18n.use(initReactI18next).init({
                 completedTasks: "Completed tasks",
                 addTask: "Add task",
                 allTasks: "All tasks",
-                check: "Check",
+                check: "Check Requests",
                 complete: "Complete",
                 createTask: "Create task",
                 createTask__description: "Fill in the details to create a new task and assign it to an employee.",
@@ -232,6 +238,10 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                requests: 'Заявки',
+                reporter: 'Докладчик',
+                taskDetails: 'Детали задачи',
+                activities: 'Деятельность',
                 employeeName: 'Имя',
                 employeeName_placeholder: 'Введите имя',
                 loading: 'Loading',
@@ -258,6 +268,8 @@ i18n.use(initReactI18next).init({
                 waiting: 'Ожидание',
                 workTime: 'Время работы',
                 myTasks: 'Мои задачи',
+                checkTime: "Время отметки",
+                checkType: "Тип отметки",
 
                 yourId: "Ваш ID",
                 enterId: "Введите ID",
@@ -275,6 +287,7 @@ i18n.use(initReactI18next).init({
                 history: "История",
                 history__description: "Отслеживайте историю входов и выходов сотрудников. Контролируйте ежедневную активность, отклонённые запросы и ручные записи в одном месте.",
                 accept: "Принять",
+                accepted: "Принято",
                 clearFilters: "Очистить фильтры",
                 progress: "Прогресс",
                 select: "Выбрать",
@@ -308,7 +321,7 @@ i18n.use(initReactI18next).init({
                 taskCompleted__description: "Описание завершенной задачи",
                 taskCompleted: "Задача завершена",
                 enterPoint: "Введите баллы",
-                deadlineDate: "Дата дедлайна",
+                deadlineDate: "Срок",
                 taskCreated: "Задача создана",
                 taskCreated__description: "Задача успешно создана.",
                 taskDetail: "Детали задачи",
@@ -348,7 +361,7 @@ i18n.use(initReactI18next).init({
                 averageWorkHours: "Средние рабочие часы",
                 addDocument__description: "Пожалуйста, заполните обязательные поля для загрузки документа. Убедитесь, что информация верна, а формат файла поддерживается.",
                 checkInRejected: "Вход отклонен",
-                rejectDetail: "Детали отклонения",
+                rejectDetail: "Причина отказа",
                 checkOutRejected: "Выход отклонен",
                 openOnMap: "Открыть на карте",
                 checkIn__description: "Отметьте начало рабочего дня, зарегистрировав текущее местоположение.",
@@ -401,7 +414,7 @@ i18n.use(initReactI18next).init({
                 tabBar__history: "История",
                 tabBar__manual: "Ручной режим",
 
-                enterProject: "Войти в проект",
+                enterProject: "Выбор проекта",
                 appInfo1: "Оцените приложение на следующих платформах",
                 appInfo2: "Enter Flow — официальное мобильное приложение для сотрудников Enter Green Buildings.\n" +
                     "Он помогает работникам соблюдать требования и оставаться на связи на рабочем месте, предоставляя: \n" +
@@ -417,7 +430,7 @@ i18n.use(initReactI18next).init({
                 //     "  *Multilingual support (Russian,Uzbek, English)\n",
                 appInfo3: "Пользоваться приложением могут только сотрудники с действительными учетными данными. Перед входом в систему ваша учетная запись должна быть создана и активирована администратором.",
 
-                started: "Началось",
+                started: "Начать задачу",
                 inProgress: "В процессе",
                 completed: "Завершено",
                 checkInAccept__description: "Вы уверены, что хотите принять этот запрос на вход?",
@@ -453,6 +466,8 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                requests: 'So‘rovlar',
+                activities: 'Faoliyat',
                 employeeName: 'Ism',
                 employeeName_placeholder: 'Ismni kiriting',
                 loading: 'Loading',
@@ -496,6 +511,7 @@ i18n.use(initReactI18next).init({
                 history: "Tarix",
                 history__description: "Xodimlaringizning ishga kirish va chiqish tarixini kuzating. Kunlik faoliyatni, rad etilgan so‘rovlarni va qo‘lda kiritilgan ma’lumotlarni bir joyda nazorat qiling.",
                 accept: "Qabul qilish",
+                accepted: "Qabul qilingan",
                 clearFilters: "Filtrlarni tozalash",
                 progress: "Jarayon",
                 select: "Tanlash",

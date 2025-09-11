@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   time: {
     fontFamily: 'Inter',
-    fontSize: 22,
+    fontSize: 16,
     fontStyle: 'normal',
     fontWeight: 700,
     lineHeight: 32,

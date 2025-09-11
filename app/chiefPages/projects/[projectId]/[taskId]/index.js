@@ -261,7 +261,7 @@ export default function ProjectItemScreen() {
                     <SgButton
                         bgColor = {COLORS.error_50}
                         color= {COLORS.error_700}
-                        onPress={toggleRejectedTaskModal}
+                        onPress={handleRejectedTask}
                     >
                         {t('rejected')}
                     </SgButton>

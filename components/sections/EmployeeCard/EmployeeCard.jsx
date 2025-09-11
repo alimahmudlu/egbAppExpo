@@ -272,8 +272,8 @@ export default function SgSectionEmployeeCard(props) {
                     <View style={styles.employeeInfo}>
                         <Text style={styles.employeeName}>{title}</Text>
                         <Text style={styles.employeeRole}>{role}</Text>
-                        <Text style={styles.checkTime}>Check time: <Text style={styles.time}>{time}</Text></Text>
-                        <Text style={styles.checkTime}>Check type: <Text style={styles.time}>{checkType}</Text></Text>
+                        <Text style={styles.checkTime}>{t('checkTime')}: <Text style={styles.time}>{time}</Text></Text>
+                        <Text style={styles.checkTime}>{t('checkType')}: <Text style={styles.time}>{checkType}</Text></Text>
                     </View>
                 </Pressable>
                 <View style={{gap: 16}}>
@@ -315,7 +315,7 @@ export default function SgSectionEmployeeCard(props) {
                     {(isManualCheckoutAvailable() && atWork) ?
                         <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
                                           onPress={toggleUserOperationModal}>
-                            <Text style={[styles.infoText, styles.rejectText]}>{t('manualCheckIn')}</Text>
+                            <Text style={[styles.infoText, styles.rejectText]}>{t('manualCheckOut')}</Text>
                         </TouchableOpacity>
                         : null
                     }
@@ -548,7 +548,7 @@ export default function SgSectionEmployeeCard(props) {
                             setRejectReason(e)
                         }}
                         value={rejectReason || ''}
-                        placeholder="Reject detail..."
+                        placeholder={t('rejectDetail')}
                         keyboardType="default"
                     />
                 </View>

@@ -59,7 +59,7 @@ export default function EmployeeDocsScreen() {
 
     useEffect(() => {
         getData({...filters, project: filters?.project?.id})
-    }, [filters?.full_name])
+    }, [filters?.full_name, filters?.project?.id])
 
     useFocusEffect(useCallback(() => {
         getData();
@@ -93,14 +93,46 @@ export default function EmployeeDocsScreen() {
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
                         title={t("manualCheckInAndCheckOut")}
-                        icon="filter"
-                        onPress={toggleFilterModal}
                     />
                 </View>
 
             }
         >
             <View>
+                <SgButton
+                    onPress={resetFilters}
+                    color={COLORS.brand_700}
+                    style={{
+                        flex: 0,
+                        width: 'auto',
+                        marginLeft: 'auto',
+                        paddingVertical: 0,
+                        paddingHorizontal: 0,
+                        gap: 7
+                    }}
+
+                >
+                    {t('clearFilters')}
+                    <ReloadArrow width={18} height={18} style={{marginLeft: 7}}/>
+                </SgButton>
+                <View style={{flex: 1}}>
+                    <SgSelect
+                        label={t("project")}
+                        placeholder={t("enterProject")}
+                        modalTitle={t("selectProject")}
+                        value={filters?.project}
+                        name='project'
+                        onChangeText={handleChange}
+                        list={(projectsList || []).map((project, index) => ({
+                            id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                key={index}
+                                title={project.name}
+                                staffData={project?.members || []}
+                                id={project.id}
+                            />
+                        }))}
+                    />
+                </View>
                 <View style={{flex: 1}}>
                     <SgInput
                         label={t('employeeName')}

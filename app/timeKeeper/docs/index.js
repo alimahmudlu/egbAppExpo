@@ -35,139 +35,202 @@ export default function EmployeeDocsScreen() {
   const [selectedFiles, setSelectedFiles] = useState([])
   const [data, setData] = useState({})
   const [errors, setErrors] = useState({})
-  const [fileTypes, setFileTypes] = useState([
-    // {
-    //   key: 'passport',
-    //   label: 'Passport',
-    //   flow: ['patent', 'bkc', 'russian'],
-    //   dateRequired: true
-    // },
-    // {
-    //   key: 'notarized_translation',
-    //   label: 'Translated Passport',
-    //   flow: ['patent', 'bkc'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'migration_card',
-    //   label: 'Migration Card',
-    //   flow: ['patent', 'bkc'],
-    //   dateRequired: true
-    // },
-    {
-      key: 'registration_card',
-      label: 'Registration Card',
-      flow: ['patent', 'bkc'],
-      dateRequired: true
-    },
-    // {
-    //   key: 'patent',
-    //   label: 'Patent',
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'language_certificate',
-    //   label: 'Language Certificate',
-    //   flow: ['patent'],
-    //   dateRequired: true
-    // },
-    // {
-    //   key: 'contract',
-    //   label: 'Contract',
-    //   flow: ['patent', 'bkc'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'payment_receipt',
-    //   label: 'Payment receipt',
-    //   flow: ['patent'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'visa',
-    //   label: 'Visa',
-    //   flow: ['bkc'],
-    //   dateRequired: true
-    // },
-    // {
-    //   key: 'work_authorization',
-    //   label: 'Work authorization',
-    //   dateRequired: false
-    // },
-    //
-    // {
-    //   key: 'health_insurance',
-    //   label: 'Health insurance',
-    //   flow: ['patent', 'bkc'],
-    //   dateRequired: true
-    // },
-    // {
-    //   key: 'medical_certification',
-    //   label: 'Medical certification',
-    //   flow: ['patent', 'bkc', 'russian'],
-    //   dateRequired: true
-    // },
-    // {
-    //   key: 'photo',
-    //   label: 'Photo',
-    //   flow: ['patent', 'bkc'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'fingerprint_certification',
-    //   label: 'Fingerprint certification',
-    //   flow: ['patent', 'bkc'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'patent',
-    //   label: 'Patent',
-    //   flow: ['patent'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'bkc_payment_receipt',
-    //   label: 'BKC payment receipt',
-    //   flow: ['bkc'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'immigration_committee_notification',
-    //   label: 'immigration_committee_notification',
-    //   flow: ['bkc'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'invitation_visa',
-    //   label: 'Invitation visa',
-    //   flow: ['bkc'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'bkc',
-    //   label: 'BKC',
-    //   flow: ['bkc'],
-    //   dateRequired: true
-    // },
-    // {
-    //   key: 'military_id_card',
-    //   label: 'Military ID card',
-    //   flow: ['russian'],
-    //   dateRequired: true
-    // },
-    // {
-    //   key: 'diploma',
-    //   label: 'Diploma',
-    //   flow: ['russian'],
-    //   dateRequired: false
-    // },
-    // {
-    //   key: 'entry_form_document',
-    //   label: 'Entry Form document',
-    //   flow: ['patent', 'bkc', 'russian'],
-    //   dateRequired: false
-    // }
-  ])
+    const [fileTypes, setFileTypes] = useState([
+        {
+            key: 'passport',
+            label: 'Passport',
+            label_ru: 'Паспорт',
+            label_uz: 'Pasport',
+            flow: ['patent', 'bkc', 'russian'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'notarized_translation',
+            label: 'Translated Passport',
+            label_ru: 'Перевод паспорта',
+            label_uz: 'Tarjima qilingan passport',
+            flow: ['patent', 'bkc'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'migration_card',
+            label: 'Migration Card',
+            label_ru: 'Миграционная карта',
+            label_uz: 'Migratsiya kartasi',
+            flow: ['patent', 'bkc'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'registration_card',
+            label: 'Registration Card',
+            label_ru: 'Регистрационная карта',
+            label_uz: 'Ro’yxatga olish hujjati',
+            flow: ['patent', 'bkc'],
+            dateRequired: true,
+            show: true
+        },
+        {
+            key: 'patent',
+            label: 'Patent',
+            label_ru: 'Патент',
+            label_uz: 'Patent',
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'language_certificate',
+            label: 'Language Certificate',
+            label_ru: 'Сертификат о знании языка',
+            label_uz: 'Til sertifikati',
+            flow: ['patent'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'contract',
+            label: 'Contract',
+            label_ru: 'Трудовой договор',
+            label_uz: 'Mehnat shartnomasi',
+            flow: ['patent', 'bkc'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'payment_receipt',
+            label: 'Payment receipt',
+            label_ru: 'Квитанция об оплате',
+            label_uz: 'To’lov kvitansiyasi',
+            flow: ['patent'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'visa',
+            label: 'Visa',
+            label_ru: 'Виза',
+            label_uz: 'Viza',
+            flow: ['bkc'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'work_authorization',
+            label: 'Work authorization',
+            label_ru: 'Разрешение на работу',
+            label_uz: 'Mehnatga ruxsatnoma',
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'health_insurance',
+            label: 'Health insurance',
+            label_ru: 'Медицинская страховка',
+            label_uz: 'Sog’liqni sug’urtasi',
+            flow: ['patent', 'bkc'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'medical_certification',
+            label: 'Medical certification',
+            label_ru: 'Медицинская справка',
+            label_uz: 'Tibbiy ma’lumotnoma',
+            flow: ['patent', 'bkc', 'russian'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'photo',
+            label: 'Photo',
+            label_ru: 'Фото',
+            label_uz: 'Rasm',
+            flow: ['patent', 'bkc'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'fingerprint_certification',
+            label: 'Fingerprint certification',
+            label_ru: 'Дактилоскопия',
+            label_uz: 'Barmoq izi sertifikati',
+            flow: ['patent', 'bkc'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'patent',
+            label: 'Patent',
+            label_ru: 'Патент',
+            label_uz: 'Patent',
+            flow: ['patent'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'bkc_payment_receipt',
+            label: 'BKC payment receipt',
+            label_ru: 'Квитанция об оплате БКЦ',
+            label_uz: 'BKC to‘lovi kvitansiyasi',
+            flow: ['bkc'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'immigration_committee_notification',
+            label: 'immigration_committee_notification',
+            label_ru: 'Уведомление в иммиграционный комитет',
+            label_uz: 'Immigratsiya qo‘mitasiga xabarnoma',
+            flow: ['bkc'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'invitation_visa',
+            label: 'Invitation visa',
+            label_ru: 'Пригласительная виза',
+            label_uz: 'Tashrif vizasi',
+            flow: ['bkc'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'bkc',
+            label: 'BKC',
+            label_ru: 'БКЦ',
+            label_uz: 'BKC',
+            flow: ['bkc'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'military_id_card',
+            label: 'Military ID card',
+            label_ru: 'Военный билет',
+            label_uz: 'Harbiy guvohnoma',
+            flow: ['russian'],
+            dateRequired: true,
+            show: false
+        },
+        {
+            key: 'diploma',
+            label: 'Diploma',
+            label_ru: 'Диплом',
+            label_uz: 'Diplom',
+            flow: ['russian'],
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'entry_form_document',
+            label: 'Entry Form document',
+            flow: ['patent', 'bkc', 'russian'],
+            dateRequired: false,
+            show: false
+        }
+    ])
   const {refreshKey} = useLocalSearchParams();
   const {t} = useTranslation()
   const [removeModal, setRemoveModal] = useState(false);
@@ -306,6 +369,7 @@ export default function EmployeeDocsScreen() {
                 handleRemove={handleRemove}
                 setRemoveModal={setRemoveModal}
                 removeModal={removeModal}
+                type={el?.type}
                 migrationId={fileTypes?.find(item => item.key === el?.type)?.[selectedLanguage?.id !== 'en' ? `label_${selectedLanguage?.id}` : 'label'] || el?.type}
             />
         ))}
@@ -339,7 +403,7 @@ export default function EmployeeDocsScreen() {
                 name='document'
                 isInvalid={errors?.document}
                 onChangeText={handleChange}
-                list={(fileTypes || [])?.filter(el => (el.flow || [])?.includes(user?.flow))?.map((fileType, index) => ({
+                list={(fileTypes || [])?.filter(el => (el.flow || [])?.includes(user?.flow) && el.show)?.map((fileType, index) => ({
                   id: fileType?.key, name: fileType?.label, render: <Text key={index}>{fileType?.label}</Text>
                 }))}
             />

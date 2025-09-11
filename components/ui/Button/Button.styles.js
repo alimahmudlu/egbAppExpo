@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 28,
     color: COLORS.buttonTextColor,
+      textAlign: 'center',
   }
 });
 

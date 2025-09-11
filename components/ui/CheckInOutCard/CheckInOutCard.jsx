@@ -238,8 +238,7 @@ export default function SgCheckInOutCard(props) {
                     </View>
                     <Icon width={20} height={20}/>
                 </View>
-                <Text style={[styles.time, {color: isCheckIn ? COLORS.brand_600 : COLORS.error_600}]}
-                >
+                <Text style={[styles.time, {color: isCheckIn ? COLORS.brand_600 : COLORS.error_600}]}>
                     {time ? time : '--:--'}
                 </Text>
             </View>
@@ -285,14 +284,20 @@ export default function SgCheckInOutCard(props) {
                 {isCheckIn ?
                     <>
                         {!status ?
-                            <SgButton color={COLORS.brand_600} onPress={handleCheckInRequest} disabled={buttonStatus}>
+                            <SgButton color={COLORS.brand_600}
+                                      onPress={handleCheckInRequest}
+                                      disabled={buttonStatus}
+                                      style={{paddingVertical: 8, minHeight: 36}}
+                                      textStyle={{fontSize: 15}}
+                            >
                                 {t('checkIn')}
                             </SgButton>
                             : null
                         }
                         {status === 1 ?
                             <SgButton
-                                style={{borderRadius: 12}}
+                                style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
+                                textStyle={{fontSize: 15}}
                                 color={COLORS.white}
                                 bgColor={COLORS?.brand_600}
                             >
@@ -303,6 +308,8 @@ export default function SgCheckInOutCard(props) {
                         {status === 2 ?
                             <SgButton
                                 color={COLORS.brand_600}
+                                style={{paddingVertical: 8, minHeight: 36}}
+                                textStyle={{fontSize: 15}}
                                 onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}
                             >
                                 {t('openOnMap')}
@@ -315,7 +322,13 @@ export default function SgCheckInOutCard(props) {
                 {(isCheckOut && checkInStatus) ?
                     <>
                         {!status || status === 3 ?
-                            <SgButton color={COLORS.error_700} onPress={handleCheckOutRequest} disabled={buttonStatus}>
+                            <SgButton
+                                color={COLORS.error_700}
+                                onPress={handleCheckOutRequest}
+                                disabled={buttonStatus}
+                                style={{paddingVertical: 8, minHeight: 36}}
+                                textStyle={{fontSize: 15}}
+                            >
                                 {t('checkOut')}
                             </SgButton>
                             : null
@@ -325,6 +338,8 @@ export default function SgCheckInOutCard(props) {
                                 style={{borderRadius: 12}}
                                 color={COLORS.white}
                                 bgColor={COLORS?.error_600}
+                                style={{paddingVertical: 8, minHeight: 36}}
+                                textStyle={{fontSize: 15}}
                             >
                                 {t('waiting')}...
                             </SgButton>
@@ -334,6 +349,8 @@ export default function SgCheckInOutCard(props) {
                             <SgButton
                                 color={COLORS.error_700}
                                 onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}
+                                style={{paddingVertical: 8, minHeight: 36}}
+                                textStyle={{fontSize: 15}}
                             >
                                 {t('openOnMap')}
                             </SgButton>

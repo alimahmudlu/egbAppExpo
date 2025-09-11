@@ -3,7 +3,7 @@ import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {Platform, StyleSheet} from "react-native";
+import {Platform, StyleSheet, Text} from "react-native";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
@@ -223,6 +223,10 @@ export default function EmployeeDashboardScreen() {
                 startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
             icon={Clock}
         />
+
+        <SgCard>
+            <Text style={styles.title}>{t('requests')}</Text>
+        </SgCard>
 
         <SgCheckInOutGroup>
             <SgSectionInfoCard

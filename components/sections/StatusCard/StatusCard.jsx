@@ -51,7 +51,7 @@ export default function SgSectionStatusCard({ icon, title, time, mapData }) {
               <Text style={styles.title}>{title}</Text>
               {icon}
             </View>
-            <Text style={styles.time}>{time}</Text>
+            <Text style={styles.time}>{time ? time.split(' ').map(el => `${el}`).join('\n') : null}</Text>
           </>
         )}
       </View>

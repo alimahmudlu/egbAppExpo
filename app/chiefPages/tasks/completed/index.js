@@ -15,6 +15,7 @@ import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
+import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -28,7 +29,7 @@ export default function EmployeeDocsScreen() {
 
     function getData(_filters = {}) {
         request({
-            url: `/chief/task/list`, method: 'get', params: {..._filters, status: _filters?.status?.id}
+            url: `/chief/task/list/completed`, method: 'get', params: {..._filters, status: _filters?.status?.id}
         }).then().catch(err => {
             console.log(err);
         })
@@ -68,18 +69,13 @@ export default function EmployeeDocsScreen() {
     }, [storeData?.cache?.[`GET:/chief/options/task_statuses`]])
 
     useEffect(() => {
-        setTaskList(storeData?.cache?.[`GET:/chief/task/list`]?.data)
-    }, [storeData?.cache?.[`GET:/chief/task/list`]])
+        setTaskList(storeData?.cache?.[`GET:/chief/task/list/completed`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/task/list/completed`]])
 
     return (<SgTemplateScreen
-            head={<View style={{paddingVertical: 16, paddingHorizontal: 16}}>
-                <SgSectionFileHead
-                    title={t('history')}
-                    description={t('history__description')}
-                    icon="filter"
-                    onPress={toggleFilterModal}
-                />
-            </View>}
+            head={<SgTemplatePageHeader data={{
+                header: t('completedTasks'),
+            }}/>}
         >
             {taskList?.map((el, index) => (<SgSectionTaskCard
                     id={el?.id}
