@@ -1,12 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Dimensions, Pressable} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, Dimensions, Platform, Pressable} from 'react-native';
 import styles from "@/components/sections/DatePicker/DatePicker.styles";
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-import dayjs from 'dayjs';
-import LeftIcon from '@/assets/images/chevron-left_2.svg';
-import RightIcon from '@/assets/images/chevron-right_2.svg';
 import COLORS from '@/constants/colors';
 import moment from "moment";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const {height} = Dimensions.get('window');
 const ITEM_HEIGHT = 40;
@@ -98,207 +95,68 @@ const styles2 = StyleSheet.create({
 export default function SgSectionDatePicker(props) {
     const {value, onChange} = props;
 
-    const [selectedDate, setSelectedDate] = useState(value);
-    const [currentMonth, setCurrentMonth] = useState(dayjs());
-    const [selected, setSelected] = useState('calendar');
+    const [date, setDate] = useState(value);
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(true);
 
-    const today = dayjs().format('YYYY-MM-DD');
+    const handleChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        // setShow(false);
+        setDate(currentDate);
 
-    const handleDayPress = (day) => {
-        setSelectedDate(day.dateString);
+        onChange(selectedDate);
     };
 
-    const goToPreviousMonth = () => {
-        const newMonth = currentMonth.subtract(1, 'month');
-        setCurrentMonth(newMonth);
-        setSelected('calendar')
+
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
     };
 
-    const goToNextMonth = () => {
-        const newMonth = currentMonth.add(1, 'month');
-        setCurrentMonth(newMonth);
+    const showDatepicker = () => {
+        showMode('date');
     };
 
-    const markedDates = {
-        [today]: {
-            marked: true,
-            dotColor: '#40cfa5',
-        },
-        ...(selectedDate && {
-            [selectedDate]: {
-                selected: true,
-                selectedColor: '#0f5743',
-                textColor: 'white',
-            },
-        }),
+    const showTimepicker = () => {
+        showMode('time');
     };
 
-    const handleScroll = (e, data, setter) => {
-        const offsetY = e.nativeEvent.contentOffset.y;
-        const index = Math.round(offsetY / ITEM_HEIGHT);
-        if (data[index]) setter(data[index]);
-    };
 
-    const renderPicker = (data, selectedValue, setter, listRef) => (
-        <View style={styles2.pickerContainer}>
-            <FlatList
-                ref={listRef}
-                data={data}
-                keyExtractor={(item) => item}
-                showsVerticalScrollIndicator={false}
-                snapToInterval={ITEM_HEIGHT}
-                decelerationRate="fast"
-                scrollEventThrottle={16}
-                onScroll={(e) => handleScroll(e, data, setter)}
-                getItemLayout={(_, index) => ({
-                    length: ITEM_HEIGHT,
-                    offset: ITEM_HEIGHT * index,
-                    index,
-                })}
-                contentContainerStyle={{
-                    paddingVertical: ITEM_HEIGHT * CENTER_INDEX,
-                }}
-                renderItem={({item, index}) => {
-                    const selectedIndex = data.indexOf(selectedValue);
-                    const distance = Math.abs(index - selectedIndex);
-                    const opacity = Math.max(1 - Math.pow(distance / CENTER_INDEX, 2), 0.15);
-
-                    return (
-                        <View style={styles2.item}>
-                            <Text
-                                style={[
-                                    styles2.itemText,
-                                    item === selectedValue && styles2.selectedText,
-                                    {opacity},
-                                ]}
-                            >
-                                {item}
-                            </Text>
-                        </View>
-                    );
-                }}
-            />
-            <View style={styles2.highlight} pointerEvents="none"/>
-        </View>
-    );
-
-    const now = new Date(value);
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
-    const isPM = currentHour >= 12;
-
-    const formattedHour = ((currentHour % 12) || 12).toString().padStart(2, '0');
-    const formattedMinute = currentMinute.toString().padStart(2, '0');
-    const formattedDate = now.toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric',
-    });
-
-    const [hour, setHour] = useState(formattedHour);
-    const [minute, setMinute] = useState(formattedMinute);
-    const [ampm, setAmPm] = useState(isPM ? 'PM' : 'AM');
-
-    const hours = [...Array(12)].map((_, i) => (i + 1).toString().padStart(2, '0'));
-    const minutes = [...Array(60)].map((_, i) => i.toString().padStart(2, '0'));
-    const ampmOptions = ['AM', 'PM'];
-
-    const hourRef = useRef(null);
-    const minuteRef = useRef(null);
-    const ampmRef = useRef(null);
-
-    const scrollToMiddle = (listRef, data, value) => {
-        const index = data.indexOf(value);
-        if (index !== -1 && listRef.current) {
-            listRef.current.scrollToIndex({index, animated: false});
-        }
-    };
-
-    useEffect(() => {
-        scrollToMiddle(hourRef, hours, hour);
-        scrollToMiddle(minuteRef, minutes, minute);
-        scrollToMiddle(ampmRef, ampmOptions, ampm);
-    }, [selected]);
-
-    useEffect(() => {
-        // FIXME: This should be a moment object
-        onChange?.(moment(`${selectedDate}T${hour}.${minute}.${ampm}`, 'YYYY-MM-DD HH:mm'))
-        // onChange?.(moment(`${selectedDate}T${hour}.${minute}.${ampm}`, 'dd/mm/yyyy - HH/mm'))
-    }, [selectedDate, hour, minute, ampm]);
 
 
     return (
         <View style={styles.container}>
-
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.navButton} onPress={goToPreviousMonth}>
-                    <LeftIcon width={20} height={20}/>
-                </TouchableOpacity>
-                <Text style={styles.monthText}>
-                    {currentMonth.format('MMMM YYYY')}
-                </Text>
-                <TouchableOpacity style={styles.navButton} onPress={goToNextMonth}>
-                    <RightIcon width={20} height={20}/>
-                </TouchableOpacity>
-            </View>
-
-
             <View style={styles.inputRow}>
                 <Pressable
-                    onPress={() => setSelected('calendar')}
+                    onPress={showDatepicker}
                     style={styles.input}
                 >
                     <Text>
-                        {selectedDate ? dayjs(selectedDate).format('MMM D, YYYY') : 'Select Date'}
+                        {date ? moment(date).format('MMM D, YYYY') : 'Select Date'}
                     </Text>
                 </Pressable>
 
                 <Pressable
-                    onPress={() => setSelected('time')}
+                    onPress={showTimepicker}
                     style={styles.input}
                 >
                     <Text>
-                        {`${hour} - ${minute} ${ampm}`}
+                        {date ? moment(date).format('HH:mm') : 'Select Time'}
                     </Text>
                 </Pressable>
             </View>
 
-            {selected === 'calendar' ?
-                <Calendar
-                    key={currentMonth.format('YYYY-MM')}
-                    current={currentMonth.format('YYYY-MM-DD')}
-                    onDayPress={handleDayPress}
-                    markedDates={markedDates}
-                    hideExtraDays={true}
-                    disableMonthChange={true}
-                    renderHeader={() => <View/>}
-                    renderArrow={() => null}
-                    onPressArrowLeft={goToPreviousMonth}
-                    onPressArrowRight={goToNextMonth}
-                    theme={{
-                        'stylesheet.calendar.header': {
-                            dayHeader: {
-                                color: COLORS.gray_700,
-                                fontSize: 14,
-                                fontWeight: 500,
-                            },
-                        },
-                        selectedDayBackgroundColor: COLORS.brand_600,
-                        todayBackgroundColor: COLORS.brand_50,
-                        todayTextColor: COLORS.brand_600,
-                        dotColor: COLORS.brand_500,
-                        textDayFontWeight: '500',
-                        textMonthFontWeight: 'bold',
-                        textDayHeaderFontWeight: '600',
-                    }}
+            {show && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    display={Platform.OS === "ios" ? "spinner" : "default"}
+                    textColor="black"   // yalnız iOS
+                    mode={mode}
+                    is24Hour={true}
+                    onChange={handleChange}
                 />
-                :
-                <View style={styles2.pickerRow}>
-                    {renderPicker(hours, hour, setHour, hourRef)}
-                    {renderPicker(minutes, minute, setMinute, minuteRef)}
-                    {renderPicker(ampmOptions, ampm, setAmPm, ampmRef)}
-                </View>
-            }
+            )}
         </View>
     );
 }

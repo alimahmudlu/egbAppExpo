@@ -154,14 +154,14 @@ export default function ProjectItemScreen() {
                 size="lg"
                 clickable={`/chiefPages/users/${taskDetails?.assigned_employee?.id}/`}
             />
-            {taskDetails?.status?.id === 1 ?
+            {/*{taskDetails?.status?.id === 1 ?*/}
                 <SgSectionStatusInfo
-                    title={t("open")}
+                    title={t("status")}
                     status={t("open")}
                     statusType=""
                 />
-                : null
-            }
+                {/*: null*/}
+            {/*}*/}
             {taskDetails?.status?.id === 2 ?
                 <SgSectionStatusInfo
                     title={t("progress")}

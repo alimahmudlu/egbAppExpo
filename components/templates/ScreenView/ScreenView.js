@@ -66,6 +66,7 @@ export default function SgTemplateScreenView(props) {
                         accessible={false}
                     >
                             <ScrollView
+                                nestedScrollEnabled
                                 keyboardShouldPersistTaps="handled"
                                 key={refreshKey} // ⭐️ Refresh burada olur
                                 style={styles.container}

@@ -53,7 +53,7 @@ export default function EmployeeDashboardScreen() {
 
     useFocusEffect(useCallback(() => {
         request({
-            url: `/employee/activity/`, method: 'get',
+            url: `/chief/activity/`, method: 'get',
         }).then(res => {
             console.log('activity res')
             setStoreData(prev => ({

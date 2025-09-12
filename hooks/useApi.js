@@ -1,13 +1,13 @@
-import {createContext, useContext, useState} from 'react';
+import {createContext, useContext} from 'react';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useData} from "@/hooks/useData";
 import {useAuth} from "@/hooks/useAuth";
-import {ActivityIndicator, Text, View} from "react-native";
+import {ActivityIndicator, Alert, View} from "react-native";
 import COLORS from "@/constants/colors";
+import {useTranslation} from "react-i18next";
 
-const { API_URL, AUTH_TOKEN_KEY } = Constants.expoConfig.extra;
+const { API_URL } = Constants.expoConfig.extra;
 
 // Create axios instance with base URL
 const api = axios.create({
@@ -22,6 +22,7 @@ const ApiContext = createContext(null);
 export function ApiProvider({children}) {
     const { storeData, updateData, insertLoading, removeLoading, } = useData();
     const { accessToken } = useAuth();
+    const {t} = useTranslation();
 
     const request = async (props) => {
         const { url, method = 'get', params = {}, headers = {}, } = props
@@ -67,6 +68,14 @@ export function ApiProvider({children}) {
 
             return resData;
         } catch (err) {
+            if (err.response && err.response.status === 403) {
+                Alert.alert(t('permissionErrorTitle'), t('permissionErrorDescription'));
+
+                updateData(storageKey, null);
+                throw new Error(`${err.response.status}: ${err.response.data}`);
+            }
+
+
             updateData(storageKey, null)
             throw err;
         } finally {

@@ -54,11 +54,10 @@ export default function SgSectionTaskCard(props) {
         setModalVisible(false)
     };
     const handleDeleteTask = () => {
-        ApiService.delete(`/chief/task/${data?.id}`, {
-            headers: {
-                'authorization': accessToken || ''
-            }
-        } ).then(res => {
+        request({
+            url: `/chief/task/${data?.id}`,
+            method: 'delete',
+        }).then(res => {
             toggleRemoveTaskInfoModal();
             removeRowData(`GET:/chief/task/list`, data?.id, 'id');
             removeRowData(`GET:/chief/project/item/${data?.projectId}/tasks`, data?.id, 'id');
@@ -220,7 +219,7 @@ export default function SgSectionTaskCard(props) {
                                 </Text>
                             </View>
                         )}
-                        {data.status?.id !== 5 ?
+                        {(data.status?.id !== 5 && ((user?.role?.id === 3 && [1, 3, 4]).includes(data?.status?.id) || user?.role?.id === 1)) ?
                             <TouchableOpacity style={styles.dots} onPress={() => setModalVisible(true)}>
                                 <DotsIcon width={20} height={20} style={styles.dotsIcon}/>
                             </TouchableOpacity>
@@ -312,7 +311,6 @@ export default function SgSectionTaskCard(props) {
                     </View>
                     : null
                 }
-
             </SgPopup>
 
             <SgPopup

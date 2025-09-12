@@ -30,7 +30,7 @@ export default function SgDatePicker(props) {
                     onPress={toggleDatePickerModal}
                     style={styles.input}
                 >
-                    <Text style={{color: COLORS.gray_400}}>{value ? moment(value).format('YYYY-MM-DD HH:mm A') : placeholder}</Text>
+                    <Text style={{color: COLORS.gray_400}}>{value ? moment(value).format('YYYY-MM-DD HH:mm') : placeholder}</Text>
                 </Pressable>
             </View>
         </View>
