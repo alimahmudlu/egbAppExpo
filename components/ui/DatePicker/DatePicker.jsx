@@ -21,6 +21,7 @@ export default function SgDatePicker(props) {
     function toggleDatePickerModal() {
         setDatePickerModal(!datePickerModal);
     }
+
   return (
     <>
         <View style={styles.wrapper}>
@@ -48,7 +49,7 @@ export default function SgDatePicker(props) {
                 </SgButton>
             }
         >
-            <SgSectionDatePicker value={value ?? new Date()} onChange={(data) => {
+            <SgSectionDatePicker value={new Date(value) ?? new Date()} onChange={(data) => {
                 onChangeText({
                 name: name,
                 value: data

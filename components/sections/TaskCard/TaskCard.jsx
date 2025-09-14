@@ -219,7 +219,7 @@ export default function SgSectionTaskCard(props) {
                                 </Text>
                             </View>
                         )}
-                        {(data.status?.id !== 5 && ((user?.role?.id === 3 && [1, 3, 4]).includes(data?.status?.id) || user?.role?.id === 1)) ?
+                        {(data.status?.id !== 5 && ((user?.role?.id === 3 && [1, 3, 4].includes(data?.status?.id)) || user?.role?.id === 1)) ?
                             <TouchableOpacity style={styles.dots} onPress={() => setModalVisible(true)}>
                                 <DotsIcon width={20} height={20} style={styles.dotsIcon}/>
                             </TouchableOpacity>

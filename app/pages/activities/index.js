@@ -1,4 +1,4 @@
-import {FlatList, Linking, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Linking, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import COLORS from "@/constants/colors";
@@ -27,8 +27,8 @@ export default function TimeKeeperUserScreen() {
     const [employeeWorkHours, setEmployeeWorkHours] = useState([]);
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({
-        start_date: moment().startOf('month').format(),
-        end_date: moment().endOf('month').format()
+        start_date: moment().startOf('month'),
+        end_date: moment().endOf('month')
     })
     const [filterModal, setFilterModal] = useState(false)
     const {storeData} = useData();
@@ -106,49 +106,111 @@ export default function TimeKeeperUserScreen() {
     }, [storeData?.cache?.[`GET:/currentUser/activities/work_hours`]])
 
     const openMap = (lat, lng) => {
-        const url = `https://www.google.com/maps?q=${lat},${lng}`;
-        Linking.openURL(url);
+        // const url = `https://www.google.com/maps?q=${lat},${lng}`;
+        // Linking.openURL(url);
+
+        const scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+        const url = Platform.OS === 'ios'
+            ? `${scheme}?q=${lat},${lng}`
+            : `${scheme}${lat},${lng}`;
+
+        // For Google Maps specific URL
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+
+        // Open the map based on platform
+        if (Platform.OS === 'ios') {
+            // On iOS, give option to choose between Apple Maps and Google Maps
+            Linking.openURL(url)
+        } else {
+            // On Android, directly open Google Maps
+            Linking.openURL(googleMapsUrl);
+        }
     };
 
     const RenderItem = ({ item }) => (
         <View style={styles.card}>
-            {/* Dates */}
+            <View style={styles.center}>
+                <Text style={styles.badge2}>{item?.activity_status}</Text>
+            </View>
+
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
                     <Text style={styles.label}>Check-in</Text>
-                    <Text style={styles.value}>{moment(item.entry_time).format("YYYY-MM-DD HH:mm")}</Text>
+                    <Text style={styles.value}>{item.entry_time ? moment(item.entry_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
                     <Text style={styles.label}>Check-out</Text>
-                    <Text style={styles.value}>{moment(item.exit_time).format("YYYY-MM-DD HH:mm")}</Text>
+                    <Text style={styles.value}>{item.exit_time ? moment(item.exit_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
                 </View>
             </View>
 
-            {/* Locations */}
             <View style={[styles.rowBetween]}>
-                <TouchableOpacity onPress={() => openMap(item.entry_latitude, item.entry_longitude)}>
-                    <Text style={styles.link}>Check-in location</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => openMap(item.exit_latitude, item.exit_longitude)}>
-                    <Text style={styles.link}>Check-out location</Text>
-                </TouchableOpacity>
+                {item.entry_latitude ?
+                    <TouchableOpacity onPress={() => openMap(item.entry_latitude, item.entry_longitude)}>
+                        <Text style={styles.link}>Check-in location</Text>
+                    </TouchableOpacity>
+                    :
+                    <Text>---</Text>
+                }
+                {item.exit_latitude ?
+                    <TouchableOpacity onPress={() => openMap(item.exit_latitude, item.exit_longitude)}>
+                        <Text style={styles.link}>Check-out location</Text>
+                    </TouchableOpacity>
+                    :
+                    <Text>---</Text>
+                }
             </View>
 
-            {/* Timekeepers */}
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
                     <Text style={styles.label}>Check-in by</Text>
-                    <Text style={styles.value}>{item.check_in_timekeeper}</Text>
+                    <Text style={styles.value}>{item.check_in_timekeeper ? item.check_in_timekeeper : '---'}</Text>
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
                     <Text style={styles.label}>Check-out by</Text>
-                    <Text style={{...styles.value, textAlign: "right"}}>{item.check_out_timekeeper}</Text>
+                    <Text style={{...styles.value, textAlign: "right"}}>{item.check_out_timekeeper ? item.check_out_timekeeper : '---'}</Text>
                 </View>
             </View>
 
-            {/* Work hours */}
+            <View style={styles.rowBetween}>
+                <View style={styles.flex1}>
+                    <Text style={styles.label}>Check-in Status</Text>
+                    <Text style={styles.value}>
+                        {item.entry_status === 1 && ('Waiting')}
+                        {item.entry_status === 2 && ('Accepted')}
+                        {item.entry_status === 3 && (
+                            // <button
+                            //     className='underline'
+                            //     // onClick={() => {setSelectedRow(el)}}
+                            // >
+                            //     Rejected
+                            // </button>
+                            'Rejected'
+                        )}
+                        {item.entry_status === null && ('--')}
+                    </Text>
+                </View>
+                <View style={[styles.flex1, styles.alignRight]}>
+                    <Text style={styles.label}>Check-out Status</Text>
+                    <Text style={{...styles.value, textAlign: "right"}}>
+                        {item.exit_status === 1 && ('Waiting')}
+                        {item.exit_status === 2 && ('Accepted')}
+                        {item.exit_status === 3 && (
+                            // <button
+                            //     className='underline'
+                            //     // onClick={() => {setSelectedRow(el)}}
+                            // >
+                            //     Rejected
+                            // </button>
+                            'Rejected'
+                        )}
+                        {item.exit_status === null && ('--')}
+                    </Text>
+                </View>
+            </View>
+
             <View style={styles.center}>
-                <Text style={styles.badge}>Work hours: {item.work_duration}</Text>
+                <Text style={styles.badge}>Work hours: {item.work_duration || '00:00'}</Text>
             </View>
         </View>
     );
@@ -377,8 +439,20 @@ const styles = StyleSheet.create({
     },
     badge: {
         backgroundColor: "#f3f4f6", // gray-100
+        textAlign: "center",
         paddingHorizontal: 12,
         paddingVertical: 6,
+        borderRadius: 12,
+        fontSize: 14,
+        fontWeight: "700",
+        color: "#1f2937", // gray-800
+    },
+    badge2: {
+        backgroundColor: "#e9f0ff", // gray-100
+        width: '100%',
+        textAlign: "center",
+        paddingHorizontal: 16,
+        paddingVertical: 10,
         borderRadius: 12,
         fontSize: 14,
         fontWeight: "700",

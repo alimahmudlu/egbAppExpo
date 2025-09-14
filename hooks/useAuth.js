@@ -51,7 +51,7 @@ export function AuthProvider({ children }) {
           }
         })
 
-        console.log(currentUser?.data?.data, currentUser.status, 'currentUser');
+        // console.log(currentUser?.data?.data, currentUser.status, 'currentUser');
         // if (currentUser.status === 200) {
         //   console.log(currentUser.data?.data, 'currentUser');
         //   setUser(currentUser.data || userData);

@@ -40,7 +40,6 @@ export default function EmployeeDashboardScreen() {
         request({
             url: `/employee/activity/`, method: 'get',
         }).then(res => {
-            console.log('activity res')
             setStoreData(prev => ({
                 ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
                     loading: true
@@ -49,7 +48,6 @@ export default function EmployeeDashboardScreen() {
                 },
             }));
         }).catch(err => {
-            console.log('activity error')
             setStoreData(prev => ({
                 ...prev, checkInData: {
                     checkIn: null, checkOut: null,
