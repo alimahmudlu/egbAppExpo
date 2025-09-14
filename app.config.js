@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.0.43",
+    "version": "0.0.44",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
