@@ -20,6 +20,8 @@ import FilterIcon from "@/assets/images/filter.svg";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgSectionStatusCard from "@/components/sections/StatusCard/StatusCard";
 import LogIn from "@/assets/images/log-in_20.svg";
+import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
+import SgCard from "@/components/ui/Card/Card";
 
 export default function TimeKeeperUserScreen() {
     const { request } = useApi();
@@ -31,6 +33,10 @@ export default function TimeKeeperUserScreen() {
         end_date: moment().endOf('month')
     })
     const [filterModal, setFilterModal] = useState(false)
+
+    const [selectedRow, setSelectedRow] = useState(null)
+    const [rejectModal, setRejectModal] = useState(false)
+
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
@@ -127,6 +133,11 @@ export default function TimeKeeperUserScreen() {
         }
     };
 
+    function handleSelectRow(item) {
+        setSelectedRow(item);
+        setRejectModal(!!item);
+    }
+
     const RenderItem = ({ item }) => (
         <View style={styles.card}>
             <View style={styles.center}>
@@ -179,13 +190,9 @@ export default function TimeKeeperUserScreen() {
                         {item.entry_status === 1 && t('waiting')}
                         {item.entry_status === 2 && t('accepted')}
                         {item.entry_status === 3 && (
-                            // <button
-                            //     className='underline'
-                            //     // onClick={() => {setSelectedRow(el)}}
-                            // >
-                            //     Rejected
-                            // </button>
-                            t('rejected')
+                            <TouchableOpacity onPress={() => handleSelectRow(item)}>
+                                <Text style={styles.link}>{t('rejected')}</Text>
+                            </TouchableOpacity>
                         )}
                         {item.entry_status === null && ('--')}
                     </Text>
@@ -196,13 +203,9 @@ export default function TimeKeeperUserScreen() {
                         {item.exit_status === 1 && t('waiting')}
                         {item.exit_status === 2 && t('accepted')}
                         {item.exit_status === 3 && (
-                            // <button
-                            //     className='underline'
-                            //     // onClick={() => {setSelectedRow(el)}}
-                            // >
-                            //     Rejected
-                            // </button>
-                            t('rejected')
+                            <TouchableOpacity onPress={() => handleSelectRow(item)}>
+                                <Text style={styles.link}>{t('rejected')}</Text>
+                            </TouchableOpacity>
                         )}
                         {item.exit_status === null && ('--')}
                     </Text>
@@ -386,6 +389,18 @@ export default function TimeKeeperUserScreen() {
                         </View>
                     </View>
                 </View>
+            </SgPopup>
+
+            <SgPopup
+                visible={rejectModal}
+                onClose={() => handleSelectRow(null)}
+                icon={<InfoCircleModalIcon width={56} height={56}/>}
+            >
+                <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
+                <SgCard>
+                    {selectedRow?.entry_reject_reason ? <Text style={styles.title}>{selectedRow?.entry_reject_reason}</Text> : null}
+                    {selectedRow?.exit_reject_reason ? <Text style={styles.title}>{selectedRow?.exit_reject_reason}</Text> : null}
+                </SgCard>
             </SgPopup>
         </SgTemplateScreen>
     )
