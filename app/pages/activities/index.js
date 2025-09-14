@@ -130,7 +130,7 @@ export default function TimeKeeperUserScreen() {
     const RenderItem = ({ item }) => (
         <View style={styles.card}>
             <View style={styles.center}>
-                <Text style={styles.badge2}>{item?.activity_status}</Text>
+                <Text style={styles.badge2}>{t(item?.activity_status_key)}</Text>
             </View>
 
             <View style={styles.rowBetween}>

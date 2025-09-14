@@ -710,6 +710,11 @@ i18n.use(initReactI18next).init({
                 checkOutStatus: "Check-out Status",
                 workHours: "Work hours",
 
+                activityRejectedExit: "Rejected Exit",
+                activityRejectedEntry: "Rejected Entry",
+                activityCompleted: "Completed",
+                activityNoExit: "No Exit",
+
                 permissionErrorTitle: "Permission denied.",
                 permissionErrorDescription: "Registration card expired. Please contact admin.",
                 status: 'Status',
@@ -930,6 +935,11 @@ i18n.use(initReactI18next).init({
                 checkOutStatus: "Статус выхода",
                 workHours: "Рабочие часы",
 
+                activityRejectedExit: "Отклонённый выход",
+                activityRejectedEntry: "Отклонённый вход",
+                activityCompleted: "Завершено",
+                activityNoExit: "Нет выхода",
+
                 permissionErrorTitle: "Отказано в доступе.",
                 permissionErrorDescription: "Срок действия регистрационной карты истёк. Обратитесь к администратору.",
                 status: 'Статус',
@@ -1149,6 +1159,11 @@ i18n.use(initReactI18next).init({
                 checkInStatus: "Kirish holati",
                 checkOutStatus: "Chiqish holati",
                 workHours: "Ish soatlari",
+
+                activityRejectedExit: "Rad etilgan chiqish",
+                activityRejectedEntry: "Rad etilgan kirish",
+                activityCompleted: "Tugallangan",
+                activityNoExit: "Chiqish yo'q",
 
                 permissionErrorTitle: "Ruxsat rad etildi.",
                 permissionErrorDescription: "Ro'yxatdan o'tish kartasining muddati tugagan. Admin bilan bog'laning.",
