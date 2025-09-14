@@ -135,11 +135,11 @@ export default function TimeKeeperUserScreen() {
 
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
-                    <Text style={styles.label}>Check-in</Text>
+                    <Text style={styles.label}>{t('checkInDate')}</Text>
                     <Text style={styles.value}>{item.entry_time ? moment(item.entry_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
-                    <Text style={styles.label}>Check-out</Text>
+                    <Text style={styles.label}>{t('checkInDate')}</Text>
                     <Text style={styles.value}>{item.exit_time ? moment(item.exit_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
                 </View>
             </View>
@@ -147,14 +147,14 @@ export default function TimeKeeperUserScreen() {
             <View style={[styles.rowBetween]}>
                 {item.entry_latitude ?
                     <TouchableOpacity onPress={() => openMap(item.entry_latitude, item.entry_longitude)}>
-                        <Text style={styles.link}>Check-in location</Text>
+                        <Text style={styles.link}>{t('checkInLocation')}</Text>
                     </TouchableOpacity>
                     :
                     <Text>---</Text>
                 }
                 {item.exit_latitude ?
                     <TouchableOpacity onPress={() => openMap(item.exit_latitude, item.exit_longitude)}>
-                        <Text style={styles.link}>Check-out location</Text>
+                        <Text style={styles.link}>{t('checkOutLocation')}</Text>
                     </TouchableOpacity>
                     :
                     <Text>---</Text>
@@ -163,21 +163,21 @@ export default function TimeKeeperUserScreen() {
 
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
-                    <Text style={styles.label}>Check-in by</Text>
+                    <Text style={styles.label}>{t('checkInBy')}</Text>
                     <Text style={styles.value}>{item.check_in_timekeeper ? item.check_in_timekeeper : '---'}</Text>
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
-                    <Text style={styles.label}>Check-out by</Text>
+                    <Text style={styles.label}>{t('checkOutBy')}</Text>
                     <Text style={{...styles.value, textAlign: "right"}}>{item.check_out_timekeeper ? item.check_out_timekeeper : '---'}</Text>
                 </View>
             </View>
 
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
-                    <Text style={styles.label}>Check-in Status</Text>
+                    <Text style={styles.label}>{t('checkInStatus')}</Text>
                     <Text style={styles.value}>
-                        {item.entry_status === 1 && ('Waiting')}
-                        {item.entry_status === 2 && ('Accepted')}
+                        {item.entry_status === 1 && t('waiting')}
+                        {item.entry_status === 2 && t('accepted')}
                         {item.entry_status === 3 && (
                             // <button
                             //     className='underline'
@@ -185,16 +185,16 @@ export default function TimeKeeperUserScreen() {
                             // >
                             //     Rejected
                             // </button>
-                            'Rejected'
+                            t('rejected')
                         )}
                         {item.entry_status === null && ('--')}
                     </Text>
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
-                    <Text style={styles.label}>Check-out Status</Text>
+                    <Text style={styles.label}>{t('checkOutStatus')}</Text>
                     <Text style={{...styles.value, textAlign: "right"}}>
-                        {item.exit_status === 1 && ('Waiting')}
-                        {item.exit_status === 2 && ('Accepted')}
+                        {item.exit_status === 1 && t('waiting')}
+                        {item.exit_status === 2 && t('accepted')}
                         {item.exit_status === 3 && (
                             // <button
                             //     className='underline'
@@ -202,7 +202,7 @@ export default function TimeKeeperUserScreen() {
                             // >
                             //     Rejected
                             // </button>
-                            'Rejected'
+                            t('rejected')
                         )}
                         {item.exit_status === null && ('--')}
                     </Text>
@@ -210,7 +210,7 @@ export default function TimeKeeperUserScreen() {
             </View>
 
             <View style={styles.center}>
-                <Text style={styles.badge}>Work hours: {item.work_duration || '00:00'}</Text>
+                <Text style={styles.badge}>{t('workHours')}: {item.work_duration || '00:00'}</Text>
             </View>
         </View>
     );

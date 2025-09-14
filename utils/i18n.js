@@ -700,6 +700,16 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                checkInDate: "Check-in date",
+                checkOutDate: "Check-out date",
+                checkInLocation: "Check-in location",
+                checkOutLocation: "Check-out location",
+                checkInBy: "Check-in by",
+                checkOutBy: "Check-out by",
+                checkInStatus: "Check-in Status",
+                checkOutStatus: "Check-out Status",
+                workHours: "Work hours",
+
                 permissionErrorTitle: "Permission denied.",
                 permissionErrorDescription: "Registration card expired. Please contact admin.",
                 status: 'Status',
@@ -910,6 +920,16 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                checkInDate: "Дата входа",
+                checkOutDate: "Дата выхода",
+                checkInLocation: "Место входа",
+                checkOutLocation: "Место выхода",
+                checkInBy: "Кто зарегистрировал вход",
+                checkOutBy: "Кто зарегистрировал выход",
+                checkInStatus: "Статус входа",
+                checkOutStatus: "Статус выхода",
+                workHours: "Рабочие часы",
+
                 permissionErrorTitle: "Отказано в доступе.",
                 permissionErrorDescription: "Срок действия регистрационной карты истёк. Обратитесь к администратору.",
                 status: 'Статус',
@@ -1120,6 +1140,16 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                checkInDate: "Kirish sanasi",
+                checkOutDate: "Chiqish sanasi",
+                checkInLocation: "Kirish joyi",
+                checkOutLocation: "Chiqish joyi",
+                checkInBy: "Kirishni kim tasdiqlagan",
+                checkOutBy: "Chiqishni kim tasdiqlagan",
+                checkInStatus: "Kirish holati",
+                checkOutStatus: "Chiqish holati",
+                workHours: "Ish soatlari",
+
                 permissionErrorTitle: "Ruxsat rad etildi.",
                 permissionErrorDescription: "Ro'yxatdan o'tish kartasining muddati tugagan. Admin bilan bog'laning.",
                 status: 'Holat',
@@ -1327,7 +1357,7 @@ i18n.use(initReactI18next).init({
                 seeExpiredDocs: "Muddati oʻtgan hujjatlarni koʻring",
                 logout_description: "Chiqishni istaysizmi?"
             }
-        },
+        }
     },
 });
 
