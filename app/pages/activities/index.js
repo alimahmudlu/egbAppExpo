@@ -150,7 +150,7 @@ export default function TimeKeeperUserScreen() {
                     <Text style={styles.value}>{item.entry_time ? moment(item.entry_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
-                    <Text style={styles.label}>{t('checkInDate')}</Text>
+                    <Text style={styles.label}>{t('checkOutDate')}</Text>
                     <Text style={styles.value}>{item.exit_time ? moment(item.exit_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
                 </View>
             </View>

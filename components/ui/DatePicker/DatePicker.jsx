@@ -49,7 +49,7 @@ export default function SgDatePicker(props) {
                 </SgButton>
             }
         >
-            <SgSectionDatePicker value={new Date(value) ?? new Date()} onChange={(data) => {
+            <SgSectionDatePicker value={value ? new Date(value) : new Date()} onChange={(data) => {
                 onChangeText({
                 name: name,
                 value: data

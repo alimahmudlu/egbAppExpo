@@ -314,7 +314,7 @@ export default function SgFileCard({ auid, fileType, title, description, type, i
             <View style={styles.bottomRow}>
                 <View style={styles.expireBox}>
                     <Text style={styles.expireText}>{t('expireDate')}</Text>
-                    <Text style={styles.expireDate}>{expiryDate ? moment(expiryDate).format('DD.MM.YYYY') : null}</Text>
+                    <Text style={styles.expireDate}>{expiryDate ? moment(expiryDate).format('DD/MM/YYYY') : null}</Text>
                 </View>
                 <View styles={{gap: 16, alignItems: 'center', flex: 1}}>
                     {deletePermission ? (

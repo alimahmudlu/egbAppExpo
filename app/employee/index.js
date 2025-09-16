@@ -72,9 +72,10 @@ export default function EmployeeDashboardScreen() {
 
         const handler = (data) => {
             if (data?.data?.type === 1) {
+                console.log('update_activity', data?.data)
                 setStoreData(prev => ({
                     ...prev, checkIn: data?.data?.status !== 3 ? data?.data : {
-                        status: 2, type: 1, reject_reason: data?.data?.reject_reason
+                        status: 3, type: 1, reject_reason: data?.data?.reject_reason
                     },
                 }));
             } else {
@@ -197,7 +198,7 @@ export default function EmployeeDashboardScreen() {
                 onClose={toggleRejectInfoModal}
                 icon={<InfoCircleModalIcon width={56} height={56}/>}
             >
-                <Text style={styles.rejectModal}>{t('rejectDetails')}</Text>
+                <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
                 <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
             </SgPopup>
         </SgTemplateScreen>);
