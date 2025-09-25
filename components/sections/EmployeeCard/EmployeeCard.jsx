@@ -26,6 +26,7 @@ import {useApi} from "@/hooks/useApi";
 import * as Location from "expo-location";
 import * as Linking from "expo-linking";
 import {useTranslation} from "react-i18next";
+import SgRadio from "@/components/ui/Radio/Radio";
 
 
 export default function SgSectionEmployeeCard(props) {
@@ -43,12 +44,14 @@ export default function SgSectionEmployeeCard(props) {
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
     const {t} = useTranslation();
     const [buttonStatus, setButtonStatus] = useState(false);
+    const [confirmType, setConfirmType] = useState(1);
 
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
 
     function toggleRejectInfoModal() {
         setRejectInfoModal(!rejectInfoModal);
     }
+    console.log(fullData, 'fullData')
 
 
     function toggleUserOperationModal() {
@@ -80,6 +83,32 @@ export default function SgSectionEmployeeCard(props) {
             if (res.success) {
                 toggleRejectedCheckInModal();
                 removeRowData('GET:/timekeeper/activity/list', fullData)
+            } else {
+                console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
+            }
+
+        }).catch(err => {
+            setButtonStatus(false)
+            console.log(err, 'apiservice control err')
+        });
+    }
+
+    function handleSubmitRejectOverTime() {
+        setButtonStatus(true)
+        request({
+            url: '/timekeeper/overtime/reject', method: 'post', data: {
+                employee_id: fullData?.employee?.id,
+                activity_id: fullData?.id,
+                type: fullData?.type,
+                confirm_time: moment(),
+                timezone: moment.tz.guess(),
+                reject_reason: rejectReason
+            }
+        }).then(res => {
+            setButtonStatus(false)
+            if (res.success) {
+                toggleRejectedCheckInModal();
+                removeRowData('GET:/timekeeper/overtime/list', fullData)
             } else {
                 console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
@@ -125,6 +154,7 @@ export default function SgSectionEmployeeCard(props) {
             timezone: moment.tz.guess(),
             activity_id: fullData?.id,
             type: fullData?.type,
+            confirm_type: fullData?.type === 2 ? confirmType : null
         }, {
             headers: {
                 'authorization': accessToken || ''
@@ -147,9 +177,74 @@ export default function SgSectionEmployeeCard(props) {
                         status: 2
                     })
                 }
+                if (fullData?.type === 3) {
+                    removeRowData('GET:/timekeeper/overtime/list', fullData)
+                    // insertData('GET:/timekeeper/overtime/list', {
+                    //     ...fullData,
+                    //     complete_status: 1,
+                    //     confirm_time: moment(),
+                    //     review_time: moment(),
+                    //     timezone: moment.tz.guess(),
+                    //     confirm_employee_id: user?.id,
+                    //     status: 2
+                    // })
+                }
                 else {
                     removeRowData('GET:/timekeeper/activity/list', fullData?.activity_id, 'id')
                     removeRowData('GET:/timekeeper/activity/list', fullData)
+                }
+            }
+            else {
+                Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
+            }
+        }).catch(err => {
+            setButtonStatus(false)
+            console.log(err?.message)
+            Alert.alert('Error', 'An error aaaa occurred while accepting the check-in.');
+        })
+    }
+
+    function handleSubmitAcceptOverTime() {
+        ApiService.post('/timekeeper/overtime/accept', {
+            employee_id: fullData?.employee?.id,
+            confirm_time: moment(),
+            timezone: moment.tz.guess(),
+            activity_id: fullData?.id,
+            type: fullData?.type,
+            confirm_type: fullData?.type === 2 ? confirmType : null
+        }, {
+            headers: {
+                'authorization': accessToken || ''
+            }
+        }).then(res => {
+            setButtonStatus(false)
+            if (res.data.success) {
+                // setAcceptCheckInModal(false);
+                setUserOperationModal(false)
+                // setAcceptedCheckInModal(false);
+                if (fullData?.type === 3) {
+                    removeRowData('GET:/timekeeper/overtime/list', fullData)
+                    // insertData('GET:/timekeeper/overtime/list', {
+                    //     ...fullData,
+                    //     complete_status: 1,
+                    //     confirm_time: moment(),
+                    //     review_time: moment(),
+                    //     timezone: moment.tz.guess(),
+                    //     confirm_employee_id: user?.id,
+                    //     status: 2
+                    // })
+                }
+                if (fullData?.type === 4) {
+                    removeRowData('GET:/timekeeper/overtime/list', fullData)
+                    // insertData('GET:/timekeeper/overtime/list', {
+                    //     ...fullData,
+                    //     complete_status: 1,
+                    //     confirm_time: moment(),
+                    //     review_time: moment(),
+                    //     timezone: moment.tz.guess(),
+                    //     confirm_employee_id: user?.id,
+                    //     status: 2
+                    // })
                 }
             }
             else {
@@ -251,6 +346,14 @@ export default function SgSectionEmployeeCard(props) {
             setButtonStatus(false)
         })
     }
+
+    function handleChangeConfirmType(type) {
+        setConfirmType(type)
+    }
+
+    useEffect(() => {
+        setConfirmType(1)
+    }, [userOperationModal]);
 
     return (
 
@@ -413,7 +516,7 @@ export default function SgSectionEmployeeCard(props) {
                                     <View style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
                                         <View style={{flex: 1,}}>
                                             <SgSectionStatusCard
-                                                title={fullData?.type === 1 ? t('checkIn') : t('checkOut')}
+                                                title={fullData?.type === 1 ? t('checkIn') : (fullData?.type === 3 ? t('overTime') : t('checkOut'))}
                                                 time={time}
                                                 icon={<LogIn width={20} height={20}/>}
                                             />
@@ -424,7 +527,7 @@ export default function SgSectionEmployeeCard(props) {
                                                     latitude: fullData?.latitude,
                                                     longitude: fullData?.longitude,
                                                 }}
-                                                title={fullData?.type === 1 ? t('checkIn') : t('checkOut')}
+                                                title={fullData?.type === 1 ? t('checkIn') : (fullData?.type === 3 ? t('overTime') : t('checkOut'))}
                                                 time={time}
                                                 icon={<LogIn width={20} height={20}/>}
                                             />
@@ -487,8 +590,8 @@ export default function SgSectionEmployeeCard(props) {
                                             <SgButton
                                                 color={COLORS.white}
                                                 bgColor={COLORS.brand_600}
-                                                // onPress={toggleAcceptCheckInModal}
-                                                onPress={handleSubmitAccept}
+                                                onPress={toggleAcceptCheckInModal}
+                                                // onPress={handleSubmitAccept}
                                             >
                                                 {t('accept')}
                                             </SgButton>
@@ -506,8 +609,8 @@ export default function SgSectionEmployeeCard(props) {
                                                 <SgButton
                                                     color={COLORS.white}
                                                     bgColor={COLORS.brand_600}
-                                                    // onPress={toggleAcceptCheckInModal}
-                                                    onPress={handleSubmitAccept}
+                                                    onPress={toggleAcceptCheckInModal}
+                                                    // onPress={handleSubmitAccept}
                                                 >
                                                     {t('accept')}
                                                 </SgButton>
@@ -528,14 +631,24 @@ export default function SgSectionEmployeeCard(props) {
                 description={fullData?.type === 1 ? t('rejectCheckIn__description') : t('rejectCheckOut__description')}
                 icon={<ErrorIconModal width={56} height={56}/>}
                 footerButton={
-                    <SgButton
-                        disabled={buttonStatus}
-                        bgColor={COLORS.error_600}
-                        color={COLORS.white}
-                        onPress={handleSubmitReject}
-                    >
-                        {t('yesReject')}
-                    </SgButton>
+                    [3, 4].includes(fullData?.type) ?
+                        <SgButton
+                            disabled={buttonStatus}
+                            bgColor={COLORS.error_600}
+                            color={COLORS.white}
+                            onPress={handleSubmitRejectOverTime}
+                        >
+                            {t('yesReject')}
+                        </SgButton>
+                        :
+                        <SgButton
+                            disabled={buttonStatus}
+                            bgColor={COLORS.error_600}
+                            color={COLORS.white}
+                            onPress={handleSubmitReject}
+                        >
+                            {t('yesReject')}
+                        </SgButton>
                 }
                 autoClose={false}
             >
@@ -570,16 +683,74 @@ export default function SgSectionEmployeeCard(props) {
                 description={fullData?.type === 1 ? t('checkInAccept__description') : t('checkOutAccept__description')}
                 icon={<SuccessIconModal width={56} height={56}/>}
                 footerButton={
-                    <SgButton
-                        bgColor={COLORS.brand_600}
-                        color={COLORS.white}
-                        onPress={handleSubmitAccept}
-                    >
-                        {t('yesAccept')}
-                    </SgButton>
+                    [3, 4].includes(fullData?.type) ?
+                        <SgButton
+                            bgColor={COLORS.brand_600}
+                            color={COLORS.white}
+                            onPress={handleSubmitAcceptOverTime}
+                        >
+                            {t('yesAccept')}
+                        </SgButton>
+                        :
+                        <SgButton
+                            bgColor={COLORS.brand_600}
+                            color={COLORS.white}
+                            onPress={handleSubmitAccept}
+                        >
+                            {t('yesAccept')}
+                        </SgButton>
                 }
                 autoClose={false}
-            />
+            >
+                {fullData?.type === 2 ?
+                    <View style={{marginBottom: 16}}>
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            key={1}
+                            onPress={() => handleChangeConfirmType(1)}
+                            style={[
+                                styles.item,
+                                confirmType === 1 && styles.selectedItem
+                            ]}
+                        >
+                            <SgRadio selected={confirmType === 1} />
+                            <View style={styles.content}>
+                                <Text style={styles.title}>Full Time</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            key={2}
+                            onPress={() => handleChangeConfirmType(2)}
+                            style={[
+                                styles.item,
+                                confirmType === 2 && styles.selectedItem
+                            ]}
+                        >
+                            <SgRadio selected={confirmType === 2} />
+                            <View style={styles.content}>
+                                <Text style={styles.title}>Actual Time</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            key={3}
+                            onPress={() => handleChangeConfirmType(3)}
+                            style={[
+                                styles.item,
+                                confirmType === 3 && styles.selectedItem
+                            ]}
+                        >
+                            <SgRadio selected={confirmType === 3} />
+                            <View style={styles.content}>
+                                <Text style={styles.title}>No Time</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    null
+                }
+            </SgPopup>
 
             <SgPopup
                 visible={acceptedCheckInModal}

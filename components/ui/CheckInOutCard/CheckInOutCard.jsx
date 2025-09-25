@@ -37,13 +37,91 @@ export default function SgCheckInOutCard(props) {
     const [checkInData, setCheckInData] = useState({})
     const [checkOutModal, setCheckOutModal] = useState(false)
     const [checkOutData, setCheckOutData] = useState({})
+    const [overTimeModal, setOverTimeModal] = useState(false)
+    const [overTimeData, setOverTimeData] = useState({})
+    const [overTimeOutModal, setOverTimeOutModal] = useState(false)
+    const [overTimeOutData, setOverTimeOutData] = useState({})
     const [buttonStatus, setButtonStatus] = useState(false)
 
     const isCheckIn = type === 'checkin';
     const isCheckOut = type === 'checkout';
-    const backgroundColor = isCheckIn ? COLORS.brand_50 : COLORS.error_100;
-    const Icon = isCheckIn ? CheckIn : CheckOut;
+    const isOverTime = type === 'overTime';
+    const isOverTimeOut = type === 'overTimeOut';
+    const backgroundColor = isCheckIn ? COLORS.brand_50 : (isOverTime ? COLORS.blue_50 : COLORS.error_100);
+    const Icon = isCheckIn ? CheckIn : (isOverTime ? CheckIn : CheckOut);
     const {t} = useTranslation()
+
+    function toggleOverTimeModal() {
+        if (overTimeModal) {
+            setOverTimeData({})
+        }
+
+        setOverTimeModal(!overTimeModal)
+    }
+
+    function handleSubmitOverTime() {
+        request({
+            url: `/${employeeType}/activity/overtime`,
+            method: 'post',
+            data: {
+                time: moment(),
+                timezone: moment.tz.guess(),
+                latitude: Number(overTimeData?.latitude),
+                longitude: Number(overTimeData?.longitude)
+            }
+        }).then(res => {
+            setButtonStatus(false)
+            setStoreData(prev => ({
+                ...prev,
+                overTime: res?.data || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            setButtonStatus(false)
+            console.log(err);
+        })
+
+        toggleOverTimeModal()
+    }
+
+    function toggleOverTimeOutModal() {
+        if (overTimeOutModal) {
+            setOverTimeOutData({})
+            setButtonStatus(false)
+        }
+
+        setOverTimeOutModal(!overTimeOutModal)
+    }
+
+    function handleSubmitOverTimeOut() {
+        request({
+            url: `/${employeeType}/activity/overtimeout`,
+            method: 'post',
+            data: {
+                time: moment(),
+                timezone: moment.tz.guess(),
+                latitude: Number(overTimeOutData?.latitude),
+                longitude: Number(overTimeOutData?.longitude),
+                activity_id: checkInId
+            }
+        }).then(res => {
+            setButtonStatus(false)
+            setStoreData(prev => ({
+                ...prev,
+                overTimeOut: res?.data || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            setButtonStatus(false)
+            console.log(err);
+        })
+
+        toggleOverTimeOutModal()
+    }
+
+
 
     function toggleCheckInModal() {
         if (checkInModal) {
@@ -224,12 +302,82 @@ export default function SgCheckInOutCard(props) {
         }
     }
 
-    if (type !== 'checkin' && type !== 'checkout') {
+    async function handleOverTimeRequest() {
+        setButtonStatus(true)
+        try {
+            // Request permission to access locations
+            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+
+            if (status !== 'granted') {
+                if (!canAskAgain) {
+                    toggleOpenSettingsModal()
+                    return;
+                }
+            }
+
+            // Get the current position
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Lowest,
+            });
+
+            const {latitude, longitude} = location.coords;
+            // Log the location data
+            if (props.onLocationReceived) {
+                props.onLocationReceived({latitude, longitude});
+            }
+
+            // onSuccess callback
+            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+            toggleOverTimeModal();
+            setOverTimeData({latitude, longitude})
+        } catch (error) {
+            console.error('Error getting location:', error);
+            setButtonStatus(false)
+            toggleOpenSettingsModal()
+        }
+    }
+
+    async function handleOverTimeOutRequest() {
+        setButtonStatus(true)
+        try {
+            // Request permission to access locations
+            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+
+            if (status !== 'granted') {
+                if (!canAskAgain) {
+                    toggleOpenSettingsModal()
+                    return;
+                }
+            }
+
+            // Get the current position
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Lowest,
+            });
+
+            const {latitude, longitude} = location.coords;
+            // Log the location data
+            if (props.onLocationReceived) {
+                props.onLocationReceived({latitude, longitude});
+            }
+
+            // onSuccess callback
+            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+            toggleOverTimeOutModal();
+            setOverTimeOutData({latitude, longitude})
+        } catch (error) {
+            console.error('Error getting location:', error);
+            setButtonStatus(false)
+            toggleOpenSettingsModal()
+        }
+    }
+
+    if (type !== 'checkin' && type !== 'checkout' && type !== 'overTime' && type !== 'overTimeOut') {
         return null;
     }
 
     return (
-        <View style={[styles.card, ['timekeeper', 'chief'].includes(employeeType) ? styles.card2 : null, {backgroundColor}]}>
+        <View style={[styles.card, ['timekeeper', 'chief'].includes(employeeType) ? styles.card2 : null, type === 'overTime' ? styles.card2 : null, {backgroundColor}]}>
             <View style={styles.content}>
                 <View style={styles.header}>
                     <View>
@@ -238,7 +386,7 @@ export default function SgCheckInOutCard(props) {
                     </View>
                     <Icon width={20} height={20}/>
                 </View>
-                <Text style={[styles.time, {color: isCheckIn ? COLORS.brand_600 : COLORS.error_600}]}>
+                <Text style={[styles.time, {color: isCheckIn ? COLORS.brand_600 : (isOverTime ? COLORS.blue_600 : COLORS.error_600)}]}>
                     {time ? time : '--:--'}
                 </Text>
             </View>
@@ -261,6 +409,25 @@ export default function SgCheckInOutCard(props) {
                 </View>
                 : null
             }
+            {(!['timekeeper', 'chief'].includes(employeeType) && (isOverTime && status === 2 && mapData?.overTime?.latitude && mapData?.overTime?.longitude) && Platform.OS !== 'web') ?
+                <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
+                        <MapView
+                            style={{flex: 1, height: 125}}
+                            initialRegion={{
+                                latitude: Number(mapData?.overTime?.latitude),
+                                longitude: Number(mapData?.overTime?.longitude),
+                                latitudeDelta: 0.01,
+                                longitudeDelta: 0.01,
+                            }}
+                        >
+                            <Marker coordinate={{
+                                latitude: Number(mapData?.overTime?.latitude),
+                                longitude: Number(mapData?.overTime?.longitude)
+                            }}/>
+                        </MapView>
+                </View>
+                : null
+            }
             {(!['timekeeper', 'chief'].includes(employeeType) && (isCheckOut && status === 2 && mapData?.checkOut?.latitude && mapData?.checkOut?.longitude) && Platform.OS !== 'web') ?
                 <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
                     <MapView
@@ -275,6 +442,25 @@ export default function SgCheckInOutCard(props) {
                         <Marker coordinate={{
                             latitude: Number(mapData?.checkOut?.latitude) || 0,
                             longitude: Number(mapData?.checkOut?.longitude) || 0
+                        }}/>
+                    </MapView>
+                </View>
+                : null
+            }
+            {(!['timekeeper', 'chief'].includes(employeeType) && (isOverTimeOut && status === 2 && mapData?.overTimeOut?.latitude && mapData?.overTimeOut?.longitude) && Platform.OS !== 'web') ?
+                <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
+                    <MapView
+                        style={{flex: 1, height: 125}}
+                        initialRegion={{
+                            latitude: Number(mapData?.overTimeOut?.latitude) || 0,
+                            longitude: Number(mapData?.overTimeOut?.longitude) || 0,
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
+                    >
+                        <Marker coordinate={{
+                            latitude: Number(mapData?.overTimeOut?.latitude) || 0,
+                            longitude: Number(mapData?.overTimeOut?.longitude) || 0
                         }}/>
                     </MapView>
                 </View>
@@ -335,10 +521,9 @@ export default function SgCheckInOutCard(props) {
                         }
                         {status === 1 ?
                             <SgButton
-                                style={{borderRadius: 12}}
                                 color={COLORS.white}
                                 bgColor={COLORS?.error_600}
-                                style={{paddingVertical: 8, minHeight: 36}}
+                                style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
                                 textStyle={{fontSize: 15}}
                             >
                                 {t('waiting')}...
@@ -349,6 +534,83 @@ export default function SgCheckInOutCard(props) {
                             <SgButton
                                 color={COLORS.error_700}
                                 onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}
+                                style={{paddingVertical: 8, minHeight: 36}}
+                                textStyle={{fontSize: 15}}
+                            >
+                                {t('openOnMap')}
+                            </SgButton>
+                            : null
+                        }
+                    </>
+                    : null
+                }
+                {isOverTime ?
+                    <>
+                        {!status ?
+                            <SgButton color={COLORS.brand_600}
+                                      onPress={handleOverTimeRequest}
+                                      disabled={buttonStatus}
+                                      style={{paddingVertical: 8, minHeight: 36}}
+                                      textStyle={{fontSize: 15}}
+                            >
+                                {t('overTime')}
+                            </SgButton>
+                            : null
+                        }
+                        {status === 1 ?
+                            <SgButton
+                                style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
+                                textStyle={{fontSize: 15}}
+                                color={COLORS.white}
+                                bgColor={COLORS?.blue_600}
+                            >
+                                {t('waiting')}...
+                            </SgButton>
+                            : null
+                        }
+                        {status === 2 ?
+                            <SgButton
+                                color={COLORS.blue_600}
+                                style={{paddingVertical: 8, minHeight: 36}}
+                                textStyle={{fontSize: 15}}
+                                onPress={() => openInMaps(mapData?.overTime.latitude, mapData?.overTime.longitude)}
+                            >
+                                {t('openOnMap')}
+                            </SgButton>
+                            : null
+                        }
+                    </>
+                    : null
+                }
+                {(isOverTimeOut && checkInStatus) ?
+                    <>
+                        {!status || status === 3 ?
+                            <SgButton
+                                color={COLORS.error_700}
+                                onPress={handleOverTimeOutRequest}
+                                disabled={buttonStatus}
+                                style={{paddingVertical: 8, minHeight: 36}}
+                                textStyle={{fontSize: 15}}
+                            >
+                                {t('checkOut')}
+                            </SgButton>
+                            : null
+                        }
+                        {status === 1 ?
+                            <SgButton
+                                color={COLORS.white}
+                                bgColor={COLORS?.error_600}
+                                style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
+                                textStyle={{fontSize: 15}}
+                            >
+                                {t('waiting')}...
+                            </SgButton>
+                            : null
+                        }
+                        {status === 2 ?
+                            <SgButton
+                                color={COLORS.error_700}
+                                onPress={() => openInMaps(mapData?.overTimeOut.latitude, mapData?.overTimeOut.longitude)}
                                 style={{paddingVertical: 8, minHeight: 36}}
                                 textStyle={{fontSize: 15}}
                             >
@@ -375,6 +637,42 @@ export default function SgCheckInOutCard(props) {
                         color={COLORS.white}
                     >
                         {t('checkIn')}
+                    </SgButton>
+                }
+            />
+
+            <SgPopup
+                visible={overTimeModal}
+                onClose={toggleOverTimeModal}
+                title={t('overTime')}
+                description={t('overTime__description')}
+                icon={<CheckInModalIcon width={56} height={56}/>}
+                footerButton={
+                    <SgButton
+                        loading={status === 1}
+                        onPress={handleSubmitOverTime}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        {t('overTime')}
+                    </SgButton>
+                }
+            />
+
+            <SgPopup
+                visible={overTimeOutModal}
+                onClose={toggleOverTimeOutModal}
+                title={t('overTime')}
+                description={t('overTime__description')}
+                icon={<CheckInModalIcon width={56} height={56}/>}
+                footerButton={
+                    <SgButton
+                        loading={status === 1}
+                        onPress={handleSubmitOverTimeOut}
+                        bgColor={COLORS.error_600}
+                        color={COLORS.white}
+                    >
+                        {t('overTime')}
                     </SgButton>
                 }
             />

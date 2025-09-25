@@ -4,6 +4,14 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import {disconnectSocket} from "@/services/createSocket";
+import * as Device from "expo-device";
+
+const userAgent = {
+    brand: Device.brand,
+    modelName: Device.modelName,
+    asName: Device.osName,
+    osVersion: Device.osVersion
+}
 
 const { API_URL } = Constants.expoConfig.extra;
 
@@ -150,6 +158,10 @@ export function AuthProvider({ children }) {
       const response = await api.post('/auth', {
         id,
         password,
+      }, {
+        headers: {
+          'User-Agent': JSON.stringify(userAgent),
+        }
       });
 
       const userData = JSON.parse(response?.data);
@@ -199,6 +211,27 @@ export function AuthProvider({ children }) {
     //   console.error('Logout API call failed:', error);
     // } finally {
       // Clear token and user data regardless of API call success
+
+      try {
+          // await request({
+          //     url: '/auth/logout',
+          //     method: 'post',
+          // }).then(res => {
+          //     console.log(res, 'LOGOUT');
+          // }).catch(err => {
+          //     console.log(err, 'LOGOUT ERROR');
+          // })
+
+          await api.post('/auth/logout', {}, {
+              headers: {
+                  authorization: accessToken,
+              }
+          });
+      }
+      catch (error) {
+          console.log(error, 'LOGOUT ERROR');
+      }
+
       setAccessToken(null);
       setUser(null);
 

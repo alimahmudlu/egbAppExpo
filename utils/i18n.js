@@ -700,6 +700,10 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                tabBar__overTime: "Overtime",
+                overTime: "Overtime",
+
+
                 checkInDate: "Check-in date",
                 checkOutDate: "Check-out date",
                 checkInLocation: "Check-in location",

@@ -156,6 +156,23 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: COLORS.black,
   },
+
+
+    item: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        borderColor: COLORS.white,
+        borderWidth: 1,
+        padding: 16,
+        gap: 12,
+    },
+    selectedItem: {
+        backgroundColor: COLORS.gray_50,
+        borderColor: COLORS.gray_200,
+        borderWidth: 1,
+        borderRadius: 12,
+    },
 });
 
 export default styles;

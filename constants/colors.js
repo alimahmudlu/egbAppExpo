@@ -12,6 +12,15 @@ const COLORS = {
     brand_800: "#1A4742",
     brand_950: "#0A2926",
 
+    blue_50:  "#d2dcf5",
+    blue_300: "#415ac0",
+    blue_400: "#2841a4",
+    blue_500: "#1d3584",
+    blue_600: "#1b2b6a",
+    blue_700: "#1a2855",
+    blue_800: "#1a2147",
+    blue_950: "#0a1029",
+
     error_50:  "#FEF3F2",
     error_100: "#FEE4E2",
     error_600: "#D92D20",

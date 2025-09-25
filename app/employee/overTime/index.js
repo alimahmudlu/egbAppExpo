@@ -163,57 +163,67 @@ export default function EmployeeDashboardScreen() {
             />}
         >
 
-            {storeData?.checkIn?.status === 3 ? <SgNoticeCard
+            {storeData?.overTime?.status === 3 ? <SgNoticeCard
                 icon={<LoginIcon width={20} height={20}/>}
                 title={t('checkInRejected')}
                 buttonText={t('rejectDetail')}
-                onClick={() => toggleRejectInfoModal(storeData?.checkIn?.reject_reason)}
+                onClick={() => toggleRejectInfoModal(storeData?.overTime?.reject_reason)}
                 bgCard="danger"
                 bgButton="danger"
             /> : null}
-            {storeData?.checkOut?.status === 3 ? <SgNoticeCard
+            {storeData?.overTimeOut?.status === 3 ? <SgNoticeCard
                 icon={<LoginIcon width={20} height={20}/>}
                 title={t('checkOutRejected')}
                 buttonText={t('rejectDetail')}
-                onClick={() => toggleRejectInfoModal(storeData?.checkOut?.reject_reason)}
+                onClick={() => toggleRejectInfoModal(storeData?.overTimeOut?.reject_reason)}
                 bgCard="danger"
                 bgButton="danger"
             /> : null}
-            <SgCheckInOutGroup>
-                <SgCheckInOutCard
-                    type="checkin"
-                    title={t('checkIn')}
-                    time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
-                    buttonLabel={t('checkIn')}
-                    status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
-                    mapData={{
-                        checkIn: {
-                            latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
-                        },
-                    }}
-                    reviewer={checkIn?.reviewer || {}}
-                />
-                <SgCheckInOutCard
-                    type="checkout"
-                    title={t('checkOut')}
-                    time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
-                    buttonLabel={t('checkOut')}
-                    status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
-                    checkInStatus={checkIn?.status === 2}
-                    checkInId={checkIn?.id}
-                    mapData={{
-                        checkOut: {
-                            latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
-                        },
-                    }}
-                    reviewer={checkOut?.reviewer || {}}
-                />
-            </SgCheckInOutGroup>
+
+            {(
+                // checkIn?.status === 2 &&
+                // (checkOut?.status && checkOut?.status !== 0) &&
+                // moment.duration(moment().diff(checkIn?.review_time)).asHours() < 24 &&
+                moment(moment(), "HH:mm").isBetween(moment("09:00", "HH:mm"), moment("11:59", "HH:mm"))
+            ) ?
+                <SgCheckInOutGroup>
+                    <SgCheckInOutCard
+                        type="overTime"
+                        title={t('overTime')}
+                        time={overTime?.status !== 3 ? (overTime?.review_time ? moment.tz(overTime?.review_time, overTime?.reviewer_timezone).format('HH:mm') : '') : ''}
+                        buttonLabel={t('overTime')}
+                        status={overTime?.status} // 0: not checked in, 1: waiting, 2: checked in
+                        mapData={{
+                            overTime: {
+                                latitude: overTime?.latitude || 0, longitude: overTime?.longitude || 0,
+                            },
+                        }}
+                        reviewer={overTime?.reviewer || {}}
+                    />
+
+                    <SgCheckInOutCard
+                        type="overTimeOut"
+                        title={t('overTimeOut')}
+                        time={checkOut?.status !== 3 ? (overTimeOut?.review_time ? moment.tz(overTimeOut?.review_time, overTimeOut?.reviewer_timezone).format('HH:mm') : '') : ''}
+                        buttonLabel={t('overTimeOut')}
+                        status={overTimeOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                        checkInStatus={overTime?.status === 2}
+                        checkInId={overTime?.id}
+                        mapData={{
+                            overTimeOut: {
+                                latitude: overTimeOut?.latitude || 0, longitude: overTimeOut?.longitude || 0,
+                            },
+                        }}
+                        reviewer={overTimeOut?.reviewer || {}}
+                    />
+                </SgCheckInOutGroup>
+                : null
+            }
 
             <SgCard
                 title={t('workTime')}
                 time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
-                    startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
+                    startTime={overTime?.review_time ? moment(overTime?.review_time).format('') : null}/>}
                 icon={Clock}
             />
 

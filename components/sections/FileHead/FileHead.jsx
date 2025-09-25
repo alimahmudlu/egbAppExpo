@@ -38,7 +38,7 @@ export default function SgSectionFileHead ({ title, description, icon, iconText,
           </Pressable> : ''}
           {filter ? filter : null}
       </View>
-      <Text style={styles.description}>{description}</Text>
+        {description ? <Text style={styles.description}>{description}</Text> : null}
     </View>
   );
 };

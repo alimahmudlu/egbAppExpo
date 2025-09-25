@@ -83,6 +83,16 @@ export default function TimeKeeperTabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="overtime/index"
+                options={{
+                    title: t('tabBar__overTime'),
+                    tabBarLabel: t('tabBar__overTime'),
+                    headerTitle: t('tabBar__overTime'),
+                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
+                        <HistoryIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
                 name="menu/index"
                 options={{
                     title: t('tabBar__menu'),
