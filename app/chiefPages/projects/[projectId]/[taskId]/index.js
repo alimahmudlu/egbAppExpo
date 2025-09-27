@@ -128,8 +128,6 @@ export default function ProjectItemScreen() {
 
     useEffect(() => {
         setTaskDetails(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
-
-        console.log(storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]?.data)
     }, [storeData?.cache?.[`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`]]);
 
     function handleRemoveFile(index) {

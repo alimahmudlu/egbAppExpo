@@ -372,6 +372,7 @@ export default function SgSectionTaskCard(props) {
                         datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
                         url={el?.filepath}
                         onPress={() => console.log('file.filename')}
+                        remove={true}
                     />
                 ))}
             </SgPopup>

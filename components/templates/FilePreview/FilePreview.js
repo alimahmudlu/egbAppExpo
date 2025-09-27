@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Video } from 'expo-av';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 // Fayl tipini URL-dən çıxarır
 const getFileExtension = (url) => {
@@ -28,11 +29,13 @@ export default function SgTemplateFilePreview({ url }) {
     // Şəkil preview
     if (imageTypes.includes(ext)) {
         return (
-            <Image
-                source={{ uri: url }}
-                style={styles.image}
-                resizeMode="contain"
-            />
+            <View style={{ flex: 1, minHeight: 400, marginBottom: 10 }}>
+                <ImageViewer
+                    imageUrls={[{ url }]}
+                    // enableSwipeDown
+                    saveToLocalByLongPress={false}
+                />
+            </View>
         );
     }
 
