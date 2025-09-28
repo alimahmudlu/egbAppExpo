@@ -180,12 +180,12 @@ export default function EmployeeDashboardScreen() {
                 bgButton="danger"
             /> : null}
 
-            {(
-                // checkIn?.status === 2 &&
-                // (checkOut?.status && checkOut?.status !== 0) &&
-                // moment.duration(moment().diff(checkIn?.review_time)).asHours() < 24 &&
-                moment(moment(), "HH:mm").isBetween(moment("09:00", "HH:mm"), moment("11:59", "HH:mm"))
-            ) ?
+            {/*{(*/}
+            {/*    // checkIn?.status === 2 &&*/}
+            {/*    // (checkOut?.status && checkOut?.status !== 0) &&*/}
+            {/*    // moment.duration(moment().diff(checkIn?.review_time)).asHours() < 24 &&*/}
+            {/*    moment(moment(), "HH:mm").isBetween(moment("09:00", "HH:mm"), moment("11:59", "HH:mm"))*/}
+            {/*) ?*/}
                 <SgCheckInOutGroup>
                     <SgCheckInOutCard
                         type="overTime"
@@ -217,8 +217,8 @@ export default function EmployeeDashboardScreen() {
                         reviewer={overTimeOut?.reviewer || {}}
                     />
                 </SgCheckInOutGroup>
-                : null
-            }
+            {/*    : null*/}
+            {/*}*/}
 
             <SgCard
                 title={t('workTime')}

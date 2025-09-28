@@ -68,6 +68,16 @@ export default function EmployeeTabLayout() {
         }}
       />
       <Tabs.Screen
+        name="overTime/index"
+        options={{
+            freezeOnBlur: false,
+          title: t('tabBar__overTime'),
+          tabBarLabel: t('tabBar__overTime'),
+          headerTitle: t('tabBar__overTime'),
+            tabBarIcon: ({ color, focused }) => focused ? <HomeActiveIcon width={20} height={20} /> : <HomeIcon width={20} height={20} />
+        }}
+      />
+      <Tabs.Screen
         name="docs/index"
         options={{
             freezeOnBlur: false,
