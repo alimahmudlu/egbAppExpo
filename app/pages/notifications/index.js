@@ -23,6 +23,7 @@ import LogIn from "@/assets/images/log-in_20.svg";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
 import {Ionicons} from "@expo/vector-icons";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function TimeKeeperUserScreen() {
     const { request } = useApi();
@@ -36,6 +37,7 @@ export default function TimeKeeperUserScreen() {
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
+    const { selectedLanguage } = useLanguage()
 
     function handleClickNotificationItem(url, id) {
         request({
@@ -77,8 +79,12 @@ export default function TimeKeeperUserScreen() {
             <View style={styles.row}>
                 <Ionicons name="document-text-outline" size={28} color={unread ? "#4F46E5" : "#1F2937"} />
                 <View style={styles.textContainer}>
-                    <Text style={[styles.title, unread ? {color: '#4F46E5'} : null]}>{item.title}</Text>
-                    <Text style={[styles.description, unread ? {color: '#4F46E5'} : null]}>{item.description}</Text>
+                    <Text style={[styles.title, unread ? {color: '#4F46E5'} : null]}>
+                        {selectedLanguage?.id !== 'en' ? `${item?.[['title', selectedLanguage?.id].join('_')]}` : `${item?.title}`}
+                    </Text>
+                    <Text style={[styles.description, unread ? {color: '#4F46E5'} : null]}>
+                        {selectedLanguage?.id !== 'en' ? `${item?.[['description', selectedLanguage?.id].join('_')]}` : `${item?.description}`}
+                    </Text>
                     {item.date ? <Text style={[styles.date, unread ? {color: '#4F46E5'} : null]}>{moment(item.date).format('DD/MM/YYYY HH:mm')}</Text> : null}
                 </View>
             </View>
