@@ -105,12 +105,8 @@ export default function TimeKeeperUserScreen() {
                         key={index}
                         unread={!item?.read}
                         item={{
-                            id: item?.id,
-                            title: item?.title,
-                            description: item?.description,
+                            ...item,
                             date: item?.update_date,
-                            url: item?.url,
-                            type: item?.type,
                         }}
                     />
                 ))}
