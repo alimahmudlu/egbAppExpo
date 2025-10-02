@@ -223,6 +223,7 @@ export default function ProjectItemScreen() {
                         <SgSectionAddFile
                             handleRemove={() => handleRemoveFile(index)}
                             key={index}
+                            fileType={el.mimetype}
                             title={el?.upload?.filename}
                             type={el?.type}
                             datetime={el?.created_at ? moment(el?.created_at).format('DD.MM.YYYY / HH:mm') : null}

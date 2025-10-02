@@ -15,7 +15,7 @@ import SgButton from '@/components/ui/Button/Button';
 import SgTemplateFilePreview from "@/components/templates/FilePreview/FilePreview";
 import {useTranslation} from "react-i18next";
 
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import * as Linking from "expo-linking";

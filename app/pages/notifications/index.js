@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         marginLeft: 12,
+        flex: 1,
     },
     title: {
         fontSize: 16,
