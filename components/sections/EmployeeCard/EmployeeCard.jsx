@@ -51,7 +51,6 @@ export default function SgSectionEmployeeCard(props) {
     function toggleRejectInfoModal() {
         setRejectInfoModal(!rejectInfoModal);
     }
-    console.log(fullData, 'fullData')
 
 
     function toggleUserOperationModal() {
@@ -162,8 +161,10 @@ export default function SgSectionEmployeeCard(props) {
         }).then(res => {
             setButtonStatus(false)
             if (res.data.success) {
-                // setAcceptCheckInModal(false);
+                setAcceptCheckInModal(false);
                 setUserOperationModal(false)
+
+
                 // setAcceptedCheckInModal(false);
                 if (fullData?.type === 1) {
                     removeRowData('GET:/timekeeper/activity/list', fullData)
@@ -192,7 +193,19 @@ export default function SgSectionEmployeeCard(props) {
                 else {
                     removeRowData('GET:/timekeeper/activity/list', fullData?.activity_id, 'id')
                     removeRowData('GET:/timekeeper/activity/list', fullData)
+                    insertData('GET:/timekeeper/activity/list', {
+                        ...fullData,
+                        activity_id: fullData?.id,
+                        confirm_time: moment(),
+                        review_time: moment(),
+                        timezone: moment.tz.guess(),
+                        confirm_employee_id: user?.id,
+                        status: 2,
+                        complete_status: 1,
+                        completed_status: 1,
+                    })
                 }
+
             }
             else {
                 Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
@@ -221,6 +234,7 @@ export default function SgSectionEmployeeCard(props) {
             if (res.data.success) {
                 // setAcceptCheckInModal(false);
                 setUserOperationModal(false)
+                setAcceptCheckInModal(false);
                 // setAcceptedCheckInModal(false);
                 if (fullData?.type === 3) {
                     removeRowData('GET:/timekeeper/overtime/list', fullData)

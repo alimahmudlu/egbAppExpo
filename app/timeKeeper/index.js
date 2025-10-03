@@ -247,56 +247,65 @@ export default function EmployeeDashboardScreen() {
 
         <SgFilterTab
             defaultTabId='checkIn'
-            tabs={[{
-                label: t('checkIn'),
-                id: 'checkIn',
-                count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length
-            }, {
-                label: t('checkOut'),
-                id: 'checkOut',
-                count: employeeActivities?.filter(el => el.type === 2 && el.status === 1)?.length
-            }, {
-                label: t('atWork'),
-                id: 'atWork',
-                count: employeeActivities?.filter(el => el.type === 1 && el.status === 2 && el.completed_status === 0)?.length
-            },]}
-            tabContent={[{
-                element: (employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => (
-                    <SgSectionEmployeeCard
-                        key={index}
-                        fullData={emp}
-                        title={emp?.employee?.full_name}
-                        role={emp?.employee?.role?.name}
-                        checkType={emp?.employee?.manual ? t('manual') : t('auto')}
-                        time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                        image={emp?.employee?.image}
-                    />))), id: 'checkIn'
-            }, {
-                element: (employeeActivities?.filter(el => el.type === 2 && el.status === 1).map((emp, index) => (
-                    <SgSectionEmployeeCard
-                        key={index}
-                        fullData={emp}
-                        title={emp?.employee?.full_name}
-                        role={emp?.employee?.role?.name}
-                        checkType={emp?.employee?.manual ? t('manual') : t('auto')}
-                        time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                        image={emp?.employee?.image}
-                    />))), id: 'checkOut'
-            }, {
-                element: (employeeActivities?.filter(el => el.type === 1 && el.status === 2 && el.completed_status === 0).map((emp, index) => (
-                    <SgSectionEmployeeCard
-                        key={index}
-                        fullData={emp}
-                        atWork={emp.type === 1 && emp.status === 2 && emp.completed_status === 0}
-                        title={emp?.employee?.full_name}
-                        role={emp?.employee?.role?.name}
-                        checkType={emp?.employee?.manual ? t('manual') : t('auto')}
-                        time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                        timeRaw={emp.request_time}
-                        image={emp?.employee?.image}
-                        editable={false}
-                    />))), id: 'atWork'
-            },]}
+            tabs={[
+                {
+                    label: t('checkIn'),
+                    id: 'checkIn',
+                    count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length
+                },
+                {
+                    label: t('checkOut'),
+                    id: 'checkOut',
+                    count: employeeActivities?.filter(el => el.type === 2 && el.status === 1 && el.completed_status === 0)?.length
+                },
+                {
+                    label: t('atWork'),
+                    id: 'atWork',
+                    count: employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1))?.length
+                }
+            ]}
+            tabContent={[
+                {
+                    element: (employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => (
+                        <SgSectionEmployeeCard
+                            key={index}
+                            fullData={emp}
+                            title={emp?.employee?.full_name}
+                            role={emp?.employee?.role?.name}
+                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                            image={emp?.employee?.image}
+                        />))), id: 'checkIn'
+                },
+                {
+                    element: (employeeActivities?.filter(el => el.type === 2 && el.status === 1 && el.completed_status === 0).map((emp, index) => (
+                        <SgSectionEmployeeCard
+                            key={index}
+                            fullData={emp}
+                            title={emp?.employee?.full_name}
+                            role={emp?.employee?.role?.name}
+                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                            image={emp?.employee?.image}
+                        />))), id: 'checkOut'
+                },
+                {
+                    element:
+                        (employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1)).map((emp, index) => (
+                        <SgSectionEmployeeCard
+                            key={index}
+                            fullData={emp}
+                            atWork={emp.type === 1 && emp.status === 2 && emp.completed_status === 0}
+                            title={emp?.employee?.full_name}
+                            role={emp?.employee?.role?.name}
+                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                            timeRaw={emp.request_time}
+                            image={emp?.employee?.image}
+                            editable={false}
+                        />))), id: 'atWork'
+                }
+            ]}
         />
     </SgTemplateScreen>);
 }

@@ -164,6 +164,7 @@ export default function SgCheckInOutCard(props) {
     function toggleCheckOutModal() {
         if (checkOutModal) {
             setCheckOutData({})
+            setButtonStatus(false)
         }
 
         setCheckOutModal(!checkOutModal)
