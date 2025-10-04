@@ -119,13 +119,13 @@ export default function EmployeeDocsScreen() {
                                     </View>
                                 </View>
                                 <View>
-                                    {employeeActivities?.filter(el => el.type === 1).map((emp, index) => (
+                                    {employeeActivities?.filter(el => (el.type === 1 || el.type === 3)).map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
-                                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                            checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}
@@ -153,13 +153,13 @@ export default function EmployeeDocsScreen() {
                                     </View>
                                 </View>
                                 <View>
-                                    {employeeActivities?.filter(el => el.type === 2).map((emp, index) => (
+                                    {employeeActivities?.filter(el => (el.type === 2 || el.type === 4)).map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
-                                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                            checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 4 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}

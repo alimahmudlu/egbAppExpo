@@ -554,7 +554,7 @@ export default function SgCheckInOutCard(props) {
                                       style={{paddingVertical: 8, minHeight: 36}}
                                       textStyle={{fontSize: 15}}
                             >
-                                {t('overTime')}
+                                {t('overTime_btn')}
                             </SgButton>
                             : null
                         }

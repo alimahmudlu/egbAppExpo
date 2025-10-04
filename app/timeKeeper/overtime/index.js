@@ -141,6 +141,7 @@ export default function EmployeeDocsScreen() {
                             checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             image={emp?.employee?.image}
+                            overTime={true}
                         />))), id: 'checkIn'
                 }, {
                     element: (employees?.filter(el => el.type === 4 && el.status === 1).map((emp, index) => (
@@ -152,6 +153,7 @@ export default function EmployeeDocsScreen() {
                             checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             image={emp?.employee?.image}
+                            overTime={true}
                         />))), id: 'checkOut'
                 }]}
             />

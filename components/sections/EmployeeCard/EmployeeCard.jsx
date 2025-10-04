@@ -30,7 +30,7 @@ import SgRadio from "@/components/ui/Radio/Radio";
 
 
 export default function SgSectionEmployeeCard(props) {
-    const {fullData, image, title, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw} = props;
+    const {fullData, image, title, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw, overTime = false} = props;
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
@@ -341,6 +341,7 @@ export default function SgSectionEmployeeCard(props) {
                 latitude: locationData?.latitude,
                 work_time: null,
                 activity_id: fullData?.checkin?.id,
+                confirm_type: confirmType
             }
         }).then(res => {
             changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id')
@@ -550,6 +551,53 @@ export default function SgSectionEmployeeCard(props) {
                                 </View>
                         )
                     }
+                    {((manual && !fullData?.checkout?.latitude && fullData?.checkin?.latitude) || (isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?
+                        <View>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={1}
+                                onPress={() => handleChangeConfirmType(1)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 1 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 1} />
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>Full Time</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={2}
+                                onPress={() => handleChangeConfirmType(2)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 2 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 2} />
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>Actual Time</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={3}
+                                onPress={() => handleChangeConfirmType(3)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 3 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 3} />
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>No Time</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        : null
+                    }
                     <View style={styles.modalGroup}>
                         {manual ?
                             <View style={styles.modalGroupButtons}>
@@ -604,8 +652,8 @@ export default function SgSectionEmployeeCard(props) {
                                             <SgButton
                                                 color={COLORS.white}
                                                 bgColor={COLORS.brand_600}
-                                                onPress={toggleAcceptCheckInModal}
-                                                // onPress={handleSubmitAccept}
+                                                // onPress={fullData?.type === 2 ? toggleAcceptCheckInModal : handleSubmitAccept}
+                                                onPress={[3, 4].includes(fullData?.type) ? handleSubmitAcceptOverTime : handleSubmitAccept}
                                             >
                                                 {t('accept')}
                                             </SgButton>
@@ -623,8 +671,8 @@ export default function SgSectionEmployeeCard(props) {
                                                 <SgButton
                                                     color={COLORS.white}
                                                     bgColor={COLORS.brand_600}
-                                                    onPress={toggleAcceptCheckInModal}
-                                                    // onPress={handleSubmitAccept}
+                                                    // onPress={fullData?.type === 2 ? toggleAcceptCheckInModal : handleSubmitAccept}
+                                                    onPress={[3, 4].includes(fullData?.type) ? handleSubmitAcceptOverTime : handleSubmitAccept}
                                                 >
                                                     {t('accept')}
                                                 </SgButton>

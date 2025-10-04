@@ -702,8 +702,10 @@ i18n.use(initReactI18next).init({
             translation: {
                 tabBar__overTime: "Overtime",
                 overTime: "Overtime",
+                overTime_btn: "Overtime",
                 overTime__description: "Overtime",
                 overTimeOut: "Overtime out",
+                normal: "Normal",
 
 
                 checkInDate: "Check-in date",
@@ -932,8 +934,9 @@ i18n.use(initReactI18next).init({
         ru: {
             translation: {
                 tabBar_overTime: "Сверхурочная работа",
-                overTime: "Сверхурочная работа",
-                overTime__description: "Сверхурочная работа",
+                overTime: "Запрос на сверхурочную работу",
+                overTime_btn: "Запросить",
+                overTime__description: "Хотите подать заявку на сверхурочную работу",
                 overTimeOut: "Вне сверхурочной работы",
 
                 checkInDate: "Дата входа",
@@ -1163,6 +1166,7 @@ i18n.use(initReactI18next).init({
             translation: {
                 tabBar__overTime: "Vaqt o'tishi bilan",
                 overTime: "Vaqt o'tishi bilan",
+                overTime_btn: "Vaqt o'tishi bilan",
                 overTime__description: "Vaqt o'tishi bilan",
                 overTimeOut: "Qo'shimcha ish vaqti",
 

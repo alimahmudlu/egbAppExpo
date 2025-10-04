@@ -17,6 +17,7 @@ export default function SgDatePicker(props) {
         isInvalid
     } = props;
     const [datePickerModal, setDatePickerModal] = useState(false);
+    const [newDate, setNewDate] = useState(value);
 
     function toggleDatePickerModal() {
         setDatePickerModal(!datePickerModal);
@@ -43,17 +44,18 @@ export default function SgDatePicker(props) {
                 <SgButton
                     bgColor={COLORS.brand_600}
                     color={COLORS.white}
-                    onPress={() => {}}
+                    onPress={() => onChangeText({
+                        name: name,
+                        value: newDate ?? new Date()
+                    })}
                 >
                     Save
                 </SgButton>
             }
         >
             <SgSectionDatePicker value={value ? new Date(value) : new Date()} onChange={(data) => {
-                onChangeText({
-                name: name,
-                value: data
-            });}} />
+                setNewDate(data)
+            }} />
         </SgPopup>
     </>
   );
