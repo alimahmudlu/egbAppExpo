@@ -26,39 +26,46 @@ export default function SgSectionProjectListItem({ title, staffData = [], id, hr
           <Text style={styles.title}>{title}</Text>
 
           <View style={styles.imageRow}>
-            {(visibleImages || []).map((el, i) => {
-              return (
-                  <View
-                      key={i}
-                      style={[styles.imageWrapper, { left: i * 13, zIndex: i }]}
-                  >
-                    {el?.src ?
-                        <Image source={{ uri: el?.src }} style={styles.staffImage} />
-                        :
-                        <View style={styles.initialsV}>
-                          <Text style={styles.initialsT}>
-                            {el?.full_name ? el?.full_name.split(' ').splice(0, 2).map(n => n[0]).join('') : 'NA'}
-                          </Text>
+              {(staffData || []).length > 0 ?
+                <>
+                    {(visibleImages || []).map((el, i) => {
+                        return (
+                            <View
+                                key={i}
+                                style={[styles.imageWrapper, { left: i * 13, zIndex: i }]}
+                            >
+                                {el?.src ?
+                                    <Image source={{ uri: el?.src }} style={styles.staffImage} />
+                                    :
+                                    <View style={styles.initialsV}>
+                                        <Text style={styles.initialsT}>
+                                            {el?.full_name ? el?.full_name.split(' ').splice(0, 2).map(n => n[0]).join('') : 'NA'}
+                                        </Text>
+                                    </View>
+                                }
+                            </View>
+                        )
+                    })}
+                    {hiddenCount > 0 && (
+                        <View
+                            style={[
+                                styles.imageWrapper,
+                                {
+                                    left: visibleImages.length * 11,
+                                    zIndex: visibleImages.length + 1,
+                                },
+                            ]}
+                        >
+                            <View style={styles.hiddenCount}>
+                                <Text style={styles.hiddenCountText}>+{hiddenCount}</Text>
+                            </View>
                         </View>
-                    }
-                  </View>
-              )
-            })}
-            {hiddenCount > 0 && (
-            <View
-                style={[
-                styles.imageWrapper,
-                {
-                    left: visibleImages.length * 11,
-                    zIndex: visibleImages.length + 1,
-                },
-                ]}
-            >
-                <View style={styles.hiddenCount}>
-                <Text style={styles.hiddenCountText}>+{hiddenCount}</Text>
-                </View>
-            </View>
-            )}
+                    )}
+                </>
+                  :
+                  <Text style={{fontSize: 12, fontStyle: 'italic'}}>No staff</Text>
+              }
+
           </View>
         </View>
 

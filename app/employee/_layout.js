@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import {Tabs} from 'expo-router';
 import React, {useEffect} from 'react';
 import {Platform} from 'react-native';
 import HomeIcon from '@/assets/images/home.svg';
@@ -12,7 +12,7 @@ import {useSocket} from "@/hooks/useSocket";
 import {useAuth} from "@/hooks/useAuth";
 
 export default function EmployeeTabLayout() {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const {socket} = useSocket();
     const {getRating} = useAuth();
 
@@ -32,71 +32,75 @@ export default function EmployeeTabLayout() {
         };
     }, [socket]);
 
-  return (
-    <Tabs
-        screenOptions={{
-            freezeOnBlur: false,
-            headerShown: false,
-            tabBarInActiveTintColor: '#98A2B3',
-            tabBarActiveTintColor: '#182230',
-            tabBarActiveBackgroundColor: '#F2F4F7',
-            tabBarStyle: Platform.select({
-                ios: {
-                    // Use a transparent background on iOS to show the blur effect
-                    position: 'absolute',
+    return (
+        <Tabs
+            screenOptions={{
+                freezeOnBlur: false,
+                headerShown: false,
+                tabBarInActiveTintColor: '#98A2B3',
+                tabBarActiveTintColor: '#182230',
+                tabBarActiveBackgroundColor: '#F2F4F7',
+                tabBarStyle: Platform.select({
+                    ios: {
+                        // Use a transparent background on iOS to show the blur effect
+                        position: 'absolute',
+                    },
+                    default: {
+                        boxShadow: '0px -24px 40px -20px #00000014',
+                        border: 'none',
+                        borderColor: '#FFFFFF'
+                    },
+                }),
+                tabBarItemStyle: {
+                    borderRadius: 12,
+                    overflow: "hidden"
                 },
-                default: {
-                    boxShadow: '0px -24px 40px -20px #00000014',
-                    border: 'none',
-                    borderColor: '#FFFFFF'
-        },
-            }),
-            tabBarItemStyle: {
-                borderRadius: 12,
-                overflow: "hidden"
-            },
-        }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-            freezeOnBlur: false,
-          title: t('tabBar__home'),
-          tabBarLabel: t('tabBar__home'),
-          headerTitle: t('tabBar__home'),
-            tabBarIcon: ({ color, focused }) => focused ? <HomeActiveIcon width={20} height={20} /> : <HomeIcon width={20} height={20} />
-        }}
-      />
-      <Tabs.Screen
-        name="overTime/index"
-        options={{
-            freezeOnBlur: false,
-          title: t('tabBar__overTime'),
-          tabBarLabel: t('tabBar__overTime'),
-          headerTitle: t('tabBar__overTime'),
-            tabBarIcon: ({ color, focused }) => focused ? <HomeActiveIcon width={20} height={20} /> : <HomeIcon width={20} height={20} />
-        }}
-      />
-      <Tabs.Screen
-        name="docs/index"
-        options={{
-            freezeOnBlur: false,
-          title: t('tabBar__myDocs'),
-          tabBarLabel: t('tabBar__myDocs'),
-          headerTitle: t('tabBar__myDocs'),
-            tabBarIcon: ({ color, focused }) => focused ? <DocsActiveIcon width={20} height={20} /> : <DocsIcon width={20} height={20} />
-        }}
-      />
-      <Tabs.Screen
-        name="menu/index"
-        options={{
-            freezeOnBlur: false,
-          title: t('tabBar__menu'),
-          tabBarLabel: t('tabBar__menu'),
-          headerTitle: t('tabBar__menu'),
-            tabBarIcon: ({ color, focused }) => focused ? <MenuActiveIcon width={20} height={20} /> : <MenuIcon width={20} height={20} />
-        }}
-      />
-    </Tabs>
-  );
+            }}
+        >
+            <Tabs.Screen
+                name="index"
+                options={{
+                    freezeOnBlur: false,
+                    title: t('tabBar__home'),
+                    tabBarLabel: t('tabBar__home'),
+                    headerTitle: t('tabBar__home'),
+                    tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
+                        <HomeIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
+                name="overTime/index"
+                options={{
+                    freezeOnBlur: false,
+                    title: t('tabBar__overTime'),
+                    tabBarLabel: t('tabBar__overTime'),
+                    headerTitle: t('tabBar__overTime'),
+                    tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
+                        <HomeIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
+                name="docs/index"
+                options={{
+                    freezeOnBlur: false,
+                    title: t('tabBar__myDocs'),
+                    tabBarLabel: t('tabBar__myDocs'),
+                    headerTitle: t('tabBar__myDocs'),
+                    tabBarIcon: ({color, focused}) => focused ? <DocsActiveIcon width={20} height={20}/> :
+                        <DocsIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
+                name="menu/index"
+                options={{
+                    freezeOnBlur: false,
+                    title: t('tabBar__menu'),
+                    tabBarLabel: t('tabBar__menu'),
+                    headerTitle: t('tabBar__menu'),
+                    tabBarIcon: ({color, focused}) => focused ? <MenuActiveIcon width={20} height={20}/> :
+                        <MenuIcon width={20} height={20}/>
+                }}
+            />
+        </Tabs>
+    );
 }

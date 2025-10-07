@@ -223,7 +223,7 @@ export default function EmployeeDocsScreen() {
                                     id: project?.id, name: project?.name, render: <SgSectionProjectListItem
                                         key={index}
                                         title={project.name}
-                                        staffData={project?.members || []}
+                                        staffData={(project?.members || []).filter(el => el.status)}
                                         id={project.id}
                                     />
                                 }))}

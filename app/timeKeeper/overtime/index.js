@@ -99,6 +99,18 @@ export default function EmployeeDocsScreen() {
     useFocusEffect(useCallback(() => {
         getData();
 
+        request({
+            url: `/notifications/read/group`,
+            method: 'post',
+            data: {
+                group: 'overtime'
+            },
+        }).then(res => {
+            console.log(res, 'apiservice control res aAAAAAAA -------------- AAAAAAAAAAA')
+        }).catch(err => {
+            console.log(err, 'apiservice control err')
+        })
+
         return () => {
             console.log('Home tab lost focus');
         };

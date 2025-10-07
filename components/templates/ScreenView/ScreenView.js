@@ -9,6 +9,7 @@ import COLORS from "@/constants/colors";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useLocalSearchParams } from "expo-router";
 import {useIsFocused} from "@react-navigation/native";
+import {useNotification} from "@/hooks/useNotification";
 
 export default function SgTemplateScreenView(props) {
     const { head, children } = props;
@@ -21,6 +22,7 @@ export default function SgTemplateScreenView(props) {
     const refreshKey = params?.refreshKey || 0; // default 0
     const isFocused = useIsFocused();
     const [remountKey, setRemountKey] = React.useState(0);
+    const {loadNotification} = useNotification();
 
     React.useEffect(() => {
         if (isFocused) {
@@ -47,6 +49,7 @@ export default function SgTemplateScreenView(props) {
             },
         });
 
+        loadNotification()
 
         setTimeout(() => {
             setRefreshing(false);
@@ -68,7 +71,7 @@ export default function SgTemplateScreenView(props) {
                             <ScrollView
                                 nestedScrollEnabled
                                 keyboardShouldPersistTaps="handled"
-                                key={refreshKey} // ⭐️ Refresh burada olur
+                                key={refreshKey}
                                 style={styles.container}
                                 refreshControl={
                                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

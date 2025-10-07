@@ -238,7 +238,7 @@ export default function EmployeeDashboardScreen() {
                     return (<SgSectionProjectListItem
                             key={index}
                             title={project.name}
-                            staffData={project?.members || []}
+                            staffData={(project?.members || []).filter(el => el.status)}
                             id={project.id}
                             href={`/employeePages/projects/${project.id}`}
                         />)

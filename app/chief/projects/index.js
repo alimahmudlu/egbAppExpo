@@ -55,7 +55,7 @@ export default function TasksScreen() {
             {(projectsList || []).map((project, index) => (<SgSectionProjectListItem
                 key={index}
                 title={project.name}
-                staffData={project?.members || []}
+                staffData={(project?.members || []).filter(el => el.status)}
                 id={project.id}
                 href={`/chiefPages/projects/${project.id}`}
             />))}

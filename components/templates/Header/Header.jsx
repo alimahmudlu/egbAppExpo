@@ -28,7 +28,7 @@ export default function SgTemplateHeader({name, role, position, rating, profileI
     }, [storeData?.cache?.[`GET:/notifications`]]);
 
 
-    useFocusEffect(useCallback(() => {
+    /*useFocusEffect(useCallback(() => {
         request({
             url: `/notifications`,
             method: 'get',
@@ -39,7 +39,7 @@ export default function SgTemplateHeader({name, role, position, rating, profileI
         return () => {
             console.log('Home tab lost focus');
         };
-    }, []));
+    }, []));*/
 
     return (
         <View style={styles.wrapper}>

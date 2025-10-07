@@ -17,6 +17,7 @@ import {useTranslation} from "react-i18next";
 
 export default function TimeKeeperTabLayout() {
     const {t} = useTranslation();
+    const {storeData} = useData();
 
     return (
         <Tabs
@@ -88,6 +89,7 @@ export default function TimeKeeperTabLayout() {
                     title: t('tabBar__overTime'),
                     tabBarLabel: t('tabBar__overTime'),
                     headerTitle: t('tabBar__overTime'),
+                    tabBarBadge: ((storeData?.cache?.[`GET:/notifications`])?.data || [])?.filter(el => !el?.read).length ? ((storeData?.cache?.[`GET:/notifications`])?.data || [])?.filter(el => !el?.read).length : null,
                     tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
                         <HistoryIcon width={20} height={20}/>
                 }}

@@ -655,7 +655,7 @@ export default function SgCheckInOutCard(props) {
                         bgColor={COLORS.primary}
                         color={COLORS.white}
                     >
-                        {t('overTime')}
+                        {t('overTime_btn')}
                     </SgButton>
                 }
             />
@@ -673,7 +673,7 @@ export default function SgCheckInOutCard(props) {
                         bgColor={COLORS.error_600}
                         color={COLORS.white}
                     >
-                        {t('overTime')}
+                        {t('overTime_btn')}
                     </SgButton>
                 }
             />
