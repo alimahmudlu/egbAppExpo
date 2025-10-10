@@ -224,7 +224,7 @@ export default function SgSectionEmployeeCard(props) {
             timezone: moment.tz.guess(),
             activity_id: fullData?.id,
             type: fullData?.type,
-            confirm_type: fullData?.type === 2 ? confirmType : null
+            confirm_type: fullData?.type === 4 ? confirmType : null
         }, {
             headers: {
                 'authorization': accessToken || ''
@@ -236,29 +236,57 @@ export default function SgSectionEmployeeCard(props) {
                 setUserOperationModal(false)
                 setAcceptCheckInModal(false);
                 // setAcceptedCheckInModal(false);
+                // if (fullData?.type === 3) {
+                //     removeRowData('GET:/timekeeper/overtime/list', fullData)
+                //     insertData('GET:/timekeeper/overtime/list', {
+                //         ...fullData,
+                //         complete_status: 0,
+                //         confirm_time: moment(),
+                //         review_time: moment(),
+                //         timezone: moment.tz.guess(),
+                //         confirm_employee_id: user?.id,
+                //         status: 2
+                //     })
+                // }
+                // if (fullData?.type === 4) {
+                //     removeRowData('GET:/timekeeper/overtime/list', fullData)
+                //     // insertData('GET:/timekeeper/overtime/list', {
+                //     //     ...fullData,
+                //     //     complete_status: 1,
+                //     //     confirm_time: moment(),
+                //     //     review_time: moment(),
+                //     //     timezone: moment.tz.guess(),
+                //     //     confirm_employee_id: user?.id,
+                //     //     status: 2
+                //     // })
+                // }
+
                 if (fullData?.type === 3) {
                     removeRowData('GET:/timekeeper/overtime/list', fullData)
-                    // insertData('GET:/timekeeper/overtime/list', {
-                    //     ...fullData,
-                    //     complete_status: 1,
-                    //     confirm_time: moment(),
-                    //     review_time: moment(),
-                    //     timezone: moment.tz.guess(),
-                    //     confirm_employee_id: user?.id,
-                    //     status: 2
-                    // })
+                    insertData('GET:/timekeeper/overtime/list', {
+                        ...fullData,
+                        complete_status: 1,
+                        confirm_time: moment(),
+                        review_time: moment(),
+                        timezone: moment.tz.guess(),
+                        confirm_employee_id: user?.id,
+                        status: 2
+                    })
                 }
-                if (fullData?.type === 4) {
+                else {
+                    removeRowData('GET:/timekeeper/overtime/list', fullData?.activity_id, 'id')
                     removeRowData('GET:/timekeeper/overtime/list', fullData)
-                    // insertData('GET:/timekeeper/overtime/list', {
-                    //     ...fullData,
-                    //     complete_status: 1,
-                    //     confirm_time: moment(),
-                    //     review_time: moment(),
-                    //     timezone: moment.tz.guess(),
-                    //     confirm_employee_id: user?.id,
-                    //     status: 2
-                    // })
+                    insertData('GET:/timekeeper/overtime/list', {
+                        ...fullData,
+                        activity_id: fullData?.id,
+                        confirm_time: moment(),
+                        review_time: moment(),
+                        timezone: moment.tz.guess(),
+                        confirm_employee_id: user?.id,
+                        status: 2,
+                        complete_status: 1,
+                        completed_status: 1,
+                    })
                 }
             }
             else {

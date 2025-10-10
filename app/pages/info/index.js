@@ -1,7 +1,6 @@
 import {Text, View, StyleSheet} from "react-native";
 import React from "react";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
-import {useLocalSearchParams} from "expo-router";
 import SgSectionDownloadApp from "@/components/sections/DownloadApp/DownloadApp";
 import {Image} from "expo-image";
 import AppInfoImage from "@/assets/images/appInfoImage.png";
@@ -10,7 +9,6 @@ import {useTranslation} from "react-i18next";
 import Constants from 'expo-constants';
 
 export default function ProjectItemScreen() {
-    const { projectId } = useLocalSearchParams();
     const {t} = useTranslation();
 
     function getAppVersion() {
