@@ -74,9 +74,7 @@ export default function EmployeeDashboardScreen() {
 
         getRating()
 
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
 
     }, [refreshKey]));
 
@@ -85,7 +83,6 @@ export default function EmployeeDashboardScreen() {
 
         const handler = (data) => {
             if (data?.data?.type === 1) {
-                console.log('update_activity', data?.data)
                 setStoreData(prev => ({
                     ...prev,
                     checkIn: data?.data?.status !== 3 ? data?.data : {

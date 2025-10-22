@@ -35,9 +35,7 @@ export default function EmployeeDashboardScreen() {
         }).then().catch(err => {
             console.log(err);
         })
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
     }, [refreshKey]));
 
     useEffect(() => {
@@ -55,7 +53,6 @@ export default function EmployeeDashboardScreen() {
         request({
             url: `/chief/activity/`, method: 'get',
         }).then(res => {
-            console.log('activity res')
             setStoreData(prev => ({
                 ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
                     loading: true
@@ -64,7 +61,6 @@ export default function EmployeeDashboardScreen() {
                 },
             }));
         }).catch(err => {
-            console.log('activity error')
             setStoreData(prev => ({
                 ...prev, checkInData: {
                     checkIn: null, checkOut: null,
@@ -72,9 +68,7 @@ export default function EmployeeDashboardScreen() {
             }));
         })
 
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
 
     }, [refreshKey]));
 

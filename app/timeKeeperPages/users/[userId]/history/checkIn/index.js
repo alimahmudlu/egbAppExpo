@@ -25,9 +25,7 @@ request({
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
     }, [refreshKey]));
 
     useEffect(() => {

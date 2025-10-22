@@ -83,8 +83,6 @@ export default function SgTemplateUpload(props) {
 
         const file = result?.assets?.[0];
 
-        console.log(file, 'file');
-
         try {
             setUploading(true);
 

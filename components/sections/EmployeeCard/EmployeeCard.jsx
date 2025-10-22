@@ -579,7 +579,8 @@ export default function SgSectionEmployeeCard(props) {
                                 </View>
                         )
                     }
-                    {((manual && !fullData?.checkout?.latitude && fullData?.checkin?.latitude) || (isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?
+                    {/*{((manual && !fullData?.checkout?.latitude && fullData?.checkin?.latitude) || (isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?*/}
+                    {((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?
                         <View>
                             <TouchableOpacity
                                 activeOpacity={1}
@@ -640,7 +641,7 @@ export default function SgSectionEmployeeCard(props) {
                                     </SgButton>
                                     : null
                                 }
-                                {(!fullData?.checkout?.latitude && fullData?.checkin?.latitude) ?
+                                {(!fullData?.checkout?.latitude && fullData?.checkin?.latitude && timeRaw) ?
                                     <SgButton
                                         disabled={buttonStatus}
                                         color={COLORS.white}

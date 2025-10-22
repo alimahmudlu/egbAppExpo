@@ -74,9 +74,7 @@ export default function EmployeeDocsScreen() {
             console.log(err);
         })
 
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
     }, [refreshKey]));
 
     useEffect(() => {

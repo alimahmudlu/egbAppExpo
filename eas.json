@@ -28,8 +28,8 @@
   "submit": {
     "production": {
       "android": {
-        "serviceAccountKeyPath": "./enter-green-buildings-5ae4ad52c7b4.json",
-        "track": "internal"
+        "serviceAccountKeyPath": "./enter-green-buildings-adc06d63d09a",
+          "track": "production"
       }
     }
   }

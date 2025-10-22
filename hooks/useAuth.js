@@ -253,7 +253,6 @@ export function AuthProvider({ children }) {
             'authorization': accessToken
         }
     }).then(res => {
-      console.log(res.data, 'RATING');
       setStoreData(res?.data?.data || {})
     }).catch(err => {
       console.log(err, 'RATING ERROR');

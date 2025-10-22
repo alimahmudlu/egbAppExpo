@@ -56,9 +56,7 @@ export default function EmployeeDashboardScreen() {
         });*/
 
 
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
     }, [refreshKey]));
 
 
@@ -111,7 +109,6 @@ export default function EmployeeDashboardScreen() {
         request({
             url: `/employee/activity/`, method: 'get',
         }).then(res => {
-            console.log('activity res')
             setStoreData(prev => ({
                 ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
                     loading: true
@@ -128,9 +125,7 @@ export default function EmployeeDashboardScreen() {
             }));
         })
 
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
 
     }, [refreshKey]));
 

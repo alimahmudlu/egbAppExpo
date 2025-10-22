@@ -4,6 +4,7 @@ import {View, Text, Switch, TouchableOpacity, Linking} from 'react-native';
 import Lang from '@/assets/images/language.svg';
 import Notify from '@/assets/images/notification.svg';
 import AppInfo from '@/assets/images/appInfo.svg';
+import DocsIcon from "@/assets/images/docs-active-f.svg";
 import Terms from '@/assets/images/Terms.svg';
 import Privacy from '@/assets/images/privacy.svg';
 import RightIcon from '@/assets/images/chevron-right.svg';
@@ -23,168 +24,186 @@ export default function SgSectionMenuCard({extraItems = []}) {
     const [modalVisible, setModalVisible] = useState(false);
     const {handleChangeNotificationPermission, notificationPermission} = useNotification();
     const {selectedLanguage} = useLanguage();
-  const { user } = useAuth();
-  const {t} = useTranslation();
+    const {user} = useAuth();
+    const {t} = useTranslation();
 
-  const openLink = async (url) => {
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    } else {
-      console.warn(`Don't know how to open this URL: ${url}`);
-    }
-  };
+    const openLink = async (url) => {
+        const supported = await Linking.canOpenURL(url);
+        if (supported) {
+            await Linking.openURL(url);
+        } else {
+            console.warn(`Don't know how to open this URL: ${url}`);
+        }
+    };
 
-  return (
-      <View style={styles.container}>
-        <View style={styles.menuWrapper}>
-          <Text style={styles.titleText}>Menus</Text>
-          <View style={styles.content}>
+    return (
+        <View style={styles.container}>
+            <View style={styles.menuWrapper}>
+                <Text style={styles.titleText}>Menus</Text>
+                <View style={styles.content}>
 
-            {/* Languages */}
-            <TouchableOpacity style={styles.item} onPress={() => setModalVisible(true)}>
-              <View style={styles.left}>
-                <View style={styles.iconContainer}>
-                  <Lang width={20} height={20} style={styles.icon} />
+                    {/*  */}
+                    <TouchableOpacity onPress={() => router.push(`/${user?.role?.id === 1 ? 'employee' : (user?.role?.id === 2 ? 'timeKeeper' : 'chief')}/docs`)} style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <DocsIcon width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('tabBar__myDocs')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+
+                    <Divider/>
+
+                    {/* Languages */}
+                    <TouchableOpacity style={styles.item} onPress={() => setModalVisible(true)}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <Lang width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('languages')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            {(selectedLanguage || {}).icon}
+                            {/*<GB width={24} height={24} style={styles.extraIcon} />*/}
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+                    <Divider/>
+
+                    {/* Notifications */}
+                    <View style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <Notify width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('notifications')}</Text>
+                        </View>
+                        <Switch
+                            value={notificationPermission?.permission}
+                            onValueChange={(res) => handleChangeNotificationPermission(res)}
+                            trackColor={{false: COLORS.gray_200, true: COLORS.brand_600}}
+                            thumbColor={COLORS.white}
+                            ios_backgroundColor={COLORS.gray_200}
+                            style={{transform: [{scaleX: 0.77}, {scaleY: 0.77}]}}
+                        />
+                    </View>
+                    <Divider/>
+
+                    {/*  */}
+                    <TouchableOpacity onPress={() => router.push(`/pages/responsibilities/${user?.position?.id}`)}
+                                      style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <AppInfo width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('duties')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+                    <Divider/>
+
+                    {/* Activities */}
+                    <TouchableOpacity onPress={() => router.push('/pages/activities')} style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <AppInfo width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('activities')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+                    <Divider/>
+
+                    {/* App Info */}
+                    <TouchableOpacity onPress={() => router.push('/pages/info')} style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <AppInfo width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('appInfo')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+                    <Divider/>
+
+                    {/* Terms & Conditions */}
+                    <TouchableOpacity onPress={() => openLink('https://entergreenbuildings.com/terms')}
+                                      style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <Terms width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('termsConditions')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+                    <Divider/>
+
+                    {/* Privacy Policy */}
+                    <TouchableOpacity onPress={() => openLink('https://entergreenbuildings.com/privacy-policy')}
+                                      style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <Privacy width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('privacyPolicy')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+
+                    {/* Extra items passed as props */}
+                    {extraItems.length > 0 && extraItems.map((item, index) => (
+                        <React.Fragment key={item.id || index}>
+                            <Divider/>
+                            <TouchableOpacity style={styles.item} onPress={item.onPress}>
+                                <View style={styles.left}>
+                                    <View style={styles.iconContainer}>
+                                        <item.icon width={20} height={20} style={styles.icon}/>
+                                    </View>
+                                    <Text style={styles.title}>{item.title}</Text>
+                                </View>
+                                <View style={styles.right}>
+                                    <RightIcon width={20} height={20}/>
+                                </View>
+                            </TouchableOpacity>
+                        </React.Fragment>
+                    ))}
+
                 </View>
-                <Text style={styles.title}>{t('languages')}</Text>
-              </View>
-              <View style={styles.right}>
-                {(selectedLanguage || {}).icon}
-                {/*<GB width={24} height={24} style={styles.extraIcon} />*/}
-                <RightIcon width={20} height={20} />
-              </View>
-            </TouchableOpacity>
-            <Divider />
-
-            {/* Notifications */}
-            <View style={styles.item}>
-              <View style={styles.left}>
-                <View style={styles.iconContainer}>
-                  <Notify width={20} height={20} style={styles.icon} />
-                </View>
-                <Text style={styles.title}>{t('notifications')}</Text>
-              </View>
-              <Switch
-                  value={notificationPermission?.permission}
-                  onValueChange={(res) => handleChangeNotificationPermission(res)}
-                  trackColor={{ false: COLORS.gray_200, true: COLORS.brand_600 }}
-                  thumbColor={COLORS.white}
-                  ios_backgroundColor={COLORS.gray_200}
-                  style={{ transform: [{ scaleX: 0.77 }, { scaleY: 0.77 }] }}
-              />
             </View>
-            <Divider />
 
-            {/*  */}
-            <TouchableOpacity onPress={() => router.push(`/pages/responsibilities/${user?.position?.id}`)} style={styles.item}>
-              <View style={styles.left}>
-                <View style={styles.iconContainer}>
-                  <AppInfo width={20} height={20} style={styles.icon} />
-                </View>
-                <Text style={styles.title}>{t('duties')}</Text>
-              </View>
-              <View style={styles.right}>
-                <RightIcon width={20} height={20} />
-              </View>
-            </TouchableOpacity>
-            <Divider />
-
-            {/* Activities */}
-            <TouchableOpacity onPress={() => router.push('/pages/activities')} style={styles.item}>
-              <View style={styles.left}>
-                <View style={styles.iconContainer}>
-                  <AppInfo width={20} height={20} style={styles.icon} />
-                </View>
-                <Text style={styles.title}>{t('activities')}</Text>
-              </View>
-              <View style={styles.right}>
-                <RightIcon width={20} height={20} />
-              </View>
-            </TouchableOpacity>
-            <Divider />
-
-            {/* App Info */}
-            <TouchableOpacity onPress={() => router.push('/pages/info')} style={styles.item}>
-              <View style={styles.left}>
-                <View style={styles.iconContainer}>
-                  <AppInfo width={20} height={20} style={styles.icon} />
-                </View>
-                <Text style={styles.title}>{t('appInfo')}</Text>
-              </View>
-              <View style={styles.right}>
-                <RightIcon width={20} height={20} />
-              </View>
-            </TouchableOpacity>
-            <Divider />
-
-            {/* Terms & Conditions */}
-            <TouchableOpacity onPress={() => openLink('https://entergreenbuildings.com/terms')} style={styles.item}>
-              <View style={styles.left}>
-                <View style={styles.iconContainer}>
-                  <Terms width={20} height={20} style={styles.icon} />
-                </View>
-                <Text style={styles.title}>{t('termsConditions')}</Text>
-              </View>
-              <View style={styles.right}>
-                <RightIcon width={20} height={20} />
-              </View>
-            </TouchableOpacity>
-            <Divider />
-
-            {/* Privacy Policy */}
-            <TouchableOpacity onPress={() => openLink('https://entergreenbuildings.com/privacy-policy')} style={styles.item}>
-              <View style={styles.left}>
-                <View style={styles.iconContainer}>
-                  <Privacy width={20} height={20} style={styles.icon} />
-                </View>
-                <Text style={styles.title}>{t('privacyPolicy')}</Text>
-              </View>
-              <View style={styles.right}>
-                <RightIcon width={20} height={20} />
-              </View>
-            </TouchableOpacity>
-
-            {/* Extra items passed as props */}
-            {extraItems.length > 0 && extraItems.map((item, index) => (
-                <React.Fragment key={item.id || index}>
-                  <Divider />
-                  <TouchableOpacity style={styles.item} onPress={item.onPress}>
-                    <View style={styles.left}>
-                      <View style={styles.iconContainer}>
-                        <item.icon width={20} height={20} style={styles.icon} />
-                      </View>
-                      <Text style={styles.title}>{item.title}</Text>
-                    </View>
-                    <View style={styles.right}>
-                      <RightIcon width={20} height={20} />
-                    </View>
-                  </TouchableOpacity>
-                </React.Fragment>
-            ))}
-
-          </View>
+            {/* Language Modal */}
+            <SgPopup
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                title={t('languages')}
+                /*footerButton={
+                  <SgButton
+                    onPress={() => setModalVisible(false)}
+                    bgColor={COLORS.primary}
+                    color={COLORS.white}
+                  >
+                    Save
+                  </SgButton>
+                }*/
+            >
+                <SgSectionLanguageSelector/>
+            </SgPopup>
         </View>
-
-        {/* Language Modal */}
-        <SgPopup
-            visible={modalVisible}
-            onClose={() => setModalVisible(false)}
-            title={t('languages')}
-            /*footerButton={
-              <SgButton
-                onPress={() => setModalVisible(false)}
-                bgColor={COLORS.primary}
-                color={COLORS.white}
-              >
-                Save
-              </SgButton>
-            }*/
-        >
-          <SgSectionLanguageSelector />
-        </SgPopup>
-      </View>
-  );
+    );
 }
 
 

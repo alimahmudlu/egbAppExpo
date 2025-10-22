@@ -1,16 +1,13 @@
 import {Tabs} from 'expo-router';
-import React, {useEffect} from 'react';
-import {TouchableOpacity, Text, Platform, Alert} from 'react-native';
-import {useAuth} from '@/hooks/useAuth';
+import React from 'react';
+import {Platform} from 'react-native';
 import HomeActiveIcon from "@/assets/images/home-active.svg";
 import HomeIcon from "@/assets/images/home.svg";
 import HistoryIcon from '@/assets/images/history.svg';
 import HistoryActiveIcon from '@/assets/images/history-active.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
-import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
-import {useSocket} from "@/hooks/useSocket";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
@@ -56,6 +53,7 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="docs/index"
                 options={{
+                    href: null,
                     title: t('tabBar__myDocs'),
                     tabBarLabel: t('tabBar__myDocs'),
                     headerTitle: t('tabBar__myDocs'),

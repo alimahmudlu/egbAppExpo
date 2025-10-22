@@ -266,7 +266,6 @@ export default function EmployeeDocsScreen() {
         }).then().catch(err => {
           console.log(err);
         })
-        console.log(res);
       }).catch(err => {
         console.log(err);
       })
@@ -274,7 +273,6 @@ export default function EmployeeDocsScreen() {
   }
 
   function handleRemove(selectedFileId, title) {
-    console.log(selectedFileId, 'selectedFileId');
     request({
       url: '/chief/doc/remove',
       method: 'post',
@@ -291,7 +289,6 @@ export default function EmployeeDocsScreen() {
       }).then().catch(err => {
         console.log(err);
       })
-      console.log(res);
     }).catch(err => {
       console.log(err);
     })
@@ -313,9 +310,7 @@ export default function EmployeeDocsScreen() {
           console.log(err);
         })
 
-        return () => {
-          console.log('doc tab lost focus');
-        };
+        return () => {};
       }, [refreshKey])
   );
 
@@ -444,7 +439,7 @@ export default function EmployeeDocsScreen() {
                     type={el?.type}
                     datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
                     url={el?.filepath}
-                    onPress={() => console.log('file.filename')}
+                    onPress={() => {}}
                     remove={true}
                 />
             ))}

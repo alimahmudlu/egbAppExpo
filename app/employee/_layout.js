@@ -82,6 +82,7 @@ export default function EmployeeTabLayout() {
             <Tabs.Screen
                 name="docs/index"
                 options={{
+                    href: null,
                     freezeOnBlur: false,
                     title: t('tabBar__myDocs'),
                     tabBarLabel: t('tabBar__myDocs'),

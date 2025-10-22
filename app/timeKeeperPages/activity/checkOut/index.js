@@ -80,9 +80,7 @@ export default function TimeKeeperUserScreen() {
             console.log(err);
         })
 
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
     }, [refreshKey]));
 
     useEffect(() => {

@@ -75,6 +75,7 @@ export default function WorkerTabLayout() {
             <Tabs.Screen
                 name="docs/index"
                 options={{
+                    href: null,
                     title: t('tabBar__myDocs'),
                     tabBarLabel: t('tabBar__myDocs'),
                     headerTitle: t('tabBar__myDocs'),

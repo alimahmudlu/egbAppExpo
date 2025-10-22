@@ -77,9 +77,7 @@ export default function EmployeeDocsScreen() {
             console.log(err);
         })
 
-        return () => {
-            console.log('Home tab lost focus');
-        };
+        return () => {};
     }, [refreshKey]));
 
     useEffect(() => {
@@ -150,7 +148,8 @@ export default function EmployeeDocsScreen() {
                         fullData={emp}
                         title={emp?.full_name}
                         role={emp?.role?.name}
-                        time={emp.request_time ? moment(emp.request_time).format('MM-DD-YYYY HH:mm') : ""}
+                        timeRaw={emp?.checkin?.review_time}
+                        time={emp?.checkin?.request_time ? moment(emp?.checkin?.request_time).format('MM-DD-YYYY HH:mm') : ""}
                         image={emp?.image}
                         editable={true}
                         manual={true}

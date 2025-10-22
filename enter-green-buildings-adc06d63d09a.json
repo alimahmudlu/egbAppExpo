@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "enter-green-buildings",
+  "private_key_id": "adc06d63d09ad57ffbb806b60e0ec5a752d4a45e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEBVeo56Y0xhwK\n1hYLHxoWJcEW7hzgi6de0r9cN+6Fr4+ko4mBzfvR0zBUoLcVbAC8JHTwE0Hn/J9I\nJ6Oinzhaqj55RGS+5eaZ1amomQ25U7yrf0eyVewNSoUXBwuc1Zr2olBsfBYP4uXc\nN2O6GsoYbgpArogamkVmrcZgdhWTziU7CRN9AKmBdMwlEQ4hwnD2Y8Bzff0+yVmx\nNcdRk32CNg52ygfatCrdUmSZnv6edI6+9B8ESUcHn9tpSWYbM7w6dUMKIRVtF8XQ\nHgUeS7iEXkvd/j56fDHjInH547LYYHBawDhH8wFxPgSFggVSbuva/mzz5xZdK2AR\nUefZ72DvAgMBAAECggEAH1j+Cc7x741MaBc7SJAIFfP3tc5ijoOxl80ljn6LWz8W\nPlgWN3dU3DC6kUNvxAc/ntbzCdRVPTT91rDazw5IxDG8R/G+GCFKst35LIiS1J56\n6loygbySlsA3byql8BuLlVb5Jurj2aqJjqF1BgrJYwVwsk4MX2S90Ivd0Qimrroz\nJp8GK7rjxbqWwXhsO7KnQRISZuyoDBNN4b09ytt+uCEZhiif6beoCSiHRJkA+X6J\nRC7dR4OKJU8op8FvND6wYUT1DVPJaHh5s12ceXZkEa8mvOzOxua3A1zh1HXC2Lk6\nbqNd213mSI6TEUop04swAwQr0pC3MxU3Dx+/PMsI0QKBgQDraP6lklSvWX9PXwzU\nzhkG+T0/ZADmXHNip6V1JUItRWN8XfGG782z2oYXjj00Qtad2lmxn/sr29ZquFbA\nQYYqygi6/O5JoLgp3/Z5SeQpTrwCtAxOr5fSVrWZvQuxPjY7ztihthZ8w4FnKGzJ\n0QCvaEY4W+3zpT4pyKck19rcTQKBgQDVKmSn2lRRCDqeAfH6E7WWYrrY+DFpEVCG\n9kW8U2Z12K4/6e2SwaWxf8/8rAQ7uxoJ52J0yrHi33shrOhAZJEB0NMpTfjGUhV2\n0IgU1TrrlibTrFuozTeBQSF4PloVRxUSsgfAzwelj6OtRr5tkdHv9RnGUShMuD3+\nRmqcRY3gKwKBgHaN+PiPekCY1Om3F7IwXSBK8xJynZVl5+I+RbB6ZBqCgHjIovNu\n32x9V9yTELW6F3WF2nf+9rJ+0zwJu/60wQnZl438BVFlNHo6RVmN4e7/rOW7oRsb\niV0vt+NF9pZ7mzqBkE3YcvjASPIXxLnanPq5i+ukOHDkviqy16JRZvJdAoGBAKCY\nBaknpWo/BtpPoNvEyYN48kfQBHmhn8dt9m/BbWnPSsfAF0n/NjOZlTpI5g+SEDXx\n6o0OwCGqOHvQZlFM8qoph0yQ/6F56c3PoRYA5xjh0HKcYZm0seJhDTQn1Xo+STQC\niDDMSHiE1M0QhRrLRxy+zSJJtlDGZX4R0vPUuuRtAoGAQaST5feCO9uHd3cZBwU5\nKnlAIDYMb6HZA7vZPI4V95sGlGk7hPBKSQ9SpLa3ddA1zqKq2aLmIINoEIIgdojF\no/b2HbRFbsLpAjheXNg0QTGDBl+Ia4NYOLycQ0fpPBn2gCspcOvg1WRNzj3kN05e\nGzRWZcHEdpY709miJUSWoWU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "eas-submit-android@enter-green-buildings.iam.gserviceaccount.com",
+  "client_id": "104723192299597512725",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/eas-submit-android%40enter-green-buildings.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
