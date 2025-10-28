@@ -30,7 +30,7 @@ import SgRadio from "@/components/ui/Radio/Radio";
 
 
 export default function SgSectionEmployeeCard(props) {
-    const {fullData, image, title, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw, overTime = false} = props;
+    const {fullData, image, title, project, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw, overTime = false} = props;
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
@@ -54,7 +54,7 @@ export default function SgSectionEmployeeCard(props) {
 
 
     function toggleUserOperationModal() {
-        if (editable || (isManualCheckoutAvailable() && atWork)) {
+        if (editable || (isManualCheckoutAvailable() && atWork) || (overTime && atWork)) {
             setUserOperationModal(status === 1 ? false : !userOperationModal);
         } else {
             router.push(`/timeKeeperPages/users/${fullData?.employee?.id}`)
@@ -141,6 +141,15 @@ export default function SgSectionEmployeeCard(props) {
 
         if (isPastDay) return true;
         if (isToday && now.isAfter(moment().set({ hour: 6, minute: 0 }))) return true;
+
+        return false;
+    };
+
+    const isManualOverTimeCheckoutAvailable = () => {
+        const isToday = moment(timeRaw).format("YYYY-MM-DD") === today;
+        const isPastDay = moment(moment(timeRaw).format("YYYY-MM-DD")).isBefore(today);
+
+        if (isPastDay) return true;
 
         return false;
     };
@@ -362,21 +371,31 @@ export default function SgSectionEmployeeCard(props) {
             url: `/timekeeper/manual/${type}`,
             method: 'post',
             data: {
-                employee_id:  (isManualCheckoutAvailable() && atWork) ? fullData?.employee_id : fullData?.id,
+                employee_id:  (isManualCheckoutAvailable() && atWork) ? fullData?.employee_id : ((overTime && atWork) ? fullData?.employee_id : fullData?.id),
                 employee_timezone: moment.tz.guess(),
                 request_time: moment(),
                 longitude: locationData?.longitude,
                 latitude: locationData?.latitude,
                 work_time: null,
-                activity_id: fullData?.checkin?.id,
+                activity_id: fullData?.id,
                 confirm_type: confirmType
             }
         }).then(res => {
-            changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id')
+            if (manual) {
+                changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id')
+            }
             setButtonStatus(false)
             if(isManualCheckoutAvailable() && atWork) {
                 request({
                     url: '/timekeeper/activity/list', method: 'get'
+                }).then(res => {
+                }).catch(err => {
+                    console.log(err, 'apiservice control err')
+                });
+            }
+            if(overTime && atWork) {
+                request({
+                    url: '/timekeeper/overtime/list', method: 'get'
                 }).then(res => {
                 }).catch(err => {
                     console.log(err, 'apiservice control err')
@@ -417,7 +436,16 @@ export default function SgSectionEmployeeCard(props) {
                     </View>
                     <View style={styles.employeeInfo}>
                         <Text style={styles.employeeName}>{title}</Text>
-                        <Text style={styles.employeeRole}>{role}</Text>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={styles.employeeRole}>{role}</Text>
+                            {project ?
+                                <>
+                                    <Text style={styles.employeeRole}> / </Text>
+                                    <Text style={styles.employeeRole}>{project}</Text>
+                                </>
+                                : null
+                            }
+                        </View>
                         <Text style={styles.checkTime}>{t('checkTime')}: <Text style={styles.time}>{time}</Text></Text>
                         <Text style={styles.checkTime}>{t('checkType')}: <Text style={styles.time}>{checkType}</Text></Text>
                     </View>
@@ -666,30 +694,20 @@ export default function SgSectionEmployeeCard(props) {
                                         </SgButton>
                                     </View>
                                     :
-                                    <View style={styles.modalGroupButtons}>
-                                        {clickType === 'reject' ?
-                                            <SgButton
-                                                color={COLORS.error_700}
-                                                bgColor={COLORS.error_50}
-                                                onPress={toggleRejectCheckInModal}
-                                            >
-                                                {t('reject')}
-                                            </SgButton>
-                                            : null
-                                        }
-                                        {clickType === 'accept' ?
+                                    ((overTime && atWork) ?
+                                        <View style={styles.modalGroupButtons}>
                                             <SgButton
                                                 color={COLORS.white}
                                                 bgColor={COLORS.brand_600}
-                                                // onPress={fullData?.type === 2 ? toggleAcceptCheckInModal : handleSubmitAccept}
-                                                onPress={[3, 4].includes(fullData?.type) ? handleSubmitAcceptOverTime : handleSubmitAccept}
+                                                disabled={buttonStatus}
+                                                onPress={() => handleCheckInRequest('overtime_checkout')}
                                             >
-                                                {t('accept')}
+                                                {t('checkOut')}
                                             </SgButton>
-                                            : null
-                                        }
-                                        {!clickType ?
-                                            <>
+                                        </View>
+                                        :
+                                        <View style={styles.modalGroupButtons}>
+                                            {clickType === 'reject' ?
                                                 <SgButton
                                                     color={COLORS.error_700}
                                                     bgColor={COLORS.error_50}
@@ -697,6 +715,9 @@ export default function SgSectionEmployeeCard(props) {
                                                 >
                                                     {t('reject')}
                                                 </SgButton>
+                                                : null
+                                            }
+                                            {clickType === 'accept' ?
                                                 <SgButton
                                                     color={COLORS.white}
                                                     bgColor={COLORS.brand_600}
@@ -705,10 +726,30 @@ export default function SgSectionEmployeeCard(props) {
                                                 >
                                                     {t('accept')}
                                                 </SgButton>
-                                            </>
-                                            : null
-                                        }
-                                    </View>
+                                                : null
+                                            }
+                                            {!clickType ?
+                                                <>
+                                                    <SgButton
+                                                        color={COLORS.error_700}
+                                                        bgColor={COLORS.error_50}
+                                                        onPress={toggleRejectCheckInModal}
+                                                    >
+                                                        {t('reject')}
+                                                    </SgButton>
+                                                    <SgButton
+                                                        color={COLORS.white}
+                                                        bgColor={COLORS.brand_600}
+                                                        // onPress={fullData?.type === 2 ? toggleAcceptCheckInModal : handleSubmitAccept}
+                                                        onPress={[3, 4].includes(fullData?.type) ? handleSubmitAcceptOverTime : handleSubmitAccept}
+                                                    >
+                                                        {t('accept')}
+                                                    </SgButton>
+                                                </>
+                                                : null
+                                            }
+                                        </View>
+                                    )
                             )
                         }
                     </View>

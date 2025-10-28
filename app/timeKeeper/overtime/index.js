@@ -74,24 +74,6 @@ export default function EmployeeDocsScreen() {
         };
     }, [socket]);
 
-
-
-    function toggleFilterModal() {
-        setFilterModal(!filterModal);
-    }
-
-    function resetFilters() {
-        setFilters({});
-    }
-
-    function handleChange(e) {
-        setFilters({...filters, [e.name]: e.value});
-    }
-
-    function handleFilters() {
-        getData({...filters, project: filters?.project?.id})
-    }
-
     useEffect(() => {
         getData({...filters})
     }, [filters])
@@ -159,6 +141,7 @@ export default function EmployeeDocsScreen() {
                                 fullData={emp}
                                 title={emp?.employee?.full_name}
                                 role={emp?.employee?.role?.name}
+                                project={emp?.project?.name}
                                 checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                 image={emp?.employee?.image}
@@ -172,6 +155,7 @@ export default function EmployeeDocsScreen() {
                                 fullData={emp}
                                 title={emp?.employee?.full_name}
                                 role={emp?.employee?.role?.name}
+                                project={emp?.project?.name}
                                 checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                 image={emp?.employee?.image}
@@ -185,11 +169,13 @@ export default function EmployeeDocsScreen() {
                                 fullData={emp}
                                 title={emp?.employee?.full_name}
                                 role={emp?.employee?.role?.name}
+                                project={emp?.project?.name}
                                 checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                 image={emp?.employee?.image}
                                 overTime={true}
                                 editable={false}
+                                atWork={true}
                             />))), id: 'atWork'
                     }
                 ]}

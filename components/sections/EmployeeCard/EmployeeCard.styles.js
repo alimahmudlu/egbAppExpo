@@ -43,10 +43,10 @@ const styles = StyleSheet.create({
   },
   employeeName: {
     fontFamily: 'Inter',
-    fontSize: 16,
+    fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 700,
-    lineHeight: 24,
+    lineHeight: 18,
     color: COLORS.gray_800,
   },
   employeeRole: {

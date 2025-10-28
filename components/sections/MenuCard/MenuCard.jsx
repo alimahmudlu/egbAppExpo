@@ -57,6 +57,21 @@ export default function SgSectionMenuCard({extraItems = []}) {
 
                     <Divider/>
 
+                    {/*  */}
+                    <TouchableOpacity onPress={() => router.push(`/pages/teams`)} style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <DocsIcon width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('tabBar__myTeams')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+
+                    <Divider/>
+
                     {/* Languages */}
                     <TouchableOpacity style={styles.item} onPress={() => setModalVisible(true)}>
                         <View style={styles.left}>

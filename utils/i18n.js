@@ -707,7 +707,6 @@ i18n.use(initReactI18next).init({
                 overTimeOut: "Overtime out",
                 normal: "Normal",
 
-
                 checkInDate: "Check-in date",
                 checkOutDate: "Check-out date",
                 checkInLocation: "Check-in location",
@@ -730,6 +729,7 @@ i18n.use(initReactI18next).init({
                 reporter: 'Reporter',
                 taskDetails: 'Task Details',
                 activities: 'Activities',
+                myTeam: 'My Team',
                 employeeName: 'Name',
                 employeeName_placeholder: 'Enter name',
                 loading: 'Loading',
@@ -897,6 +897,7 @@ i18n.use(initReactI18next).init({
                 tabBar__projects: "Projects",
                 tabBar__history: "History",
                 tabBar__manual: "Manual",
+                tabBar__myTeams: "My Teams",
                 enterProject: "Enter project",
                 appInfo1: "Rate the app on the following platforms",
                 appInfo2: "Enter Flow is the official mobile app for employees of Enter Green Buildings.\nIt helps workers stay compliant and connected on the job by providing: \n  * Daily check-in and check-out with GPS location capture \n  * View assigned tasks and performance scores \n  * Get notified about upcoming document expirations \n  * Multilingual support (Russian,Uzbek, English)\n",
@@ -928,7 +929,10 @@ i18n.use(initReactI18next).init({
                 documentRemove: "Document Remove",
                 remove: "Remove",
                 seeExpiredDocs: "See expired docs",
-                logout_description: "Are you about to logout. Are you sure?"
+                logout_description: "Are you about to logout. Are you sure?",
+                teamMembers: "Team Members",
+                enterRole: "Enter role",
+                role: "Role",
             }
         },
         ru: {
@@ -938,6 +942,7 @@ i18n.use(initReactI18next).init({
                 overTime_btn: "Запросить",
                 overTime__description: "Хотите подать заявку на сверхурочную работу",
                 overTimeOut: "Вне сверхурочной работы",
+                normal: "Нормальный",
 
                 checkInDate: "Дата входа",
                 checkOutDate: "Дата выхода",
@@ -961,6 +966,7 @@ i18n.use(initReactI18next).init({
                 reporter: 'Докладчик',
                 taskDetails: 'Детали задачи',
                 activities: 'Деятельность',
+                myTeam: 'Моя команда',
                 employeeName: 'Имя',
                 employeeName_placeholder: 'Введите имя',
                 loading: 'Загрузка',
@@ -1128,6 +1134,7 @@ i18n.use(initReactI18next).init({
                 tabBar__projects: "Проекты",
                 tabBar__history: "История",
                 tabBar__manual: "Ручной режим",
+                tabBar__myTeams: "Моя команда",
                 enterProject: "Выбор проекта",
                 appInfo1: "Оцените приложение на следующих платформах",
                 appInfo2: "Enter Flow — официальное мобильное приложение для сотрудников Enter Green Buildings.\nОн помогает работникам соблюдать требования и оставаться на связи на рабочем месте, предоставляя: \n  * Ежедневная регистрация заезда и отъезда с фиксацией местоположения по GPS \n  * Просмотр назначенных задач и оценок производительности \n  * Получайте уведомления о приближающемся истечении срока действия документов \n  * Многоязычная поддержка (русский, узбекский, английский)",
@@ -1159,7 +1166,10 @@ i18n.use(initReactI18next).init({
                 documentRemove: "Удалить документ",
                 remove: "удалять",
                 seeExpiredDocs: "Просмотреть просроченные документы",
-                logout_description: "Вы собираетесь выйти. Вы уверены?"
+                logout_description: "Вы собираетесь выйти. Вы уверены?",
+                teamMembers: "Члены команды",
+                enterRole: "Введите роль",
+                role: "Роль",
             }
         },
         uz: {
@@ -1169,7 +1179,7 @@ i18n.use(initReactI18next).init({
                 overTime_btn: "Vaqt o'tishi bilan",
                 overTime__description: "Vaqt o'tishi bilan",
                 overTimeOut: "Qo'shimcha ish vaqti",
-
+                normal: "Oddiy",
 
                 checkInDate: "Kirish sanasi",
                 checkOutDate: "Chiqish sanasi",
@@ -1193,6 +1203,7 @@ i18n.use(initReactI18next).init({
                 reporter: 'Xabarchi',
                 taskDetails: 'Vazifa tafsilotlari',
                 activities: 'Faoliyat',
+                myTeam: 'Mening jamoam',
                 employeeName: 'Ism',
                 employeeName_placeholder: 'Ismni kiriting',
                 loading: 'Yuklanmoqda',
@@ -1360,6 +1371,7 @@ i18n.use(initReactI18next).init({
                 tabBar__projects: "Loyihalar",
                 tabBar__history: "Tarix",
                 tabBar__manual: "Qo'lda",
+                tabBar__myTeams: "Mening jamoam",
                 enterProject: "Loyihani kiriting",
                 appInfo1: "Tatbiqi platformalarda baholash",
                 appInfo2: "Enter Flow - Enter Green Buildings xodimlari uchun rasmiy mobil ilova.\nBu ishchilarga quyidagi shartlarni ta'minlash orqali ishda rioya qilish va bog'lanishda yordam beradi: \n  * GPS joylashuvni yozib olish bilan har kuni ro'yxatdan o'tish va chiqish \n  * Belgilangan vazifalar va ishlash ballarini ko'rish \n  * Hujjatning amal qilish muddati tugashi haqida xabar oling \n  * Ko'p tilli yordam (rus, o'zbek, ingliz)",
@@ -1391,7 +1403,11 @@ i18n.use(initReactI18next).init({
                 documentRemove: "Hujjatni olib tashlash",
                 remove: "o'chirish",
                 seeExpiredDocs: "Muddati oʻtgan hujjatlarni koʻring",
-                logout_description: "Chiqishni istaysizmi?"
+                logout_description: "Chiqishni istaysizmi?",
+
+                teamMembers: "Jamoa a'zolari",
+                enterRole: "Rolni kiriting",
+                role: "Rol",
             }
         }
     },

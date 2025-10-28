@@ -267,6 +267,7 @@ export default function EmployeeDashboardScreen() {
                             fullData={emp}
                             title={emp?.employee?.full_name}
                             role={emp?.employee?.role?.name}
+                            project={emp?.project?.name}
                             checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             image={emp?.employee?.image}
@@ -279,6 +280,7 @@ export default function EmployeeDashboardScreen() {
                             fullData={emp}
                             title={emp?.employee?.full_name}
                             role={emp?.employee?.role?.name}
+                            project={emp?.project?.name}
                             checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             image={emp?.employee?.image}
@@ -293,6 +295,7 @@ export default function EmployeeDashboardScreen() {
                             atWork={emp.type === 1 && emp.status === 2 && emp.completed_status === 0}
                             title={emp?.employee?.full_name}
                             role={emp?.employee?.role?.name}
+                            project={emp?.project?.name}
                             checkType={emp?.employee?.manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             timeRaw={emp.request_time}
