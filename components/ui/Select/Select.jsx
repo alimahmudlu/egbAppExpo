@@ -20,8 +20,6 @@ export default function SgSelect(props) {
     const [selectModal, setSelectModal] = useState(false);
     const [selectedValue, setSelectedValue] = useState(value);
 
-    // console.log(list)
-
     function toggleSelectModal() {
         setSelectModal(!selectModal);
     }

@@ -245,8 +245,6 @@ export default function EmployeeDocsScreen() {
   function handleSubmitDoc() {
     let errors = validate({...data, fileTypes: fileTypes, file: selectedFiles?.[0]?.id}, 'addDocs', validationConstraints);
 
-    console.log(errors, 'errors');
-
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       ToastAndroid.show("error var", ToastAndroid.SHORT)
@@ -270,7 +268,6 @@ export default function EmployeeDocsScreen() {
         }).then().catch(err => {
           console.log(err);
         })
-        console.log(res);
       }).catch(err => {
         console.log(err);
       })
@@ -278,7 +275,6 @@ export default function EmployeeDocsScreen() {
   }
 
   function handleRemove(selectedFileId, title) {
-    console.log(selectedFileId, 'selectedFileId');
     request({
       url: '/timekeeper/doc/remove',
       method: 'post',
@@ -295,7 +291,6 @@ export default function EmployeeDocsScreen() {
       }).then().catch(err => {
         console.log(err);
       })
-      console.log(res);
     }).catch(err => {
       console.log(err);
     })

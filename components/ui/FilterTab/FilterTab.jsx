@@ -25,7 +25,10 @@ export default function SgFilterTab({ tabs = [], defaultTabId, onTabChange, tabC
           return (
               <Pressable
                   key={index}
-                  onPress={() => handleTabPress(tab?.id || index)}
+                  onPress={() => {
+                      handleTabPress(tab?.id || index)
+                      tab?.onClick?.(tab?.id || index)
+                  }}
                   style={[styles.tabButton, isActive && styles.activeTabButton]}
               >
                 <Text style={[styles.tabText, isActive && styles.activeTabText]}>

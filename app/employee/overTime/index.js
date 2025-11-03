@@ -43,8 +43,6 @@ export default function EmployeeDashboardScreen() {
         request({
             url: `/employee/activity/`, method: 'get',
         }).then(res => {
-
-            console.log(res?.data, 'ress DATAA _______________---------------------_________________________________')
             setStoreData(prev => ({
                 ...prev,
                 checkOut: (res?.data || []).find(el => el.type === 2) || {

@@ -67,7 +67,6 @@ export default function EmployeeDashboardScreen() {
             insertData('GET:/timekeeper/activity/list', data?.data)
         };
         const handler2 = (data) => {
-            console.log('update_activity', data?.data)
             // removeRowData('GET:/timekeeper/activity/list', data?.data?.activity_id, 'id')
             changeAddRowData('GET:/timekeeper/activity/list', {
                 completed_status: 1
@@ -268,7 +267,7 @@ export default function EmployeeDashboardScreen() {
                             title={emp?.employee?.full_name}
                             role={emp?.employee?.role?.name}
                             project={emp?.project?.name}
-                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                            checkType={emp?.is_manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             image={emp?.employee?.image}
                         />))), id: 'checkIn'
@@ -281,7 +280,7 @@ export default function EmployeeDashboardScreen() {
                             title={emp?.employee?.full_name}
                             role={emp?.employee?.role?.name}
                             project={emp?.project?.name}
-                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                            checkType={emp?.is_manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             image={emp?.employee?.image}
                         />))), id: 'checkOut'
@@ -296,7 +295,7 @@ export default function EmployeeDashboardScreen() {
                             title={emp?.employee?.full_name}
                             role={emp?.employee?.role?.name}
                             project={emp?.project?.name}
-                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                            checkType={emp?.is_manual ? t('manual') : t('auto')}
                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                             timeRaw={emp.request_time}
                             image={emp?.employee?.image}

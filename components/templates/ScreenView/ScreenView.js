@@ -12,7 +12,7 @@ import {useIsFocused} from "@react-navigation/native";
 import {useNotification} from "@/hooks/useNotification";
 
 export default function SgTemplateScreenView(props) {
-    const { head, children } = props;
+    const { head, children, scrollView = true } = props;
     const [refreshing, setRefreshing] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
@@ -68,6 +68,7 @@ export default function SgTemplateScreenView(props) {
                         onPress={Keyboard.dismiss}
                         accessible={false}
                     >
+                        {scrollView ?
                             <ScrollView
                                 nestedScrollEnabled
                                 keyboardShouldPersistTaps="handled"
@@ -80,6 +81,9 @@ export default function SgTemplateScreenView(props) {
                             >
                                 {children}
                             </ScrollView>
+                            :
+                            children
+                        }
                     </TouchableWithoutFeedback>
                 </KeyboardAvoidingView>
                 <StatusBar hidden={false} style="light" />

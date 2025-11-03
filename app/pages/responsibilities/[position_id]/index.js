@@ -18,7 +18,6 @@ export default function PrivacyPolicyScreen() {
             method: 'get'
         }).then(res => {
             setDetails(res.data)
-            console.log('Position details:', res.data);
         }).catch(err => {
             console.log(err, 'errrrr');
         })

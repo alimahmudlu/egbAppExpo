@@ -88,7 +88,6 @@ export default function EmployeeDocsScreen() {
                 group: 'overtime'
             },
         }).then(res => {
-            console.log(res, 'apiservice control res aAAAAAAA -------------- AAAAAAAAAAA')
         }).catch(err => {
             console.log(err, 'apiservice control err')
         })
@@ -142,7 +141,7 @@ export default function EmployeeDocsScreen() {
                                 title={emp?.employee?.full_name}
                                 role={emp?.employee?.role?.name}
                                 project={emp?.project?.name}
-                                checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                checkType={emp?.is_manual ? t('manual') : t('auto')}
                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                 image={emp?.employee?.image}
                                 overTime={true}
@@ -156,7 +155,7 @@ export default function EmployeeDocsScreen() {
                                 title={emp?.employee?.full_name}
                                 role={emp?.employee?.role?.name}
                                 project={emp?.project?.name}
-                                checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                checkType={emp?.is_manual ? t('manual') : t('auto')}
                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                 image={emp?.employee?.image}
                                 overTime={true}
@@ -170,7 +169,7 @@ export default function EmployeeDocsScreen() {
                                 title={emp?.employee?.full_name}
                                 role={emp?.employee?.role?.name}
                                 project={emp?.project?.name}
-                                checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                checkType={emp?.is_manual ? t('manual') : t('auto')}
                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                 image={emp?.employee?.image}
                                 overTime={true}

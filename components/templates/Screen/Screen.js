@@ -3,10 +3,10 @@ import COLORS from "@/constants/colors";
 import SgTemplatesScreenView from "@/components/templates/ScreenView/ScreenView";
 
 export default function SgTemplatesScreen(props) {
-    const {head, children} = props;
+    const {head, children, scrollView = true} = props;
 
     return (
-        <SgTemplatesScreenView>
+        <SgTemplatesScreenView scrollView={scrollView}>
             <View style={styles.contentContainer}>
                 {head && <View style={styles.head}>{head}</View>}
                 <View style={[styles.body]}>

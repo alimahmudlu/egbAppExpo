@@ -87,7 +87,10 @@ export default function TimeKeeperTabLayout() {
                     title: t('tabBar__overTime'),
                     tabBarLabel: t('tabBar__overTime'),
                     headerTitle: t('tabBar__overTime'),
-                    tabBarBadge: ((storeData?.cache?.[`GET:/notifications`])?.data || [])?.filter(el => !el?.read).length ? ((storeData?.cache?.[`GET:/notifications`])?.data || [])?.filter(el => !el?.read).length : null,
+                    tabBarBadge: (((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 3 && el.status === 1)).length + ((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 4 && el.status === 1)).length) ?
+                        (((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 3 && el.status === 1)).length + ((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 4 && el.status === 1)).length)
+                        :
+                        null,
                     tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
                         <HistoryIcon width={20} height={20}/>
                 }}

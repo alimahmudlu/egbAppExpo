@@ -25,7 +25,7 @@ export function ApiProvider({children}) {
     const {t} = useTranslation();
 
     const request = async (props) => {
-        const { url, method = 'get', params = {}, headers = {}, } = props
+        const { url, method = 'get', params = {}, headers = {}, updateStatus = true } = props
         // const storageKey = `${method.toUpperCase()}:${url}${Object.keys(params).length > 0 ? `?${JSON.stringify(params)}` : ''}`;
         const storageKey = `${method.toUpperCase()}:${url}`;
 
@@ -59,11 +59,13 @@ export function ApiProvider({children}) {
 
             const resData = response.data;
 
-            try {
-                updateData(storageKey, resData)
-            } catch (e) {
-                console.warn('Cache write failed:', e);
-                updateData(storageKey, null)
+            if (updateStatus) {
+                try {
+                    updateData(storageKey, resData)
+                } catch (e) {
+                    console.warn('Cache write failed:', e);
+                    updateData(storageKey, null)
+                }
             }
 
             return resData;

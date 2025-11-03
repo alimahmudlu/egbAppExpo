@@ -706,6 +706,7 @@ i18n.use(initReactI18next).init({
                 overTime__description: "Overtime",
                 overTimeOut: "Overtime out",
                 normal: "Normal",
+                loadMore: "Load more",
 
                 checkInDate: "Check-in date",
                 checkOutDate: "Check-out date",
@@ -943,6 +944,7 @@ i18n.use(initReactI18next).init({
                 overTime__description: "Хотите подать заявку на сверхурочную работу",
                 overTimeOut: "Вне сверхурочной работы",
                 normal: "Нормальный",
+                loadMore: "Загрузить больше",
 
                 checkInDate: "Дата входа",
                 checkOutDate: "Дата выхода",
@@ -1180,6 +1182,7 @@ i18n.use(initReactI18next).init({
                 overTime__description: "Vaqt o'tishi bilan",
                 overTimeOut: "Qo'shimcha ish vaqti",
                 normal: "Oddiy",
+                loadMore: "Batafsil yuklash",
 
                 checkInDate: "Kirish sanasi",
                 checkOutDate: "Chiqish sanasi",

@@ -2,13 +2,11 @@ import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import {useAuth} from "@/hooks/useAuth";
 import {ActivityIndicator, View} from "react-native";
-import {registerForPushNotificationsAsync} from "@/utils/notification";
 import {useApi} from "@/hooks/useApi";
 import { useInitialRedirect } from '@/hooks/useInitialRedirect';
 
 export default function Index() {
     const { user, loading } = useAuth();
-    const {request} = useApi();
     const router = useRouter();
     const { setInitialRedirect } = useInitialRedirect(); // custom hook/context
 
@@ -21,16 +19,18 @@ export default function Index() {
             router.replace('/auth');
         }
         else {
-
             if (user?.role?.id === 1) {
                 setInitialRedirect(true);
                 router.replace('/employee');
             } else if (user?.role?.id === 2) {
                 setInitialRedirect(true);
                 router.replace('/timeKeeper');
-            } else {
+            } else if (user?.role?.id === 3) {
                 setInitialRedirect(true);
                 router.replace('/chief');
+            } else if (user?.role?.id === 999) {
+                setInitialRedirect(true);
+                router.replace('/admin');
             }
         }
     }, [user?.role.id, loading]);

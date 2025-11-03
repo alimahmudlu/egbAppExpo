@@ -20,19 +20,43 @@ import SgSectionProjectListItem from "@/components/sections/ProjectListItem/Proj
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
-    const [employeeActivities, setEmployeeActivities] = useState([]);
+    const [employeeActivitiesCheckIn, setEmployeeActivitiesCheckIn] = useState({});
+    const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState([]);
+
+    const [page, setPage] = useState(1);
+    const [pageCheckOut, setPageCheckOut] = useState(1);
+
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
+    const [activeTab, setActiveTab] = useState('checkIn');
 
     function getData(_filters = {}) {
         request({
-            url: '/timekeeper/history/list',
+            url: '/timekeeper/history/list/checkin',
             method: 'get',
-            params: {..._filters}
+            params: {
+                ..._filters,
+                page: page,
+                limit: 10
+            }
+        }).then().catch(err => {
+            console.log(err, 'apiservice control err')
+        });
+    }
+
+    function getDataCheckOut(_filters = {}) {
+        request({
+            url: '/timekeeper/history/list/checkout',
+            method: 'get',
+            params: {
+                ..._filters,
+                page: pageCheckOut,
+                limit: 10
+            }
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
@@ -51,15 +75,27 @@ export default function EmployeeDocsScreen() {
     }
 
     function handleFilters() {
-        getData({...filters, project: filters?.project?.id})
+        setPage(1)
+        setPageCheckOut(1)
     }
 
     useEffect(() => {
-        getData({...filters, project: filters?.project?.id})
+        setPage(1)
+        setPageCheckOut(1)
     }, [filters?.full_name])
 
+    useEffect(() => {
+        getData({...filters, project: filters?.project?.id})
+    }, [page, filters?.full_name])
+
+    useEffect(() => {
+        getDataCheckOut({...filters, project: filters?.project?.id})
+    }, [pageCheckOut, filters?.full_name])
+
     useFocusEffect(useCallback(() => {
-        getData();
+        setPage(1)
+        setPageCheckOut(1)
+        setActiveTab('checkIn')
 
         request({
             url: `/timekeeper/options/projects`, method: 'get',
@@ -78,8 +114,43 @@ export default function EmployeeDocsScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
-        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/history/list`]?.data)
-    }, [storeData?.cache?.[`GET:/timekeeper/history/list`]]);
+        setEmployeeActivitiesCheckIn((prevState) => {
+            if (page === 1) {
+                return {
+                    ...storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {}
+                }
+            }
+            else {
+                return {
+                    ...storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {},
+                    data: [...prevState?.data, ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data?.data || [])]
+                }
+            }
+        })
+    }, [storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]]);
+
+    useEffect(() => {
+        setEmployeeActivitiesCheckOut((prevState) => {
+            if (pageCheckOut === 1) {
+                return {
+                    ...storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {}
+                }
+            }
+            else {
+                return {
+                    ...storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {},
+                    data: [...prevState?.data, ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data?.data || [])]
+                }
+            }
+        })
+    }, [storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]]);
+
+    function handleMoreCheckIn() {
+        setPage(page + 1);
+    }
+    function handleMoreCheckOut() {
+        setPageCheckOut(pageCheckOut + 1);
+    }
 
 
     return (
@@ -96,10 +167,10 @@ export default function EmployeeDocsScreen() {
             }
         >
             <SgFilterTab
-                defaultTabId='checkIn'
+                defaultTabId={activeTab || 'checkIn'}
                 tabs={[
-                    {label: t('checkIn'), id: 'checkIn'},
-                    {label: t('checkOut'), id: 'checkOut'},
+                    {label: t('checkIn'), id: 'checkIn', onClick: setActiveTab},
+                    {label: t('checkOut'), id: 'checkOut', onClick: setActiveTab},
                 ]}
                 tabContent={[
                     {
@@ -116,8 +187,8 @@ export default function EmployeeDocsScreen() {
                                         />
                                     </View>
                                 </View>
-                                <View>
-                                    {employeeActivities?.filter(el => (el.type === 1 || el.type === 3)).map((emp, index) => (
+                                <View style={{gap: 8}}>
+                                    {((employeeActivitiesCheckIn || {}).data || [])?.map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
@@ -131,6 +202,16 @@ export default function EmployeeDocsScreen() {
                                             reason={emp.reject_reason}
                                         />
                                     ))}
+
+                                    <View style={{marginTop: 16}}>
+                                        <SgButton
+                                            onPress={handleMoreCheckIn}
+                                            bgColor={COLORS.primary}
+                                            color={COLORS.white}
+                                        >
+                                            {t('loadMore')}
+                                        </SgButton>
+                                    </View>
                                 </View>
                             </>
                         ),
@@ -138,6 +219,7 @@ export default function EmployeeDocsScreen() {
                     },
                     {
                         element: (
+                            // <></>
                             <>
                                 <View>
                                     <View style={{flex: 1}}>
@@ -150,14 +232,14 @@ export default function EmployeeDocsScreen() {
                                         />
                                     </View>
                                 </View>
-                                <View>
-                                    {employeeActivities?.filter(el => (el.type === 2 || el.type === 4)).map((emp, index) => (
+                                <View style={{gap: 8}}>
+                                    {((employeeActivitiesCheckOut || {}).data || [])?.map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
-                                            checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 4 ? t('overTime') : t('normal')}`}
+                                            checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}
@@ -165,6 +247,16 @@ export default function EmployeeDocsScreen() {
                                             reason={emp.reject_reason}
                                         />
                                     ))}
+
+                                    <View style={{marginTop: 16}}>
+                                        <SgButton
+                                            onPress={handleMoreCheckOut}
+                                            bgColor={COLORS.primary}
+                                            color={COLORS.white}
+                                        >
+                                            {t('loadMore')}
+                                        </SgButton>
+                                    </View>
                                 </View>
                             </>
                         ),

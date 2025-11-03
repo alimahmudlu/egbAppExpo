@@ -34,7 +34,6 @@ export default function TimeKeeperUserScreen() {
             url: `/chief/employee/details/${userId}`,
             method: 'get',
         }).then(res => {
-            console.log(res?.data, 'ree')
         }).catch(err => {
             console.log(err, 'err')
         })
