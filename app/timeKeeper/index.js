@@ -260,17 +260,19 @@ export default function EmployeeDashboardScreen() {
             ]}
             tabContent={[
                 {
-                    element: (employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => (
-                        <SgSectionEmployeeCard
-                            key={index}
-                            fullData={emp}
-                            title={emp?.employee?.full_name}
-                            role={emp?.employee?.role?.name}
-                            project={emp?.project?.name}
-                            checkType={emp?.is_manual ? t('manual') : t('auto')}
-                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                            image={emp?.employee?.image}
-                        />))), id: 'checkIn'
+                    element: (employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => {
+                        return (
+                            <SgSectionEmployeeCard
+                                key={index}
+                                fullData={emp}
+                                title={emp?.employee?.full_name}
+                                role={emp?.employee?.role?.name}
+                                project={emp?.project?.name}
+                                checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                image={emp?.employee?.image}
+                            />)
+                    })), id: 'checkIn'
                 },
                 {
                     element: (employeeActivities?.filter(el => el.type === 2 && el.status === 1 && el.completed_status === 0).map((emp, index) => (

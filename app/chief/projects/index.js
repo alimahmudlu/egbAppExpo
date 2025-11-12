@@ -24,7 +24,6 @@ export default function TasksScreen() {
             if (res.success) {
                 setProjectsList(res?.data);
             } else {
-                // Handle error response
                 console.log(res.message);
             }
         }).catch(err => {

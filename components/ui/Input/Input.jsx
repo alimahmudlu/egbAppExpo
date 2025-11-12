@@ -13,7 +13,8 @@ export default function SgInput({
   value,
   name,
     isInvalid = false,
-  onChangeText
+  onChangeText,
+    disabled = false,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [counter, setCounter] = useState(Number(value) || 0);
@@ -37,7 +38,8 @@ export default function SgInput({
               style={styles.input}
               placeholder={placeholder}
               secureTextEntry={!showPassword}
-              value={value}
+              value={value?.toString()}
+              readOnly={disabled}
               onChangeText={(e) => onChangeText({ name, value: e })}
               placeholderTextColor={COLORS.gray_400}
             />
@@ -52,7 +54,8 @@ export default function SgInput({
           <TextInput
             style={[styles.input, styles.textarea]}
             placeholder={placeholder}
-            value={value}
+            value={value?.toString()}
+            readOnly={disabled}
             onChangeText={(e) => onChangeText({ name, value: e })}
             placeholderTextColor={COLORS.gray_400}
             multiline
@@ -71,7 +74,8 @@ export default function SgInput({
             <TextInput
               style={[styles.input, styles.counterInput]}
               keyboardType="numeric"
-              value={counter.toString()}
+              value={counter?.toString()}
+              readOnly={disabled}
               onChangeText={handleChange}
               placeholderTextColor={COLORS.gray_400}
             />
@@ -88,7 +92,8 @@ export default function SgInput({
             <TextInput
               style={[styles.input]}
               keyboardType="numeric"
-              value={value}
+              value={value?.toString()}
+              readOnly={disabled}
               placeholder={placeholder}
               onChangeText={(e) => onChangeText({ name, value: e })}
               placeholderTextColor={COLORS.gray_400}
@@ -101,7 +106,8 @@ export default function SgInput({
           <TextInput
             style={styles.input}
             placeholder={placeholder}
-            value={value}
+            value={value?.toString()}
+            readOnly={disabled}
             onChangeText={(e) => onChangeText({ name, value: e })}
             placeholderTextColor={COLORS.gray_400}
           />

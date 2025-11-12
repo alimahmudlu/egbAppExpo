@@ -141,7 +141,7 @@ export default function EmployeeDocsScreen() {
                     />
                 </View>
             </View>
-            <View>
+            <View style={{gap: 8}}>
                 {employees?.map((emp, index) => (
                     <SgSectionEmployeeCard
                         key={index}

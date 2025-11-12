@@ -28,7 +28,7 @@ export default function Index() {
             } else if (user?.role?.id === 3) {
                 setInitialRedirect(true);
                 router.replace('/chief');
-            } else if (user?.role?.id === 999) {
+            } else if (user?.role?.id === 4) {
                 setInitialRedirect(true);
                 router.replace('/admin');
             }
