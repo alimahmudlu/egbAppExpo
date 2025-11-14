@@ -7,6 +7,8 @@ import DocsIcon from '@/assets/images/docs.svg';
 import DocsActiveIcon from '@/assets/images/docs-active.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
+import OvertimeIcon from '@/assets/images/overtime.svg';
+import OvertimeActiveIcon from '@/assets/images/overtime-active.svg';
 import {useTranslation} from "react-i18next";
 import {useSocket} from "@/hooks/useSocket";
 import {useAuth} from "@/hooks/useAuth";
@@ -75,8 +77,8 @@ export default function EmployeeTabLayout() {
                     title: t('tabBar__overTime'),
                     tabBarLabel: t('tabBar__overTime'),
                     headerTitle: t('tabBar__overTime'),
-                    tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
-                        <HomeIcon width={20} height={20}/>
+                    tabBarIcon: ({color, focused}) => focused ? <OvertimeActiveIcon width={20} height={20}/> :
+                        <OvertimeIcon width={20} height={20}/>
                 }}
             />
             <Tabs.Screen

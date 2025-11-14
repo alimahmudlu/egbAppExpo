@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, LayoutChangeEvent } from 'react-native';
+import {View, Text, TouchableOpacity, Animated, StyleSheet, LayoutChangeEvent, Platform} from 'react-native';
+import COLORS from "@/constants/colors";
 
 const CollapsibleView = ({ title, children }) => {
     const [collapsed, setCollapsed] = useState(true);
@@ -53,12 +54,29 @@ const CollapsibleView = ({ title, children }) => {
     );
 };
 
+const isAndroid = Platform.OS === 'android';
+
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
+        // borderWidth: 1,
+        // borderColor: '#ccc',
+        // borderRadius: 5,
         overflow: 'hidden',
+
+
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        // padding: 20,
+        marginVertical: 8,
+        marginHorizontal: 16,
+        // Modern Kölgə Effekti (Minimalist qalır)
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        elevation: 5,
+        borderWidth: isAndroid ? 0 : 0.5,
+        borderColor: isAndroid ? 'transparent' : COLORS.gray_200,
     },
     header: {
         padding: 15,
@@ -69,7 +87,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 18
+        fontSize: 18,
+        color: '#333333',
     },
     collapsibleContainer: {
         overflow: 'hidden',

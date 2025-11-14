@@ -1,6 +1,6 @@
 import {Tabs} from 'expo-router';
 import React, {useEffect} from 'react';
-import {TouchableOpacity, Text, Platform} from 'react-native';
+import {Platform} from 'react-native';
 import {useAuth} from '@/hooks/useAuth';
 import HomeActiveIcon from "@/assets/images/home-active.svg";
 import HomeIcon from "@/assets/images/home.svg";
@@ -17,7 +17,6 @@ import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
 
 export default function WorkerTabLayout() {
-    const {logout} = useAuth();
     const {changeRowData} = useData();
     const {socket} = useSocket();
     const {t} = useTranslation()

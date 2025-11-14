@@ -16,6 +16,7 @@ import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import FilterIcon from "@/assets/images/filter.svg";
 import SgInput from "@/components/ui/Input/Input";
 import SgSelect from "@/components/ui/Select/Select";
+import CollapsibleView from "@/components/ui/Collapse/Collapse";
 
 const isAndroid = Platform.OS === 'android';
 
@@ -30,22 +31,24 @@ const ProjectItem = ({ project }) => {
     const {t} = useTranslation()
 
     return (
-        <View style={styles.card}>
-            <Text style={styles.projectName}>{project.name}</Text>
-            <Text style={styles.teamHeader}>{t('teamMembers')} ({project.members.length})</Text>
+        <CollapsibleView title={<Text style={styles.projectName}>{project.name}</Text>}>
+            {/*<View style={styles.card}>*/}
+            {/*    <Text style={styles.projectName}>{project.name}</Text>*/}
+                <Text style={styles.teamHeader}>{t('teamMembers')} ({project.members.length})</Text>
 
-            {/* 3. İşçi Object-lərinin Map ilə Ekranlaşdırılması */}
-            <View style={styles.employeesContainer}>
-                {project?.members?.sort((a, b) => b?.role?.id - a?.role?.id).map((employee, index) => (
-                    <EmployeeListItem
-                        key={index}
-                        name={employee?.full_name || 'N/A'}
-                        role={employee?.role?.name || 'N/A'}
-                        isLast={index === project?.members?.length - 1}
-                    />
-                ))}
-            </View>
-        </View>
+                {/* 3. İşçi Object-lərinin Map ilə Ekranlaşdırılması */}
+                <View style={styles.employeesContainer}>
+                    {project?.members?.sort((a, b) => b?.role?.id - a?.role?.id).map((employee, index) => (
+                        <EmployeeListItem
+                            key={index}
+                            name={employee?.full_name || 'N/A'}
+                            role={employee?.role?.name || 'N/A'}
+                            isLast={index === project?.members?.length - 1}
+                        />
+                    ))}
+                </View>
+            {/*</View>*/}
+        </CollapsibleView>
     );
 };
 

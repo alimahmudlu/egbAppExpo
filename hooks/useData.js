@@ -101,9 +101,9 @@ export const DataProvider = ({ children }) => {
       }
     }));
   }
-  const changeRowData = async (key, data, id, index) => {
+  const changeRowData = async (key, data, id, index, pagination = false) => {
     setStoreData(prev => {
-      const oldData = prev.cache?.[key]?.data;
+      const oldData = pagination ? prev.cache?.[key]?.data?.data || [] : prev.cache?.[key]?.data;
       if (!oldData) return prev;
 
       const updatedData = oldData.map(item =>
@@ -116,7 +116,13 @@ export const DataProvider = ({ children }) => {
           ...prev.cache,
           [key]: {
             ...prev.cache?.[key],
-            data: updatedData
+            data: pagination ?
+                {
+                    ...prev.cache?.[key]?.data,
+                    data: updatedData
+                }
+                :
+                updatedData
           }
         }
       };

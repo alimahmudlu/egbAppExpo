@@ -10,7 +10,16 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 12,
     width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-between",
   },
+    bottomRow: {
+        flex: 0,
+        width: "70%",
+    },
+    right: {
+      // flex: 1,
+    },
   vectorBackground: {
     position: 'absolute',
     top: 45,
@@ -60,6 +69,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 50,
+      flex: 0,
+      width: 'auto'
   },
   logoutText: {
     fontFamily: "Inter",
@@ -71,10 +82,10 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: "Inter",
-    fontSize: 30,
+    fontSize: 20,
     fontStyle: "normal",
     fontWeight: 700,
-    lineHeight: 38,
+    lineHeight: 28,
     color: COLORS.white,
   },
   role: {

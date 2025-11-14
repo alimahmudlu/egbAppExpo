@@ -136,22 +136,20 @@ export default function SgSectionEmployeeCard(props) {
     const today = moment().format("YYYY-MM-DD");
 
     const isManualCheckoutAvailable = () => {
-        const isToday = moment(timeRaw).format("YYYY-MM-DD") === today;
-        const isPastDay = moment(moment(timeRaw).format("YYYY-MM-DD")).isBefore(today);
+        // const isToday = moment(timeRaw).format("YYYY-MM-DD") === today;
+        // const isPastDay = moment(moment(timeRaw).format("YYYY-MM-DD")).isBefore(today);
+        //
+        // if (isPastDay) return true;
+        // if (isToday && now.isAfter(moment().set({ hour: 6, minute: 0 }))) return true;
+        //
+        // return false;
 
-        if (isPastDay) return true;
-        if (isToday && now.isAfter(moment().set({ hour: 6, minute: 0 }))) return true;
+        return fullData?.type === 2 || fullData?.type === 1;
 
-        return false;
     };
 
     const isManualOverTimeCheckoutAvailable = () => {
-        const isToday = moment(timeRaw).format("YYYY-MM-DD") === today;
-        const isPastDay = moment(moment(timeRaw).format("YYYY-MM-DD")).isBefore(today);
-
-        if (isPastDay) return true;
-
-        return false;
+        return fullData?.type === 3 || fullData?.type === 4;
     };
 
 
@@ -377,13 +375,13 @@ export default function SgSectionEmployeeCard(props) {
                 longitude: locationData?.longitude,
                 latitude: locationData?.latitude,
                 work_time: null,
-                activity_id: fullData?.id,
+                activity_id: manual ? fullData?.checkin?.id : fullData?.id,
                 confirm_type: confirmType
             }
         }).then(res => {
             if (manual) {
                 // console.log('manual', res?.data, res?.data?.checkin?.id, 'idr', storeData?.cache?.[`GET:/timekeeper/manual/list`])
-                changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id')
+                changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id', true)
             }
             setButtonStatus(false)
             if(isManualCheckoutAvailable() && atWork) {
@@ -488,6 +486,13 @@ export default function SgSectionEmployeeCard(props) {
                         : null
                     }
                     {(isManualCheckoutAvailable() && atWork) ?
+                        <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
+                                          onPress={toggleUserOperationModal}>
+                            <Text style={[styles.infoText, styles.rejectText]}>{t('manualCheckOut')}</Text>
+                        </TouchableOpacity>
+                        : null
+                    }
+                    {(isManualOverTimeCheckoutAvailable() && atWork) ?
                         <TouchableOpacity style={[styles.infoButton, styles.rejectButton]}
                                           onPress={toggleUserOperationModal}>
                             <Text style={[styles.infoText, styles.rejectText]}>{t('manualCheckOut')}</Text>
@@ -659,15 +664,29 @@ export default function SgSectionEmployeeCard(props) {
                     <View style={styles.modalGroup}>
                         {manual ?
                             <View style={styles.modalGroupButtons}>
-                                {!fullData?.checkin?.latitude ?
-                                    <SgButton
-                                        disabled={buttonStatus}
-                                        color={COLORS.error_700}
-                                        bgColor={COLORS.error_50}
-                                        onPress={() => handleCheckInRequest('checkin')}
-                                    >
-                                        {t('checkIn')}
-                                    </SgButton>
+                                {(!fullData?.checkin?.latitude && !fullData?.overtimecheckin?.latitude) ?
+                                    <>
+                                        <SgButton
+                                            disabled={buttonStatus}
+                                            color={COLORS.white}
+                                            bgColor={COLORS.brand_600}
+                                            onPress={() => handleCheckInRequest('checkin')}
+                                        >
+                                            {t('checkIn')}
+                                        </SgButton>
+
+                                        {!fullData?.overtimecheckin?.latitude ?
+                                            <SgButton
+                                                disabled={buttonStatus}
+                                                color={COLORS.white}
+                                                bgColor={COLORS.brand_600}
+                                                onPress={() => handleCheckInRequest('overtime_checkin')}
+                                            >
+                                                {t('overtimeCheckIn')}
+                                            </SgButton>
+                                            : null
+                                        }
+                                    </>
                                     : null
                                 }
                                 {(!fullData?.checkout?.latitude && fullData?.checkin?.latitude && timeRaw) ?

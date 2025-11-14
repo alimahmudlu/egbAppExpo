@@ -949,6 +949,13 @@ i18n.use(initReactI18next).init({
                 busSchedule: "Bus Schedule",
                 busSchedule__description: "Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule ",
                 busSchedule__archive: "Reports",
+
+                enterApplicationStatus: 'Enter application status',
+                applicationStatus: 'Application status',
+                draft: 'Draft',
+                done: 'Done',
+                iosUser: 'IOS Users',
+                overtimeCheckIn: 'Overtime',
             }
         },
         ru: {

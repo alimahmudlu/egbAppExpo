@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, Pressable} from 'react-native';
+import {View, StyleSheet, Text, Pressable, TouchableOpacity} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
@@ -18,22 +18,36 @@ import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
 import FilterIcon from "@/assets/images/filter.svg";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
+import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
-    const [employees, setEmployees] = useState([]);
+    const [employees, setEmployees] = useState({});
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
+    const [page, setPage] = useState(1);
+    const [getDataStatus, setDataStatus] = useState(false)
 
     function getData(_filters = {}) {
+
+        console.log({
+            ..._filters,
+            page: page,
+            limit: 10
+        }, 'filters')
+
         request({
             url: '/timekeeper/manual/list',
             method: 'get',
-            params: {..._filters}
+            params: {
+                ..._filters,
+                page: page,
+                limit: 10
+            }
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
@@ -54,15 +68,17 @@ export default function EmployeeDocsScreen() {
     }
 
     function handleFilters() {
-        getData({...filters, project: filters?.project?.id})
+        setPage(1)
+        setDataStatus(!getDataStatus)
     }
 
     useEffect(() => {
-        getData({...filters, project: filters?.project?.id})
-    }, [filters?.full_name, filters?.project?.id])
+        getData({...filters, project: filters?.project?.id, application_status: filters?.application_status?.id})
+    }, [page, getDataStatus])
 
     useFocusEffect(useCallback(() => {
-        getData();
+        setPage(1);
+        setDataStatus(!getDataStatus)
 
         request({
             url: `/timekeeper/options/projects`, method: 'get',
@@ -81,8 +97,34 @@ export default function EmployeeDocsScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
-        setEmployees(storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data)
+        // setEmployees(storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data)
+
+        setEmployees((prevState) => {
+            if (page === 1) {
+                return {
+                    ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
+                }
+            }
+            else {
+                console.log(typeof storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page, typeof page, 'page')
+                if (storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page == page) {
+                    return {
+                        ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
+                    }
+                }
+                else {
+                    return {
+                        ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {},
+                        data: [...prevState?.data, ...(storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.data || [])]
+                    }
+                }
+            }
+        })
     }, [storeData?.cache?.[`GET:/timekeeper/manual/list`]]);
+
+    function handleMore() {
+        setPage(page + 1);
+    }
 
 
     return (
@@ -91,70 +133,40 @@ export default function EmployeeDocsScreen() {
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
                         title={t("manualCheckInAndCheckOut")}
+                        icon="filter"
+                        onPress={toggleFilterModal}
                     />
                 </View>
-
             }
         >
-            <View>
-                <SgButton
-                    onPress={resetFilters}
-                    color={COLORS.brand_700}
-                    style={{
-                        flex: 0,
-                        width: 'auto',
-                        marginLeft: 'auto',
-                        paddingVertical: 0,
-                        paddingHorizontal: 0,
-                        gap: 7
-                    }}
-
-                >
-                    {t('clearFilters')}
-                    <ReloadArrow width={18} height={18} style={{marginLeft: 7}}/>
-                </SgButton>
-                <View style={{flex: 1}}>
-                    <SgSelect
-                        label={t("project")}
-                        placeholder={t("enterProject")}
-                        modalTitle={t("selectProject")}
-                        value={filters?.project}
-                        name='project'
-                        onChangeText={handleChange}
-                        list={(projectsList || []).map((project, index) => ({
-                            id: project?.id, name: project?.name, render: <SgSectionProjectListItem
-                                key={index}
-                                title={project.name}
-                                staffData={(project?.members || []).filter(el => el.status)}
-                                id={project.id}
-                            />
-                        }))}
-                    />
-                </View>
-                <View style={{flex: 1}}>
-                    <SgInput
-                        label={t('employeeName')}
-                        placeholder={t('employeeName_placeholder')}
-                        value={filters?.full_name}
-                        name='full_name'
-                        onChangeText={handleChange}
-                    />
-                </View>
-            </View>
             <View style={{gap: 8}}>
-                {employees?.map((emp, index) => (
+                {((employees || {}).data || [])?.map((emp, index) => (
                     <SgSectionEmployeeCard
                         key={index}
                         fullData={emp}
                         title={emp?.full_name}
                         role={emp?.role?.name}
-                        timeRaw={emp?.checkin?.review_time}
-                        time={emp?.checkin?.request_time ? moment(emp?.checkin?.request_time).format('MM-DD-YYYY HH:mm') : ""}
+                        timeRaw={emp?.checkin?.review_time || emp?.overtimecheckin?.request_time}
+                        time={emp?.checkin?.request_time ? moment(emp?.checkin?.request_time).format('MM-DD-YYYY HH:mm') : (emp?.overtimecheckin?.request_time ? moment(emp?.overtimecheckin?.request_time).format('MM-DD-YYYY HH:mm') : '')}
                         image={emp?.image}
                         editable={true}
                         manual={true}
+                        checkType={emp?.checkin?.request_time ? 'Manual Check-In' : (emp?.overtimecheckin?.request_time ? 'Manual Overtime Check-In' : '')}
                     />
                 ))}
+
+                {((employees || {}).total || 0) > page * 10 ?
+                    <View style={{marginTop: 16}}>
+                        <SgButton
+                            onPress={handleMore}
+                            bgColor={COLORS.primary}
+                            color={COLORS.white}
+                        >
+                            {t('loadMore')}
+                        </SgButton>
+                    </View>
+                    : null
+                }
             </View>
 
             <SgPopup
@@ -194,6 +206,15 @@ export default function EmployeeDocsScreen() {
 
                     <View style={{gap: 16}}>
                         <View style={{flex: 1}}>
+                            <SgInput
+                                label={t('employeeName')}
+                                placeholder={t('employeeName_placeholder')}
+                                value={filters?.full_name}
+                                name='full_name'
+                                onChangeText={handleChange}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
                             <SgSelect
                                 label={t("project")}
                                 placeholder={t("enterProject")}
@@ -211,24 +232,47 @@ export default function EmployeeDocsScreen() {
                                 }))}
                             />
                         </View>
-                        {/*<View style={{flex: 1}}>*/}
-                        {/*    <SgDatePicker*/}
-                        {/*        label={t('startDate')}*/}
-                        {/*        placeholder="dd/mm/yyyy - hh/mm"*/}
-                        {/*        value={filters?.start_date}*/}
-                        {/*        name='start_date'*/}
-                        {/*        onChangeText={handleChange}*/}
-                        {/*    />*/}
-                        {/*</View>*/}
-                        {/*<View style={{flex: 1}}>*/}
-                        {/*    <SgDatePicker*/}
-                        {/*        label={t('endDate')}*/}
-                        {/*        placeholder="dd/mm/yyyy - hh/mm"*/}
-                        {/*        value={filters?.end_date}*/}
-                        {/*        name='end_date'*/}
-                        {/*        onChangeText={handleChange}*/}
-                        {/*    />*/}
-                        {/*</View>*/}
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("applicationStatus")}
+                                placeholder={t("enterApplicationStatus")}
+                                modalTitle={t("selectApplicationStatus")}
+                                value={filters?.application_status}
+                                name='application_status'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: '0',
+                                        name: 'draft',
+                                        render: <View><Text>{t('draft')}</Text></View>
+                                    },
+                                    {
+                                        id: '1',
+                                        name: 'done',
+                                        render: <View><Text>{t('done')}</Text></View>
+                                    }
+                                ]}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                style={styles.checkboxContainer}
+                                onPress={() => handleChange({
+                                    name: 'ios',
+                                    value: filters?.ios ? '0' : '1'
+                                })}
+                            >
+                                <SgCheckbox
+                                    checked={filters?.ios === '1'}
+                                    onToggle={() => handleChange({
+                                        name: 'ios',
+                                        value: filters?.ios ? '0' : '1',
+                                    })}
+                                />
+                                <Text style={styles.checkboxLabel}>{t('iosUser')}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </SgPopup>
@@ -360,5 +404,25 @@ const styles = StyleSheet.create({
     },
     reopenButtonText: {
         color: '#fff',
+    },
+
+
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.gray_200,
+    },
+    checkboxLabel: {
+        fontFamily: 'Inter',
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 600,
+        lineHeight: 20,
+        color: COLORS.gray_800
     },
 });

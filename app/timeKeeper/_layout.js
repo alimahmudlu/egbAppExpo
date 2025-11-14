@@ -5,6 +5,10 @@ import HomeActiveIcon from "@/assets/images/home-active.svg";
 import HomeIcon from "@/assets/images/home.svg";
 import HistoryIcon from '@/assets/images/history.svg';
 import HistoryActiveIcon from '@/assets/images/history-active.svg';
+import OvertimeIcon from '@/assets/images/overtime.svg';
+import OvertimeActiveIcon from '@/assets/images/overtime-active.svg';
+import ManualIcon from '@/assets/images/manual.svg';
+import ManualActiveIcon from '@/assets/images/manual-active2.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
 import {useData} from "@/hooks/useData";
@@ -77,8 +81,8 @@ export default function TimeKeeperTabLayout() {
                     title: t('tabBar__manual'),
                     tabBarLabel: t('tabBar__manual'),
                     headerTitle: t('tabBar__manual'),
-                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
-                        <HistoryIcon width={20} height={20}/>
+                    tabBarIcon: ({color, focused}) => focused ? <ManualActiveIcon width={20} height={20}/> :
+                        <ManualIcon width={20} height={20}/>
                 }}
             />
             <Tabs.Screen
@@ -91,8 +95,8 @@ export default function TimeKeeperTabLayout() {
                         (((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 3 && el.status === 1)).length + ((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 4 && el.status === 1)).length)
                         :
                         null,
-                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
-                        <HistoryIcon width={20} height={20}/>
+                    tabBarIcon: ({color, focused}) => focused ? <OvertimeActiveIcon width={20} height={20}/> :
+                        <OvertimeIcon width={20} height={20}/>
                 }}
             />
             <Tabs.Screen
