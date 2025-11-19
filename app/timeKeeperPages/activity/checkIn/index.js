@@ -120,6 +120,7 @@ export default function TimeKeeperUserScreen() {
                         time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                         image={emp?.employee?.image}
                         editable={false}
+                        project={emp?.project?.name}
                         status={emp.status}
                         reason={emp.reject_reason}
                     />

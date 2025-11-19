@@ -30,16 +30,10 @@ export default function EmployeeDocsScreen() {
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
     const [page, setPage] = useState(1);
+    const [oldPage, setOldPage] = useState(1);
     const [getDataStatus, setDataStatus] = useState(false)
 
     function getData(_filters = {}) {
-
-        console.log({
-            ..._filters,
-            page: page,
-            limit: 10
-        }, 'filters')
-
         request({
             url: '/timekeeper/manual/list',
             method: 'get',
@@ -52,8 +46,6 @@ export default function EmployeeDocsScreen() {
             console.log(err, 'apiservice control err')
         });
     }
-
-
 
     function toggleFilterModal() {
         setFilterModal(!filterModal);
@@ -100,14 +92,15 @@ export default function EmployeeDocsScreen() {
         // setEmployees(storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data)
 
         setEmployees((prevState) => {
+            console.log(page, 'page', storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page)
             if (page === 1) {
                 return {
                     ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
                 }
             }
             else {
-                console.log(typeof storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page, typeof page, 'page')
-                if (storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page == page) {
+                if (storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page == oldPage) {
+                    setOldPage(page)
                     return {
                         ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
                     }
@@ -124,6 +117,7 @@ export default function EmployeeDocsScreen() {
 
     function handleMore() {
         setPage(page + 1);
+        setOldPage(page);
     }
 
 
@@ -150,6 +144,7 @@ export default function EmployeeDocsScreen() {
                         time={emp?.checkin?.request_time ? moment(emp?.checkin?.request_time).format('MM-DD-YYYY HH:mm') : (emp?.overtimecheckin?.request_time ? moment(emp?.overtimecheckin?.request_time).format('MM-DD-YYYY HH:mm') : '')}
                         image={emp?.image}
                         editable={true}
+                        project={emp?.project?.name}
                         manual={true}
                         checkType={emp?.checkin?.request_time ? 'Manual Check-In' : (emp?.overtimecheckin?.request_time ? 'Manual Overtime Check-In' : '')}
                     />

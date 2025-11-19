@@ -57,6 +57,7 @@ request({
                     editable={false}
                     status={emp.status}
                     reason={emp.reject_reason}
+                    project={emp?.project?.name}
                 />
                 /*<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}} key={index}>
                     <SgListUserItem

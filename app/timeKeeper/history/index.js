@@ -194,12 +194,14 @@ export default function EmployeeDocsScreen() {
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
+                                            project={emp?.project?.name}
                                             checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}
                                             status={emp.status}
                                             reason={emp.reject_reason}
+                                            project={emp?.project?.name}
                                         />
                                     ))}
 
@@ -239,6 +241,7 @@ export default function EmployeeDocsScreen() {
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
+                                            project={emp?.project?.name}
                                             checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}

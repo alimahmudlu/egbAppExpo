@@ -252,6 +252,7 @@ export default function TimeKeeperUserScreen() {
                                             editable={false}
                                             status={emp.status}
                                             reason={emp.reject_reason}
+                                            project={emp?.project?.name}
                                         />
                                     ))}
                                 </View>
@@ -275,6 +276,7 @@ export default function TimeKeeperUserScreen() {
                                             editable={false}
                                             status={emp.status}
                                             reason={emp.reject_reason}
+                                            project={emp?.project?.name}
                                         />
                                     ))}
                                 </View>
