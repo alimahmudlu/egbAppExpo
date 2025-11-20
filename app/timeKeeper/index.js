@@ -3,11 +3,11 @@ import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {Platform, StyleSheet, Text} from "react-native";
+import {Platform, StyleSheet, Text, View} from "react-native";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
@@ -18,43 +18,42 @@ import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCard from "@/components/ui/Card/Card";
 import SgUtilsTimeDifference from "@/utils/TimeDifference";
 import Clock from "@/assets/images/clock.svg";
+import SgInput from "@/components/ui/Input/Input";
+import SgSelect from "@/components/ui/Select/Select";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
+import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
+import FilterIcon from "@/assets/images/filter.svg";
+import SgButton from "@/components/ui/Button/Button";
+import COLORS from "@/constants/colors";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import SgPopup from "@/components/ui/Modal/Modal";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
     const {request} = useApi();
     const [employeeActivities, setEmployeeActivities] = useState([]);
+    const [filters, setFilters] = useState({})
     const {storeData, insertData, removeRowData, changeAddRowData, setStoreData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
+    const [filterModal, setFilterModal] = useState(false)
 
 
-
-
-    useFocusEffect(useCallback(() => {
+    function getData(_filters = {}) {
         request({
-            url: '/timekeeper/activity/list', method: 'get'
+            url: '/timekeeper/activity/list',
+            method: 'get',
+            params: {..._filters}
         }).then(res => {
         }).catch(err => {
             console.log(err, 'apiservice control err')
         });
+    }
 
-        /*request({
-            url: `/timekeeper/activity/checkin`,
-            method: 'get',
-            params: {start_date: moment().startOf('day').format(), end_date: moment().endOf('day').format()},
-        }).then().catch(err => {
-            console.log(err, 'apiservice control err')
-        });
-
-        request({
-            url: `/timekeeper/activity/checkout`,
-            method: 'get',
-            params: {start_date: moment().startOf('day').format(), end_date: moment().endOf('day').format()},
-        }).then().catch(err => {
-            console.log(err, 'apiservice control err')
-        });*/
-
+    useFocusEffect(useCallback(() => {
+        getData({...filters, project: filters?.project?.id})
 
         return () => {};
     }, [refreshKey]));
@@ -98,6 +97,8 @@ export default function EmployeeDashboardScreen() {
     }, [storeData?.cache?.['GET:/timekeeper/activity/list']])
 
 
+    const [activeTab, setActiveTab] = useState('checkIn');
+    const [projectsList, setProjectsList] = useState([]);
     const [checkIn, setCheckIn] = useState({});
     const [checkOut, setCheckOut] = useState({});
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
@@ -122,6 +123,19 @@ export default function EmployeeDashboardScreen() {
                     checkIn: null, checkOut: null,
                 }
             }));
+        })
+
+        request({
+            url: `/timekeeper/options/projects`, method: 'get',
+        }).then(res => {
+            if (res.success) {
+                setProjectsList(res?.data);
+            } else {
+                // Handle error response
+                console.log(res.message);
+            }
+        }).catch(err => {
+            console.log(err);
         })
 
         return () => {};
@@ -163,20 +177,37 @@ export default function EmployeeDashboardScreen() {
         setRejectInfoModal(!rejectInfoModal);
     }
 
+    function handleChange(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
+
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
+    }
+
+    function resetFilters() {
+        setFilters({});
+    }
+
+    function handleFilters() {
+        getData({...filters, project: filters?.project?.id})
+    }
+
     useEffect(() => {
         // Alert.alert('checkIn change')
         setCheckIn(storeData?.checkIn)
         setCheckOut(storeData?.checkOut)
     }, [storeData?.checkIn, storeData?.checkOut])
 
-    return (<SgTemplateScreen
-        head={<SgTemplateHeader
-            name={user?.full_name}
-            role={user?.role?.name}
-            position={user?.position}
-            profileImage={''}
-        />}
-    >
+    return (
+        <SgTemplateScreen
+            head={<SgTemplateHeader
+                name={user?.full_name}
+                role={user?.role?.name}
+                position={user?.position}
+                profileImage={''}
+            />}
+        >
 
         <SgCheckInOutGroup>
             <SgCheckInOutCard
@@ -213,14 +244,21 @@ export default function EmployeeDashboardScreen() {
 
         <SgCard
             title={t('workTime')}
-            time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
-                startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
+            time={checkOut?.completed_status ?
+                checkIn?.work_time :
+                <SgUtilsTimeDifference
+                    startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}
+                />
+            }
             icon={Clock}
         />
 
-        <SgCard>
-            <Text style={styles.title}>{t('requests')}</Text>
-        </SgCard>
+        <SgNoticeCard
+            title={t('requests')}
+            buttonText={<FilterIcon width={20} height={20} />}
+            bgButton="lightSuccess"
+            onClick={toggleFilterModal}
+        />
 
         <SgCheckInOutGroup>
             <SgSectionInfoCard
@@ -240,22 +278,25 @@ export default function EmployeeDashboardScreen() {
         </SgCheckInOutGroup>
 
         <SgFilterTab
-            defaultTabId='checkIn'
+            defaultTabId={activeTab || 'checkIn'}
             tabs={[
                 {
                     label: t('checkIn'),
                     id: 'checkIn',
-                    count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length
+                    count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length,
+                    onClick: setActiveTab
                 },
                 {
                     label: t('checkOut'),
                     id: 'checkOut',
-                    count: employeeActivities?.filter(el => el.type === 2 && el.status === 1 && el.completed_status === 0)?.length
+                    count: employeeActivities?.filter(el => el.type === 2 && el.status === 1 && el.completed_status === 0)?.length,
+                    onClick: setActiveTab
                 },
                 {
                     label: t('atWork'),
                     id: 'atWork',
-                    count: employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1))?.length
+                    count: employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1))?.length,
+                    onClick: setActiveTab
                 }
             ]}
             tabContent={[
@@ -289,23 +330,95 @@ export default function EmployeeDashboardScreen() {
                 },
                 {
                     element:
-                        (employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1)).map((emp, index) => (
-                        <SgSectionEmployeeCard
-                            key={index}
-                            fullData={emp}
-                            atWork={emp.type === 1 && emp.status === 2 && emp.completed_status === 0}
-                            title={emp?.employee?.full_name}
-                            role={emp?.employee?.role?.name}
-                            project={emp?.project?.name}
-                            checkType={emp?.is_manual ? t('manual') : t('auto')}
-                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                            timeRaw={emp.request_time}
-                            image={emp?.employee?.image}
-                            editable={false}
-                        />))), id: 'atWork'
+                        <>
+                            <View style={{gap: 8}}>
+                                {(employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1)).map((emp, index) => (
+                                    <SgSectionEmployeeCard
+                                        key={index}
+                                        fullData={emp}
+                                        atWork={emp.type === 1 && emp.status === 2 && emp.completed_status === 0}
+                                        title={emp?.employee?.full_name}
+                                        role={emp?.employee?.role?.name}
+                                        project={emp?.project?.name}
+                                        checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                        time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                        timeRaw={emp.request_time}
+                                        image={emp?.employee?.image}
+                                        editable={false}
+                                    />)))}
+                            </View>
+                        </>,
+                    id: 'atWork'
                 }
             ]}
         />
+
+            <SgPopup
+                visible={filterModal}
+                onClose={toggleFilterModal}
+                footerButton={
+                    <SgButton
+                        onPress={handleFilters}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        {t('accept')}
+                    </SgButton>
+                }
+            >
+                <View style={{paddingBottom: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+                        <SgButton
+                            onPress={resetFilters}
+                            color={COLORS.brand_700}
+                            style={{
+                                flex: 0,
+                                width: 'auto',
+                                marginLeft: 'auto',
+                                paddingVertical: 0,
+                                paddingHorizontal: 0,
+                                gap: 7
+                            }}
+
+                        >
+                            {t('clearFilters')}
+                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                        </SgButton>
+                    </View>
+
+                    <View style={{gap: 16}}>
+                        <View style={{flex: 1}}>
+                            <SgInput
+                                label={t('employeeName')}
+                                placeholder={t('employeeName_placeholder')}
+                                value={filters?.full_name}
+                                name='full_name'
+                                onChangeText={handleChange}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("project")}
+                                placeholder={t("enterProject")}
+                                modalTitle={t("selectProject")}
+                                value={filters?.project}
+                                name='project'
+                                onChangeText={handleChange}
+                                list={(projectsList || []).map((project, index) => ({
+                                    id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                        key={index}
+                                        title={project.name}
+                                        staffData={(project?.members || []).filter(el => el.status)}
+                                        id={project.id}
+                                    />
+                                }))}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </SgPopup>
     </SgTemplateScreen>);
 }
 

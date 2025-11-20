@@ -41,7 +41,8 @@ export default function EmployeeDocsScreen() {
                 ..._filters,
                 page: page,
                 limit: 10
-            }
+            },
+            pagination: true
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
@@ -92,7 +93,6 @@ export default function EmployeeDocsScreen() {
         // setEmployees(storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data)
 
         setEmployees((prevState) => {
-            console.log(page, 'page', storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page)
             if (page === 1) {
                 return {
                     ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
@@ -100,15 +100,15 @@ export default function EmployeeDocsScreen() {
             }
             else {
                 if (storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page == oldPage) {
-                    setOldPage(page)
                     return {
                         ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
                     }
                 }
                 else {
+                    setOldPage(page)
+
                     return {
-                        ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {},
-                        data: [...prevState?.data, ...(storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.data || [])]
+                        ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
                     }
                 }
             }

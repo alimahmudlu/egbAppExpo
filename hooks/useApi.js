@@ -20,12 +20,12 @@ const api = axios.create({
 const ApiContext = createContext(null);
 
 export function ApiProvider({children}) {
-    const { storeData, updateData, insertLoading, removeLoading, } = useData();
+    const { storeData, updateData, insertLoading, updateDataWithPagination, removeLoading, } = useData();
     const { accessToken } = useAuth();
     const {t} = useTranslation();
 
     const request = async (props) => {
-        const { url, method = 'get', params = {}, headers = {}, updateStatus = true } = props
+        const { url, method = 'get', params = {}, headers = {}, updateStatus = true, pagination = false } = props
         // const storageKey = `${method.toUpperCase()}:${url}${Object.keys(params).length > 0 ? `?${JSON.stringify(params)}` : ''}`;
         const storageKey = `${method.toUpperCase()}:${url}`;
 
@@ -44,7 +44,6 @@ export function ApiProvider({children}) {
         try {
             insertLoading(storageKey)
 
-
             // Make API call to authenticate
             const response = await api({
                 url,
@@ -60,11 +59,16 @@ export function ApiProvider({children}) {
             const resData = response.data;
 
             if (updateStatus) {
-                try {
-                    updateData(storageKey, resData)
-                } catch (e) {
-                    console.warn('Cache write failed:', e);
-                    updateData(storageKey, null)
+                if (pagination) {
+                    updateDataWithPagination(storageKey, resData, 'id')
+                }
+                else {
+                    try {
+                        updateData(storageKey, resData)
+                    } catch (e) {
+                        console.warn('Cache write failed:', e);
+                        updateData(storageKey, null)
+                    }
                 }
             }
 

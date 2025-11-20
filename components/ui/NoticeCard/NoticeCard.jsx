@@ -30,6 +30,9 @@ export default function SgNoticeCard({ icon, title, buttonText, bgCard, bgButton
     case 'success':
       buttonBackground = COLORS.brand_600;
       break;
+    case 'lightSuccess':
+      buttonBackground = COLORS.brand_50;
+      break;
     case 'danger':
       buttonBackground = COLORS.error_600;
       break;

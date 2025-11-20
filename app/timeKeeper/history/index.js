@@ -201,7 +201,6 @@ export default function EmployeeDocsScreen() {
                                             editable={false}
                                             status={emp.status}
                                             reason={emp.reject_reason}
-                                            project={emp?.project?.name}
                                         />
                                     ))}
 

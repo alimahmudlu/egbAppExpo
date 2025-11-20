@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.0.61",
+    "version": "0.0.62",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
@@ -33,7 +33,7 @@ export default {
       package: "com.egb.egb",
       edgeToEdgeEnabled: true,
       usesCleartextTraffic: true,
-        versionCode: 10,
+        versionCode: 11,
       adaptiveIcon: {
         foregroundImage: "./assets/images/icon-white.png",
         backgroundColor: "#0B322F"
