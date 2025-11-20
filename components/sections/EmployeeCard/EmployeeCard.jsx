@@ -38,7 +38,7 @@ export default function SgSectionEmployeeCard(props) {
     const [acceptedCheckInModal, setAcceptedCheckInModal] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
     const { accessToken, user } = useAuth();
-    const { removeRowData, insertData, changeRowData, changeAddRowData, storeData } = useData();
+    const { removeRowData, insertData, changeRowData, changeAddRowData, storeData, removeRowFromPaginationData } = useData();
     const {request} = useApi();
     const [clickType, setClickType] = useState(null)
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
@@ -381,7 +381,8 @@ export default function SgSectionEmployeeCard(props) {
         }).then(res => {
             if (manual) {
                 // console.log('manual', res?.data, res?.data?.checkin?.id, 'idr', storeData?.cache?.[`GET:/timekeeper/manual/list`])
-                changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id', true)
+                // changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id', true)
+                removeRowFromPaginationData(`GET:/timekeeper/manual/list`, fullData)
             }
             setButtonStatus(false)
             if(isManualCheckoutAvailable() && atWork) {

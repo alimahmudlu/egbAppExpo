@@ -194,9 +194,6 @@ export const DataProvider = ({ children }) => {
                 ? prev.cache[key].data.data
                 : [];
 
-            console.log(prev, '---------------____________________------------------------prev_---------------_______________-----------------')
-            console.log(existingItems, 'existingItems')
-
             // 2. Yeni dataları çıxarırıq
             const incomingFullData = response.data || {};
             const incomingItems = incomingFullData.data || [];
@@ -311,8 +308,63 @@ export const DataProvider = ({ children }) => {
     });
   }
 
+    const removeRowFromPaginationData = async (key, item, identifierKey = 'id') => {
+        setStoreData(prev => {
+
+            // Mövcud data obyektini çıxarırıq
+            const existingCache = prev.cache?.[key];
+
+            // Əgər key, cache və ya data yoxdursa, heç nə etmirik
+            if (!existingCache || !existingCache.data || !Array.isArray(existingCache.data.data)) {
+                return prev;
+            }
+
+            const currentItems = existingCache.data.data;
+            const currentTotal = parseInt(existingCache.data.total, 10) || 0;
+
+            // Silinəcək elementin ID-si və ya dəyəri
+            const itemIdentifier = item?.[identifierKey] !== undefined ? item[identifierKey] : item;
+
+            // Massivdən elementləri filterləyərək silirik
+            let isItemRemoved = false;
+
+            const updatedItems = currentItems.filter(e => {
+                const elementIdentifier = e?.[identifierKey] !== undefined ? e[identifierKey] : e;
+
+                // Elementi saxlayırıqsa (silmürüksə) true, siliriksə false qaytarır
+                const shouldKeep = elementIdentifier !== itemIdentifier;
+
+                // Əgər silinən elementi tapmışıqsa (yalnız bir element silinəcəyi fərz edilir)
+                if (!shouldKeep) {
+                    isItemRemoved = true;
+                }
+
+                return shouldKeep;
+            });
+
+            // Əgər element həqiqətən silinibsə, 'total' dəyərini azaldırıq
+            const updatedTotal = isItemRemoved && currentTotal > 0 ? (currentTotal - 1) : currentTotal;
+
+            // Yenilənmiş state-i qaytarırıq
+            return ({
+                ...prev,
+                cache: {
+                    ...prev.cache,
+                    [key]: {
+                        ...existingCache, // success, message, və s. saxlayır
+                        data: {
+                            ...existingCache.data, // page və s. saxlayır
+                            data: updatedItems, // Yenilənmiş element massivi
+                            total: String(updatedTotal) // Total dəyərini string kimi qaytarırıq (API-də string idi)
+                        }
+                    }
+                }
+            });
+        });
+    }
+
   return (
-      <DataContext.Provider value={{ storeData, setStoreData, loading, clearData, updateDataWithPagination, insertData, changeRowData, updateData, removeRowData, changeAddRowData, insertLoading, removeLoading }}>
+      <DataContext.Provider value={{ storeData, setStoreData, loading, removeRowFromPaginationData, clearData, updateDataWithPagination, insertData, changeRowData, updateData, removeRowData, changeAddRowData, insertLoading, removeLoading }}>
         {children}
       </DataContext.Provider>
   );

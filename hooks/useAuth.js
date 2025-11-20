@@ -59,11 +59,19 @@ export function AuthProvider({ children }) {
           }
         })
 
-        // console.log(currentUser?.data?.data, currentUser.status, 'currentUser');
-        // if (currentUser.status === 200) {
-        //   console.log(currentUser.data?.data, 'currentUser');
-        //   setUser(currentUser.data || userData);
-        // }
+        console.log(currentUser?.data?.data, currentUser.status, 'currentUser');
+        if (currentUser.status === 200) {
+          setUser(currentUser?.data?.data || userData);
+            // if (currentUser?.data?.data?.role?.id === 1) {
+            //     router.replace('/employee');
+            // } else if (currentUser?.data?.data?.role?.id === 2) {
+            //     router.replace('/timeKeeper');
+            // } else if (currentUser?.data?.data?.role?.id === 3) {
+            //     router.replace('/chief');
+            // } else if (currentUser?.data?.data?.role?.id === 4) {
+            //     router.replace('/admin');
+            // }
+        }
         // else {
         //   // logout();
         // }
