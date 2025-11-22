@@ -19,7 +19,7 @@ export default function ChiefMenuScreen() {
     const {request} = useApi();
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
-    const [today, setToday] = useState({});
+    const [today, setToday] = useState([]);
     const [data, setData] = useState({
         turn1order: 0,
         turn2order: 0,
@@ -28,6 +28,7 @@ export default function ChiefMenuScreen() {
     const [reportData, setReportData] = useState({});
     const [errors, setErrors] = useState({});
     const [reportModal, setReportModal] = useState(false);
+    const [selectedRow, setSelectedRow] = useState({});
 
     function handleChange(e) {
         setData({...data, [e.name]: e.value});
@@ -37,26 +38,25 @@ export default function ChiefMenuScreen() {
         setReportData({...reportData, [e.name]: e.value});
     }
 
-    function toggleReportModal() {
+    function toggleReportModal(item = {}) {
+        setSelectedRow(item);
         setReportModal(!reportModal);
     }
 
     function handleSubmit() {
         request({
             method: "post",
-            url: "/admin/food/report/add",
+            url: "/admin/bus/report/add",
             data: {
                 ...data,
-                date: moment().add(1, 'day').format('YYYY-MM-DD'),
-                turn1employees: today?.today?.turn1employees || 0,
-                turn2employees: today?.today?.turn2employees || 0,
+                projectId: selectedRow?.project_id,
+                date: selectedRow?.date || moment().format('YYYY-MM-DD'),
+                turn1employees: selectedRow?.turn1employees || 0,
+                turn2employees: selectedRow?.turn2employees || 0,
             },
         }).then(res => {
-            setData({
-                turn1order: 0,
-                turn2order: 0,
-                date: moment().add(1, 'day').format('YYYY-MM-DD')
-            })
+            setData({});
+            getData();
         }).catch(err => {
             console.log(err);
         })
@@ -66,7 +66,7 @@ export default function ChiefMenuScreen() {
 
     function getData() {
         request({
-            url: '/admin/food/report/today', method: 'get',
+            url: '/admin/bus/projects', method: 'get',
         }).then(res => {
             console.log(res, 'res');
         }).catch(err => {
@@ -83,8 +83,8 @@ export default function ChiefMenuScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
-        setToday(storeData?.cache?.[`GET:/admin/food/report/today`]?.data)
-    }, [storeData?.cache?.[`GET:/admin/food/report/today`]])
+        setToday(storeData?.cache?.[`GET:/admin/bus/projects`]?.data)
+    }, [storeData?.cache?.[`GET:/admin/bus/projects`]])
 
     return (
         <SgTemplateScreen
@@ -102,54 +102,43 @@ export default function ChiefMenuScreen() {
             <View style={{gap: 32}}>
                 <View style={{gap: 16}}>
                     <Text style={{fontSize: 18, fontWeight: 700}}>
-                        ORDER
+                        {t('PROJECTS')}
                     </Text>
-                    <View style={{borderWidth: 1, borderColor: '#eee', padding: 16, borderRadius: 8, gap: 21}}>
-                        <View style={{gap: 8}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee', borderStyle: 'dashed'}}>
-                                <Text style={{fontWeight: 700}}>1nd turn: </Text>
-                                <Text style={{fontWeight: 700}}>{today?.todayEmployees?.turn1employees || 0}</Text>
+                    <View style={{gap: 16}}>
+                        {(today || []).map((item, index) => (
+                            <View key={index} style={{borderWidth: 1, borderColor: '#eee', padding: 16, borderRadius: 8, gap: 21}}>
+                                <Text style={{fontWeight: 700, fontSize: 18}}>{item?.project_name}</Text>
+                                <View style={{gap: 8}}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee', borderStyle: 'dashed'}}>
+                                        <Text style={{fontWeight: 400}}>{t('EmployeesMorningCheckedIn')}: </Text>
+                                        <Text style={{fontWeight: 700}}>{item?.turn1employees || 0}</Text>
+                                    </View>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee', borderStyle: 'dashed'}}>
+                                        <Text style={{fontWeight: 400}}>{t('EmployeesNightCheckIn')}: </Text>
+                                        <Text style={{fontWeight: 700}}>{item?.turn2employees || 0}</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    {item?.report_status ?
+                                        <SgButton
+                                            bgColor={COLORS.gray_600}
+                                            color={COLORS.white}
+                                            onPress={() => toggleReportModal(item)}
+                                        >
+                                            {t('ViewScheduleReport')}
+                                        </SgButton>
+                                        :
+                                        <SgButton
+                                            bgColor={COLORS.brand_600}
+                                            color={COLORS.white}
+                                            onPress={() => toggleReportModal(item)}
+                                        >
+                                            {t('ScheduleABus')}
+                                        </SgButton>
+                                    }
+                                </View>
                             </View>
-                            <View>
-                                <SgInput
-                                    placeholder={t('enterturn1order')}
-                                    value={data?.turn1order || today?.today?.turn1order || 0}
-                                    name='turn1order'
-                                    onChangeText={handleChange}
-                                    type='number'
-                                    disabled={today?.today?.status}
-                                />
-                            </View>
-                        </View>
-                        <View style={{gap: 8}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee', borderStyle: 'dashed'}}>
-                                <Text style={{fontWeight: 700}}>2st turn: </Text>
-                                <Text style={{fontWeight: 700}}>{today?.todayEmployees?.turn2employees || 0}</Text>
-                            </View>
-                            <View>
-                                <SgInput
-                                    placeholder={t('enterturn2order')}
-                                    value={data?.turn2order || today?.today?.turn2order || 0}
-                                    name='turn2order'
-                                    onChangeText={handleChange}
-                                    type='number'
-                                    disabled={today?.today?.status}
-                                />
-                            </View>
-                        </View>
-                        {today?.today?.status ?
-                            null
-                            :
-                            <View>
-                                <SgButton
-                                    bgColor={COLORS.brand_600}
-                                    color={COLORS.white}
-                                    onPress={handleSubmit}
-                                >
-                                    Save
-                                </SgButton>
-                            </View>
-                        }
+                        ))}
                     </View>
                 </View>
             </View>
@@ -158,29 +147,40 @@ export default function ChiefMenuScreen() {
             <SgPopup
                 visible={reportModal}
                 onClose={toggleReportModal}
-                title={t('foodSchedule__report')}
-                description={`${moment().add(-1, 'day').format('DD/MM/YYYY')} ${t('foodSchedule__report__description')}`}
-                footerButton={''}
+                title={t('busSchedule__report')}
+                description={`${selectedRow?.project_name}`}
+                footerButton={
+                    selectedRow?.report_status ? null :
+                        <SgButton
+                            bgColor={COLORS.brand_600}
+                            color={COLORS.white}
+                            onPress={handleSubmit}
+                        >
+                            {t('Schedule')}
+                        </SgButton>
+                }
             >
                 <View style={{gap: 16}}>
                     <View>
-                        <SgDatePicker
-                            label={t('dateOfIssue')}
-                            placeholder={t('enterDate')}
-                            type="date"
-                            value={reportData?.reportDate}
-                            name='reportDate'
-                            isInvalid={errors?.reportDate}
-                            onChangeText={handleChangeReport}
+                        <SgInput
+                            label={t('countOfBus')}
+                            placeholder={t('countOfBus')}
+                            value={data?.countOfBus || selectedRow?.report_status?.bus_count}
+                            name='countOfBus'
+                            onChangeText={handleChange}
+                            type='number'
+                            disabled={selectedRow?.report_status}
                         />
                     </View>
                     <View>
                         <SgInput
-                            placeholder={t('enterturn1order')}
-                            value={data?.turn1order}
-                            name='turn1order'
+                            label={t('countOfSeatInEveryBus')}
+                            placeholder={t('countOfSeatInEveryBus')}
+                            value={data?.countOfSeatInEveryBus || selectedRow?.report_status?.seat_count}
+                            name='countOfSeatInEveryBus'
                             onChangeText={handleChange}
                             type='number'
+                            disabled={selectedRow?.report_status}
                         />
                     </View>
                 </View>

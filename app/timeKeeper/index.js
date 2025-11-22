@@ -42,6 +42,7 @@ export default function EmployeeDashboardScreen() {
 
 
     function getData(_filters = {}) {
+        console.log(_filters, 'filters')
         request({
             url: '/timekeeper/activity/list',
             method: 'get',
@@ -53,7 +54,7 @@ export default function EmployeeDashboardScreen() {
     }
 
     useFocusEffect(useCallback(() => {
-        getData({...filters, project: filters?.project?.id})
+        getData({...filters, project: (filters?.project || []).map(el => el.id)})
 
         return () => {};
     }, [refreshKey]));
@@ -190,7 +191,7 @@ export default function EmployeeDashboardScreen() {
     }
 
     function handleFilters() {
-        getData({...filters, project: filters?.project?.id})
+        getData({...filters, project: (filters?.project || []).map(el => el.id)})
     }
 
     useEffect(() => {
@@ -405,6 +406,7 @@ export default function EmployeeDashboardScreen() {
                                 modalTitle={t("selectProject")}
                                 value={filters?.project}
                                 name='project'
+                                multiple={true}
                                 onChangeText={handleChange}
                                 list={(projectsList || []).map((project, index) => ({
                                     id: project?.id, name: project?.name, render: <SgSectionProjectListItem

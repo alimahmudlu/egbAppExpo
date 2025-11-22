@@ -41,6 +41,36 @@ export default function SgSectionAdminMenuCard({extraItems = []}) {
             <View style={styles.menuWrapper}>
                 <Text style={styles.titleText}>Menus</Text>
                 <View style={styles.content}>
+                    {/*  */}
+                    <TouchableOpacity onPress={() => router.push(`/${user?.role?.id === 1 ? 'employee' : (user?.role?.id === 2 ? 'timeKeeper' : (user?.role?.id === 3 ? 'chief' : 'admin'))}/docs`)} style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <DocsIcon width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('tabBar__myDocs')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+
+                    <Divider/>
+
+                    {/*  */}
+                    <TouchableOpacity onPress={() => router.push(`/pages/teams`)} style={styles.item}>
+                        <View style={styles.left}>
+                            <View style={styles.iconContainer}>
+                                <DocsIcon width={20} height={20} style={styles.icon}/>
+                            </View>
+                            <Text style={styles.title}>{t('tabBar__myTeams')}</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <RightIcon width={20} height={20}/>
+                        </View>
+                    </TouchableOpacity>
+
+                    <Divider/>
+
                     {/* Languages */}
                     <TouchableOpacity style={styles.item} onPress={() => setModalVisible(true)}>
                         <View style={styles.left}>

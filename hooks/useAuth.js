@@ -184,14 +184,15 @@ export function AuthProvider({ children }) {
         setLoading(false);
       }, 1500)
 
-      // Navigate based on role
-      if (userData?.user?.role?.id === 1) {
-        router.replace('/employee/');
-      } else if (userData?.user?.role?.id === 2) {
-        router.replace('/timeKeeper/');
-      } else {
-        router.replace('/chief/');
-      }
+        if (userData?.user?.role?.id === 1) {
+            router.replace('/employee');
+        } else if (userData?.user?.role?.id === 2) {
+            router.replace('/timeKeeper');
+        } else if (userData?.user?.role?.id === 3) {
+            router.replace('/chief');
+        } else if (userData?.user?.role?.id === 4) {
+            router.replace('/admin');
+        }
       //
       return { success: true, user: userData?.user };
     } catch (error) {

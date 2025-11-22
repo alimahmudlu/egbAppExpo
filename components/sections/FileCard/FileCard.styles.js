@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   bottomRow: {
-      backgroundColor: '#F00000',
       flex: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -4,14 +4,13 @@ import {TouchableOpacity, Text, Platform} from 'react-native';
 import {useAuth} from '@/hooks/useAuth';
 import HomeActiveIcon from "@/assets/images/home-active.svg";
 import HomeIcon from "@/assets/images/home.svg";
-import HistoryActiveIcon from "@/assets/images/history-active.svg";
+import FoodSchedule from "@/assets/images/foodSchedule.svg";
+import FoodScheduleActive from "@/assets/images/foodScheduleActive.svg";
 import HistoryIcon from "@/assets/images/history.svg";
 import ProjectsActiveIcon from "@/assets/images/bag-active.svg";
 import ProjectsIcon from "@/assets/images/bag.svg";
 import MenuActiveIcon from "@/assets/images/menu-active.svg";
 import MenuIcon from "@/assets/images/menu.svg";
-import {useData} from "@/hooks/useData";
-import {useSocket} from "@/hooks/useSocket";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
@@ -54,13 +53,24 @@ export default function WorkerTabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="docs/index"
+                options={{
+                    href: null,
+                    title: t('tabBar__myDocs'),
+                    tabBarLabel: t('tabBar__myDocs'),
+                    headerTitle: t('tabBar__myDocs'),
+                    tabBarIcon: ({color, focused}) => focused ? <DocsActiveIcon width={20} height={20}/> :
+                        <DocsIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
                 name="food/index"
                 options={{
                     title: t('tabBar__food_schedules'),
                     tabBarLabel: t('tabBar__food_schedules'),
                     headerTitle: t('tabBar__food_schedules'),
-                    tabBarIcon: ({color, focused}) => focused ? <MenuActiveIcon width={20} height={20}/> :
-                        <MenuIcon width={20} height={20}/>
+                    tabBarIcon: ({color, focused}) => focused ? <FoodScheduleActive width={20} height={20}/> :
+                        <FoodSchedule width={20} height={20}/>
                 }}
             />
             <Tabs.Screen

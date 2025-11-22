@@ -102,18 +102,18 @@ export default function ChiefMenuScreen() {
             <View style={{gap: 32}}>
                 <View style={{gap: 16}}>
                     <Text style={{fontSize: 18, fontWeight: 700}}>
-                        ORDER
+                        {t('ORDER')}
                     </Text>
                     <View style={{borderWidth: 1, borderColor: '#eee', padding: 16, borderRadius: 8, gap: 21}}>
                         <View style={{gap: 8}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee', borderStyle: 'dashed'}}>
-                                <Text style={{fontWeight: 700}}>1nd turn: </Text>
+                                <Text style={{fontWeight: 700}}>{t('turn1st')}: </Text>
                                 <Text style={{fontWeight: 700}}>{today?.todayEmployees?.turn1employees || 0}</Text>
                             </View>
                             <View>
                                 <SgInput
                                     placeholder={t('enterturn1order')}
-                                    value={data?.turn1order || today?.today?.turn1order || 0}
+                                    value={data?.turn1order || today?.today?.turn1order || ''}
                                     name='turn1order'
                                     onChangeText={handleChange}
                                     type='number'
@@ -123,13 +123,13 @@ export default function ChiefMenuScreen() {
                         </View>
                         <View style={{gap: 8}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee', borderStyle: 'dashed'}}>
-                                <Text style={{fontWeight: 700}}>2st turn: </Text>
+                                <Text style={{fontWeight: 700}}>{t('turn2nd')}: </Text>
                                 <Text style={{fontWeight: 700}}>{today?.todayEmployees?.turn2employees || 0}</Text>
                             </View>
                             <View>
                                 <SgInput
                                     placeholder={t('enterturn2order')}
-                                    value={data?.turn2order || today?.today?.turn2order || 0}
+                                    value={data?.turn2order || today?.today?.turn2order || ''}
                                     name='turn2order'
                                     onChangeText={handleChange}
                                     type='number'
@@ -146,7 +146,7 @@ export default function ChiefMenuScreen() {
                                     color={COLORS.white}
                                     onPress={handleSubmit}
                                 >
-                                    Save
+                                    {t('Save')}
                                 </SgButton>
                             </View>
                         }
