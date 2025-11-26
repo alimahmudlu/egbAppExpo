@@ -34,7 +34,10 @@ export default function TimeKeeperUserScreen() {
         end_date: moment().endOf('month')
     })
 
-    const {storeData} = useData();
+    const [page, setPage] = useState(1);
+    const [getDataStatus, setDataStatus] = useState(false)
+
+    const {storeData, updateData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
     const { selectedLanguage } = useLanguage()
@@ -55,24 +58,56 @@ export default function TimeKeeperUserScreen() {
         router.push(url);
     }
 
-
-    useFocusEffect(useCallback(() => {
+    function getData() {
         request({
             url: `/notifications`,
             method: 'get',
-            params: filters,
+            params: {
+                page: page,
+                limit: 10
+            },
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
+    }
+
+    useFocusEffect(useCallback(() => {
+        setPage(1)
+        setDataStatus(!getDataStatus)
 
         return () => {
-            console.log('Home tab lost focus');
+            setPage(0)
+            setNotifications({data: []})
+            updateData(`GET:/notifications`, {data: []})
         };
     }, [refreshKey]));
 
     useEffect(() => {
-        setNotifications(storeData?.cache?.[`GET:/notifications`]?.data)
+        if (page) {
+            getData()
+        }
+    }, [page, getDataStatus])
+
+    useEffect(() => {
+        setNotifications((prevState) => {
+            if (page === 1) {
+                return {
+                    ...(storeData?.cache?.[`GET:/notifications`]?.data || {})
+                }
+            }
+            else {
+                return {
+                    ...(storeData?.cache?.[`GET:/notifications`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/notifications`]?.data || {})?.data || [])]
+                }
+            }
+        })
     }, [storeData?.cache?.[`GET:/notifications`]]);
+
+    function handleMore() {
+        setPage(page + 1);
+    }
+
 
     const RenderItem = ({ item, unread = true }) => (
         <TouchableOpacity onPress={() => handleClickNotificationItem(item.url, item.id)} style={[styles.card, unread ? {borderColor: '#4F46E5'} : null]}>
@@ -100,7 +135,7 @@ export default function TimeKeeperUserScreen() {
             }} />}
         >
             <View style={{gap: 8}}>
-                {(notifications || []).map((item, index) => (
+                {((notifications || {}).data || [])?.map((item, index) => (
                     <RenderItem
                         key={index}
                         unread={!item?.read}
@@ -110,6 +145,19 @@ export default function TimeKeeperUserScreen() {
                         }}
                     />
                 ))}
+
+                {((notifications || {}).total || 0) > page * 10 ?
+                    <View style={{marginTop: 16}}>
+                        <SgButton
+                            onPress={handleMore}
+                            bgColor={COLORS.primary}
+                            color={COLORS.white}
+                        >
+                            {t('loadMore')}
+                        </SgButton>
+                    </View>
+                    : null
+                }
             </View>
         </SgTemplateScreen>
     )

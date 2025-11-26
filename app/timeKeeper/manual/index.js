@@ -26,7 +26,7 @@ export default function EmployeeDocsScreen() {
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
-    const {storeData} = useData();
+    const {storeData, updateData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
     const [page, setPage] = useState(1);
@@ -44,7 +44,7 @@ export default function EmployeeDocsScreen() {
             },
             pagination: true
         }).then().catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
 
@@ -66,7 +66,9 @@ export default function EmployeeDocsScreen() {
     }
 
     useEffect(() => {
-        getData({...filters, project: filters?.project?.id, application_status: filters?.application_status?.id})
+        if (page) {
+            getData({...filters, project: filters?.project?.id, application_status: filters?.application_status?.id})
+        }
     }, [page, getDataStatus])
 
     useFocusEffect(useCallback(() => {
@@ -80,18 +82,21 @@ export default function EmployeeDocsScreen() {
                 setProjectsList(res?.data);
             } else {
                 // Handle error response
-                console.log(res.message);
+                // console.log(res.message);
             }
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
         })
 
-        return () => {};
+        return () => {
+            setPage(null)
+            setEmployees({})
+            setProjectsList([])
+            updateData(`GET:/timekeeper/manual/list`, {data: []})
+        };
     }, [refreshKey]));
 
     useEffect(() => {
-        // setEmployees(storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data)
-
         setEmployees((prevState) => {
             if (page === 1) {
                 return {

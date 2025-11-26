@@ -1,6 +1,6 @@
 import {Slot, useRouter, usePathname, useSegments} from "expo-router";
 import {useEffect, useRef} from "react";
-import {AuthProvider, useAuth} from "@/hooks/useAuth";
+import {AuthProvider} from "@/hooks/useAuth";
 import {BackHandler, ToastAndroid} from "react-native";
 import {useFonts} from '@expo-google-fonts/inter/useFonts';
 import {Inter_100Thin} from '@expo-google-fonts/inter/100Thin';
@@ -43,33 +43,42 @@ export default function RootLayout() {
             return;
         }
         if (history.current[history.current.length - 1] !== pathname) {
-            history.current.push(pathname);
+            if (pathname === '/auth') {
+                history.current = [pathname];
+            }
+            else if (history.current[history.current.length - 1] === '/auth') {
+                history.current = ['/', pathname];
+            }
+            else {
+                history.current.push(pathname);
+            }
         }
     }, [pathname]);
 
-    useEffect(() => {
-        const onBackPress = () => {
-            if (history.current.length > 2) {
-                history.current.pop();
-                const prev = history.current[history.current.length - 1];
-                router.replace(prev);
+    const onBackPress = () => {
+        if (history.current.length > 2) {
+            history.current.pop();
+            const prev = history.current[history.current.length - 1];
+            router.replace(prev);
+            return true;
+        } else {
+            if (backPressCount.current === 0) {
+                ToastAndroid.show("Press back again to exit", ToastAndroid.SHORT);
+                backPressCount.current = 1;
+                if (backPressTimeout.current) clearTimeout(backPressTimeout.current);
+                backPressTimeout.current = setTimeout(() => {
+                    backPressCount.current = 0;
+                }, 2000);
                 return true;
-            } else {
-                if (backPressCount.current === 0) {
-                    ToastAndroid.show("Press back again to exit", ToastAndroid.SHORT);
-                    backPressCount.current = 1;
-                    if (backPressTimeout.current) clearTimeout(backPressTimeout.current);
-                    backPressTimeout.current = setTimeout(() => {
-                        backPressCount.current = 0;
-                    }, 2000);
-                    return true;
-                } else if (backPressCount.current === 1) {
-                    BackHandler.exitApp();
-                    return true;
-                }
+            } else if (backPressCount.current === 1) {
+                BackHandler.exitApp();
+                return true;
             }
-            return false;
-        };
+        }
+        return false;
+    };
+
+    useEffect(() => {
         const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
         return () => {
             sub.remove();
@@ -105,7 +114,7 @@ export default function RootLayout() {
             <LanguageProvider>
                 <InitialRedirectProvider>
                     <AuthProvider>
-                        <DataProvider>
+                        <DataProvider onBackPress={onBackPress}>
                             <ApiProvider>
                                 <NotificationProvider>
                                     <SocketProvider>

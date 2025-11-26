@@ -23,7 +23,7 @@ export default function TimeKeeperUserScreen() {
             url: `/timekeeper/employee/history/${userId}/checkout`,
             method: 'get',
         }).then().catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
         return () => {};
     }, [refreshKey]));

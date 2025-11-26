@@ -15,11 +15,11 @@ export const SocketProvider = ({ children }) => {
             setSocket(s);
 
             s.on("connect", () => {
-                console.log("✅ Socket bağlandı:", s.id);
+                // console.log("✅ Socket bağlandı:", s.id);
             });
 
             s.on("disconnect", () => {
-                console.log("❌ Socket kəsildi");
+                // console.log("❌ Socket kəsildi");
             });
         } else {
             disconnectSocket();

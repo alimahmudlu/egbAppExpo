@@ -68,7 +68,7 @@ export default function ProjectItemScreen() {
             })
             toggleCompleteTaskInfoModal();
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     };
 
@@ -93,7 +93,7 @@ export default function ProjectItemScreen() {
                                 }})
             toggleCheckTaskInfoModal();
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     };
 
@@ -118,7 +118,7 @@ export default function ProjectItemScreen() {
                                 }})
             toggleStartTaskInfoModal();
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     };
 
@@ -127,7 +127,7 @@ export default function ProjectItemScreen() {
             url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
             method: 'get',
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
     }, [projectId, refreshKey]);
 
@@ -333,7 +333,9 @@ export default function ProjectItemScreen() {
                         type={el?.type}
                         datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
                         url={el?.filepath}
-                        onPress={() => console.log('file.filename')}
+                        onPress={() => {
+                            // console.log('file.filename')
+                        }}
                         remove={true}
                     />
                 ))}

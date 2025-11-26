@@ -32,33 +32,72 @@ import SgPopup from "@/components/ui/Modal/Modal";
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
     const {request} = useApi();
-    const [employeeActivities, setEmployeeActivities] = useState([]);
+    const [employeeActivitiesCheckIn, setEmployeeActivitiesCheckIn] = useState({});
+    const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
+    const [employeeActivitiesAtWork, setEmployeeActivitiesAtWork] = useState({});
     const [filters, setFilters] = useState({})
-    const {storeData, insertData, removeRowData, changeAddRowData, setStoreData} = useData();
+    const {storeData, insertData, changeAddRowData, setStoreData, updateData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
     const [filterModal, setFilterModal] = useState(false)
 
+    const [activeTab, setActiveTab] = useState('checkIn');
+    const [projectsList, setProjectsList] = useState([]);
+    const [checkIn, setCheckIn] = useState({});
+    const [checkOut, setCheckOut] = useState({});
+    const [countData, setCountData] = useState({});
+    const [rejectInfoModal, setRejectInfoModal] = useState(false);
+    const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
+
+    const [pageAtWork, setPageAtWork] = useState(1);
+    const [pageCheckIn, setPageCheckIn] = useState(1);
+    const [pageCheckOut, setPageCheckOut] = useState(1);
+    const [getDataStatus, setDataStatus] = useState(false)
+
 
     function getData(_filters = {}) {
-        console.log(_filters, 'filters')
         request({
-            url: '/timekeeper/activity/list',
+            url: '/timekeeper/activity/list/checkin',
             method: 'get',
-            params: {..._filters}
+            params: {
+                ..._filters,
+                page: pageCheckIn,
+                limit: 10
+            }
         }).then(res => {
         }).catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
-
-    useFocusEffect(useCallback(() => {
-        getData({...filters, project: (filters?.project || []).map(el => el.id)})
-
-        return () => {};
-    }, [refreshKey]));
-
+    function getDataCheckOut(_filters = {}) {
+        request({
+            url: '/timekeeper/activity/list/checkout',
+            method: 'get',
+            params: {
+                ..._filters,
+                page: pageCheckOut,
+                limit: 10
+            }
+        }).then(res => {
+        }).catch(err => {
+            // console.log(err, 'apiservice control err')
+        });
+    }
+    function getDataAtWork(_filters = {}) {
+        request({
+            url: '/timekeeper/activity/list/atwork',
+            method: 'get',
+            params: {
+                ..._filters,
+                page: pageAtWork,
+                limit: 10
+            }
+        }).then(res => {
+        }).catch(err => {
+            // console.log(err, 'apiservice control err')
+        });
+    }
 
     useEffect(() => {
         if (!socket) return;
@@ -92,19 +131,53 @@ export default function EmployeeDashboardScreen() {
         };
     }, [socket]);
 
+    useEffect(() => {
+        setEmployeeActivitiesCheckIn((prevState) => {
+            if (pageCheckIn === 1) {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})
+                }
+            }
+            else {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})?.data || [])]
+                }
+            }
+        })
+    }, [storeData?.cache?.['GET:/timekeeper/activity/list/checkin']])
 
     useEffect(() => {
-        setEmployeeActivities(storeData?.cache?.['GET:/timekeeper/activity/list']?.data)
-    }, [storeData?.cache?.['GET:/timekeeper/activity/list']])
+        setEmployeeActivitiesCheckOut((prevState) => {
+            if (pageCheckOut === 1) {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})
+                }
+            }
+            else {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})?.data || [])]
+                }
+            }
+        })
+    }, [storeData?.cache?.['GET:/timekeeper/activity/list/checkout']])
 
-
-    const [activeTab, setActiveTab] = useState('checkIn');
-    const [projectsList, setProjectsList] = useState([]);
-    const [checkIn, setCheckIn] = useState({});
-    const [checkOut, setCheckOut] = useState({});
-    const [rejectInfoModal, setRejectInfoModal] = useState(false);
-    const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
-
+    useEffect(() => {
+        setEmployeeActivitiesAtWork((prevState) => {
+            if (pageAtWork === 1) {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})
+                }
+            }
+            else {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})?.data || [])]
+                }
+            }
+        })
+    }, [storeData?.cache?.['GET:/timekeeper/activity/list/atwork']])
 
     useFocusEffect(useCallback(() => {
         request({
@@ -118,7 +191,7 @@ export default function EmployeeDashboardScreen() {
                 },
             }));
         }).catch(err => {
-            console.log('activity error')
+            // console.log('activity error')
             setStoreData(prev => ({
                 ...prev, checkInData: {
                     checkIn: null, checkOut: null,
@@ -133,13 +206,50 @@ export default function EmployeeDashboardScreen() {
                 setProjectsList(res?.data);
             } else {
                 // Handle error response
-                console.log(res.message);
+                // console.log(res.message);
             }
         }).catch(err => {
-            console.log(err);
         })
 
-        return () => {};
+        request({
+            url: `/timekeeper/activity/list/count`,
+            method: 'get',
+            params: {
+                start_date: moment().startOf('day').format(),
+                end_date: moment().endOf('day').format(),
+                project: filters?.project?.id,
+                full_name: filters?.full_name
+            },
+        }).then(res => {
+            if (res.success) {
+                setCountData(res?.data);
+            } else {
+                // Handle error response
+                // console.log(res.message);
+            }
+        }).catch(err => {
+        })
+
+        getData({...filters, project: (filters?.project || []).map(el => el.id)})
+        getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)})
+        getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)})
+
+        return () => {
+            setProjectsList([])
+            setCheckIn({})
+            setCheckOut({})
+
+            setPageCheckIn(0)
+            setPageCheckOut(0)
+            setPageAtWork(0)
+            setEmployeeActivitiesCheckIn({data: []})
+            setEmployeeActivitiesCheckOut({data: []})
+            setEmployeeActivitiesAtWork({data: []})
+            updateData(`GET:/timekeeper/activity/list/checkin`, {data: []})
+            updateData(`GET:/timekeeper/activity/list/checkout`, {data: []})
+            updateData(`GET:/timekeeper/activity/list/atwork`, {data: []})
+            setActiveTab('checkIn')
+        };
 
     }, [refreshKey]));
 
@@ -191,14 +301,45 @@ export default function EmployeeDashboardScreen() {
     }
 
     function handleFilters() {
-        getData({...filters, project: (filters?.project || []).map(el => el.id)})
+        setDataStatus(!getDataStatus)
+        setPageCheckIn(1)
+        setPageCheckOut(1)
+        setPageAtWork(1)
     }
+
+    useEffect(() => {
+        if (pageCheckIn) {
+            getData({...filters, project: (filters?.project || []).map(el => el.id)})
+        }
+    }, [pageCheckIn, getDataStatus])
+
+    useEffect(() => {
+        if (pageCheckOut) {
+            getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)})
+        }
+    }, [pageCheckOut, getDataStatus])
+
+    useEffect(() => {
+        if (pageAtWork) {
+            getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)})
+        }
+    }, [pageAtWork, getDataStatus])
 
     useEffect(() => {
         // Alert.alert('checkIn change')
         setCheckIn(storeData?.checkIn)
         setCheckOut(storeData?.checkOut)
     }, [storeData?.checkIn, storeData?.checkOut])
+
+    function handleMoreCheckIn() {
+        setPageCheckOut(pageCheckIn + 1);
+    }
+    function handleMoreCheckOut() {
+        setPageCheckOut(pageCheckOut + 1);
+    }
+    function handleMoreAtWork() {
+        setPageAtWork(pageAtWork + 1);
+    }
 
     return (
         <SgTemplateScreen
@@ -265,14 +406,16 @@ export default function EmployeeDashboardScreen() {
             <SgSectionInfoCard
                 icon="log-in-outline"
                 title={t('dailyCheckIn')}
-                count={employeeActivities?.filter(el => el.type === 1 && moment().startOf('day').isBefore(el.review_time))?.length}
+                // count={(employeeActivitiesCheckIn || {})?.total}
+                count={(countData || {})?.checkin_count || 0}
                 type="checkin"
                 href={`/timeKeeperPages/activity/checkIn`}
             />
             <SgSectionInfoCard
                 icon="log-out-outline"
                 title={t('dailyCheckOut')}
-                count={employeeActivities?.filter(el => el.type === 2 && moment().startOf('day').isBefore(el.review_time))?.length}
+                // count={(employeeActivitiesCheckOut || {})?.total}
+                count={(countData || {})?.checkout_count || 0}
                 type="checkout"
                 href={`/timeKeeperPages/activity/checkOut`}
             />
@@ -284,69 +427,124 @@ export default function EmployeeDashboardScreen() {
                 {
                     label: t('checkIn'),
                     id: 'checkIn',
-                    count: employeeActivities?.filter(el => el.type === 1 && el.status === 1)?.length,
+                    count: (employeeActivitiesCheckIn || {})?.total,
                     onClick: setActiveTab
                 },
                 {
                     label: t('checkOut'),
                     id: 'checkOut',
-                    count: employeeActivities?.filter(el => el.type === 2 && el.status === 1 && el.completed_status === 0)?.length,
+                    count: (employeeActivitiesCheckOut || {})?.total,
                     onClick: setActiveTab
                 },
                 {
                     label: t('atWork'),
                     id: 'atWork',
-                    count: employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1))?.length,
+                    count: (employeeActivitiesAtWork || {})?.total,
                     onClick: setActiveTab
                 }
             ]}
             tabContent={[
                 {
-                    element: (employeeActivities?.filter(el => el.type === 1 && el.status === 1).map((emp, index) => {
-                        return (
-                            <SgSectionEmployeeCard
-                                key={index}
-                                fullData={emp}
-                                title={emp?.employee?.full_name}
-                                role={emp?.employee?.role?.name}
-                                project={emp?.project?.name}
-                                checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                image={emp?.employee?.image}
-                            />)
-                    })), id: 'checkIn'
-                },
-                {
-                    element: (employeeActivities?.filter(el => el.type === 2 && el.status === 1 && el.completed_status === 0).map((emp, index) => (
-                        <SgSectionEmployeeCard
-                            key={index}
-                            fullData={emp}
-                            title={emp?.employee?.full_name}
-                            role={emp?.employee?.role?.name}
-                            project={emp?.project?.name}
-                            checkType={emp?.is_manual ? t('manual') : t('auto')}
-                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                            image={emp?.employee?.image}
-                        />))), id: 'checkOut'
+                    element:
+                        <>
+                            <View style={{gap: 8}}>
+                                {(((employeeActivitiesCheckIn || {})?.data || [])?.map((emp, index) => {
+                                    return (
+                                        <SgSectionEmployeeCard
+                                            key={index}
+                                            fullData={emp}
+                                            title={emp?.employee?.full_name}
+                                            role={emp?.employee?.role?.name}
+                                            project={emp?.project?.name}
+                                            checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                        />
+                                    )
+                                }))}
+
+                                {((employeeActivitiesCheckIn || {})?.total || 0) > pageCheckIn * 10 ?
+                                    <View style={{marginTop: 16}}>
+                                        <SgButton
+                                            onPress={handleMoreCheckIn}
+                                            bgColor={COLORS.primary}
+                                            color={COLORS.white}
+                                        >
+                                            {t('loadMore')}
+                                        </SgButton>
+                                    </View>
+                                    : null
+                                }
+                            </View>
+                        </>
+                    , id: 'checkIn'
                 },
                 {
                     element:
                         <>
                             <View style={{gap: 8}}>
-                                {(employeeActivities?.filter(el => (el.type === 1 && el.status === 2 && el.completed_status === 0) && !employeeActivities.find(el2 => el.employee?.full_name === el2?.employee?.full_name && el2.type === 2 && el2.status === 1)).map((emp, index) => (
-                                    <SgSectionEmployeeCard
-                                        key={index}
-                                        fullData={emp}
-                                        atWork={emp.type === 1 && emp.status === 2 && emp.completed_status === 0}
-                                        title={emp?.employee?.full_name}
-                                        role={emp?.employee?.role?.name}
-                                        project={emp?.project?.name}
-                                        checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                        time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                        timeRaw={emp.request_time}
-                                        image={emp?.employee?.image}
-                                        editable={false}
-                                    />)))}
+                                {(((employeeActivitiesCheckOut || {})?.data || [])?.map((emp, index) => {
+                                    return (
+                                        <SgSectionEmployeeCard
+                                            key={index}
+                                            fullData={emp}
+                                            title={emp?.employee?.full_name}
+                                            role={emp?.employee?.role?.name}
+                                            project={emp?.project?.name}
+                                            checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                        />
+                                    )
+                                }))}
+
+                                {((employeeActivitiesCheckOut || {})?.total || 0) > pageCheckOut * 10 ?
+                                    <View style={{marginTop: 16}}>
+                                        <SgButton
+                                            onPress={handleMoreCheckOut}
+                                            bgColor={COLORS.primary}
+                                            color={COLORS.white}
+                                        >
+                                            {t('loadMore')}
+                                        </SgButton>
+                                    </View>
+                                    : null
+                                }
+                            </View>
+                        </>
+                    , id: 'checkOut'
+                },
+                {
+                    element:
+                        <>
+                            <View style={{gap: 8}}>
+                                {(((employeeActivitiesAtWork || {})?.data || [])?.map((emp, index) => {
+                                    return (
+                                        <SgSectionEmployeeCard
+                                            key={index}
+                                            fullData={emp}
+                                            atWork={true}
+                                            title={emp?.employee?.full_name}
+                                            role={emp?.employee?.role?.name}
+                                            project={emp?.project?.name}
+                                            checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                            timeRaw={emp.request_time}
+                                            editable={false}
+                                        />
+                                    )
+                                }))}
+
+                                {((employeeActivitiesAtWork || {})?.total || 0) > pageAtWork * 10 ?
+                                    <View style={{marginTop: 16}}>
+                                        <SgButton
+                                            onPress={handleMoreAtWork}
+                                            bgColor={COLORS.primary}
+                                            color={COLORS.white}
+                                        >
+                                            {t('loadMore')}
+                                        </SgButton>
+                                    </View>
+                                    : null
+                                }
                             </View>
                         </>,
                     id: 'atWork'

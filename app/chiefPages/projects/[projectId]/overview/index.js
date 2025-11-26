@@ -25,7 +25,7 @@ export default function ProjectItemScreen() {
             method: 'get',
             cache: true
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
     }, [projectId, refreshKey]);
 

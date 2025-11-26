@@ -27,6 +27,6 @@ export const disconnectSocket = () => {
     if (socket) {
         socket.disconnect();
         socket = null;
-        console.log("🔌 Socket bağlantısı kəsildi (logout)");
+        // console.log("🔌 Socket bağlantısı kəsildi (logout)");
     }
 };

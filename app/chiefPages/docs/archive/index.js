@@ -20,10 +20,10 @@ export default function ProjectItemScreen() {
             url: '/chief/doc/history',
             method: 'get',
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {
-            console.log('Home tab lost focus');
+            // console.log('Home tab lost focus');
         };
     }, [refreshKey]));
 

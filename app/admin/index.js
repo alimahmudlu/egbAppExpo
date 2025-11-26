@@ -1,5 +1,3 @@
-import Avatar from "@/assets/images/avatar.png";
-import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCard from "@/components/ui/Card/Card";
@@ -7,7 +5,7 @@ import Clock from "@/assets/images/clock.svg";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {Alert, StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text} from "react-native";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useCallback, useEffect, useState} from "react";
@@ -21,7 +19,6 @@ import LoginIcon from "@/assets/images/login.svg";
 import COLORS from "@/constants/colors";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
-import SgButton from "@/components/ui/Button/Button";
 
 export default function EmployeeDashboardScreen() {
     const {user, getRating} = useAuth();

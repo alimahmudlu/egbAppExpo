@@ -78,8 +78,6 @@ export default function TimeKeeperUserScreen() {
     }
 
     function handleFilters() {
-        console.log("handleFilters", filters);
-
         request({
             url: `/my_team/list`,
             method: 'get',

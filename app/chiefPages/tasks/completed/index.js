@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";

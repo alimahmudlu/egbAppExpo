@@ -22,7 +22,7 @@ export default function SgTemplateScreenView(props) {
     const refreshKey = params?.refreshKey || 0; // default 0
     const isFocused = useIsFocused();
     const [remountKey, setRemountKey] = React.useState(0);
-    const {loadNotification} = useNotification();
+    // const {loadNotification} = useNotification();
 
     React.useEffect(() => {
         if (isFocused) {
@@ -49,7 +49,7 @@ export default function SgTemplateScreenView(props) {
             },
         });
 
-        loadNotification()
+        // loadNotification()
 
         setTimeout(() => {
             setRefreshing(false);

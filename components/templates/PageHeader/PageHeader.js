@@ -2,9 +2,11 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Link, router} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import React from "react";
+import {useData} from "@/hooks/useData";
 
 export default function SgTemplatePageHeader(props) {
-    const {data: {header, data}, filter} = props
+    const {data: {header, data}, filter} = props;
+    const {onBackPress} = useData()
 
     return (
         <>
@@ -12,7 +14,7 @@ export default function SgTemplatePageHeader(props) {
                 <TouchableOpacity
                     style={styles.backButton}
                     onPress={() => {
-                        router.back()
+                        onBackPress()
                     }}
                 >
                     <LeftIcon width={20} height={20} />

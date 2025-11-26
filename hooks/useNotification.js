@@ -42,10 +42,10 @@ export const NotificationProvider = ({children}) => {
 
     function loadNotification() {
         request({
-            url: `/notifications`,
+            url: `/notifications/count`,
             method: 'get',
         }).then().catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
 

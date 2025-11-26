@@ -25,7 +25,7 @@ export default function ProjectItemScreen() {
         request({
             url: `/employee/project/item/${projectId}`, method: 'get',
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {};
     }, [refreshKey, projectId]));

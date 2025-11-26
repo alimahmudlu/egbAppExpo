@@ -79,7 +79,7 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err);
+            // console.log(err);
         })
 
         toggleOverTimeModal()
@@ -115,7 +115,7 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err);
+            // console.log(err);
         })
 
         toggleOverTimeOutModal()
@@ -155,7 +155,7 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err);
+            // console.log(err);
         })
 
         toggleCheckInModal()
@@ -192,11 +192,11 @@ export default function SgCheckInOutCard(props) {
                 }));
             } else {
                 // Handle error response
-                console.log(res.message);
+                // console.log(res.message);
             }
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err);
+            // console.log(err);
         })
         toggleCheckOutModal()
     }

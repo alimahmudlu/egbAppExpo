@@ -21,7 +21,7 @@ import SgSectionProjectListItem from "@/components/sections/ProjectListItem/Proj
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const [employeeActivitiesCheckIn, setEmployeeActivitiesCheckIn] = useState({});
-    const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState([]);
+    const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
 
     const [page, setPage] = useState(1);
     const [pageCheckOut, setPageCheckOut] = useState(1);
@@ -29,10 +29,11 @@ export default function EmployeeDocsScreen() {
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
-    const {storeData} = useData();
+    const {storeData, updateData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
     const [activeTab, setActiveTab] = useState('checkIn');
+    const [getDataStatus, setDataStatus] = useState(false)
 
     function getData(_filters = {}) {
         request({
@@ -44,7 +45,7 @@ export default function EmployeeDocsScreen() {
                 limit: 10
             }
         }).then().catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
 
@@ -58,7 +59,7 @@ export default function EmployeeDocsScreen() {
                 limit: 10
             }
         }).then().catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
 
@@ -77,6 +78,7 @@ export default function EmployeeDocsScreen() {
     function handleFilters() {
         setPage(1)
         setPageCheckOut(1)
+        setDataStatus(!getDataStatus)
     }
 
     useEffect(() => {
@@ -85,17 +87,22 @@ export default function EmployeeDocsScreen() {
     }, [filters?.full_name])
 
     useEffect(() => {
-        getData({...filters, project: filters?.project?.id})
-    }, [page, filters?.full_name])
+        if (page) {
+            getData({...filters, project: filters?.project?.id})
+        }
+    }, [page, filters?.full_name, getDataStatus])
 
     useEffect(() => {
-        getDataCheckOut({...filters, project: filters?.project?.id})
-    }, [pageCheckOut, filters?.full_name])
+        if (pageCheckOut) {
+            getDataCheckOut({...filters, project: filters?.project?.id})
+        }
+    }, [pageCheckOut, filters?.full_name, getDataStatus])
 
     useFocusEffect(useCallback(() => {
         setPage(1)
         setPageCheckOut(1)
         setActiveTab('checkIn')
+        setDataStatus(!getDataStatus)
 
         request({
             url: `/timekeeper/options/projects`, method: 'get',
@@ -104,26 +111,33 @@ export default function EmployeeDocsScreen() {
                 setProjectsList(res?.data);
             } else {
                 // Handle error response
-                console.log(res.message);
+                // console.log(res.message);
             }
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
         })
 
-        return () => {};
+        return () => {
+            setPage(0)
+            setPageCheckOut(0)
+            setEmployeeActivitiesCheckIn({data: []})
+            setEmployeeActivitiesCheckOut({data: []})
+            updateData(`GET:/timekeeper/history/list/checkin`, {data: []})
+            updateData(`GET:/timekeeper/history/list/checkout`, {data: []})
+        };
     }, [refreshKey]));
 
     useEffect(() => {
         setEmployeeActivitiesCheckIn((prevState) => {
             if (page === 1) {
                 return {
-                    ...storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {}
+                    ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {})
                 }
             }
             else {
                 return {
-                    ...storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {},
-                    data: [...prevState?.data, ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data?.data || [])]
+                    ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {})?.data || [])]
                 }
             }
         })
@@ -138,8 +152,8 @@ export default function EmployeeDocsScreen() {
             }
             else {
                 return {
-                    ...storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {},
-                    data: [...prevState?.data, ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data?.data || [])]
+                    ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {})?.data || [])]
                 }
             }
         })
@@ -204,15 +218,18 @@ export default function EmployeeDocsScreen() {
                                         />
                                     ))}
 
-                                    <View style={{marginTop: 16}}>
-                                        <SgButton
-                                            onPress={handleMoreCheckIn}
-                                            bgColor={COLORS.primary}
-                                            color={COLORS.white}
-                                        >
-                                            {t('loadMore')}
-                                        </SgButton>
-                                    </View>
+                                    {((employeeActivitiesCheckIn || {}).total || 0) > page * 10 ?
+                                        <View style={{marginTop: 16}}>
+                                            <SgButton
+                                                onPress={handleMoreCheckIn}
+                                                bgColor={COLORS.primary}
+                                                color={COLORS.white}
+                                            >
+                                                {t('loadMore')}
+                                            </SgButton>
+                                        </View>
+                                        : null
+                                    }
                                 </View>
                             </>
                         ),
@@ -250,15 +267,18 @@ export default function EmployeeDocsScreen() {
                                         />
                                     ))}
 
-                                    <View style={{marginTop: 16}}>
-                                        <SgButton
-                                            onPress={handleMoreCheckOut}
-                                            bgColor={COLORS.primary}
-                                            color={COLORS.white}
-                                        >
-                                            {t('loadMore')}
-                                        </SgButton>
-                                    </View>
+                                    {((employeeActivitiesCheckOut || {}).total || 0) > page * 10 ?
+                                        <View style={{marginTop: 16}}>
+                                            <SgButton
+                                                onPress={handleMoreCheckOut}
+                                                bgColor={COLORS.primary}
+                                                color={COLORS.white}
+                                            >
+                                                {t('loadMore')}
+                                            </SgButton>
+                                        </View>
+                                        : null
+                                    }
                                 </View>
                             </>
                         ),

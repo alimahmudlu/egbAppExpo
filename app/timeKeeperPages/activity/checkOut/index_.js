@@ -4,31 +4,28 @@ import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import COLORS from "@/constants/colors";
 import React, {useCallback, useEffect, useState} from "react";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
-import moment from "moment/moment";
+import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 import {useTranslation} from "react-i18next";
-import SgPopup from "@/components/ui/Modal/Modal";
 import SgButton from "@/components/ui/Button/Button";
 import ReloadArrow from "@/assets/images/reload-arrows.svg";
 import SgSelect from "@/components/ui/Select/Select";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
-import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import SgPopup from "@/components/ui/Modal/Modal";
 import SgInput from "@/components/ui/Input/Input";
 import FilterIcon from "@/assets/images/filter.svg";
 
 export default function TimeKeeperUserScreen() {
-    const { request } = useApi();
-    const [employeeActivities, setEmployeeActivities] = useState({});
+    const {request} = useApi();
+    const [employeeActivities, setEmployeeActivities] = useState([]);
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
-    const {storeData, updateData} = useData();
+    const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
-    const [page, setPage] = useState(1);
-    const [getDataStatus, setDataStatus] = useState(false)
 
     function toggleFilterModal() {
         setFilterModal(!filterModal);
@@ -42,7 +39,7 @@ export default function TimeKeeperUserScreen() {
         setFilters({...filters, [e.name]: e.value});
     }
 
-    function getData() {
+    function handleFilters() {
         request({
             url: `/timekeeper/activity/checkout`,
             method: 'get',
@@ -51,32 +48,24 @@ export default function TimeKeeperUserScreen() {
                 end_date: moment().endOf('day').format(),
                 project: filters?.project?.id,
                 full_name: filters?.full_name,
-                page,
-                limit: 10
             },
         }).then().catch(err => {
             // console.log(err, 'apiservice control err')
         });
     }
 
-    function handleFilters() {
-        setPage(1);
-        setDataStatus(!getDataStatus);
-    }
-
     useEffect(() => {
-        setPage(1);
-        setDataStatus(!getDataStatus);
+        handleFilters()
     }, [filters?.full_name])
 
-    useEffect(() => {
-        if (page) {
-            getData()
-        }
-    }, [page, getDataStatus])
-
     useFocusEffect(useCallback(() => {
-        getData()
+        request({
+            url: `/timekeeper/activity/checkout`,
+            method: 'get',
+            params: {start_date: moment().startOf('day').format(), end_date: moment().endOf('day').format()},
+        }).then().catch(err => {
+            // console.log(err, 'apiservice control err')
+        });
 
         request({
             url: `/timekeeper/options/projects`, method: 'get',
@@ -90,33 +79,13 @@ export default function TimeKeeperUserScreen() {
         }).catch(err => {
             // console.log(err);
         })
-        return () => {
-            setPage(null)
-            setProjectsList([])
-            setEmployeeActivities({data: []})
-            updateData(`GET:/timekeeper/activity/checkout`, {data: []})
-        };
+
+        return () => {};
     }, [refreshKey]));
 
     useEffect(() => {
-        setEmployeeActivities((prevState) => {
-            if (page === 1) {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/activity/checkout`]?.data || {})
-                }
-            }
-            else {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/activity/checkout`]?.data || {}),
-                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/checkout`]?.data || {})?.data || [])]
-                }
-            }
-        })
+        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/activity/checkout`]?.data)
     }, [storeData?.cache?.[`GET:/timekeeper/activity/checkout`]])
-
-    function handleMoreCheckIn() {
-        setPage(page + 1);
-    }
 
     return (
         <SgTemplateScreen
@@ -124,8 +93,8 @@ export default function TimeKeeperUserScreen() {
                 header: t('checkOut'),
             }} filter={
                 <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
-                <Text><FilterIcon width={20} height={20} /></Text>
-            </Pressable>} />}
+                    <Text><FilterIcon width={20} height={20} /></Text>
+                </Pressable>} />}
         >
             <View>
                 <View style={{flex: 1}}>
@@ -138,39 +107,22 @@ export default function TimeKeeperUserScreen() {
                     />
                 </View>
             </View>
-            <View style={{gap: 8}}>
-                {((employeeActivities || {})?.data || [])?.map((emp, index) => (
+            <View>
+                {employeeActivities?.map((emp, index) => (
                     <SgSectionEmployeeCard
                         key={index}
                         fullData={emp}
                         title={emp?.employee?.full_name}
                         role={emp?.employee?.role?.name}
-                        position={emp?.employee?.position}
                         time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                         image={emp?.employee?.image}
                         editable={false}
-                        project={emp?.project?.name}
                         status={emp.status}
                         reason={emp.reject_reason}
+                        project={emp?.project?.name}
                     />
                 ))}
-
-                {((employeeActivities || {}).total || 0) > page * 10 ?
-                    <View style={{marginTop: 16}}>
-                        <SgButton
-                            onPress={handleMoreCheckIn}
-                            bgColor={COLORS.primary}
-                            color={COLORS.white}
-                        >
-                            {t('loadMore')}
-                        </SgButton>
-                    </View>
-                    : null
-                }
             </View>
-
-
-
             <SgPopup
                 visible={filterModal}
                 onClose={toggleFilterModal}
@@ -260,13 +212,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
-    },
-    iconWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: COLORS.brand_50,
-        padding: 14,
-        borderRadius: 50,
     },
     backButton: {
         padding: 8,

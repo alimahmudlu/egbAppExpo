@@ -83,12 +83,12 @@ export default function SgSectionEmployeeCard(props) {
                 toggleRejectedCheckInModal();
                 removeRowData('GET:/timekeeper/activity/list', fullData)
             } else {
-                console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
+                // console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
 
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
 
@@ -109,12 +109,12 @@ export default function SgSectionEmployeeCard(props) {
                 toggleRejectedCheckInModal();
                 removeRowData('GET:/timekeeper/overtime/list', fullData)
             } else {
-                console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
+                // console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
 
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
 
@@ -219,7 +219,7 @@ export default function SgSectionEmployeeCard(props) {
             }
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err?.message)
+            // console.log(err?.message)
             Alert.alert('Error', 'An error aaaa occurred while accepting the check-in.');
         })
     }
@@ -301,7 +301,7 @@ export default function SgSectionEmployeeCard(props) {
             }
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err?.message)
+            // console.log(err?.message)
             Alert.alert('Error', 'An error aaaa occurred while accepting the check-in.');
         })
     }

@@ -1,25 +1,17 @@
 import {
     View,
-    Text,
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Alert, Dimensions, TouchableOpacity
+    Keyboard
 } from "react-native";
 import styles from "@/assets/styles/auth/auth.styles";
 import SgSectionAuth from "@/components/sections/AuthSection/AuthSection";
 import SgForm from "@/components/ui/Form/Form";
 import SgInput from "@/components/ui/Input/Input";
-import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 import SgButton from "@/components/ui/Button/Button";
 import { useState } from "react";
 import COLORS from "@/constants/colors";
 import {useAuth} from "@/hooks/useAuth";
 import SgPopup from "@/components/ui/Modal/Modal";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
-import SgCard from "@/components/ui/Card/Card";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useTranslation} from "react-i18next";
 
@@ -43,12 +35,12 @@ export default function Login() {
     login(id, password).then((resp) => {
         if (!resp.success) {
             setErrorModalData(resp.error || 'Login failed');
-            console.log(resp.error || 'Login failed');
+            // console.log(resp.error || 'Login failed');
             toggleErrorModal()
         }
     }).catch((error) => {
         setErrorModalData('Login failed 2');
-        console.log(error, 'error');
+        // console.log(error, 'error');
     }).finally(() => {
         setTimeout(() => {
             setLoading(false)

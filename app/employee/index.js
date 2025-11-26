@@ -69,7 +69,7 @@ export default function EmployeeDashboardScreen() {
         request({
             url: '/employee/project/list', method: 'get',
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
 
         getRating()

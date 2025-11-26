@@ -1,4 +1,3 @@
-import Avatar from "@/assets/images/avatar.png";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
@@ -33,7 +32,7 @@ export default function EmployeeDashboardScreen() {
         request({
             url: `/chief/task/list`, method: 'get'
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {};
     }, [refreshKey]));

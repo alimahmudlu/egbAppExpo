@@ -7,13 +7,12 @@ import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import SgSelect from "@/components/ui/Select/Select";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
-import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgButton from "@/components/ui/Button/Button";
 import SgPopup from "@/components/ui/Modal/Modal";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useApi} from "@/hooks/useApi";
-import {globalValidate, validate} from "@/utils/validate";
+import {validate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants"
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useTranslation} from "react-i18next";
@@ -41,10 +40,10 @@ export default function TaskCreateScreen() {
                 setProjectsList(res?.data);
             } else {
                 // Handle error response
-                console.log(res.message);
+                // console.log(res.message);
             }
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {};
     }, [refreshKey]));
@@ -58,10 +57,10 @@ export default function TaskCreateScreen() {
                     setEmployeesList(res?.data);
                 } else {
                     // Handle error response
-                    console.log(res.message);
+                    // console.log(res.message);
                 }
             }).catch(err => {
-                console.log(err);
+                // console.log(err);
             })
         }
     }, [data?.project?.id]);
@@ -92,7 +91,7 @@ export default function TaskCreateScreen() {
             }).then(res => {
                 toggleCreateTaskInfoModal()
             }).catch(err => {
-                console.log(err, 'err');
+                // console.log(err, 'err');
             })
         }
     }

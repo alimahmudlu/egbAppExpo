@@ -47,6 +47,7 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
+                    unmountOnBlur: true,
                     title: t('tabBar__home'),
                     tabBarLabel: t('tabBar__home'),
                     headerTitle: t('tabBar__home'),
@@ -57,6 +58,7 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="docs/index"
                 options={{
+                    unmountOnBlur: true,
                     href: null,
                     title: t('tabBar__myDocs'),
                     tabBarLabel: t('tabBar__myDocs'),
@@ -68,6 +70,7 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="history/index"
                 options={{
+                    unmountOnBlur: true,
                     title: t('tabBar__history'),
                     tabBarLabel: t('tabBar__history'),
                     headerTitle: t('tabBar__history'),
@@ -78,6 +81,7 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="manual/index"
                 options={{
+                    unmountOnBlur: true,
                     title: t('tabBar__manual'),
                     tabBarLabel: t('tabBar__manual'),
                     headerTitle: t('tabBar__manual'),
@@ -88,13 +92,14 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="overtime/index"
                 options={{
+                    unmountOnBlur: true,
                     title: t('tabBar__overTime'),
                     tabBarLabel: t('tabBar__overTime'),
                     headerTitle: t('tabBar__overTime'),
-                    tabBarBadge: (((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 3 && el.status === 1)).length + ((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 4 && el.status === 1)).length) ?
-                        (((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 3 && el.status === 1)).length + ((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 4 && el.status === 1)).length)
-                        :
-                        null,
+                    // tabBarBadge: (((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 3 && el.status === 1)).length + ((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 4 && el.status === 1)).length) ?
+                    //     (((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 3 && el.status === 1)).length + ((storeData?.cache?.[`GET:/timekeeper/overtime/list`])?.data || [])?.filter(el => (el.type === 4 && el.status === 1)).length)
+                    //     :
+                    //     null,
                     tabBarIcon: ({color, focused}) => focused ? <OvertimeActiveIcon width={20} height={20}/> :
                         <OvertimeIcon width={20} height={20}/>
                 }}
@@ -102,6 +107,7 @@ export default function TimeKeeperTabLayout() {
             <Tabs.Screen
                 name="menu/index"
                 options={{
+                    unmountOnBlur: true,
                     title: t('tabBar__menu'),
                     tabBarLabel: t('tabBar__menu'),
                     headerTitle: t('tabBar__menu'),

@@ -62,7 +62,7 @@ export default function SgSectionTaskCard(props) {
             removeRowData(`GET:/chief/task/list`, data?.id, 'id');
             removeRowData(`GET:/chief/project/item/${data?.projectId}/tasks`, data?.id, 'id');
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
         });
     };
 
@@ -87,7 +87,7 @@ export default function SgSectionTaskCard(props) {
             changeRowData(`GET:/chief/task/list`, res?.data, res?.data?.id)
             toggleCheckedTaskInfoModal();
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     };
 
@@ -112,7 +112,7 @@ export default function SgSectionTaskCard(props) {
             changeRowData(`GET:/chief/task/list`, res?.data, res?.data?.id)
             toggleCompletedTaskInfoModal();
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     };
 
@@ -138,7 +138,7 @@ export default function SgSectionTaskCard(props) {
             setSelectedFiles([])
             toggleCompleteTaskInfoModal();
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     };
 
@@ -162,7 +162,7 @@ export default function SgSectionTaskCard(props) {
             changeRowData(`GET:/employee/project/item/${data?.projectId}/tasks`, res?.data, res?.data?.id)
             toggleCheckTaskInfoModal();
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     };
 
@@ -371,7 +371,9 @@ export default function SgSectionTaskCard(props) {
                         type={el?.type}
                         datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
                         url={el?.filepath}
-                        onPress={() => console.log('file.filename')}
+                        onPress={() => {
+                            // console.log('file.filename')
+                        }}
                         remove={true}
                     />
                 ))}

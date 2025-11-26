@@ -19,7 +19,7 @@ export default function PrivacyPolicyScreen() {
         }).then(res => {
             setDetails(res.data)
         }).catch(err => {
-            console.log(err, 'errrrr');
+            // console.log(err, 'errrrr');
         })
     }, [])
 

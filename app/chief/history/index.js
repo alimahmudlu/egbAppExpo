@@ -30,7 +30,7 @@ export default function EmployeeDocsScreen() {
         request({
             url: `/chief/task/list`, method: 'get', params: {..._filters, status: _filters?.status?.id}
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
     }
 
@@ -56,10 +56,10 @@ export default function EmployeeDocsScreen() {
         request({
             url: `/chief/options/task_statuses`, method: 'get', cache: true,
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {
-            console.log('Home tab lost focus');
+            // console.log('Home tab lost focus');
         };
     }, [refreshKey]));
 

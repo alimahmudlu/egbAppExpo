@@ -3,8 +3,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import {useData} from "@/hooks/useData";
 import {useAuth} from "@/hooks/useAuth";
-import {ActivityIndicator, Alert, View} from "react-native";
-import COLORS from "@/constants/colors";
+import {Alert} from "react-native";
 import {useTranslation} from "react-i18next";
 
 const { API_URL } = Constants.expoConfig.extra;
@@ -95,12 +94,12 @@ export function ApiProvider({children}) {
                 request
             }}>
             <>
-                {storeData?.loading?.size > 0 ?
-                    <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 2, opacity: 0.5, flex: 1, width: '100%', height: '100%', backgroundColor: COLORS.gray_blue_200, justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator size="large" color="#007BFF" />
-                    </View>
-                    : null
-                }
+                {/*{storeData?.loading?.size > 0 ?*/}
+                {/*    <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 2, opacity: 0.5, flex: 1, width: '100%', height: '100%', backgroundColor: COLORS.gray_blue_200, justifyContent: 'center', alignItems: 'center' }}>*/}
+                {/*        <ActivityIndicator size="large" color="#007BFF" />*/}
+                {/*    </View>*/}
+                {/*    : null*/}
+                {/*}*/}
                 {children}
             </>
         </ApiContext.Provider>

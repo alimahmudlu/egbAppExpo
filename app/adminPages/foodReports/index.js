@@ -2,7 +2,6 @@ import {View, StyleSheet, Text} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
-import SgFileCard from "@/components/sections/FileCard/FileCard";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
@@ -11,7 +10,6 @@ import moment from "moment";
 import CollapsibleView from "@/components/ui/Collapse/Collapse";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
-import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import SgInput from "@/components/ui/Input/Input";
 import SgPopup from "@/components/ui/Modal/Modal";
 

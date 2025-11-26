@@ -20,13 +20,15 @@ import FilterIcon from "@/assets/images/filter.svg";
 
 export default function TimeKeeperUserScreen() {
     const { request } = useApi();
-    const [employeeActivities, setEmployeeActivities] = useState([]);
+    const [employeeActivities, setEmployeeActivities] = useState({});
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
-    const {storeData} = useData();
+    const {storeData, updateData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
+    const [page, setPage] = useState(1);
+    const [getDataStatus, setDataStatus] = useState(false)
 
     function toggleFilterModal() {
         setFilterModal(!filterModal);
@@ -40,7 +42,7 @@ export default function TimeKeeperUserScreen() {
         setFilters({...filters, [e.name]: e.value});
     }
 
-    function handleFilters() {
+    function getData() {
         request({
             url: `/timekeeper/activity/checkin`,
             method: 'get',
@@ -49,24 +51,32 @@ export default function TimeKeeperUserScreen() {
                 end_date: moment().endOf('day').format(),
                 project: filters?.project?.id,
                 full_name: filters?.full_name,
+                page,
+                limit: 10
             },
         }).then().catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
 
+    function handleFilters() {
+        setPage(1);
+        setDataStatus(!getDataStatus);
+    }
+
     useEffect(() => {
-        handleFilters()
+        setPage(1);
+        setDataStatus(!getDataStatus);
     }, [filters?.full_name])
 
+    useEffect(() => {
+        if (page) {
+            getData()
+        }
+    }, [page, getDataStatus])
+
     useFocusEffect(useCallback(() => {
-        request({
-            url: `/timekeeper/activity/checkin`,
-            method: 'get',
-            params: {start_date: moment().startOf('day').format(), end_date: moment().endOf('day').format()},
-        }).then().catch(err => {
-            console.log(err, 'apiservice control err')
-        });
+        getData()
 
         request({
             url: `/timekeeper/options/projects`, method: 'get',
@@ -75,19 +85,38 @@ export default function TimeKeeperUserScreen() {
                 setProjectsList(res?.data);
             } else {
                 // Handle error response
-                console.log(res.message);
+                // console.log(res.message);
             }
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {
-            console.log('Home tab lost focus');
+            setPage(null)
+            setProjectsList([])
+            setEmployeeActivities({data: []})
+            updateData(`GET:/timekeeper/activity/checkin`, {data: []})
         };
     }, [refreshKey]));
 
     useEffect(() => {
-        setEmployeeActivities(storeData?.cache?.[`GET:/timekeeper/activity/checkin`]?.data)
+        setEmployeeActivities((prevState) => {
+            if (page === 1) {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/checkin`]?.data || {})
+                }
+            }
+            else {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/checkin`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/checkin`]?.data || {})?.data || [])]
+                }
+            }
+        })
     }, [storeData?.cache?.[`GET:/timekeeper/activity/checkin`]])
+
+    function handleMoreCheckIn() {
+        setPage(page + 1);
+    }
 
     return (
         <SgTemplateScreen
@@ -109,8 +138,8 @@ export default function TimeKeeperUserScreen() {
                     />
                 </View>
             </View>
-            <View>
-                {employeeActivities?.map((emp, index) => (
+            <View style={{gap: 8}}>
+                {((employeeActivities || {})?.data || [])?.map((emp, index) => (
                     <SgSectionEmployeeCard
                         key={index}
                         fullData={emp}
@@ -125,6 +154,19 @@ export default function TimeKeeperUserScreen() {
                         reason={emp.reject_reason}
                     />
                 ))}
+
+                {((employeeActivities || {}).total || 0) > page * 10 ?
+                    <View style={{marginTop: 16}}>
+                        <SgButton
+                            onPress={handleMoreCheckIn}
+                            bgColor={COLORS.primary}
+                            color={COLORS.white}
+                        >
+                            {t('loadMore')}
+                        </SgButton>
+                    </View>
+                    : null
+                }
             </View>
 
 

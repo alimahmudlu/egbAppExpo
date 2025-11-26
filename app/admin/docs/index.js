@@ -8,22 +8,18 @@ import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgPopup from "@/components/ui/Modal/Modal";
-import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
 import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
 import moment from "moment";
 import SgSelect from "@/components/ui/Select/Select";
-import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import {useAuth} from "@/hooks/useAuth";
-import SgInput from "@/components/ui/Input/Input";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useTranslation} from "react-i18next";
 import {validate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants";
 import {useLanguage} from "@/hooks/useLanguage";
-import {request} from "axios";
 
 export default function EmployeeDocsScreen() {
   const [docList, setDocList] = useState([]);

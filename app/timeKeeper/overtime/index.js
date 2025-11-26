@@ -23,12 +23,10 @@ import {useSocket} from "@/hooks/useSocket";
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const [employees, setEmployees] = useState([]);
-    const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
-    const [filterModal, setFilterModal] = useState(false)
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
-    const {storeData, insertData, removeRowData, changeAddRowData, setStoreData} = useData();
+    const {storeData, insertData, updateData, changeAddRowData, setStoreData} = useData();
     const {socket} = useSocket()
 
     function getData(_filters = {}) {
@@ -93,7 +91,8 @@ export default function EmployeeDocsScreen() {
         })
 
         return () => {
-            console.log('Home tab lost focus');
+            setEmployees([])
+            updateData(`GET:/timekeeper/overtime/list`, {data: []})
         };
     }, [refreshKey]));
 

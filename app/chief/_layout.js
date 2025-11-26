@@ -1,7 +1,6 @@
 import {Tabs} from 'expo-router';
 import React, {useEffect} from 'react';
 import {Platform} from 'react-native';
-import {useAuth} from '@/hooks/useAuth';
 import HomeActiveIcon from "@/assets/images/home-active.svg";
 import HomeIcon from "@/assets/images/home.svg";
 import HistoryActiveIcon from "@/assets/images/history-active.svg";

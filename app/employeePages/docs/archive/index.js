@@ -19,7 +19,7 @@ export default function ProjectItemScreen() {
         request({
             url: '/employee/doc/history', method: 'get',
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {
             console.log('Home tab lost focus');

@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
@@ -31,7 +30,7 @@ export default function EmployeeDocsScreen() {
         request({
             url: `/chief/task/list/active`, method: 'get', params: {..._filters, status: _filters?.status?.id}
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
     }
 
@@ -57,7 +56,7 @@ export default function EmployeeDocsScreen() {
         request({
             url: `/chief/options/task_statuses`, method: 'get', cache: true,
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {};
     }, [refreshKey]));

@@ -1,14 +1,10 @@
 import {Tabs} from 'expo-router';
-import React, {useEffect} from 'react';
-import {TouchableOpacity, Text, Platform} from 'react-native';
-import {useAuth} from '@/hooks/useAuth';
+import React from 'react';
+import {Platform} from 'react-native';
 import HomeActiveIcon from "@/assets/images/home-active.svg";
 import HomeIcon from "@/assets/images/home.svg";
 import FoodSchedule from "@/assets/images/foodSchedule.svg";
 import FoodScheduleActive from "@/assets/images/foodScheduleActive.svg";
-import HistoryIcon from "@/assets/images/history.svg";
-import ProjectsActiveIcon from "@/assets/images/bag-active.svg";
-import ProjectsIcon from "@/assets/images/bag.svg";
 import MenuActiveIcon from "@/assets/images/menu-active.svg";
 import MenuIcon from "@/assets/images/menu.svg";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";

@@ -26,10 +26,10 @@ export default function TimeKeeperUserScreen() {
                 type: 'active'
             }
         }).then().catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {
-            console.log('Home tab lost focus');
+            // console.log('Home tab lost focus');
         };
     }, [refreshKey]));
 

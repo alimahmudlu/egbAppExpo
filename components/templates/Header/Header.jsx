@@ -24,8 +24,8 @@ export default function SgTemplateHeader({name, role, position, rating, profileI
 
 
     useEffect(() => {
-        setNotifications(storeData?.cache?.[`GET:/notifications`]?.data)
-    }, [storeData?.cache?.[`GET:/notifications`]]);
+        setNotifications(storeData?.cache?.[`GET:/notifications/count`]?.data)
+    }, [storeData?.cache?.[`GET:/notifications/count`]]);
 
 
     /*useFocusEffect(useCallback(() => {
@@ -60,7 +60,7 @@ export default function SgTemplateHeader({name, role, position, rating, profileI
                     router.push(`/pages/notifications`);
                 }}>
                     <BellIcon style={styles.notificationIcon} width={20} height={20} resizeMode='strech'/>
-                    {(notifications || [])?.filter(el => !el.read)?.length ? <Text style={styles.notificationBadge}>{(notifications || [])?.filter(el => !el.read)?.length}</Text> : null}
+                    {(notifications)?.unread_notifications_count ? <Text style={styles.notificationBadge}>{(notifications)?.unread_notifications_count}</Text> : null}
                 </TouchableOpacity>
             </View>
         </View>

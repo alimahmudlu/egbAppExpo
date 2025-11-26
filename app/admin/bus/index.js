@@ -8,7 +8,6 @@ import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgInput from "@/components/ui/Input/Input";
 import moment from "moment";
 import SgPopup from "@/components/ui/Modal/Modal";
-import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useApi} from "@/hooks/useApi";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useData} from "@/hooks/useData";

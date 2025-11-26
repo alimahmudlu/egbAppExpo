@@ -264,10 +264,10 @@ export default function EmployeeDocsScreen() {
           url: '/employee/doc/list',
           method: 'get',
         }).then().catch(err => {
-          console.log(err);
+          // console.log(err);
         })
       }).catch(err => {
-        console.log(err);
+        // console.log(err);
       })
     }
   }
@@ -287,10 +287,10 @@ export default function EmployeeDocsScreen() {
         url: '/employee/doc/list',
         method: 'get',
       }).then().catch(err => {
-        console.log(err);
+        // console.log(err);
       })
     }).catch(err => {
-      console.log(err);
+      // console.log(err);
     })
   }
 
@@ -307,7 +307,7 @@ export default function EmployeeDocsScreen() {
           url: '/employee/doc/list',
           method: 'get',
         }).then().catch(err => {
-          console.log(err);
+          // console.log(err);
         })
 
         return () => {};

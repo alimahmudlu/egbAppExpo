@@ -5,7 +5,7 @@ const STORAGE_KEY = 'APP_DATA';
 
 const DataContext = createContext();
 
-export const DataProvider = ({ children }) => {
+export const DataProvider = ({ onBackPress, children }) => {
   const [storeData, setStoreData] = useState({
     checkInData: {
         checkIn: null,
@@ -16,36 +16,36 @@ export const DataProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const storedData = await AsyncStorage.getItem(STORAGE_KEY);
-        if (storedData) {
-          setStoreData(JSON.parse(storedData));
-        }
-      } catch (e) {
-        console.error('Error loading data:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       // const storedData = await AsyncStorage.getItem(STORAGE_KEY);
+  //       // if (storedData) {
+  //       //   setStoreData(JSON.parse(storedData));
+  //       }
+  //     } catch (e) {
+  //       console.error('Error loading data:', e);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //
+  //   loadData();
+  // }, []);
 
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    const saveData = async () => {
-      try {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(storeData));
-      } catch (e) {
-        console.error('Error saving data:', e);
-      }
-    };
-
-    if (!loading) {
-      // saveData();
-    }
-  }, [storeData]);
+  // useEffect(() => {
+  //   const saveData = async () => {
+  //     try {
+  //       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(storeData));
+  //     } catch (e) {
+  //       console.error('Error saving data:', e);
+  //     }
+  //   };
+  //
+  //   if (!loading) {
+  //     // saveData();
+  //   }
+  // }, [storeData]);
 
   const insertLoading = async (key) => {
     setStoreData(prev => {
@@ -71,7 +71,7 @@ export const DataProvider = ({ children }) => {
 
   const clearData = async () => {
     try {
-      await AsyncStorage.removeItem(STORAGE_KEY);
+      // await AsyncStorage.removeItem(STORAGE_KEY);
       setStoreData({ user: null, token: null });
     } catch (e) {
       console.error('Error clearing data:', e);
@@ -364,7 +364,7 @@ export const DataProvider = ({ children }) => {
     }
 
   return (
-      <DataContext.Provider value={{ storeData, setStoreData, loading, removeRowFromPaginationData, clearData, updateDataWithPagination, insertData, changeRowData, updateData, removeRowData, changeAddRowData, insertLoading, removeLoading }}>
+      <DataContext.Provider value={{ storeData, onBackPress, setStoreData, loading, removeRowFromPaginationData, clearData, updateDataWithPagination, insertData, changeRowData, updateData, removeRowData, changeAddRowData, insertLoading, removeLoading }}>
         {children}
       </DataContext.Provider>
   );

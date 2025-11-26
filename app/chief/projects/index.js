@@ -24,10 +24,10 @@ export default function TasksScreen() {
             if (res.success) {
                 setProjectsList(res?.data);
             } else {
-                console.log(res.message);
+                // console.log(res.message);
             }
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
         })
         return () => {};
     }, [refreshKey]));

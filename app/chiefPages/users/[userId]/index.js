@@ -1,13 +1,10 @@
 import { View, StyleSheet } from 'react-native';
 import {useLocalSearchParams} from "expo-router";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
-import Avatar from "@/assets/images/avatar.png";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import SgCard from "@/components/ui/Card/Card";
-import ClockHistory from "@/assets/images/coins-stacked.svg";
-import SgSectionProgressBar from "@/components/sections/ProgressBar/ProgressBar";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import React, {useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
@@ -35,7 +32,7 @@ export default function TimeKeeperUserScreen() {
             method: 'get',
         }).then(res => {
         }).catch(err => {
-            console.log(err, 'err')
+            // console.log(err, 'err')
         })
     }, [userId, refreshKey]);
 

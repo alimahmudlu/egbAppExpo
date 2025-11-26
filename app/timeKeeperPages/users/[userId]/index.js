@@ -35,7 +35,7 @@ export default function TimeKeeperUserScreen() {
             url: `/timekeeper/employee/details/${userId}`,
             method: 'get',
         }).then().catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     }, [userId, refreshKey]);
 
