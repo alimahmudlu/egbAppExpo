@@ -36,7 +36,7 @@ export default function EmployeeDashboardScreen() {
     const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
     const [employeeActivitiesAtWork, setEmployeeActivitiesAtWork] = useState({});
     const [filters, setFilters] = useState({})
-    const {storeData, insertData, changeAddRowData, setStoreData, updateData} = useData();
+    const {storeData, insertDataWithPagination, insertData, changeAddRowData, setStoreData, updateData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
@@ -61,13 +61,13 @@ export default function EmployeeDashboardScreen() {
             url: '/timekeeper/activity/list/checkin',
             method: 'get',
             params: {
-                ..._filters,
                 page: pageCheckIn,
-                limit: 10
+                limit: 10,
+                ..._filters,
             }
         }).then(res => {
         }).catch(err => {
-            // console.log(err, 'apiservice control err')
+            console.log(err, 'apiservice control err')
         });
     }
     function getDataCheckOut(_filters = {}) {
@@ -85,6 +85,7 @@ export default function EmployeeDashboardScreen() {
         });
     }
     function getDataAtWork(_filters = {}) {
+        console.log("getDataAtWork");
         request({
             url: '/timekeeper/activity/list/atwork',
             method: 'get',
@@ -103,21 +104,35 @@ export default function EmployeeDashboardScreen() {
         if (!socket) return;
 
         const handler = (data) => {
-            insertData('GET:/timekeeper/activity/list', data?.data)
+            if (data?.data?.type === 1) {
+                insertDataWithPagination('GET:/timekeeper/activity/list/checkin', data?.data, 1)
+                // setEmployeeActivitiesCheckIn((prevState) => ({
+                //     ...prevState,
+                //     total: prevState.total + 1,
+                // }))
+            }
+            if (data?.data?.type === 2) {
+                insertDataWithPagination('GET:/timekeeper/activity/list/checkout', data?.data, 1)
+                setEmployeeActivitiesCheckOut((prevState) => ({
+                    ...prevState,
+                    total: Number(prevState.total || 0) + 1,
+                }))
+            }
+
         };
         const handler2 = (data) => {
             // removeRowData('GET:/timekeeper/activity/list', data?.data?.activity_id, 'id')
-            changeAddRowData('GET:/timekeeper/activity/list', {
-                completed_status: 1
-            }, data?.data?.activity_id, 'id')
-            insertData('GET:/timekeeper/activity/list', {
-                ...data?.data,
-                // complete_status: 1,
-                // confirm_time: moment(),
-                // timezone: moment.tz.guess(),
-                // confirm_employee_id: user?.id,
-                // status: 2
-            })
+            // changeAddRowData('GET:/timekeeper/activity/list', {
+            //     completed_status: 1
+            // }, data?.data?.activity_id, 'id')
+            // insertData('GET:/timekeeper/activity/list', {
+            //     ...data?.data,
+            //     // complete_status: 1,
+            //     // confirm_time: moment(),
+            //     // timezone: moment.tz.guess(),
+            //     // confirm_employee_id: user?.id,
+            //     // status: 2
+            // })
         };
 
         // socket.on('connect', () => {
@@ -239,15 +254,15 @@ export default function EmployeeDashboardScreen() {
             setCheckIn({})
             setCheckOut({})
 
-            setPageCheckIn(0)
-            setPageCheckOut(0)
-            setPageAtWork(0)
+            setPageCheckIn(1)
+            setPageCheckOut(1)
+            setPageAtWork(1)
             setEmployeeActivitiesCheckIn({data: []})
             setEmployeeActivitiesCheckOut({data: []})
             setEmployeeActivitiesAtWork({data: []})
-            updateData(`GET:/timekeeper/activity/list/checkin`, {data: []})
-            updateData(`GET:/timekeeper/activity/list/checkout`, {data: []})
-            updateData(`GET:/timekeeper/activity/list/atwork`, {data: []})
+            // updateData(`GET:/timekeeper/activity/list/checkin`, {data: []})
+            // updateData(`GET:/timekeeper/activity/list/checkout`, {data: []})
+            // updateData(`GET:/timekeeper/activity/list/atwork`, {data: []})
             setActiveTab('checkIn')
         };
 
@@ -332,13 +347,25 @@ export default function EmployeeDashboardScreen() {
     }, [storeData?.checkIn, storeData?.checkOut])
 
     function handleMoreCheckIn() {
-        setPageCheckOut(pageCheckIn + 1);
+        setPageCheckIn(pageCheckIn + 1);
     }
     function handleMoreCheckOut() {
         setPageCheckOut(pageCheckOut + 1);
     }
     function handleMoreAtWork() {
         setPageAtWork(pageAtWork + 1);
+    }
+
+    function removeRowData(fullData, type) {
+        setDataStatus(!getDataStatus)
+        // setEmployeeActivitiesCheckIn((prevState) => {
+        //     const _data = prevState.data;
+        //
+        //     return {
+        //         ...prevState,
+        //         data: _data.filter(item => item.employee?.id !== fullData?.employee?.id)
+        //     }
+        // })
     }
 
     return (
@@ -451,6 +478,8 @@ export default function EmployeeDashboardScreen() {
                                 {(((employeeActivitiesCheckIn || {})?.data || [])?.map((emp, index) => {
                                     return (
                                         <SgSectionEmployeeCard
+                                            cardType={'checkIn'}
+                                            removeRowData={removeRowData}
                                             key={index}
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
@@ -461,7 +490,6 @@ export default function EmployeeDashboardScreen() {
                                         />
                                     )
                                 }))}
-
                                 {((employeeActivitiesCheckIn || {})?.total || 0) > pageCheckIn * 10 ?
                                     <View style={{marginTop: 16}}>
                                         <SgButton
@@ -485,6 +513,8 @@ export default function EmployeeDashboardScreen() {
                                 {(((employeeActivitiesCheckOut || {})?.data || [])?.map((emp, index) => {
                                     return (
                                         <SgSectionEmployeeCard
+                                            cardType={'checkOut'}
+                                            removeRowData={removeRowData}
                                             key={index}
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
@@ -519,6 +549,8 @@ export default function EmployeeDashboardScreen() {
                                 {(((employeeActivitiesAtWork || {})?.data || [])?.map((emp, index) => {
                                     return (
                                         <SgSectionEmployeeCard
+                                            cardType={'atWork'}
+                                            removeRowData={removeRowData}
                                             key={index}
                                             fullData={emp}
                                             atWork={true}

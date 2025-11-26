@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "EGB",
     "slug": "egb-expo-app",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "orientation": "default",
     "icon": "./assets/images/icon-color.png",
     "scheme": "egbappexpo",
@@ -33,7 +33,7 @@ export default {
       package: "com.egb.egb",
       edgeToEdgeEnabled: true,
       usesCleartextTraffic: true,
-        versionCode: 14,
+        versionCode: 15,
       adaptiveIcon: {
         foregroundImage: "./assets/images/icon-white.png",
         backgroundColor: "#0B322F"
@@ -85,7 +85,7 @@ export default {
     "extra": {
       API_URL: process.env.API_URL || 'https://mobile-api.entergreenbuildings.com/api',
       AUTH_TOKEN_KEY: process.env.AUTH_TOKEN_KEY || 'authorization',
-      SOCKET_URL: process.env.SOCKET_URL || 'https://mobile-api.entergreenbuildings.com',
+      SOCKET_URL: process.env.SOCKET_URL || 'wss://mobile-api.entergreenbuildings.com',
       "router": {},
       "eas": {
         "projectId": "d461924c-79d5-4a37-8efa-85691df04b88"

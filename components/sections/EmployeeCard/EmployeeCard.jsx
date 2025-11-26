@@ -30,7 +30,7 @@ import SgRadio from "@/components/ui/Radio/Radio";
 
 
 export default function SgSectionEmployeeCard(props) {
-    const {fullData, image, title, project, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw, overTime = false} = props;
+    const {fullData, removeRowData, cardType, image, title, project, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw, overTime = false} = props;
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
@@ -38,7 +38,8 @@ export default function SgSectionEmployeeCard(props) {
     const [acceptedCheckInModal, setAcceptedCheckInModal] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
     const { accessToken, user } = useAuth();
-    const { removeRowData, insertData, changeRowData, changeAddRowData, storeData, removeRowFromPaginationData } = useData();
+    // const { removeRowData, insertData, changeRowData, changeAddRowData, storeData, removeRowFromPaginationData } = useData();
+    const { insertData, changeRowData, changeAddRowData, storeData, removeRowFromPaginationData } = useData();
     const {request} = useApi();
     const [clickType, setClickType] = useState(null)
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
@@ -81,7 +82,8 @@ export default function SgSectionEmployeeCard(props) {
             setButtonStatus(false)
             if (res.success) {
                 toggleRejectedCheckInModal();
-                removeRowData('GET:/timekeeper/activity/list', fullData)
+                removeRowData()
+                // removeRowData('GET:/timekeeper/activity/list', fullData)
             } else {
                 // console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
@@ -107,7 +109,8 @@ export default function SgSectionEmployeeCard(props) {
             setButtonStatus(false)
             if (res.success) {
                 toggleRejectedCheckInModal();
-                removeRowData('GET:/timekeeper/overtime/list', fullData)
+                removeRowData()
+                // removeRowData('GET:/timekeeper/overtime/list', fullData)
             } else {
                 // console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
@@ -173,45 +176,48 @@ export default function SgSectionEmployeeCard(props) {
 
 
                 // setAcceptedCheckInModal(false);
-                if (fullData?.type === 1) {
-                    removeRowData('GET:/timekeeper/activity/list', fullData)
-                    insertData('GET:/timekeeper/activity/list', {
-                        ...fullData,
-                        complete_status: 1,
-                        confirm_time: moment(),
-                        review_time: moment(),
-                        timezone: moment.tz.guess(),
-                        confirm_employee_id: user?.id,
-                        status: 2
-                    })
-                }
-                if (fullData?.type === 3) {
-                    removeRowData('GET:/timekeeper/overtime/list', fullData)
-                    // insertData('GET:/timekeeper/overtime/list', {
-                    //     ...fullData,
-                    //     complete_status: 1,
-                    //     confirm_time: moment(),
-                    //     review_time: moment(),
-                    //     timezone: moment.tz.guess(),
-                    //     confirm_employee_id: user?.id,
-                    //     status: 2
-                    // })
-                }
-                else {
-                    removeRowData('GET:/timekeeper/activity/list', fullData?.activity_id, 'id')
-                    removeRowData('GET:/timekeeper/activity/list', fullData)
-                    insertData('GET:/timekeeper/activity/list', {
-                        ...fullData,
-                        activity_id: fullData?.id,
-                        confirm_time: moment(),
-                        review_time: moment(),
-                        timezone: moment.tz.guess(),
-                        confirm_employee_id: user?.id,
-                        status: 2,
-                        complete_status: 1,
-                        completed_status: 1,
-                    })
-                }
+                // if (fullData?.type === 1) {
+                //     removeRowData('GET:/timekeeper/activity/list', fullData)
+                //     insertData('GET:/timekeeper/activity/list', {
+                //         ...fullData,
+                //         complete_status: 1,
+                //         confirm_time: moment(),
+                //         review_time: moment(),
+                //         timezone: moment.tz.guess(),
+                //         confirm_employee_id: user?.id,
+                //         status: 2
+                //     })
+                // }
+                // if (fullData?.type === 3) {
+                //     removeRowData('GET:/timekeeper/overtime/list', fullData)
+                //     // insertData('GET:/timekeeper/overtime/list', {
+                //     //     ...fullData,
+                //     //     complete_status: 1,
+                //     //     confirm_time: moment(),
+                //     //     review_time: moment(),
+                //     //     timezone: moment.tz.guess(),
+                //     //     confirm_employee_id: user?.id,
+                //     //     status: 2
+                //     // })
+                // }
+                // else {
+                //     removeRowData('GET:/timekeeper/activity/list', fullData?.activity_id, 'id')
+                //     removeRowData('GET:/timekeeper/activity/list', fullData)
+                //     insertData('GET:/timekeeper/activity/list', {
+                //         ...fullData,
+                //         activity_id: fullData?.id,
+                //         confirm_time: moment(),
+                //         review_time: moment(),
+                //         timezone: moment.tz.guess(),
+                //         confirm_employee_id: user?.id,
+                //         status: 2,
+                //         complete_status: 1,
+                //         completed_status: 1,
+                //     })
+                // }
+
+
+                removeRowData()
 
             }
             else {
@@ -239,15 +245,38 @@ export default function SgSectionEmployeeCard(props) {
         }).then(res => {
             setButtonStatus(false)
             if (res.data.success) {
-                // setAcceptCheckInModal(false);
-                setUserOperationModal(false)
-                setAcceptCheckInModal(false);
-                // setAcceptedCheckInModal(false);
+                // // setAcceptCheckInModal(false);
+                // // setAcceptedCheckInModal(false);
+                // // if (fullData?.type === 3) {
+                // //     removeRowData('GET:/timekeeper/overtime/list', fullData)
+                // //     insertData('GET:/timekeeper/overtime/list', {
+                // //         ...fullData,
+                // //         complete_status: 0,
+                // //         confirm_time: moment(),
+                // //         review_time: moment(),
+                // //         timezone: moment.tz.guess(),
+                // //         confirm_employee_id: user?.id,
+                // //         status: 2
+                // //     })
+                // // }
+                // // if (fullData?.type === 4) {
+                // //     removeRowData('GET:/timekeeper/overtime/list', fullData)
+                // //     // insertData('GET:/timekeeper/overtime/list', {
+                // //     //     ...fullData,
+                // //     //     complete_status: 1,
+                // //     //     confirm_time: moment(),
+                // //     //     review_time: moment(),
+                // //     //     timezone: moment.tz.guess(),
+                // //     //     confirm_employee_id: user?.id,
+                // //     //     status: 2
+                // //     // })
+                // // }
+                //
                 // if (fullData?.type === 3) {
                 //     removeRowData('GET:/timekeeper/overtime/list', fullData)
                 //     insertData('GET:/timekeeper/overtime/list', {
                 //         ...fullData,
-                //         complete_status: 0,
+                //         complete_status: 1,
                 //         confirm_time: moment(),
                 //         review_time: moment(),
                 //         timezone: moment.tz.guess(),
@@ -255,46 +284,26 @@ export default function SgSectionEmployeeCard(props) {
                 //         status: 2
                 //     })
                 // }
-                // if (fullData?.type === 4) {
+                // else {
+                //     removeRowData('GET:/timekeeper/overtime/list', fullData?.activity_id, 'id')
                 //     removeRowData('GET:/timekeeper/overtime/list', fullData)
-                //     // insertData('GET:/timekeeper/overtime/list', {
-                //     //     ...fullData,
-                //     //     complete_status: 1,
-                //     //     confirm_time: moment(),
-                //     //     review_time: moment(),
-                //     //     timezone: moment.tz.guess(),
-                //     //     confirm_employee_id: user?.id,
-                //     //     status: 2
-                //     // })
+                //     insertData('GET:/timekeeper/overtime/list', {
+                //         ...fullData,
+                //         activity_id: fullData?.id,
+                //         confirm_time: moment(),
+                //         review_time: moment(),
+                //         timezone: moment.tz.guess(),
+                //         confirm_employee_id: user?.id,
+                //         status: 2,
+                //         complete_status: 1,
+                //         completed_status: 1,
+                //     })
                 // }
 
-                if (fullData?.type === 3) {
-                    removeRowData('GET:/timekeeper/overtime/list', fullData)
-                    insertData('GET:/timekeeper/overtime/list', {
-                        ...fullData,
-                        complete_status: 1,
-                        confirm_time: moment(),
-                        review_time: moment(),
-                        timezone: moment.tz.guess(),
-                        confirm_employee_id: user?.id,
-                        status: 2
-                    })
-                }
-                else {
-                    removeRowData('GET:/timekeeper/overtime/list', fullData?.activity_id, 'id')
-                    removeRowData('GET:/timekeeper/overtime/list', fullData)
-                    insertData('GET:/timekeeper/overtime/list', {
-                        ...fullData,
-                        activity_id: fullData?.id,
-                        confirm_time: moment(),
-                        review_time: moment(),
-                        timezone: moment.tz.guess(),
-                        confirm_employee_id: user?.id,
-                        status: 2,
-                        complete_status: 1,
-                        completed_status: 1,
-                    })
-                }
+
+                setUserOperationModal(false)
+                setAcceptCheckInModal(false);
+                removeRowData()
             }
             else {
                 Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
@@ -309,9 +318,6 @@ export default function SgSectionEmployeeCard(props) {
     function toggleAcceptedCheckInModal() {
         setAcceptedCheckInModal(!acceptedCheckInModal);
     }
-
-
-
 
     function toggleOpenSettingsModal() {
         setOpenSettingsModal(!openSettingsModal)

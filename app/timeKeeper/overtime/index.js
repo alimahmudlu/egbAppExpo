@@ -101,6 +101,11 @@ export default function EmployeeDocsScreen() {
     }, [storeData?.cache?.[`GET:/timekeeper/overtime/list`]]);
 
 
+    function removeRowData(fullData, type) {
+        getData({...filters})
+    }
+
+
     return (
         <SgTemplateScreen
             head={
@@ -135,6 +140,7 @@ export default function EmployeeDocsScreen() {
                     {
                         element: (employees?.filter(el => el.type === 3 && el.status === 1).map((emp, index) => (
                             <SgSectionEmployeeCard
+                                removeRowData={removeRowData}
                                 key={index}
                                 fullData={emp}
                                 title={emp?.employee?.full_name}
@@ -149,6 +155,7 @@ export default function EmployeeDocsScreen() {
                     {
                         element: (employees?.filter(el => el.type === 4 && el.status === 1).map((emp, index) => (
                             <SgSectionEmployeeCard
+                                removeRowData={removeRowData}
                                 key={index}
                                 fullData={emp}
                                 title={emp?.employee?.full_name}
@@ -163,6 +170,7 @@ export default function EmployeeDocsScreen() {
                     {
                         element: (employees?.filter(el => el.type === 3 && el.status === 2 && el.completed_status === 0).map((emp, index) => (
                             <SgSectionEmployeeCard
+                                removeRowData={removeRowData}
                                 key={index}
                                 fullData={emp}
                                 title={emp?.employee?.full_name}

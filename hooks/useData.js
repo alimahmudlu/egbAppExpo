@@ -19,9 +19,9 @@ export const DataProvider = ({ onBackPress, children }) => {
   // useEffect(() => {
   //   const loadData = async () => {
   //     try {
-  //       // const storedData = await AsyncStorage.getItem(STORAGE_KEY);
-  //       // if (storedData) {
-  //       //   setStoreData(JSON.parse(storedData));
+  //       const storedData = await AsyncStorage.getItem(STORAGE_KEY);
+  //       if (storedData) {
+  //         setStoreData(JSON.parse(storedData));
   //       }
   //     } catch (e) {
   //       console.error('Error loading data:', e);
@@ -32,7 +32,7 @@ export const DataProvider = ({ onBackPress, children }) => {
   //
   //   loadData();
   // }, []);
-
+  //
   // useEffect(() => {
   //   const saveData = async () => {
   //     try {
@@ -92,6 +92,27 @@ export const DataProvider = ({ onBackPress, children }) => {
       }
     }));
   }
+    const insertDataWithPagination = async (key, data, total) => {
+        setStoreData(prev => {
+            return ({
+                ...prev,
+                cache: {
+                    ...prev.cache,
+                    [key]: {
+                        ...prev.cache?.[key],
+                        data: {
+                            ...prev.cache?.[key]?.data,
+                            total: Number(prev.cache?.[key]?.data?.total || 0) + total,
+                            data: [
+                                ...prev.cache?.[key]?.data?.data,
+                                data
+                            ]
+                        }
+                    }
+                }
+            })
+        });
+    }
   const updateData = async (key, data) => {
     setStoreData(prev => ({
       ...prev,
@@ -364,7 +385,7 @@ export const DataProvider = ({ onBackPress, children }) => {
     }
 
   return (
-      <DataContext.Provider value={{ storeData, onBackPress, setStoreData, loading, removeRowFromPaginationData, clearData, updateDataWithPagination, insertData, changeRowData, updateData, removeRowData, changeAddRowData, insertLoading, removeLoading }}>
+      <DataContext.Provider value={{ storeData, insertDataWithPagination, onBackPress, setStoreData, loading, removeRowFromPaginationData, clearData, updateDataWithPagination, insertData, changeRowData, updateData, removeRowData, changeAddRowData, insertLoading, removeLoading }}>
         {children}
       </DataContext.Provider>
   );

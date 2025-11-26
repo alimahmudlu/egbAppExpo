@@ -89,7 +89,7 @@ export default function EmployeeDocsScreen() {
         })
 
         return () => {
-            setPage(null)
+            setPage(1)
             setEmployees({})
             setProjectsList([])
             updateData(`GET:/timekeeper/manual/list`, {data: []})
