@@ -118,6 +118,7 @@ export default function EmployeeDocsScreen() {
         })
 
         return () => {
+            setFilters({})
             setPage(0)
             setPageCheckOut(0)
             setDataStatus(!getDataStatus)

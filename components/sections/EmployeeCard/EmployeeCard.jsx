@@ -392,12 +392,14 @@ export default function SgSectionEmployeeCard(props) {
             }
             setButtonStatus(false)
             if(isManualCheckoutAvailable() && atWork) {
-                request({
-                    url: '/timekeeper/activity/list', method: 'get'
-                }).then(res => {
-                }).catch(err => {
-                    console.log(err, 'apiservice control err')
-                });
+                // request({
+                //     url: '/timekeeper/activity/list', method: 'get'
+                // }).then(res => {
+                // }).catch(err => {
+                //     console.log(err, 'apiservice control err')
+                // });
+
+                removeRowData()
             }
             if(overTime && atWork) {
                 request({
@@ -621,7 +623,7 @@ export default function SgSectionEmployeeCard(props) {
                         )
                     }
                     {/*{((manual && !fullData?.checkout?.latitude && fullData?.checkin?.latitude) || (isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?*/}
-                    {((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?
+                    {(((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) && clickType !== 'reject') ?
                         <View>
                             <TouchableOpacity
                                 activeOpacity={1}

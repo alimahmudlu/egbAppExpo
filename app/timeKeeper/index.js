@@ -251,6 +251,7 @@ export default function EmployeeDashboardScreen() {
             setProjectsList([])
             setCheckIn({})
             setCheckOut({})
+            setFilters({})
 
             setPageCheckIn(1)
             setPageCheckOut(1)

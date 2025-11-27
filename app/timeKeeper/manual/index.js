@@ -89,6 +89,7 @@ export default function EmployeeDocsScreen() {
         })
 
         return () => {
+            setFilters({})
             setPage(0)
             setDataStatus(!getDataStatus)
             setEmployees({})

@@ -92,6 +92,7 @@ export default function EmployeeDocsScreen() {
 
         return () => {
             setEmployees([])
+            setFilters({})
             updateData(`GET:/timekeeper/overtime/list`, {data: []})
         };
     }, [refreshKey]));
