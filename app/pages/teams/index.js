@@ -104,7 +104,7 @@ export default function TimeKeeperUserScreen() {
 
     useEffect(() => {
         setData(storeData?.cache?.[`GET:/my_team/list`]?.data)
-        console.log(storeData?.cache?.[`GET:/my_team/list`]?.data, 'storeData')
+        // console.log(storeData?.cache?.[`GET:/my_team/list`]?.data, 'storeData')
     }, [storeData?.cache?.[`GET:/my_team/list`]])
 
     return (

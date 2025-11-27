@@ -89,7 +89,8 @@ export default function EmployeeDocsScreen() {
         })
 
         return () => {
-            setPage(1)
+            setPage(0)
+            setDataStatus(!getDataStatus)
             setEmployees({})
             setProjectsList([])
             updateData(`GET:/timekeeper/manual/list`, {data: []})
@@ -102,14 +103,12 @@ export default function EmployeeDocsScreen() {
                 return {
                     ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
                 }
-            }
-            else {
+            } else {
                 if (storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data?.page == oldPage) {
                     return {
                         ...storeData?.cache?.[`GET:/timekeeper/manual/list`]?.data || {}
                     }
-                }
-                else {
+                } else {
                     setOldPage(page)
 
                     return {

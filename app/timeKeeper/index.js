@@ -67,9 +67,10 @@ export default function EmployeeDashboardScreen() {
             }
         }).then(res => {
         }).catch(err => {
-            console.log(err, 'apiservice control err')
+            // console.log(err, 'apiservice control err')
         });
     }
+
     function getDataCheckOut(_filters = {}) {
         request({
             url: '/timekeeper/activity/list/checkout',
@@ -84,8 +85,8 @@ export default function EmployeeDashboardScreen() {
             // console.log(err, 'apiservice control err')
         });
     }
+
     function getDataAtWork(_filters = {}) {
-        console.log("getDataAtWork");
         request({
             url: '/timekeeper/activity/list/atwork',
             method: 'get',
@@ -152,8 +153,7 @@ export default function EmployeeDashboardScreen() {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})
                 }
-            }
-            else {
+            } else {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {}),
                     data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})?.data || [])]
@@ -168,8 +168,7 @@ export default function EmployeeDashboardScreen() {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})
                 }
-            }
-            else {
+            } else {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {}),
                     data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})?.data || [])]
@@ -184,8 +183,7 @@ export default function EmployeeDashboardScreen() {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})
                 }
-            }
-            else {
+            } else {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {}),
                     data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})?.data || [])]
@@ -260,9 +258,9 @@ export default function EmployeeDashboardScreen() {
             setEmployeeActivitiesCheckIn({data: []})
             setEmployeeActivitiesCheckOut({data: []})
             setEmployeeActivitiesAtWork({data: []})
-            // updateData(`GET:/timekeeper/activity/list/checkin`, {data: []})
-            // updateData(`GET:/timekeeper/activity/list/checkout`, {data: []})
-            // updateData(`GET:/timekeeper/activity/list/atwork`, {data: []})
+            updateData(`GET:/timekeeper/activity/list/checkin`, {data: []})
+            updateData(`GET:/timekeeper/activity/list/checkout`, {data: []})
+            updateData(`GET:/timekeeper/activity/list/atwork`, {data: []})
             setActiveTab('checkIn')
         };
 
@@ -349,9 +347,11 @@ export default function EmployeeDashboardScreen() {
     function handleMoreCheckIn() {
         setPageCheckIn(pageCheckIn + 1);
     }
+
     function handleMoreCheckOut() {
         setPageCheckOut(pageCheckOut + 1);
     }
+
     function handleMoreAtWork() {
         setPageAtWork(pageAtWork + 1);
     }
@@ -378,211 +378,211 @@ export default function EmployeeDashboardScreen() {
             />}
         >
 
-        <SgCheckInOutGroup>
-            <SgCheckInOutCard
-                employeeType={'timekeeper'}
-                type="checkin"
-                title={t('checkIn')}
-                time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
-                buttonLabel={t('checkIn')}
-                status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
-                mapData={{
-                    checkIn: {
-                        latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
-                    },
-                }}
-                reviewer={checkIn?.reviewer || {}}
-            />
-            <SgCheckInOutCard
-                employeeType={'timekeeper'}
-                type="checkout"
-                title={t('checkOut')}
-                time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
-                buttonLabel={t('checkOut')}
-                status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
-                checkInStatus={checkIn?.status === 2}
-                checkInId={checkIn?.id}
-                mapData={{
-                    checkOut: {
-                        latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
-                    },
-                }}
-                reviewer={checkOut?.reviewer || {}}
-            />
-        </SgCheckInOutGroup>
-
-        <SgCard
-            title={t('workTime')}
-            time={checkOut?.completed_status ?
-                checkIn?.work_time :
-                <SgUtilsTimeDifference
-                    startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}
+            <SgCheckInOutGroup>
+                <SgCheckInOutCard
+                    employeeType={'timekeeper'}
+                    type="checkin"
+                    title={t('checkIn')}
+                    time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
+                    buttonLabel={t('checkIn')}
+                    status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    mapData={{
+                        checkIn: {
+                            latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
+                        },
+                    }}
+                    reviewer={checkIn?.reviewer || {}}
                 />
-            }
-            icon={Clock}
-        />
+                <SgCheckInOutCard
+                    employeeType={'timekeeper'}
+                    type="checkout"
+                    title={t('checkOut')}
+                    time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
+                    buttonLabel={t('checkOut')}
+                    status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    checkInStatus={checkIn?.status === 2}
+                    checkInId={checkIn?.id}
+                    mapData={{
+                        checkOut: {
+                            latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
+                        },
+                    }}
+                    reviewer={checkOut?.reviewer || {}}
+                />
+            </SgCheckInOutGroup>
 
-        <SgNoticeCard
-            title={t('requests')}
-            buttonText={<FilterIcon width={20} height={20} />}
-            bgButton="lightSuccess"
-            onClick={toggleFilterModal}
-        />
-
-        <SgCheckInOutGroup>
-            <SgSectionInfoCard
-                icon="log-in-outline"
-                title={t('dailyCheckIn')}
-                // count={(employeeActivitiesCheckIn || {})?.total}
-                count={(countData || {})?.checkin_count || 0}
-                type="checkin"
-                href={`/timeKeeperPages/activity/checkIn`}
-            />
-            <SgSectionInfoCard
-                icon="log-out-outline"
-                title={t('dailyCheckOut')}
-                // count={(employeeActivitiesCheckOut || {})?.total}
-                count={(countData || {})?.checkout_count || 0}
-                type="checkout"
-                href={`/timeKeeperPages/activity/checkOut`}
-            />
-        </SgCheckInOutGroup>
-
-        <SgFilterTab
-            defaultTabId={activeTab || 'checkIn'}
-            tabs={[
-                {
-                    label: t('checkIn'),
-                    id: 'checkIn',
-                    count: (employeeActivitiesCheckIn || {})?.total,
-                    onClick: setActiveTab
-                },
-                {
-                    label: t('checkOut'),
-                    id: 'checkOut',
-                    count: (employeeActivitiesCheckOut || {})?.total,
-                    onClick: setActiveTab
-                },
-                {
-                    label: t('atWork'),
-                    id: 'atWork',
-                    count: (employeeActivitiesAtWork || {})?.total,
-                    onClick: setActiveTab
+            <SgCard
+                title={t('workTime')}
+                time={checkOut?.completed_status ?
+                    checkIn?.work_time :
+                    <SgUtilsTimeDifference
+                        startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}
+                    />
                 }
-            ]}
-            tabContent={[
-                {
-                    element:
-                        <>
-                            <View style={{gap: 8}}>
-                                {(((employeeActivitiesCheckIn || {})?.data || [])?.map((emp, index) => {
-                                    return (
-                                        <SgSectionEmployeeCard
-                                            cardType={'checkIn'}
-                                            removeRowData={removeRowData}
-                                            key={index}
-                                            fullData={emp}
-                                            title={emp?.employee?.full_name}
-                                            role={emp?.employee?.role?.name}
-                                            project={emp?.project?.name}
-                                            checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                        />
-                                    )
-                                }))}
-                                {((employeeActivitiesCheckIn || {})?.total || 0) > pageCheckIn * 10 ?
-                                    <View style={{marginTop: 16}}>
-                                        <SgButton
-                                            onPress={handleMoreCheckIn}
-                                            bgColor={COLORS.primary}
-                                            color={COLORS.white}
-                                        >
-                                            {t('loadMore')}
-                                        </SgButton>
-                                    </View>
-                                    : null
-                                }
-                            </View>
-                        </>
-                    , id: 'checkIn'
-                },
-                {
-                    element:
-                        <>
-                            <View style={{gap: 8}}>
-                                {(((employeeActivitiesCheckOut || {})?.data || [])?.map((emp, index) => {
-                                    return (
-                                        <SgSectionEmployeeCard
-                                            cardType={'checkOut'}
-                                            removeRowData={removeRowData}
-                                            key={index}
-                                            fullData={emp}
-                                            title={emp?.employee?.full_name}
-                                            role={emp?.employee?.role?.name}
-                                            project={emp?.project?.name}
-                                            checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                        />
-                                    )
-                                }))}
+                icon={Clock}
+            />
 
-                                {((employeeActivitiesCheckOut || {})?.total || 0) > pageCheckOut * 10 ?
-                                    <View style={{marginTop: 16}}>
-                                        <SgButton
-                                            onPress={handleMoreCheckOut}
-                                            bgColor={COLORS.primary}
-                                            color={COLORS.white}
-                                        >
-                                            {t('loadMore')}
-                                        </SgButton>
-                                    </View>
-                                    : null
-                                }
-                            </View>
-                        </>
-                    , id: 'checkOut'
-                },
-                {
-                    element:
-                        <>
-                            <View style={{gap: 8}}>
-                                {(((employeeActivitiesAtWork || {})?.data || [])?.map((emp, index) => {
-                                    return (
-                                        <SgSectionEmployeeCard
-                                            cardType={'atWork'}
-                                            removeRowData={removeRowData}
-                                            key={index}
-                                            fullData={emp}
-                                            atWork={true}
-                                            title={emp?.employee?.full_name}
-                                            role={emp?.employee?.role?.name}
-                                            project={emp?.project?.name}
-                                            checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                            timeRaw={emp.request_time}
-                                            editable={false}
-                                        />
-                                    )
-                                }))}
+            <SgNoticeCard
+                title={t('requests')}
+                buttonText={<FilterIcon width={20} height={20}/>}
+                bgButton="lightSuccess"
+                onClick={toggleFilterModal}
+            />
 
-                                {((employeeActivitiesAtWork || {})?.total || 0) > pageAtWork * 10 ?
-                                    <View style={{marginTop: 16}}>
-                                        <SgButton
-                                            onPress={handleMoreAtWork}
-                                            bgColor={COLORS.primary}
-                                            color={COLORS.white}
-                                        >
-                                            {t('loadMore')}
-                                        </SgButton>
-                                    </View>
-                                    : null
-                                }
-                            </View>
-                        </>,
-                    id: 'atWork'
-                }
-            ]}
-        />
+            <SgCheckInOutGroup>
+                <SgSectionInfoCard
+                    icon="log-in-outline"
+                    title={t('dailyCheckIn')}
+                    // count={(employeeActivitiesCheckIn || {})?.total}
+                    count={(countData || {})?.checkin_count || 0}
+                    type="checkin"
+                    href={`/timeKeeperPages/activity/checkIn`}
+                />
+                <SgSectionInfoCard
+                    icon="log-out-outline"
+                    title={t('dailyCheckOut')}
+                    // count={(employeeActivitiesCheckOut || {})?.total}
+                    count={(countData || {})?.checkout_count || 0}
+                    type="checkout"
+                    href={`/timeKeeperPages/activity/checkOut`}
+                />
+            </SgCheckInOutGroup>
+
+            <SgFilterTab
+                defaultTabId={activeTab || 'checkIn'}
+                tabs={[
+                    {
+                        label: t('checkIn'),
+                        id: 'checkIn',
+                        count: (employeeActivitiesCheckIn || {})?.total,
+                        onClick: setActiveTab
+                    },
+                    {
+                        label: t('checkOut'),
+                        id: 'checkOut',
+                        count: (employeeActivitiesCheckOut || {})?.total,
+                        onClick: setActiveTab
+                    },
+                    {
+                        label: t('atWork'),
+                        id: 'atWork',
+                        count: (employeeActivitiesAtWork || {})?.total,
+                        onClick: setActiveTab
+                    }
+                ]}
+                tabContent={[
+                    {
+                        element:
+                            <>
+                                <View style={{gap: 8}}>
+                                    {(((employeeActivitiesCheckIn || {})?.data || [])?.map((emp, index) => {
+                                        return (
+                                            <SgSectionEmployeeCard
+                                                cardType={'checkIn'}
+                                                removeRowData={removeRowData}
+                                                key={index}
+                                                fullData={emp}
+                                                title={emp?.employee?.full_name}
+                                                role={emp?.employee?.role?.name}
+                                                project={emp?.project?.name}
+                                                checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                            />
+                                        )
+                                    }))}
+                                    {((employeeActivitiesCheckIn || {})?.total || 0) > pageCheckIn * 10 ?
+                                        <View style={{marginTop: 16}}>
+                                            <SgButton
+                                                onPress={handleMoreCheckIn}
+                                                bgColor={COLORS.primary}
+                                                color={COLORS.white}
+                                            >
+                                                {t('loadMore')}
+                                            </SgButton>
+                                        </View>
+                                        : null
+                                    }
+                                </View>
+                            </>
+                        , id: 'checkIn'
+                    },
+                    {
+                        element:
+                            <>
+                                <View style={{gap: 8}}>
+                                    {(((employeeActivitiesCheckOut || {})?.data || [])?.map((emp, index) => {
+                                        return (
+                                            <SgSectionEmployeeCard
+                                                cardType={'checkOut'}
+                                                removeRowData={removeRowData}
+                                                key={index}
+                                                fullData={emp}
+                                                title={emp?.employee?.full_name}
+                                                role={emp?.employee?.role?.name}
+                                                project={emp?.project?.name}
+                                                checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                            />
+                                        )
+                                    }))}
+
+                                    {((employeeActivitiesCheckOut || {})?.total || 0) > pageCheckOut * 10 ?
+                                        <View style={{marginTop: 16}}>
+                                            <SgButton
+                                                onPress={handleMoreCheckOut}
+                                                bgColor={COLORS.primary}
+                                                color={COLORS.white}
+                                            >
+                                                {t('loadMore')}
+                                            </SgButton>
+                                        </View>
+                                        : null
+                                    }
+                                </View>
+                            </>
+                        , id: 'checkOut'
+                    },
+                    {
+                        element:
+                            <>
+                                <View style={{gap: 8}}>
+                                    {(((employeeActivitiesAtWork || {})?.data || [])?.map((emp, index) => {
+                                        return (
+                                            <SgSectionEmployeeCard
+                                                cardType={'atWork'}
+                                                removeRowData={removeRowData}
+                                                key={index}
+                                                fullData={emp}
+                                                atWork={true}
+                                                title={emp?.employee?.full_name}
+                                                role={emp?.employee?.role?.name}
+                                                project={emp?.project?.name}
+                                                checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                                timeRaw={emp.request_time}
+                                                editable={false}
+                                            />
+                                        )
+                                    }))}
+
+                                    {((employeeActivitiesAtWork || {})?.total || 0) > pageAtWork * 10 ?
+                                        <View style={{marginTop: 16}}>
+                                            <SgButton
+                                                onPress={handleMoreAtWork}
+                                                bgColor={COLORS.primary}
+                                                color={COLORS.white}
+                                            >
+                                                {t('loadMore')}
+                                            </SgButton>
+                                        </View>
+                                        : null
+                                    }
+                                </View>
+                            </>,
+                        id: 'atWork'
+                    }
+                ]}
+            />
 
             <SgPopup
                 visible={filterModal}
@@ -651,7 +651,7 @@ export default function EmployeeDashboardScreen() {
                     </View>
                 </View>
             </SgPopup>
-    </SgTemplateScreen>);
+        </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

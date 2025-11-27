@@ -120,6 +120,7 @@ export default function EmployeeDocsScreen() {
         return () => {
             setPage(0)
             setPageCheckOut(0)
+            setDataStatus(!getDataStatus)
             setEmployeeActivitiesCheckIn({data: []})
             setEmployeeActivitiesCheckOut({data: []})
             updateData(`GET:/timekeeper/history/list/checkin`, {data: []})
@@ -133,8 +134,7 @@ export default function EmployeeDocsScreen() {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {})
                 }
-            }
-            else {
+            } else {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {}),
                     data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/history/list/checkin`]?.data || {})?.data || [])]
@@ -149,8 +149,7 @@ export default function EmployeeDocsScreen() {
                 return {
                     ...storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {}
                 }
-            }
-            else {
+            } else {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {}),
                     data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]?.data || {})?.data || [])]
@@ -162,6 +161,7 @@ export default function EmployeeDocsScreen() {
     function handleMoreCheckIn() {
         setPage(page + 1);
     }
+
     function handleMoreCheckOut() {
         setPageCheckOut(pageCheckOut + 1);
     }
