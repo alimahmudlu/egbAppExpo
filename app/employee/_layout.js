@@ -1,109 +1,148 @@
-import {Tabs} from 'expo-router';
-import React, {useEffect} from 'react';
-import {Platform} from 'react-native';
-import HomeIcon from '@/assets/images/home.svg';
-import HomeActiveIcon from '@/assets/images/home-active.svg';
-import DocsIcon from '@/assets/images/docs.svg';
-import DocsActiveIcon from '@/assets/images/docs-active.svg';
-import MenuIcon from '@/assets/images/menu.svg';
-import MenuActiveIcon from '@/assets/images/menu-active.svg';
-import OvertimeIcon from '@/assets/images/overtime.svg';
-import OvertimeActiveIcon from '@/assets/images/overtime-active.svg';
-import {useTranslation} from "react-i18next";
-import {useSocket} from "@/hooks/useSocket";
-import {useAuth} from "@/hooks/useAuth";
+import { Tabs } from "expo-router";
+import React, { useEffect } from "react";
+import { Platform, View } from "react-native";
+import { BlurView } from "expo-blur"; // Modern iOS blur effect
+import { useTranslation } from "react-i18next";
+import { useSocket } from "@/hooks/useSocket";
+import { useAuth } from "@/hooks/useAuth";
+
+import HomeIcon from "@/assets/images/home.svg";
+import HomeActiveIcon from "@/assets/images/home-active.svg";
+import DocsIcon from "@/assets/images/docs.svg";
+import DocsActiveIcon from "@/assets/images/docs-active.svg";
+import MenuIcon from "@/assets/images/menu.svg";
+import MenuActiveIcon from "@/assets/images/menu-active.svg";
+import OvertimeIcon from "@/assets/images/overtime.svg";
+import OvertimeActiveIcon from "@/assets/images/overtime-active.svg";
 
 export default function EmployeeTabLayout() {
-    const {t} = useTranslation();
-    const {socket} = useSocket();
-    const {getRating} = useAuth();
+  const { t } = useTranslation();
+  const { socket } = useSocket();
+  const { getRating } = useAuth();
 
-    useEffect(() => {
-        if (!socket) return;
+  useEffect(() => {
+    if (!socket) return;
+    const taskStatus = () => getRating();
+    socket.on("change_task__by_employee", taskStatus);
 
-        const taskStatus = (data) => {
-            getRating()
-        };
+    return () => {
+      socket.off("change_task__by_employee", taskStatus);
+    };
+  }, [socket]);
 
-        // socket.on('connect', () => {
-        socket.on("change_task__by_employee", taskStatus);
-        // })
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        freezeOnBlur: false,
 
-        return () => {
-            socket.off("change_task__by_chief", taskStatus);
-        };
-    }, [socket]);
+        tabBarActiveTintColor: "#0A0A0A",
+        tabBarInactiveTintColor: "#9CA3AF",
 
-    return (
-        <Tabs
-            screenOptions={{
-                freezeOnBlur: false,
-                headerShown: false,
-                tabBarInActiveTintColor: '#98A2B3',
-                tabBarActiveTintColor: '#182230',
-                tabBarActiveBackgroundColor: '#F2F4F7',
-                tabBarStyle: Platform.select({
-                    ios: {
-                        // Use a transparent background on iOS to show the blur effect
-                        position: 'absolute',
-                    },
-                    default: {
-                        boxShadow: '0px -24px 40px -20px #00000014',
-                        border: 'none',
-                        borderColor: '#FFFFFF'
-                    },
-                }),
-                tabBarItemStyle: {
-                    borderRadius: 12,
-                    overflow: "hidden"
-                },
-            }}
-        >
-            <Tabs.Screen
-                name="index"
-                options={{
-                    freezeOnBlur: false,
-                    title: t('tabBar__home'),
-                    tabBarLabel: t('tabBar__home'),
-                    headerTitle: t('tabBar__home'),
-                    tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
-                        <HomeIcon width={20} height={20}/>
-                }}
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 20,
+          marginHorizontal: 24,
+          height: 65,
+          borderRadius: 24,
+          paddingBottom: 6,
+          paddingTop: 6,
+          paddingHorizontal: 10,
+          borderWidth: 0,
+          backgroundColor: Platform.OS === "ios" ? "transparent" : "#FFFFFFEE",
+
+          ...Platform.select({
+            android: {
+              elevation: 12,
+              shadowColor: "#000",
+            },
+          }),
+        },
+
+        tabBarBackground: () =>
+          Platform.OS === "ios" ? (
+            <BlurView
+              intensity={40}
+              tint="light"
+              style={{
+                flex: 1,
+                borderRadius: 24,
+                overflow: "hidden",
+              }}
             />
-            <Tabs.Screen
-                name="overTime/index"
-                options={{
-                    freezeOnBlur: false,
-                    title: t('tabBar__overTime'),
-                    tabBarLabel: t('tabBar__overTime'),
-                    headerTitle: t('tabBar__overTime'),
-                    tabBarIcon: ({color, focused}) => focused ? <OvertimeActiveIcon width={20} height={20}/> :
-                        <OvertimeIcon width={20} height={20}/>
-                }}
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "#FFFFFFEE",
+                borderRadius: 24,
+              }}
             />
-            <Tabs.Screen
-                name="docs/index"
-                options={{
-                    href: null,
-                    freezeOnBlur: false,
-                    title: t('tabBar__myDocs'),
-                    tabBarLabel: t('tabBar__myDocs'),
-                    headerTitle: t('tabBar__myDocs'),
-                    tabBarIcon: ({color, focused}) => focused ? <DocsActiveIcon width={20} height={20}/> :
-                        <DocsIcon width={20} height={20}/>
-                }}
-            />
-            <Tabs.Screen
-                name="menu/index"
-                options={{
-                    freezeOnBlur: false,
-                    title: t('tabBar__menu'),
-                    tabBarLabel: t('tabBar__menu'),
-                    headerTitle: t('tabBar__menu'),
-                    tabBarIcon: ({color, focused}) => focused ? <MenuActiveIcon width={20} height={20}/> :
-                        <MenuIcon width={20} height={20}/>
-                }}
-            />
-        </Tabs>
-    );
+          ),
+
+        tabBarItemStyle: {
+          borderRadius: 20,
+        },
+
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "600",
+          marginTop: -4,
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: t("tabBar__home"),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <HomeActiveIcon width={22} height={22} />
+            ) : (
+              <HomeIcon width={22} height={22} />
+            ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="overTime/index"
+        options={{
+          title: t("tabBar__overTime"),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <OvertimeActiveIcon width={22} height={22} />
+            ) : (
+              <OvertimeIcon width={22} height={22} />
+            ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="docs/index"
+        options={{
+          href: null,
+          title: t("tabBar__myDocs"),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <DocsActiveIcon width={22} height={22} />
+            ) : (
+              <DocsIcon width={22} height={22} />
+            ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="menu/index"
+        options={{
+          title: t("tabBar__menu"),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <MenuActiveIcon width={22} height={22} />
+            ) : (
+              <MenuIcon width={22} height={22} />
+            ),
+        }}
+      />
+    </Tabs>
+  );
 }
