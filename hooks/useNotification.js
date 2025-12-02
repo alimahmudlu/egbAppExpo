@@ -19,7 +19,7 @@ const NotificationContext = createContext({
 
 export const NotificationProvider = ({children}) => {
     // Hooks istifadəsi (Real layihədə mock-ları silin!)
-    const {user, loading} = useAuth();
+    const {user, loading, accessToken} = useAuth();
     const router = useRouter();
     const {request} = useApi();
     const pathname = usePathname();
@@ -106,8 +106,10 @@ export const NotificationProvider = ({children}) => {
     }
 
     useEffect(() => {
-        loadNotification()
-    }, [refreshKey, pathname, refreshing]);
+        if (!loading && accessToken) {
+            loadNotification()
+        }
+    }, [refreshKey, pathname, refreshing, loading]);
 
     useEffect(() => {
         if (Platform.OS === 'android') {
