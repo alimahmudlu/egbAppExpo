@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,

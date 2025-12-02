@@ -28,7 +28,7 @@ export const LanguageProvider = ({ children }) => {
       }
       else {
         setSelectedLanguage((LANGUAGES || []).find(l => l.id === (lang || 'en')) || {});
-        i18n.changeLanguage((LANGUAGES || []).find(l => l.id === (lang || 'en')) || {});
+        i18n.changeLanguage(((LANGUAGES || []).find(l => l.id === (lang || 'en')) || {})?.id || 'en');
       }
     });
   }, []);

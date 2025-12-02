@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   time: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 24,
     fontStyle: 'normal',
     fontWeight: 700,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   contentTitle: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 13,
     fontStyle: 'normal',
     fontWeight: 500,
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   contentDesc: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: 600,

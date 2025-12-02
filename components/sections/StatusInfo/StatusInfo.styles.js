@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   statusText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 600,

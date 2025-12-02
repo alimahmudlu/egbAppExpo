@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   time: {
     color: COLORS.gray_500,
     textOverflow: 'ellipsis',
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 500,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   description: {
     flex: 1,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   duration: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   name: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     color: COLORS.gray_700,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: 10,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   statusText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 600,

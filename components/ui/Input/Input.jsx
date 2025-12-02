@@ -15,6 +15,8 @@ export default function SgInput({
     isInvalid = false,
   onChangeText,
     disabled = false,
+    max = null,
+    min = null
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [counter, setCounter] = useState(Number(value) || 0);
@@ -23,11 +25,24 @@ export default function SgInput({
     const parsed = parseInt(val, 10);
     const newValue = isNaN(parsed) ? 0 : parsed;
     setCounter(newValue);
-    onChangeText({ name, value: newValue });
+    if (type === 'counter') {
+        if (max && newValue > max) {
+            setCounter(max);
+            onChangeText({ name, value: newValue });
+        }
+        else if (min && newValue < min) {
+            setCounter(min);
+            onChangeText({ name, value: newValue });
+        }
+        else {
+            setCounter(newValue);
+            onChangeText({ name, value: newValue });
+        }
+    }
   };
 
-  const handleIncrease = () => handleChange(counter + 1);
-  const handleDecrease = () => handleChange(counter > 0 ? counter - 1 : 0);
+  const handleIncrease = () => handleChange(max ? (counter + 1 < max ? counter + 1 : max) : counter + 1);
+  const handleDecrease = () => handleChange(min ? ((counter - 1 > 0 && counter - 1 > min) ? counter - 1 : 0) : (counter > 0 ? counter - 1 : 0));
 
   const renderInput = () => {
     switch (type) {

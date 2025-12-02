@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 20,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   clearText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray_200,
   },
   checkboxLabel: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray_800
   },
   inputLabel: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 500,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     gap: 8
   },
   inputText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: 400,

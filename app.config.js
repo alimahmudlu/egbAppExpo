@@ -4,7 +4,7 @@ export default {
     "expo": {
         "name": "EGB",
         "slug": "egb-expo-app",
-        "version": "0.1.5",
+        "version": "0.1.9",
         "orientation": "default",
         "icon": "./assets/images/icon-color.png",
         "scheme": "egbappexpo",
@@ -27,13 +27,13 @@ export default {
                 NSPhotoLibraryUsageDescription: "Bu tətbiq şəkil və videolara baxmaq və yazmaq üçün icazə istəyir.",
                 NSCameraUsageDescription: "Bu tətbiq kameraya giriş üçün icazə istəyir.",
                 NSDocumentsFolderUsageDescription: "Bu tətbiq sənədləri saxlamaq üçün cihazın fayl sisteminə giriş tələb edir."
-            }
+            },
         },
         android: {
             package: "com.egb.egb",
             edgeToEdgeEnabled: true,
             usesCleartextTraffic: true,
-            versionCode: 17,
+            versionCode: 20,
             adaptiveIcon: {
                 foregroundImage: "./assets/images/icon-white.png",
                 backgroundColor: "#0B322F"
@@ -48,7 +48,15 @@ export default {
         "web": {
             "bundler": "metro",
             "output": "static",
-            "favicon": "./assets/images/icon-color.png"
+            "favicon": "./assets/images/icon-color.png",
+            config: {
+                googleMaps: {
+                    apiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
+                },
+                "react-native-maps": {
+                    apiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
+                }
+            },
         },
         "plugins": [
             "expo-web-browser",
@@ -72,7 +80,11 @@ export default {
                         "./assets/sound/notification_sound.wav",
                         "./assets/sound/notification_sound_other.wav"
                     ],
-                    "enableBackgroundRemoteNotifications": false
+                    "enableBackgroundRemoteNotifications": true,
+
+                    "ios": {
+                        "enableBackgroundRemoteNotifications": true
+                    }
                 }
             ]
             // "expo-font",

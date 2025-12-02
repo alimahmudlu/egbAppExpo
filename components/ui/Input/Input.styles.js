@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 
   input: {
     flex: 1,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontWeight: '400',
     fontStyle: 'normal',

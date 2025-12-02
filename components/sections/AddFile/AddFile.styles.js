@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: 700,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray_800,
   },
   dateTime: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 8,
     fontStyle: 'normal',
     fontWeight: 500,

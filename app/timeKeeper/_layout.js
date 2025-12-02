@@ -1,5 +1,5 @@
-import {Tabs} from 'expo-router';
-import React from 'react';
+import {router, Tabs} from 'expo-router';
+import React, {useEffect} from 'react';
 import {Platform} from 'react-native';
 import HomeActiveIcon from "@/assets/images/home-active.svg";
 import HomeIcon from "@/assets/images/home.svg";
@@ -15,10 +15,18 @@ import {useData} from "@/hooks/useData";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function TimeKeeperTabLayout() {
     const {t} = useTranslation();
-    const {storeData} = useData();
+    const {isLoggedIn, loading} = useAuth();
+
+    useEffect(() => {
+        if (!loading && !isLoggedIn) {
+            console.log('not logged in')
+            router.replace('/auth')
+        }
+    }, [isLoggedIn, loading]);
 
     return (
         <Tabs

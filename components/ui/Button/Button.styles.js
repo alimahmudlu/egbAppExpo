@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     color: COLORS.buttonTextColor,
   },
   text: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 18,
     fontStyle: 'normal',
     fontWeight: '600',

@@ -1,4 +1,4 @@
-import {Tabs} from 'expo-router';
+import {router, Tabs} from 'expo-router';
 import React, {useEffect} from 'react';
 import {Platform} from 'react-native';
 import HomeIcon from '@/assets/images/home.svg';
@@ -16,7 +16,14 @@ import {useAuth} from "@/hooks/useAuth";
 export default function EmployeeTabLayout() {
     const {t} = useTranslation();
     const {socket} = useSocket();
-    const {getRating} = useAuth();
+    const {getRating, isLoggedIn, loading} = useAuth();
+
+    useEffect(() => {
+        if (!loading && !isLoggedIn) {
+            console.log('not logged in')
+            router.replace('/auth')
+        }
+    }, [isLoggedIn, loading]);
 
     useEffect(() => {
         if (!socket) return;

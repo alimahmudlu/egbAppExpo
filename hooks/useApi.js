@@ -19,8 +19,8 @@ const api = axios.create({
 const ApiContext = createContext(null);
 
 export function ApiProvider({children}) {
-    const { storeData, updateData, insertLoading, updateDataWithPagination, removeLoading, } = useData();
-    const { accessToken } = useAuth();
+    const { updateData, insertLoading, updateDataWithPagination, removeLoading, } = useData();
+    const { accessToken, logout } = useAuth();
     const {t} = useTranslation();
 
     const request = async (props) => {
@@ -78,6 +78,10 @@ export function ApiProvider({children}) {
 
                 updateData(storageKey, null);
                 throw new Error(`${err.response.status}: ${err.response.data}`);
+            }
+            if (err.response && err.response.status === 401) {
+                // Alert.alert(t('permissionErrorTitle'), t('permissionErrorDescription'));
+                logout()
             }
 
 

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     paddingHorizontal: 20,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 500,

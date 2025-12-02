@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.brand_800,
   },
   tabText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   badgeText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 8,
     fontStyle: 'normal',
     fontWeight: '500',

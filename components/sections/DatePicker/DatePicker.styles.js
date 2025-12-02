@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   monthText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   paddingVertical: 8,
   borderRadius: 8,
   backgroundColor: COLORS.gray_100,
-  fontFamily: 'Inter',
+  fontFamily: 'Inter, sans-serif',
   fontSize: 16,
   fontStyle: 'normal',
   fontWeight: '400',

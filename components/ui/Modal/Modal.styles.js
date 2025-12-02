@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.gray_900,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 20,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: COLORS.gray_700,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: '400',

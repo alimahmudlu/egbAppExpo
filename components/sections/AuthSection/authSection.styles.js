@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 48,
     fontStyle: 'normal',
     fontWeight: 700,
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: '#000',
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 500,

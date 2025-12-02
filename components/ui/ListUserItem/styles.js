@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     initials: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 18,
         fontStyle: 'normal',
         fontWeight: 700,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     employeeName: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 16,
         fontStyle: 'normal',
         fontWeight: 700,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         color: COLORS.gray_800,
     },
     employeeRole: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 400,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         color: COLORS.brand_500,
     },
     checkTime: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 400,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         color: COLORS.gray_500,
     },
     time: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 500,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         color: COLORS.gray_800,
     },
     date: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 500,

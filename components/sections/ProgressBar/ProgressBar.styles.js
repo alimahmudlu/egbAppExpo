@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
   label: {
     width: 80,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 500,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   value: {
     width: 40,
     textAlign: 'left',
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,

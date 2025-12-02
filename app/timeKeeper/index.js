@@ -1,9 +1,8 @@
-import Avatar from "@/assets/images/avatar.png";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {Platform, StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import SgSectionInfoCard from "@/components/sections/InfoCard/InfoCard";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
@@ -26,7 +25,6 @@ import FilterIcon from "@/assets/images/filter.svg";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
 import ReloadArrow from "@/assets/images/reload-arrows.svg";
-import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import SgPopup from "@/components/ui/Modal/Modal";
 
 export default function EmployeeDashboardScreen() {
@@ -36,7 +34,7 @@ export default function EmployeeDashboardScreen() {
     const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
     const [employeeActivitiesAtWork, setEmployeeActivitiesAtWork] = useState({});
     const [filters, setFilters] = useState({})
-    const {storeData, insertDataWithPagination, insertData, changeAddRowData, setStoreData, updateData} = useData();
+    const {storeData, insertDataWithPagination, setStoreData, updateData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
@@ -277,15 +275,27 @@ export default function EmployeeDashboardScreen() {
                         status: 2, type: 1, reject_reason: data?.data?.reject_reason
                     },
                 }));
-            } else {
+            }
+            else if (data?.data?.type === 2) {
                 setStoreData(prev => ({
-                    ...prev, checkIn: {
+                    ...prev,
+                    checkIn: data?.data?.status !== 3 ? {} : {
                         ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
-                    }, checkOut: data?.data?.status !== 3 ? data?.data : {
+                    },
+                    checkOut: data?.data?.status !== 3 ? {} : {
                         status: 3, type: 2, reject_reason: data?.data?.reject_reason
                     },
                 }));
             }
+            // else {
+            //     setStoreData(prev => ({
+            //         ...prev, checkIn: {
+            //             ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+            //         }, checkOut: data?.data?.status !== 3 ? data?.data : {
+            //             status: 3, type: 2, reject_reason: data?.data?.reject_reason
+            //         },
+            //     }));
+            // }
         };
 
         // socket.on('connect', () => {

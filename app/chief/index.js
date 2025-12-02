@@ -81,15 +81,28 @@ export default function EmployeeDashboardScreen() {
                         status: 2, type: 1, reject_reason: data?.data?.reject_reason
                     },
                 }));
-            } else {
+            }
+
+            else if (data?.data?.type === 2) {
                 setStoreData(prev => ({
-                    ...prev, checkIn: {
+                    ...prev,
+                    checkIn: data?.data?.status !== 3 ? {} : {
                         ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
-                    }, checkOut: data?.data?.status !== 3 ? data?.data : {
+                    },
+                    checkOut: data?.data?.status !== 3 ? {} : {
                         status: 3, type: 2, reject_reason: data?.data?.reject_reason
                     },
                 }));
             }
+            // else {
+            //     setStoreData(prev => ({
+            //         ...prev, checkIn: {
+            //             ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+            //         }, checkOut: data?.data?.status !== 3 ? data?.data : {
+            //             status: 3, type: 2, reject_reason: data?.data?.reject_reason
+            //         },
+            //     }));
+            // }
         };
 
         // socket.on('connect', () => {

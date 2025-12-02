@@ -64,10 +64,10 @@ export default function SgTemplateScreenView(props) {
                     style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 >
-                    <TouchableWithoutFeedback
-                        onPress={Keyboard.dismiss}
-                        accessible={false}
-                    >
+                    {/*<TouchableWithoutFeedback*/}
+                    {/*    onPress={Keyboard.dismiss}*/}
+                    {/*    accessible={false}*/}
+                    {/*>*/}
                         {scrollView ?
                             <ScrollView
                                 nestedScrollEnabled
@@ -84,7 +84,7 @@ export default function SgTemplateScreenView(props) {
                             :
                             children
                         }
-                    </TouchableWithoutFeedback>
+                    {/*</TouchableWithoutFeedback>*/}
                 </KeyboardAvoidingView>
                 <StatusBar hidden={false} style="light" />
             </SafeScreen>

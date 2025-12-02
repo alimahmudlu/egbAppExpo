@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   hiddenCountText: {
     color: COLORS.gray_700,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 8,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   initialsT: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 700,

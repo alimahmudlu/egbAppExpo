@@ -1,4 +1,4 @@
-import {Tabs} from 'expo-router';
+import {router, Tabs} from 'expo-router';
 import React, {useEffect} from 'react';
 import {Platform} from 'react-native';
 import HomeActiveIcon from "@/assets/images/home-active.svg";
@@ -14,11 +14,20 @@ import {useSocket} from "@/hooks/useSocket";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function WorkerTabLayout() {
     const {changeRowData} = useData();
     const {socket} = useSocket();
     const {t} = useTranslation()
+    const {isLoggedIn, loading} = useAuth();
+
+    useEffect(() => {
+        if (!loading && !isLoggedIn) {
+            console.log('not logged in')
+            router.replace('/auth')
+        }
+    }, [isLoggedIn, loading]);
 
     useEffect(() => {
         if (!socket) return;

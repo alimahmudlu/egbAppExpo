@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.checkedColor,
   },
   label: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     color: COLORS.checkLabelColor,
     fontWeight: '500',

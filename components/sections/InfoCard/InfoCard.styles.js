@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
 
   cardTitle: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   cardCount: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 24,
     fontStyle: 'normal',
     fontWeight: 700,

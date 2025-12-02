@@ -50,7 +50,7 @@ const styles2 = StyleSheet.create({
         alignItems: 'center',
     },
     itemText: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 16,
         fontStyle: 'normal',
         fontWeight: '500',
@@ -58,7 +58,7 @@ const styles2 = StyleSheet.create({
         color: COLORS.gray_600,
     },
     selectedText: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 16,
         fontStyle: 'normal',
         fontWeight: '600',

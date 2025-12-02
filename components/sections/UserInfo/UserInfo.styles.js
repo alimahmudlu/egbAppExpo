@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     color: COLORS.gray_700,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontStyle: 'normal',
     fontWeight: '700',
   },
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: COLORS.gray_800,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontStyle: 'normal',
     fontWeight: '700',
   },
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   role: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontStyle: 'normal',
     fontWeight: '400',
   },
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   rating: {
     color: COLORS.black,
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontStyle: 'normal',
     fontWeight: '500',
   },

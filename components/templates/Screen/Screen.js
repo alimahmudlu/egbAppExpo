@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     },
     head: {
         width: '100%',
-        flex: 0
+        // flex: 0
     },
     body: {
         width: '100%',

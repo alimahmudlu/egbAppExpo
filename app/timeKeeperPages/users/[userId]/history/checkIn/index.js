@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     },
     overviewButtonText: {
         color: '#000000',
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontWeight: '500',
         fontSize: 16,
         // lineHeight: '24px',
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
     },
     acceptButtonText: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 600,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
     },
     rejectButtonText: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 10,
         fontStyle: 'normal',
         fontWeight: 600,

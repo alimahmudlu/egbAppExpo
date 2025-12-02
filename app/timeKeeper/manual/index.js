@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
         borderColor: COLORS.gray_200,
     },
     checkboxLabel: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter, sans-serif',
         fontSize: 14,
         fontStyle: 'normal',
         fontWeight: 600,

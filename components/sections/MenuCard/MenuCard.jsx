@@ -98,7 +98,10 @@ export default function SgSectionMenuCard({extraItems = []}) {
                         </View>
                         <Switch
                             value={notificationPermission?.permission}
-                            onValueChange={(res) => handleChangeNotificationPermission(res)}
+                            onValueChange={(res) => {
+                                console.log(res, 'resssss')
+                                handleChangeNotificationPermission(res)
+                            }}
                             trackColor={{false: COLORS.gray_200, true: COLORS.brand_600}}
                             thumbColor={COLORS.white}
                             ios_backgroundColor={COLORS.gray_200}

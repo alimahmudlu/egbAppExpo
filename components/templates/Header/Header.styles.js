@@ -33,28 +33,33 @@ wrapper: {
 
     notification: {
         backgroundColor: '#ccc',
-        padding: 8,
+        padding: 10,
         borderRadius: 50,
         position: 'relative'
     },
     notificationIcon: {
-        width: 20, header: 20
+        width: 20,
+        height: 20
     },
     notificationBadge: {
         position: 'absolute',
-        top: -2,
-        right: -2,
+        top: -4,
+        right: -4,
         color: COLORS.gray_700,
+        // color: COLORS.error_700,
         fontWeight: 700,
-        fontSize: 14,
-        padding: 1,
+        fontSize: 10,
+        lineHeight: 20,
         backgroundColor: '#ccc',
         borderRadius: 25,
-        width: 16,
-        height: 16,
+        padding: 0,
+        width: '100%',
+        maxWidth: 40,
+        minWidth: 26,
+        height: 22,
         textAlign: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     }
 });
 

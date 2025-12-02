@@ -5,6 +5,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import {disconnectSocket} from "@/services/createSocket";
 import * as Device from "expo-device";
+import storage from "@/utils/storage";
 
 const userAgent = {
     brand: Device.brand,
@@ -39,8 +40,8 @@ export function AuthProvider({ children }) {
   const loadStoredAuth = async () => {
     try {
       // Load token and user data from secure storage
-      const storedToken = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
-      const storedUserData = await SecureStore.getItemAsync(USER_DATA_KEY);
+      const storedToken = await storage.getItemAsync(AUTH_TOKEN_KEY);
+      const storedUserData = await storage.getItemAsync(USER_DATA_KEY);
 
       if (storedToken && storedUserData) {
         // Set token in state and axios headers
@@ -105,7 +106,7 @@ export function AuthProvider({ children }) {
             // Update token in state, storage and headers
             const newToken = response.data.token;
             setAccessToken(newToken);
-            await SecureStore.setItemAsync(AUTH_TOKEN_KEY, newToken);
+            await storage.setItemAsync(AUTH_TOKEN_KEY, newToken);
             api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
 
             // Retry the original request
@@ -132,8 +133,8 @@ export function AuthProvider({ children }) {
   // Store authentication data
   const storeAuthData = async (token, userData) => {
     try {
-      await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
-      await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify(userData)));
+      await storage.setItemAsync(AUTH_TOKEN_KEY, token);
+      await storage.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify(userData)));
 
       // Set token in axios headers for future requests
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -148,7 +149,7 @@ export function AuthProvider({ children }) {
 
   const setStoreData = async (data) => {
     try {
-      await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify({...user, ...data})));
+      await storage.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify({...user, ...data})));
       loadStoredAuth();
     } catch (error) {
       console.error(`Failed to store data for key ${data}:`, error);
@@ -247,8 +248,8 @@ export function AuthProvider({ children }) {
       delete api.defaults.headers.common['Authorization'];
 
       // Clear stored data
-      await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
-      await SecureStore.deleteItemAsync(USER_DATA_KEY);
+      await storage.deleteItemAsync(AUTH_TOKEN_KEY);
+      await storage.deleteItemAsync(USER_DATA_KEY);
 
       // Navigate to auth screen
       router.replace('/auth/');
@@ -270,6 +271,7 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
+          isLoggedIn: !!accessToken,
         user,
         accessToken,
         loading,

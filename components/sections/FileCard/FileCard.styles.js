@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   statusText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   migrationText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 600,
@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,
     color: COLORS.gray_950,
   },
   description: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   expireText: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray_500,
   },
   expireDate: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 500,

@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray_500,
   },
   time: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: 700,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   openMap: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 600,

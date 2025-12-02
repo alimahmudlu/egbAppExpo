@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   versionLabel: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray_500,
   },
   version: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 16,
     fontWeight: 500,
     lineHeight: 24,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray_200,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 400,

@@ -60,6 +60,7 @@ export default function SgTemplateHeader({name, role, position, rating, profileI
                     router.push(`/pages/notifications`);
                 }}>
                     <BellIcon style={styles.notificationIcon} width={20} height={20} resizeMode='strech'/>
+                    {/*{(notifications)?.unread_notifications_count ? <Text style={styles.notificationBadge}>{(notifications)?.unread_notifications_count}</Text> : null}*/}
                     {(notifications)?.unread_notifications_count ? <Text style={styles.notificationBadge}>{(notifications)?.unread_notifications_count}</Text> : null}
                 </TouchableOpacity>
             </View>

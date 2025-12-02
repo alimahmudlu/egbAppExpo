@@ -93,14 +93,25 @@ export default function EmployeeDashboardScreen() {
             else if (data?.data?.type === 2) {
                 setStoreData(prev => ({
                     ...prev,
-                    checkIn: {
+                    checkIn: data?.data?.status !== 3 ? {} : {
                         ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
                     },
-                    checkOut: data?.data?.status !== 3 ? data?.data : {
+                    checkOut: data?.data?.status !== 3 ? {} : {
                         status: 3, type: 2, reject_reason: data?.data?.reject_reason
                     },
                 }));
             }
+            // else if (data?.data?.type === 2) {
+            //     setStoreData(prev => ({
+            //         ...prev,
+            //         checkIn: {
+            //             ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+            //         },
+            //         checkOut: data?.data?.status !== 3 ? data?.data : {
+            //             status: 3, type: 2, reject_reason: data?.data?.reject_reason
+            //         },
+            //     }));
+            // }
             else if (data?.data?.type === 3) {
                 setStoreData(prev => ({
                     ...prev,

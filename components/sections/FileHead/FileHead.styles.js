@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 32,
     fontStyle: 'normal',
     fontWeight: 700,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   description: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 500,

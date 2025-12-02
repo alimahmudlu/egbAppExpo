@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
   },
     bottomRow: {
-        flex: 0,
+        // flex: 0,
         width: "70%",
     },
     right: {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 50,
-      flex: 0,
+      // flex: 0,
       width: 'auto'
   },
   logoutText: {

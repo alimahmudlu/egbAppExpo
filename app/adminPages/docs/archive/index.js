@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     }, overviewButton: {
         paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4,
     }, overviewButtonText: {
-        color: '#000000', fontFamily: 'Inter', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
+        color: '#000000', fontFamily: 'Inter, sans-serif', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
     }, container: {
         flex: 1,
     }, contentText: {

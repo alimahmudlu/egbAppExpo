@@ -623,7 +623,7 @@ export default function SgSectionEmployeeCard(props) {
                         )
                     }
                     {/*{((manual && !fullData?.checkout?.latitude && fullData?.checkin?.latitude) || (isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?*/}
-                    {(((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) && clickType !== 'reject') ?
+                    {(((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) || ((isManualOverTimeCheckoutAvailable() && atWork) || fullData?.type === 4) && clickType !== 'reject') ?
                         <View>
                             <TouchableOpacity
                                 activeOpacity={1}
@@ -639,6 +639,23 @@ export default function SgSectionEmployeeCard(props) {
                                     <Text style={styles.title}>Full Time</Text>
                                 </View>
                             </TouchableOpacity>
+                            {moment().tz("Europe/Moscow").weekday() === 7 ?
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    key={4}
+                                    onPress={() => handleChangeConfirmType(4)}
+                                    style={[
+                                        styles.item,
+                                        confirmType === 4 && styles.selectedItem
+                                    ]}
+                                >
+                                    <SgRadio selected={confirmType === 4} />
+                                    <View style={styles.content}>
+                                        <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                : null
+                            }
                             <TouchableOpacity
                                 activeOpacity={1}
                                 key={2}
@@ -879,6 +896,23 @@ export default function SgSectionEmployeeCard(props) {
                                 <Text style={styles.title}>Full Time</Text>
                             </View>
                         </TouchableOpacity>
+                        {/*{moment().tz("Europe/Moscow").weekday() === 7 ?
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={4}
+                                onPress={() => handleChangeConfirmType(4)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 4 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 4} />
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                </View>
+                            </TouchableOpacity>
+                            : null
+                        }*/}
                         <TouchableOpacity
                             activeOpacity={1}
                             key={2}
