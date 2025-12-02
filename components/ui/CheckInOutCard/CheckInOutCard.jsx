@@ -11,7 +11,7 @@ import * as Linking from 'expo-linking';
 import SgPopup from "@/components/ui/Modal/Modal";
 import React, {useEffect, useState} from "react";
 import moment from "moment-timezone";
-// import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useTranslation} from "react-i18next";
@@ -402,7 +402,7 @@ export default function SgCheckInOutCard(props) {
                     {time ? time : '--:--'}
                 </Text>
             </View>
-{/*            {(!['timekeeper', 'chief'].includes(employeeType) && (isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web') ?
+            {(!['timekeeper', 'chief'].includes(employeeType) && (isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web') ?
                 <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
                         <MapView
                             style={{flex: 1, height: 125}}
@@ -477,7 +477,7 @@ export default function SgCheckInOutCard(props) {
                     </MapView>
                 </View>
                 : null
-            }*/}
+            }
             <View style={{paddingHorizontal: 4, paddingVertical: 4,}}>
                 {isCheckIn ?
                     <>

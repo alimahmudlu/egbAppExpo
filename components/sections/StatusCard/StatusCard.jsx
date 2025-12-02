@@ -1,4 +1,4 @@
-// import MapView, {Marker} from "react-native-maps";
+import MapView, {Marker} from "react-native-maps";
 
 import {View, Text, Image, TouchableOpacity, Platform} from 'react-native';
 import styles from '@/components/sections/StatusCard/StatusCard.styles';
@@ -28,32 +28,32 @@ export default function SgSectionStatusCard({ icon, title, time, mapData }) {
 
   return (
       <View style={[styles.container, hasLocation && styles.containerNoPadding]}>
-        {/*{mapData?.longitude ? (*/}
-        {/*  <>*/}
-        {/*    <MapView*/}
-        {/*        style={{flex: 1, height: 125}}*/}
-        {/*        initialRegion={{*/}
-        {/*          latitude: Number(mapData?.latitude) || 0,*/}
-        {/*          longitude: Number(mapData?.longitude) || 0,*/}
-        {/*          latitudeDelta: 0.01,*/}
-        {/*          longitudeDelta: 0.01,*/}
-        {/*        }}*/}
-        {/*    >*/}
-        {/*      <Marker coordinate={{ latitude: Number(mapData?.latitude) || 0, longitude: Number(mapData?.longitude) || 0 }} />*/}
-        {/*    </MapView>*/}
-        {/*    <TouchableOpacity style={styles.openMapContainer} onPress={handleOpenMap} activeOpacity={0.8}>*/}
-        {/*      <Text style={styles.openMap}>Open on map</Text>*/}
-        {/*    </TouchableOpacity>*/}
-        {/*  </>*/}
-        {/*) : (*/}
-        {/*  <>*/}
-        {/*    <View style={styles.titleRow}>*/}
-        {/*      <Text style={styles.title}>{title}</Text>*/}
-        {/*      {icon}*/}
-        {/*    </View>*/}
-        {/*    <Text style={styles.time}>{time ? time.split(' ').map(el => `${el}`).join('\n') : null}</Text>*/}
-        {/*  </>*/}
-        {/*)}*/}
+        {mapData?.longitude ? (
+          <>
+            <MapView
+                style={{flex: 1, height: 125}}
+                initialRegion={{
+                  latitude: Number(mapData?.latitude) || 0,
+                  longitude: Number(mapData?.longitude) || 0,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+            >
+              <Marker coordinate={{ latitude: Number(mapData?.latitude) || 0, longitude: Number(mapData?.longitude) || 0 }} />
+            </MapView>
+            <TouchableOpacity style={styles.openMapContainer} onPress={handleOpenMap} activeOpacity={0.8}>
+              <Text style={styles.openMap}>Open on map</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <View style={styles.titleRow}>
+              <Text style={styles.title}>{title}</Text>
+              {icon}
+            </View>
+            <Text style={styles.time}>{time ? time.split(' ').map(el => `${el}`).join('\n') : null}</Text>
+          </>
+        )}
       </View>
   );
 }
