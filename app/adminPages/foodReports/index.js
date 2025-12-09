@@ -23,6 +23,16 @@ export default function ProjectItemScreen() {
     const [reportData, setReportData] = useState({});
     const [errors, setErrors] = useState({});
     const [reportModal, setReportModal] = useState(false);
+    const title = {
+        1: 'Breakfast',
+        2: 'Lunch',
+        3: 'Dinenr',
+        4: 'Night Lunch',
+        5: 'Extra Bread',
+        6: 'Extra Kefir',
+        7: 'Extra Sugar',
+        8: 'Extra Tea'
+    }
 
     function handleChangeReport(e) {
         setReportData({...reportData, [e.name]: e.value});
@@ -36,10 +46,8 @@ export default function ProjectItemScreen() {
     function handleSubmit() {
         const _data = {
             ...reportData,
-            turn1rest: reportData.turn1order - reportData.turn1real < 0 ? 0 : reportData.turn1order - reportData.turn1real,
-            turn1missing: reportData.turn1order - reportData.turn1real > 0 ? 0 : (reportData.turn1order - reportData.turn1real) * -1,
-            turn2rest: reportData.turn2order - reportData.turn2real < 0 ? 0 : reportData.turn2order - reportData.turn2real,
-            turn2missing: reportData.turn2order - reportData.turn2real > 0 ? 0 : (reportData.turn2order - reportData.turn2real) * -1
+            rest: reportData.order - reportData.real < 0 ? 0 : reportData.order - reportData.real,
+            missing: reportData.order - reportData.real > 0 ? 0 : (reportData.order - reportData.real) * -1,
         }
 
         request({
@@ -55,7 +63,6 @@ export default function ProjectItemScreen() {
         request({
             url: '/admin/food/report/list', method: 'get',
         }).then(res => {
-            console.log(res, 'res');
         }).catch(err => {
             console.log(err);
         })
@@ -82,46 +89,28 @@ export default function ProjectItemScreen() {
             <View style={{gap: 12}}>
                 {(list || []).map((item, index) => {
                     return (
-                        <CollapsibleView key={index} title={item.date ? moment(item.date).format('DD/MM/YYYY') : ''}>
+                        <CollapsibleView key={index} title={`${item.date ? moment(item.date).format('DD/MM/YYYY') : ''} - ${title?.[item?.type]}`}>
                             <View style={{gap: 12}}>
                                 <View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1stemployees')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn1employees}</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.employees}</Text>
                                     </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1storder')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn1order}</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.order}</Text>
                                     </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1strest')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn1rest}</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.rest}</Text>
                                     </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1stmissing')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn1missing}</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.missing}</Text>
                                     </View>
                                 </View>
                                 <View>
-                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
-                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndemployees')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn2employees}</Text>
-                                    </View>
-                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
-                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndorder')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn2order}</Text>
-                                    </View>
-                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
-                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndrest')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn2rest}</Text>
-                                    </View>
-                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
-                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndmissing')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn2missing}</Text>
-                                    </View>
-                                </View>
-                                <View>
-                                    {item?.status === 0 ?
+                                    {item?.status !== 2 ?
                                         <SgButton
                                             bgColor={COLORS.brand_600}
                                             color={COLORS.white}
@@ -142,7 +131,7 @@ export default function ProjectItemScreen() {
                 visible={reportModal}
                 onClose={toggleReportModal}
                 title={t('foodSchedule__report')}
-                description={`${reportData.date ? moment(reportData.date).format('DD/MM/YYYY') : ''} ${t('foodSchedule__report__description')}`}
+                description={`${reportData.date ? moment(reportData.date).format('DD/MM/YYYY') : ''} - ${title?.[reportData?.type]} ${t('foodSchedule__report__description')}`}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -158,56 +147,26 @@ export default function ProjectItemScreen() {
                         <View>
                             <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
                                 <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1stemployees')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn1employees}</Text>
+                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.employees}</Text>
                             </View>
                             <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
                                 <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1storder')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn1order}</Text>
+                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.order}</Text>
                             </View>
                             <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
                                 <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1strest')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn1order - reportData.turn1real < 0 ? 0 : reportData.turn1order - reportData.turn1real}</Text>
+                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.order - reportData.real < 0 ? 0 : reportData.order - reportData.real}</Text>
                             </View>
                             <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
                                 <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1stmissing')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn1order - reportData.turn1real > 0 ? 0 : (reportData.turn1order - reportData.turn1real) * -1}</Text>
+                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.order - reportData.real > 0 ? 0 : (reportData.order - reportData.real) * -1}</Text>
                             </View>
                         </View>
                         <View>
                             <SgInput
                                 placeholder={t('enterturn1real')}
-                                value={reportData?.turn1real}
-                                name='turn1real'
-                                onChangeText={handleChangeReport}
-                                type='number'
-                            />
-                        </View>
-                    </View>
-                    <View style={{borderBottomWidth: 1, borderColor: '#eee'}}></View>
-                    <View style={{gap: 16}}>
-                        <View>
-                            <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
-                                <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndemployees')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn2employees}</Text>
-                            </View>
-                            <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
-                                <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndorder')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn2order}</Text>
-                            </View>
-                            <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
-                                <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndrest')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn2order - reportData.turn2real < 0 ? 0 : reportData.turn2order - reportData.turn2real}</Text>
-                            </View>
-                            <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
-                                <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndmissing')}:</Text>
-                                <Text style={{fontSize: 16, fontWeight: '700'}}>{reportData.turn2order - reportData.turn2real > 0 ? 0 : (reportData.turn2order - reportData.turn2real) * -1}</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <SgInput
-                                placeholder={t('enterturn2real')}
-                                value={reportData?.turn2real}
-                                name='turn2real'
+                                value={reportData?.real}
+                                name='real'
                                 onChangeText={handleChangeReport}
                                 type='number'
                             />

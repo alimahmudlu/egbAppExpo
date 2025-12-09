@@ -23,6 +23,7 @@ export default function TaskCreateScreen() {
     const [errors, setErrors] = useState({});
     const [projectsList, setProjectsList] = useState([]);
     const [employeesList, setEmployeesList] = useState([]);
+    const [positions, setPositions] = useState([]);
     const [createTaskInfoModal, setCreateTaskInfoModal] = useState(false);
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
@@ -42,6 +43,14 @@ export default function TaskCreateScreen() {
                 // Handle error response
                 // console.log(res.message);
             }
+        }).catch(err => {
+            // console.log(err);
+        })
+        request({
+            url: `/position`, method: 'get',
+        }).then(res => {
+            setPositions(res?.data || []);
+            console.log(res?.data, 'positions');
         }).catch(err => {
             // console.log(err);
         })
@@ -142,7 +151,7 @@ export default function TaskCreateScreen() {
                     isInvalid={errors?.assigned_employee}
                     onChangeText={handleChange}
                     list={(employeesList || []).map((employee, index) => ({
-                            id: employee?.id, name: employee?.full_name, render: <SgSectionUserInfo
+                            id: employee?.id, name: employee?.full_name, position: employee?.position, render: <SgSectionUserInfo
                                 name={employee?.full_name}
                                 role="Employee"
                                 position={employee?.position}
@@ -151,6 +160,17 @@ export default function TaskCreateScreen() {
                                 size="md"
                             />
                         }))}
+                    filters={[
+                        {
+                            name: 'position',
+                            label: t('position'),
+                            list: (positions || []).map((project, index) => ({
+                                id: project?.id, name: project?.name, render: <View><Text>{project?.name || 'sss'}</Text></View>
+                            })),
+                            type: 'select',
+                            key: 'position'
+                        }
+                    ]}
                 />
                 <SgInput
                     label={t("title")}

@@ -5,7 +5,8 @@ import Down from '@/assets/images/chevron-down.svg';
 import COLORS from '@/constants/colors';
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgRadio from "@/components/ui/Radio/Radio";
-import SgCheckbox from "@/components/ui/Checkbox/Checkbox"; // Multi-select üçün fərz edilən import
+import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
+import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo"; // Multi-select üçün fərz edilən import
 
 export default function SgSelect(props) {
     const {
@@ -18,7 +19,21 @@ export default function SgSelect(props) {
         modalTitle,
         isInvalid,
         list,
+        filters = []
     } = props
+    const [userFilters, setUserFilters] = useState({});
+    const [array, setArray] = useState(list ? [...list] : [])
+
+    useEffect(() => {
+        setArray(list ? [...list] : [])
+    }, [list])
+
+    function handleChange(e, key) {
+        setUserFilters({...userFilters, [e.name]: e.value});
+        setArray(list.filter(item => {
+            return item?.[key]?.id === e.value?.id
+        }))
+    }
 
     // Başlanğıc dəyəri propdan götürürük və multi-select üçün massiv olmasını təmin edirik
     const initialValue = multiple ? (Array.isArray(value) ? value : []) : (value || null);
@@ -125,14 +140,30 @@ export default function SgSelect(props) {
                 visible={selectModal}
                 onClose={toggleSelectModal}
                 title={modalTitle || placeholder}
-                // Çox seçimdə close düyməsini saxla ki, istifadəçi seçimi bitirdiyini bilsin
                 closeType={multiple ? "default" : "select"}
             >
+                <View>
+                    {filters.length > 0 && (
+                        filters.map((filter, index) => (
+                            <SgSelect
+                                key={index}
+                                label={filter?.label}
+                                placeholder={filter?.name}
+                                value={userFilters[filter?.name]}
+                                modalTitle={filter?.name}
+                                name={filter?.name}
+                                onChangeText={(e) => handleChange(e, filter?.key)}
+                                list={(filter?.list || [])}
+                            />
+                        ))
+                    )}
+                </View>
                 <ScrollView
                     style={{flex: 1, padding: 10, maxHeight: 400, height: '100%'}}
                     contentContainerStyle={{paddingBottom: 10}}
                 >
-                    {(list || []).map((item, index) => {
+
+                    {(array || []).map((item, index) => {
                         // Seçim vəziyyətini yoxla
                         const isSelected = multiple
                             ? selectedValue.some(selected => selected.id === item.id)

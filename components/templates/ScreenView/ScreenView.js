@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useLocalSearchParams } from "expo-router";
 import {useIsFocused} from "@react-navigation/native";
 import {useNotification} from "@/hooks/useNotification";
+import InternetStatusIndicator from "@/utils/InternetStatusIndicator";
 
 export default function SgTemplateScreenView(props) {
     const { head, children, scrollView = true } = props;
@@ -64,6 +65,7 @@ export default function SgTemplateScreenView(props) {
                     style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 >
+                    <InternetStatusIndicator />
                     {/*<TouchableWithoutFeedback*/}
                     {/*    onPress={Keyboard.dismiss}*/}
                     {/*    accessible={false}*/}

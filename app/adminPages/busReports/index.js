@@ -21,7 +21,6 @@ export default function ProjectItemScreen() {
         request({
             url: '/admin/bus/projects/history', method: 'get',
         }).then(res => {
-            console.log(res, 'res');
         }).catch(err => {
             console.log(err);
         })

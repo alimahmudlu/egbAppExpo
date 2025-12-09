@@ -700,6 +700,7 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                tabBar__allTasks: "All Tasks",
                 tabBar__overTime: "Overtime",
                 overTime: "Overtime",
                 overTime_btn: "Overtime",
@@ -937,6 +938,7 @@ i18n.use(initReactI18next).init({
                 enterRole: "Enter role",
                 role: "Role",
 
+                FoodSchedule: "Food Schedule",
                 foodSchedule: "Food Schedule",
                 foodSchedule__description: "Food Schedule description Food Schedule description Food Schedule description Food Schedule description Food Schedule description Food Schedule description",
                 foodSchedule__archive: "Reports",
@@ -948,12 +950,12 @@ i18n.use(initReactI18next).init({
                 foodSchedule__report__description: " - add Food Schedule report",
                 foodReports: "Food report",
                 turn1st: "Day shift",
-                turn2nd: "2st turn",
+                turn2nd: "Night shift",
 
-                turn1stemployees: "Day shift employees",
-                turn1storder: "Day shift order",
-                turn1strest: "Day shift rest",
-                turn1stmissing: "Day shift missing",
+                turn1stemployees: "Employees",
+                turn1storder: "Order",
+                turn1strest: "Left over",
+                turn1stmissing: "Waste",
 
                 turn2ndemployees: "Night shift employees",
                 turn2ndorder: "Night shift order",
@@ -990,10 +992,16 @@ i18n.use(initReactI18next).init({
                 done: 'Done',
                 iosUser: 'IOS Users',
                 overtimeCheckIn: 'Overtime',
+
+                tripType: 'Trip Type',
+                selectTripType: 'Select Trip Type',
+                toProject: 'to Project',
+                selectToProject: 'Select to Project',
             }
         },
         ru: {
             translation: {
+                tabBar__allTasks: "Все задачи",
                 tabBar_overTime: "Сверхурочная работа",
                 overTime: "Запрос на сверхурочную работу",
                 overTime_btn: "Запросить",
@@ -1243,10 +1251,10 @@ i18n.use(initReactI18next).init({
                 "foodReports": "Отчет о питании",
                 "turn1st": "1-я смена",
                 "turn2nd": "2-я смена",
-                "turn1stemployees": "Сотрудники 1-й смены",
-                "turn1storder": "Заказ 1-й смены",
-                "turn1strest": "Остаток 1-й смены",
-                "turn1stmissing": "Отсутствующие 1-й смены",
+                "turn1stemployees": "Сотрудники",
+                "turn1storder": "Заказ",
+                "turn1strest": "Остаток",
+                "turn1stmissing": "Отсутствующие",
                 "turn2ndemployees": "Сотрудники 2-й смены",
                 "turn2ndorder": "Заказ 2-й смены",
                 "turn2ndrest": "Остаток 2-й смены",
@@ -1278,11 +1286,17 @@ i18n.use(initReactI18next).init({
                 "draft": "Черновик",
                 "done": "Готово",
                 "iosUser": "Пользователи IOS",
-                "overtimeCheckIn": "Сверхурочные"
+                "overtimeCheckIn": "Сверхурочные",
+
+                tripType: 'Тип поездки',
+                selectTripType: 'Выберите тип поездки',
+                toProject: 'к проекту',
+                selectToProject: 'Выбрать для проекта',
             }
         },
         uz: {
             translation: {
+                tabBar__allTasks: "Barcha vazifalar",
                 tabBar__overTime: "Vaqt o'tishi bilan",
                 overTime: "Vaqt o'tishi bilan",
                 overTime_btn: "Vaqt o'tishi bilan",
@@ -1533,10 +1547,10 @@ i18n.use(initReactI18next).init({
                 "foodReports": "Oziq-ovqat hisoboti",
                 "turn1st": "1-smena",
                 "turn2nd": "2-smena",
-                "turn1stemployees": "1-smena xodimlari",
-                "turn1storder": "1-smena buyurtmasi",
-                "turn1strest": "1-smena qoldig'i",
-                "turn1stmissing": "1-smenada yo'qlar",
+                "turn1stemployees": "xodimlari",
+                "turn1storder": "buyurtmasi",
+                "turn1strest": "qoldig'i",
+                "turn1stmissing": "yo'qlar",
                 "turn2ndemployees": "2-smena xodimlari",
                 "turn2ndorder": "2-smena buyurtmasi",
                 "turn2ndrest": "2-smena qoldig'i",
@@ -1568,7 +1582,12 @@ i18n.use(initReactI18next).init({
                 "draft": "Qoralama",
                 "done": "Bajarildi",
                 "iosUser": "IOS foydalanuvchilari",
-                "overtimeCheckIn": "Ishdan keyingi vaqt (overtaym)"
+                "overtimeCheckIn": "Ishdan keyingi vaqt (overtaym)",
+
+                tripType: 'Sayohat turi',
+                selectTripType: 'Sayohat turini tanlang',
+                toProject: 'Loyihaga',
+                selectToProject: 'Loyihalash uchun tanlang',
             }
         }
     },

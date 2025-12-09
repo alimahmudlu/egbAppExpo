@@ -11,6 +11,7 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import {useApi} from "@/hooks/useApi";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useData} from "@/hooks/useData";
+import SgSelect from "@/components/ui/Select/Select";
 
 
 export default function ChiefMenuScreen() {
@@ -28,6 +29,34 @@ export default function ChiefMenuScreen() {
     const [errors, setErrors] = useState({});
     const [reportModal, setReportModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({});
+    const [projects, setProjects] = useState([]);
+    const [tripTypeList, setTripTypeList] = useState([
+        {
+            id: '1',
+            name: 'Day Main',
+            render: <Text>Day Main</Text>,
+        },
+        {
+            id: '2',
+            name: 'Night Main',
+            render: <Text>Night Main</Text>,
+        },
+        {
+            id: '3',
+            name: 'Additional',
+            render: <Text>Additional</Text>,
+        },
+        {
+            id: '4',
+            name: 'UFMS',
+            render: <Text>UFMS</Text>,
+        },
+        {
+            id: '5',
+            name: 'Airport',
+            render: <Text>Airport</Text>,
+        }
+    ]);
 
     function handleChange(e) {
         setData({...data, [e.name]: e.value});
@@ -49,6 +78,8 @@ export default function ChiefMenuScreen() {
             data: {
                 ...data,
                 projectId: selectedRow?.project_id,
+                tripType: selectedRow?.tripType,
+                toProjectId: selectedRow?.toProject,
                 date: selectedRow?.date || moment().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
                 turn2employees: selectedRow?.turn2employees || 0,
@@ -67,7 +98,6 @@ export default function ChiefMenuScreen() {
         request({
             url: '/admin/bus/projects', method: 'get',
         }).then(res => {
-            console.log(res, 'res');
         }).catch(err => {
             console.log(err);
         })
@@ -75,6 +105,13 @@ export default function ChiefMenuScreen() {
 
     useFocusEffect(useCallback(() => {
         getData();
+
+        request({
+            url: '/admin/projects', method: 'get',
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
 
         return () => {
             console.log('Home tab lost focus');
@@ -84,6 +121,10 @@ export default function ChiefMenuScreen() {
     useEffect(() => {
         setToday(storeData?.cache?.[`GET:/admin/bus/projects`]?.data)
     }, [storeData?.cache?.[`GET:/admin/bus/projects`]])
+
+    useEffect(() => {
+        setProjects(storeData?.cache?.[`GET:/admin/projects`]?.data)
+    }, [storeData?.cache?.[`GET:/admin/projects`]])
 
     return (
         <SgTemplateScreen
@@ -180,6 +221,36 @@ export default function ChiefMenuScreen() {
                             onChangeText={handleChange}
                             type='number'
                             disabled={selectedRow?.report_status}
+                        />
+                    </View>
+
+                    <View>
+                        <SgSelect
+                            label={t('tripType')}
+                            placeholder={t('tripType')}
+                            modalTitle={t('selectTripType')}
+                            value={data?.tripType}
+                            name='tripType'
+                            isInvalid={errors?.tripType}
+                            onChangeText={handleChange}
+                            list={(tripTypeList || [])}
+                        />
+                    </View>
+
+                    <View>
+                        <SgSelect
+                            label={t('toProject')}
+                            placeholder={t('toProject')}
+                            modalTitle={t('selectToProject')}
+                            value={data?.toProject}
+                            name='toProject'
+                            isInvalid={errors?.toProject}
+                            onChangeText={handleChange}
+                            list={(projects || []).filter(item => item.id !== selectedRow?.project_id)?.map(item => ({
+                                id: item?.id,
+                                name: item?.name,
+                                render: <Text>{item?.name}</Text>,
+                            }))}
                         />
                     </View>
                 </View>

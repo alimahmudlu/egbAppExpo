@@ -21,6 +21,7 @@ import moment from "moment";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useTranslation} from "react-i18next";
+import {FontAwesome} from "@expo/vector-icons";
 
 export default function SgSectionTaskCard(props) {
     const { user, accessToken } = useAuth();
@@ -234,7 +235,40 @@ export default function SgSectionTaskCard(props) {
                 </Pressable>
 
                 <View style={styles.footer}>
-                    <Text style={styles.duration}>{data?.duration}</Text>
+                    {/*<View style={{gap: 8, flexDirection: 'row', alignItems: 'center'}}>*/}
+                    {/*    <Text style={styles.date}>Points:</Text>*/}
+                    {/*    <Text style={styles.duration}>{data?.duration}</Text>*/}
+                    {/*</View>*/}
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 4,
+                    }}>
+                        <FontAwesome
+                            name="star"
+                            size={16}
+                            style={{
+                                color: '#FFA500',
+                            }}
+                        />
+                        <Text
+                            style={[
+                                {
+                                    color: COLORS.black,
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontStyle: 'normal',
+                                    fontWeight: '500',
+                                },
+                                {
+                                    color: COLORS.gray_800,
+                                    fontSize: 12,
+                                    lineHeight: 18,
+                                },
+                            ]}
+                        >
+                            {data?.duration}
+                        </Text>
+                    </View>
                     {data?.name ? <View style={styles.userInfo}>
                         <Text style={styles.name}>{(data?.name || '').replace(/\s+/g, " ").split(' ').splice(0, 2).join(' ')}</Text>
                         {data?.image ? (

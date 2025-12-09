@@ -72,7 +72,7 @@ export default function ProjectItemScreen() {
                         projectId={el?.project_id}
                         key={index}
                         time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                        duration={el?.duration}
+                        duration={el?.points}
                         title={el?.name}
                         description={el?.description}
                         name={el?.assigned_employee?.full_name}

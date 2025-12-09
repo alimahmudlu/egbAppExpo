@@ -28,6 +28,7 @@ export default function EmployeeDocsScreen() {
     const {t} = useTranslation();
     const {storeData, insertData, updateData, changeAddRowData, setStoreData} = useData();
     const {socket} = useSocket()
+    const [activeTab, setActiveTab] = useState('checkIn');
 
     function getData(_filters = {}) {
         request({
@@ -119,22 +120,25 @@ export default function EmployeeDocsScreen() {
             }
         >
             <SgFilterTab
-                defaultTabId='checkIn'
+                defaultTabId={activeTab || 'checkIn'}
                 tabs={[
                     {
                         label: t('checkIn'),
                         id: 'checkIn',
-                        count: employees?.filter(el => el.type === 3 && el.status === 1)?.length
+                        count: employees?.filter(el => el.type === 3 && el.status === 1)?.length,
+                        onClick: setActiveTab
                     },
                     {
                         label: t('checkOut'),
                         id: 'checkOut',
-                        count: employees?.filter(el => el.type === 4 && el.status === 1)?.length
+                        count: employees?.filter(el => el.type === 4 && el.status === 1)?.length,
+                        onClick: setActiveTab
                     },
                     {
                         label: t('atWork'),
                         id: 'atWork',
-                        count: employees?.filter(el => el.type === 3 && el.status === 2 && el.completed_status === 0)?.length
+                        count: employees?.filter(el => el.type === 3 && el.status === 2 && el.completed_status === 0)?.length,
+                        onClick: setActiveTab
                     }
                 ]}
                 tabContent={[

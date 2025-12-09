@@ -27,6 +27,7 @@ import {useInitialRedirect, InitialRedirectProvider} from '@/hooks/useInitialRed
 import {LanguageProvider} from "@/hooks/useLanguage";
 import {NotificationProvider} from "@/hooks/useNotification";
 import {ApiProvider} from "@/hooks/useApi";
+import InternetStatusIndicator from "@/utils/InternetStatusIndicator";
 
 // Wrap the root layout with the AuthProvider
 export default function RootLayout() {
@@ -56,7 +57,8 @@ export default function RootLayout() {
     }, [pathname]);
 
     const onBackPress = () => {
-        if (history.current.length > 2) {
+        console.log('onBackPress', history.current, backPressCount);
+        if (history.current.length >= 2) {
             history.current.pop();
             const prev = history.current[history.current.length - 1];
             router.replace(prev);

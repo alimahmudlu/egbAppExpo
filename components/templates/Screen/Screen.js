@@ -1,6 +1,7 @@
 import {Platform, StyleSheet, View} from "react-native";
 import COLORS from "@/constants/colors";
 import SgTemplatesScreenView from "@/components/templates/ScreenView/ScreenView";
+import InternetStatusIndicator from "@/utils/InternetStatusIndicator";
 
 export default function SgTemplatesScreen(props) {
     const {head, children, scrollView = true} = props;
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
         paddingBottom: Platform.OS === 'ios' ? 56 : 16,
         backgroundColor: COLORS.white,
         flexDirection: 'column',
-        gap: 12,
+        // gap: 12,
         boxSizing: 'border-box'
     },
     head: {

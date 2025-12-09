@@ -10,7 +10,7 @@ import {useAuth} from "@/hooks/useAuth";
 import {Alert, StyleSheet, Text, View} from "react-native";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import SgUtilsTimeDifference from "@/utils/TimeDifference";
@@ -22,6 +22,11 @@ import COLORS from "@/constants/colors";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
 import SgButton from "@/components/ui/Button/Button";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import FilterIcon from "@/assets/images/filter.svg";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
+import SgInput from "@/components/ui/Input/Input";
+import SgSelect from "@/components/ui/Select/Select";
 
 export default function EmployeeDashboardScreen() {
     const {user, getRating} = useAuth();
@@ -29,6 +34,7 @@ export default function EmployeeDashboardScreen() {
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
     const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
     const [projectsList, setProjectsList] = useState([]);
+    const [taskList, setTaskList] = useState([]);
     const [checkIn, setCheckIn] = useState({});
     const [checkOut, setCheckOut] = useState({});
     const [overTime, setOverTime] = useState({});
@@ -38,6 +44,25 @@ export default function EmployeeDashboardScreen() {
     const {socket} = useSocket();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
+    const [filters, setFilters] = useState({})
+    const [filterModal, setFilterModal] = useState(false)
+    const [getDataStatus, setDataStatus] = useState(false)
+
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
+    }
+
+    function handleChange(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
+
+    function resetFilters() {
+        setFilters({});
+    }
+
+    function handleFilters() {
+        setDataStatus(!getDataStatus)
+    }
 
     useFocusEffect(useCallback(() => {
         request({
@@ -66,15 +91,22 @@ export default function EmployeeDashboardScreen() {
             }));
         })
 
-        request({
+        /*request({
             url: '/employee/project/list', method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
+        })*/
+
+        request({
+            url: '/employee/project/tasks', method: 'get',
         }).then().catch(err => {
             // console.log(err);
         })
 
         getRating()
 
-        return () => {};
+        return () => {
+        };
 
     }, [refreshKey]));
 
@@ -89,8 +121,7 @@ export default function EmployeeDashboardScreen() {
                         status: 3, type: 1, reject_reason: data?.data?.reject_reason
                     },
                 }));
-            }
-            else if (data?.data?.type === 2) {
+            } else if (data?.data?.type === 2) {
                 setStoreData(prev => ({
                     ...prev,
                     checkIn: data?.data?.status !== 3 ? {} : {
@@ -101,16 +132,16 @@ export default function EmployeeDashboardScreen() {
                     },
                 }));
             }
-            // else if (data?.data?.type === 2) {
-            //     setStoreData(prev => ({
-            //         ...prev,
-            //         checkIn: {
-            //             ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
-            //         },
-            //         checkOut: data?.data?.status !== 3 ? data?.data : {
-            //             status: 3, type: 2, reject_reason: data?.data?.reject_reason
-            //         },
-            //     }));
+                // else if (data?.data?.type === 2) {
+                //     setStoreData(prev => ({
+                //         ...prev,
+                //         checkIn: {
+                //             ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+                //         },
+                //         checkOut: data?.data?.status !== 3 ? data?.data : {
+                //             status: 3, type: 2, reject_reason: data?.data?.reject_reason
+                //         },
+                //     }));
             // }
             else if (data?.data?.type === 3) {
                 setStoreData(prev => ({
@@ -119,8 +150,7 @@ export default function EmployeeDashboardScreen() {
                         status: 3, type: 1, reject_reason: data?.data?.reject_reason
                     },
                 }));
-            }
-            else if (data?.data?.type === 4) {
+            } else if (data?.data?.type === 4) {
                 setStoreData(prev => ({
                     ...prev,
 
@@ -135,7 +165,7 @@ export default function EmployeeDashboardScreen() {
         };
 
         // socket.on('connect', () => {
-            socket.on("update_activity", handler);
+        socket.on("update_activity", handler);
         // })
 
         return () => {
@@ -148,9 +178,13 @@ export default function EmployeeDashboardScreen() {
         setRejectInfoModal(!rejectInfoModal);
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         setProjectsList(storeData?.cache?.[`GET:/employee/project/list`]?.data)
-    }, [storeData?.cache?.[`GET:/employee/project/list`]])
+    }, [storeData?.cache?.[`GET:/employee/project/list`]])*/
+
+    useEffect(() => {
+        setTaskList(storeData?.cache?.[`GET:/employee/project/tasks`]?.data)
+    }, [storeData?.cache?.[`GET:/employee/project/tasks`]])
 
     useEffect(() => {
         // Alert.alert('checkIn change')
@@ -162,93 +196,175 @@ export default function EmployeeDashboardScreen() {
 
 
     return (<SgTemplateScreen
-            head={<SgTemplateHeader
-                name={user?.full_name}
-                role={user?.role?.name}
-                position={user?.position}
-                rating={user?.rating}
-                profileImage={''}
-            />}
-        >
+        head={<SgTemplateHeader
+            name={user?.full_name}
+            role={user?.role?.name}
+            position={user?.position}
+            rating={user?.rating}
+            profileImage={''}
+        />}
+    >
 
-            {storeData?.checkIn?.status === 3 ? <SgNoticeCard
-                icon={<LoginIcon width={20} height={20}/>}
-                title={t('checkInRejected')}
-                buttonText={t('rejectDetail')}
-                onClick={() => toggleRejectInfoModal(storeData?.checkIn?.reject_reason)}
-                bgCard="danger"
-                bgButton="danger"
-            /> : null}
-            {storeData?.checkOut?.status === 3 ? <SgNoticeCard
-                icon={<LoginIcon width={20} height={20}/>}
-                title={t('checkOutRejected')}
-                buttonText={t('rejectDetail')}
-                onClick={() => toggleRejectInfoModal(storeData?.checkOut?.reject_reason)}
-                bgCard="danger"
-                bgButton="danger"
-            /> : null}
-            <SgCheckInOutGroup>
-                <SgCheckInOutCard
-                    type="checkin"
-                    title={t('checkIn')}
-                    time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
-                    buttonLabel={t('checkIn')}
-                    status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
-                    mapData={{
-                        checkIn: {
-                            latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
-                        },
-                    }}
-                    reviewer={checkIn?.reviewer || {}}
-                />
-                <SgCheckInOutCard
-                    type="checkout"
-                    title={t('checkOut')}
-                    time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
-                    buttonLabel={t('checkOut')}
-                    status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
-                    checkInStatus={checkIn?.status === 2}
-                    checkInId={checkIn?.id}
-                    mapData={{
-                        checkOut: {
-                            latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
-                        },
-                    }}
-                    reviewer={checkOut?.reviewer || {}}
-                />
-            </SgCheckInOutGroup>
-
-            <SgCard
-                title={t('workTime')}
-                time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
-                    startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
-                icon={Clock}
+        {storeData?.checkIn?.status === 3 ? <SgNoticeCard
+            icon={<LoginIcon width={20} height={20}/>}
+            title={t('checkInRejected')}
+            buttonText={t('rejectDetail')}
+            onClick={() => toggleRejectInfoModal(storeData?.checkIn?.reject_reason)}
+            bgCard="danger"
+            bgButton="danger"
+        /> : null}
+        {storeData?.checkOut?.status === 3 ? <SgNoticeCard
+            icon={<LoginIcon width={20} height={20}/>}
+            title={t('checkOutRejected')}
+            buttonText={t('rejectDetail')}
+            onClick={() => toggleRejectInfoModal(storeData?.checkOut?.reject_reason)}
+            bgCard="danger"
+            bgButton="danger"
+        /> : null}
+        <SgCheckInOutGroup>
+            <SgCheckInOutCard
+                type="checkin"
+                title={t('checkIn')}
+                time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
+                buttonLabel={t('checkIn')}
+                status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
+                mapData={{
+                    checkIn: {
+                        latitude: checkIn?.latitude || 0, longitude: checkIn?.longitude || 0,
+                    },
+                }}
+                reviewer={checkIn?.reviewer || {}}
             />
+            <SgCheckInOutCard
+                type="checkout"
+                title={t('checkOut')}
+                time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
+                buttonLabel={t('checkOut')}
+                status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                checkInStatus={checkIn?.status === 2}
+                checkInId={checkIn?.id}
+                mapData={{
+                    checkOut: {
+                        latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,
+                    },
+                }}
+                reviewer={checkOut?.reviewer || {}}
+            />
+        </SgCheckInOutGroup>
 
-            <SgCard>
-                <Text style={styles.title}>{t('myTasks')}</Text>
-            </SgCard>
+        <SgCard
+            title={t('workTime')}
+            time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
+                startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
+            icon={Clock}
+        />
 
-            <View style={{gap: 12}}>
-                {(projectsList || []).map((project, index) => {
-                    return (<SgSectionProjectListItem
-                            key={index}
-                            title={project.name}
-                            staffData={(project?.members || []).filter(el => el.status)}
-                            id={project.id}
-                            href={`/employeePages/projects/${project.id}`}
-                        />)
-                })}
+        <SgCard>
+            <Text style={styles.title}>{t('myTasks')}</Text>
+        </SgCard>
+        {/*<SgNoticeCard
+            title={<Text style={styles.title}>{t('myTasks')}</Text>}
+            buttonText={<FilterIcon width={20} height={20}/>}
+            bgButton="lightSuccess"
+            onClick={toggleFilterModal}
+        />*/}
+
+        <View style={{gap: 12}}>
+            {(taskList || []).map((el, index) => {
+                return (
+                    <SgSectionTaskCard
+                        id={el?.id}
+                        projectId={el?.project_id}
+                        key={index}
+                        time={el?.deadline ? moment(el?.deadline).format('DD/MM/YYYY / HH:mm') : ''}
+                        duration={el?.points}
+                        title={el?.name}
+                        description={el?.description}
+                        name={el?.reporter_employee?.full_name}
+                        image={null}
+                        status={el?.status}
+                        href={`/employeePages/projects/${el?.project_id}/${el?.id}`}
+                    />
+                )
+            })}
+        </View>
+        <SgPopup
+            visible={rejectInfoModal}
+            onClose={toggleRejectInfoModal}
+            icon={<InfoCircleModalIcon width={56} height={56}/>}
+        >
+            <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
+            <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
+        </SgPopup>
+
+        <SgPopup
+            visible={filterModal}
+            onClose={toggleFilterModal}
+            footerButton={
+                <SgButton
+                    onPress={handleFilters}
+                    bgColor={COLORS.primary}
+                    color={COLORS.white}
+                >
+                    {t('accept')}
+                </SgButton>
+            }
+        >
+            <View style={{paddingBottom: 20}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+                    <SgButton
+                        onPress={resetFilters}
+                        color={COLORS.brand_700}
+                        style={{
+                            flex: 0,
+                            width: 'auto',
+                            marginLeft: 'auto',
+                            paddingVertical: 0,
+                            paddingHorizontal: 0,
+                            gap: 7
+                        }}
+
+                    >
+                        {t('clearFilters')}
+                        <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                    </SgButton>
+                </View>
+
+                <View style={{gap: 16}}>
+                    <View style={{flex: 1}}>
+                        <SgInput
+                            label={t('employeeName')}
+                            placeholder={t('employeeName_placeholder')}
+                            value={filters?.full_name}
+                            name='full_name'
+                            onChangeText={handleChange}
+                        />
+                    </View>
+                    <View style={{flex: 1}}>
+                        <SgSelect
+                            label={t("project")}
+                            placeholder={t("enterProject")}
+                            modalTitle={t("selectProject")}
+                            value={filters?.project}
+                            name='project'
+                            multiple={true}
+                            onChangeText={handleChange}
+                            list={(projectsList || []).map((project, index) => ({
+                                id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                    key={index}
+                                    title={project.name}
+                                    staffData={(project?.members || []).filter(el => el.status)}
+                                    id={project.id}
+                                />
+                            }))}
+                        />
+                    </View>
+                </View>
             </View>
-            <SgPopup
-                visible={rejectInfoModal}
-                onClose={toggleRejectInfoModal}
-                icon={<InfoCircleModalIcon width={56} height={56}/>}
-            >
-                <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
-                <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
-            </SgPopup>
-        </SgTemplateScreen>);
+        </SgPopup>
+    </SgTemplateScreen>);
 }
 
 const styles = StyleSheet.create({

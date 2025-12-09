@@ -8,7 +8,7 @@ import {
     Dimensions,
     KeyboardAvoidingView,
     Platform,
-    Keyboard
+    Keyboard, ScrollView
 } from 'react-native';
 import styles from './Modal.styles';
 import SgButton from '@/components/ui/Button/Button';
@@ -99,7 +99,7 @@ export default function SgPopup({
                   <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
                 </TouchableWithoutFeedback>
 
-                <View style={[styles.container, fullScreen && { flex: 1, height: '100%',  }]}>
+                <View style={[styles.container, fullScreen && { flex: 1, height: '100%'  }]}>
                   <View style={styles.dragHandle} />
 
                   <View style={{marginVertical: 'auto'}}>
@@ -121,8 +121,11 @@ export default function SgPopup({
                     )}
                     {description && <Text style={styles.description}>{description}</Text>}
 
-                    {children}
                   </View>
+
+                    <ScrollView>
+                        {children}
+                    </ScrollView>
 
                   <View style={styles.footerButtonsContainer}>
                     <View style={{ flex: 1 }}>

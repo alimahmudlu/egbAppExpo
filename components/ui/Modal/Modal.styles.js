@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
+      maxHeight: '100%',
   },
   dragHandle: {
     width: 48,

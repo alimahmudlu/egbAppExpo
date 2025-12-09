@@ -50,7 +50,7 @@ export default function EmployeeDashboardScreen() {
 
     useFocusEffect(useCallback(() => {
         request({
-            url: `/chief/activity/`, method: 'get',
+            url: `/chief/activity/check`, method: 'get',
         }).then(res => {
             setStoreData(prev => ({
                 ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
@@ -192,13 +192,29 @@ export default function EmployeeDashboardScreen() {
             </SgCheckInOutGroup>
 
             <SgNoticeCard
-                title={t('activeTasks')}
+                title={t('check')}
                 buttonText={t('addTask')}
                 bgButton="success"
                 href="/chiefPages/create-task"
             />
 
-            <SgFilterTab
+        <View style={{gap: 16}}>
+            {taskList?.filter(el => [3, 4].includes(el?.status?.id))?.map((el, index) => (
+                <SgSectionTaskCard
+                    id={el?.id}
+                    projectId={el?.project_id}
+                    key={index}
+                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
+                    duration={el?.points}
+                    title={el?.name}
+                    description={el?.description}
+                    name={el?.assigned_employee?.full_name}
+                    image={null}
+                    status={el?.status}
+                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
+                />))}
+        </View>
+            {/*<SgFilterTab
                 defaultTabId='all'
                 tabs={[
                     {label: t('allTasks'), id: 'all', count: taskList?.length},
@@ -213,7 +229,7 @@ export default function EmployeeDashboardScreen() {
                                     projectId={el?.project_id}
                                     key={index}
                                     time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                                    duration={el?.duration}
+                                    duration={el?.points}
                                     title={el?.name}
                                     description={el?.description}
                                     name={el?.assigned_employee?.full_name}
@@ -232,7 +248,7 @@ export default function EmployeeDashboardScreen() {
                                     projectId={el?.project_id}
                                     key={index}
                                     time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                                    duration={el?.duration}
+                                    duration={el?.points}
                                     title={el?.name}
                                     description={el?.description}
                                     name={el?.assigned_employee?.full_name}
@@ -250,7 +266,7 @@ export default function EmployeeDashboardScreen() {
                     //                 projectId={el?.project_id}
                     //                 key={index}
                     //                 time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                    //                 duration={el?.duration}
+                    //                 duration={el?.points}
                     //                 title={el?.name}
                     //                 description={el?.description}
                     //                 name={el?.assigned_employee?.full_name}
@@ -262,7 +278,7 @@ export default function EmployeeDashboardScreen() {
                     //     id: 'complete'
                     // }
                 ]}
-            />
+            />*/}
         </SgTemplateScreen>);
 }
 
