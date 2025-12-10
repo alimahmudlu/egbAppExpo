@@ -17,11 +17,10 @@ const InternetStatusIndicator = () => {
         return () => unsubscribe();
     }, []);
 
-    // let statusText = "TEST your internet";
     let statusText = null;
 
     if (!isConnected) {
-        statusText = "Open your internet";
+        statusText = "Device Offline: Network Interface Unavailable";
     } else if (isConnected && !isInternetReachable) {
         statusText = "No internet connection";
     }
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
     text: {
         color: COLORS.white,
         fontWeight: '700',
-        fontSize: 16,
+        fontSize: 14,
     },
 });
 

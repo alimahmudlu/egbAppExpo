@@ -1,16 +1,13 @@
-import {
-    Dimensions,
-    Keyboard, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, TouchableWithoutFeedback, View
-} from "react-native";
+import {KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet} from "react-native";
 import React, {useState} from "react";
 import SafeScreen from "@/components/SafeScreen";
 import {StatusBar} from "expo-status-bar";
-import COLORS from "@/constants/colors";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useLocalSearchParams } from "expo-router";
 import {useIsFocused} from "@react-navigation/native";
-import {useNotification} from "@/hooks/useNotification";
 import InternetStatusIndicator from "@/utils/InternetStatusIndicator";
+import GpsSignalStatusIndicator from "@/utils/GpsSignalStatusIndicator";
+import {useGpsSignalStatus} from "@/hooks/useGpsSignalStatus";
 
 export default function SgTemplateScreenView(props) {
     const { head, children, scrollView = true } = props;
@@ -24,6 +21,7 @@ export default function SgTemplateScreenView(props) {
     const isFocused = useIsFocused();
     const [remountKey, setRemountKey] = React.useState(0);
     // const {loadNotification} = useNotification();
+    const { renderSystemAlertBanner } = useGpsSignalStatus();
 
     React.useEffect(() => {
         if (isFocused) {
@@ -66,6 +64,8 @@ export default function SgTemplateScreenView(props) {
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 >
                     <InternetStatusIndicator />
+                    <GpsSignalStatusIndicator />
+                    {/*{renderSystemAlertBanner()}*/}
                     {/*<TouchableWithoutFeedback*/}
                     {/*    onPress={Keyboard.dismiss}*/}
                     {/*    accessible={false}*/}

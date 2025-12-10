@@ -95,6 +95,32 @@ export default function EmployeeDocsScreen() {
             show: false
         },
         {
+            key: 'notification_from_a_legal_entity',
+            label: 'Notification from a legal entity',
+            label_ru: 'Уведомление от юр лица',
+            label_uz: 'Yuridik shaxsdan bildirishnoma',
+            flow: ['patent', 'bkc'],
+            issueRequired: false,
+            expiryRequired: false,
+            serialRequired: false,
+            numberRequired: false,
+            dateRequired: false,
+            show: false
+        },
+        {
+            key: 'notification_from_an_individual',
+            label: 'Notification from an individual',
+            label_ru: 'Уведомление от физ лица',
+            label_uz: 'Shaxsdan bildirishnoma',
+            flow: ['patent'],
+            issueRequired: false,
+            expiryRequired: false,
+            serialRequired: false,
+            numberRequired: false,
+            dateRequired: false,
+            show: false
+        },
+        {
             key: 'payment_receipt',
             label: 'Payment receipt',
             label_ru: 'Квитанция об оплате',

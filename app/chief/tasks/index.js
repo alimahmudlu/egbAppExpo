@@ -72,6 +72,10 @@ export default function EmployeeDocsScreen() {
     return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: t('allTasks'),
+                data: {
+                    href: '/chiefPages/create-task',
+                    header: t('addTask')
+                }
             }}/>}
         >
             {taskList?.map((el, index) => (<SgSectionTaskCard

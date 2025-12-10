@@ -6,7 +6,7 @@ import Constants from 'expo-constants';
 import {disconnectSocket} from "@/services/createSocket";
 import * as Device from "expo-device";
 import storage from "@/utils/storage";
-import {Text} from "react-native";
+import {ActivityIndicator, Text, View} from "react-native";
 
 const userAgent = {
     brand: Device.brand,
@@ -281,7 +281,9 @@ export function AuthProvider({ children }) {
         login,
         logout
       }}>
-        {loading ? <><Text>Loading starttt</Text></> : children}
+        {loading ? <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#007BFF" />
+        </View> : children}
     </AuthContext.Provider>
   );
 }

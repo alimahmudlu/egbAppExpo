@@ -639,7 +639,7 @@ export default function SgSectionEmployeeCard(props) {
                                     <Text style={styles.title}>Full Time</Text>
                                 </View>
                             </TouchableOpacity>
-                            {moment().tz("Europe/Moscow").weekday() === 7 ?
+                            {moment().tz("Europe/Moscow").weekday() === 3 ?
                                 <TouchableOpacity
                                     activeOpacity={1}
                                     key={4}
@@ -896,7 +896,7 @@ export default function SgSectionEmployeeCard(props) {
                                 <Text style={styles.title}>Full Time</Text>
                             </View>
                         </TouchableOpacity>
-                        {moment().tz("Europe/Moscow").weekday() === 7 ?
+                        {moment().tz("Europe/Moscow").weekday() === 3 ?
                             <TouchableOpacity
                                 activeOpacity={1}
                                 key={4}
