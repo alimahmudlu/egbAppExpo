@@ -6,7 +6,8 @@ import COLORS from '@/constants/colors';
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgRadio from "@/components/ui/Radio/Radio";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
-import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo"; // Multi-select üçün fərz edilən import
+import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
+import SgInput from "@/components/ui/Input/Input"; // Multi-select üçün fərz edilən import
 
 export default function SgSelect(props) {
     const {
@@ -22,27 +23,65 @@ export default function SgSelect(props) {
         filters = []
     } = props
     const [userFilters, setUserFilters] = useState({});
+    const [originalArray, setOriginalArray] = useState(list ? [...list] : [])
     const [array, setArray] = useState(list ? [...list] : [])
 
     useEffect(() => {
         setArray(list ? [...list] : [])
+        setOriginalArray(list ? [...list] : [])
     }, [list])
 
-    function handleChange(e, key) {
-        setUserFilters({...userFilters, [e.name]: e.value});
+    function handleChange(e, key, type) {
+        const filters = {...userFilters, [e.name]: e.value}
+        setUserFilters(filters);
+        // item?.[key]?.id === e.value?.id
         setArray(list.filter(item => {
-            return item?.[key]?.id === e.value?.id
-        }))
+            // Bütün filter açarları üzərindən keç və hər biri TRUE qaytarmalıdır (AND Məntiqi)
+            return Object.keys(filters).every(filterKey => {
+                const filterValue = filters[filterKey];
+                const itemValue = item[filterKey];
+
+                // Əgər filterValue boşdursa (yəni süzgəc tətbiq edilməyibsə), TRUE qaytarılır
+                if (!filterValue) {
+                    return true;
+                }
+
+                // --- A) Obyekt əsaslı süzgəc (ID müqayisəsi) ---
+                // Əgər filterValue bir obyektdirsə və 'id' keyi varsa
+                if (typeof filterValue === 'object' && filterValue !== null && 'id' in filterValue) {
+                    return itemValue && typeof itemValue === 'object' && itemValue.id === filterValue.id;
+                }
+
+                // --- B) Sadə dəyər əsaslı süzgəc (%LIKE% müqayisəsi) ---
+                // Əgər filterValue sadə string dəyərdirsə (məsələn, axtarış sözü)
+                if (typeof filterValue === 'string') {
+
+                    // list iteminin dəyəri də string olmalıdır
+                    if (typeof itemValue === 'string') {
+
+                        // Hər iki dəyəri kiçik hərfə çevirərək müqayisə edirik (Case-insensitive LIKE)
+                        const normalizedItemValue = itemValue.toLowerCase();
+                        const normalizedFilterValue = filterValue.toLowerCase();
+
+                        // Stringin içində olub-olmadığını yoxlayır (%LIKE% məntiqi)
+                        return normalizedItemValue.includes(normalizedFilterValue);
+                    }
+
+                    // Əgər list itemindəki dəyər string deyilsə, uyğun gəlmir.
+                    return false;
+                }
+
+                // Başqa tipdə olan filters dəyərləri üçün tam bərabərlik.
+                return itemValue === filterValue;
+            });
+        }));
     }
 
-    // Başlanğıc dəyəri propdan götürürük və multi-select üçün massiv olmasını təmin edirik
     const initialValue = multiple ? (Array.isArray(value) ? value : []) : (value || null);
 
     const [selectModal, setSelectModal] = useState(false);
-    // selectedValue tək seçim üçün obyekt, çox seçim üçün massiv olacaq
     const [selectedValue, setSelectedValue] = useState(initialValue);
 
-    // value propu dəyişdikdə state-i yeniləmək üçün useEffect istifadə edirik
     useEffect(() => {
         const newValue = multiple ? (Array.isArray(value) ? value : []) : (value || null);
         setSelectedValue(newValue);
@@ -51,34 +90,31 @@ export default function SgSelect(props) {
 
     function toggleSelectModal() {
         setSelectModal(!selectModal);
+        setUserFilters({})
+        setArray(originalArray)
     }
 
     function handleSelect(e, item) {
         e.stopPropagation();
 
         if (multiple) {
-            // --- Çox Seçimli Məntiq ---
             const isSelected = selectedValue.some(selected => selected.id === item.id);
             let newSelectedValue;
 
             if (isSelected) {
-                // Seçimi ləğv et
                 newSelectedValue = selectedValue.filter(selected => selected.id !== item.id);
             } else {
-                // Seçim əlavə et
                 newSelectedValue = [...selectedValue, {id: item.id, name: item.name}];
             }
 
             setSelectedValue(newSelectedValue);
 
-            // Üst komponentə massivi göndər
             onChangeText({
                 name: name,
                 value: newSelectedValue,
             });
 
         } else {
-            // --- Tək Seçimli Məntiq ---
             setSelectedValue({
                 id: item?.id,
                 name: item?.name,
@@ -90,17 +126,14 @@ export default function SgSelect(props) {
                     name: item?.name,
                 }
             });
-            // Tək seçimdə popupu bağla
             toggleSelectModal();
         }
     }
 
-    // Çox seçim üçün seçilmiş adları göstərmək üçün funksiya
     const getDisplayValue = () => {
         if (multiple) {
             if (selectedValue.length > 0) {
                 const names = selectedValue.map(item => item.name);
-                // İlk bir neçə adı göstərib sonra sayını qeyd et
                 if (names.length > 2) {
                     return `${names.slice(0, 2).join(', ')} və ${names.length - 2} daha...`;
                 }
@@ -124,7 +157,6 @@ export default function SgSelect(props) {
                     <View
                         style={styles.input}
                     >
-                        {/* Görüntü sahəsini yeniləyirik */}
                         <Text style={!value?.id && (!multiple || (multiple && selectedValue.length === 0)) ? {color: COLORS.gray_400} : {}}>
                             {getDisplayValue()}
                         </Text>
@@ -139,23 +171,40 @@ export default function SgSelect(props) {
             <SgPopup
                 visible={selectModal}
                 onClose={toggleSelectModal}
+                fullScreen={true}
                 title={modalTitle || placeholder}
                 closeType={multiple ? "default" : "select"}
             >
-                <View>
+                <View style={{gap: 8, paddingBottom: 8}}>
                     {filters.length > 0 && (
-                        filters.map((filter, index) => (
-                            <SgSelect
-                                key={index}
-                                label={filter?.label}
-                                placeholder={filter?.name}
-                                value={userFilters[filter?.name]}
-                                modalTitle={filter?.name}
-                                name={filter?.name}
-                                onChangeText={(e) => handleChange(e, filter?.key)}
-                                list={(filter?.list || [])}
-                            />
-                        ))
+                        filters.map((filter, index) => {
+                            if (filter.type === 'select') {
+                                return (
+                                    <SgSelect
+                                        key={index}
+                                        label={filter?.label}
+                                        placeholder={filter?.name}
+                                        value={userFilters[filter?.name]}
+                                        modalTitle={filter?.name}
+                                        name={filter?.name}
+                                        onChangeText={(e) => handleChange(e, filter?.key)}
+                                        list={(filter?.list || [])}
+                                    />
+                                )
+                            }
+                            else if (filter.type === 'input') {
+                                return (
+                                    <SgInput
+                                        key={index}
+                                        label={filter?.label}
+                                        placeholder={filter?.name}
+                                        value={userFilters[filter?.name]}
+                                        name={filter?.name}
+                                        onChangeText={(e) => handleChange(e, filter?.key)}
+                                    />
+                                )
+                            }
+                        })
                     )}
                 </View>
                 <ScrollView

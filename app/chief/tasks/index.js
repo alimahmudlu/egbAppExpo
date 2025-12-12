@@ -15,6 +15,7 @@ import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import TaskListScreen from "@/components/sections/ClickupTask/TaskListScreen";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -28,8 +29,10 @@ export default function EmployeeDocsScreen() {
 
     function getData(_filters = {}) {
         request({
-            url: `/chief/task/list/active`, method: 'get', params: {..._filters, status: _filters?.status?.id}
-        }).then().catch(err => {
+            url: `/chief/task/clickup/list`, method: 'get', params: {..._filters, status: _filters?.status?.id}
+        }).then(resp => {
+            console.log(resp?.data, 'ppppal');
+        }).catch(err => {
             // console.log(err);
         })
     }
@@ -66,8 +69,8 @@ export default function EmployeeDocsScreen() {
     }, [storeData?.cache?.[`GET:/chief/options/task_statuses`]])
 
     useEffect(() => {
-        setTaskList(storeData?.cache?.[`GET:/chief/task/list/active`]?.data)
-    }, [storeData?.cache?.[`GET:/chief/task/list/active`]])
+        setTaskList(storeData?.cache?.[`GET:/chief/task/clickup/list`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/task/clickup/list`]])
 
     return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
@@ -78,19 +81,9 @@ export default function EmployeeDocsScreen() {
                 }
             }}/>}
         >
-            {taskList?.map((el, index) => (<SgSectionTaskCard
-                    id={el?.id}
-                    projectId={el?.project_id}
-                    key={index}
-                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                    duration={el?.duration}
-                    title={el?.name}
-                    description={el?.description}
-                    name={el?.assigned_employee?.full_name}
-                    image={null}
-                    status={el?.status}
-                    href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
-                />))}
+            <TaskListScreen
+                taskList={taskList || []}
+            />
 
 
             <SgPopup
@@ -139,9 +132,12 @@ export default function EmployeeDocsScreen() {
                                 render: (<Text style={{fontSize: 16, fontWeight: 500}}>
                                     {el.id === 1 && t("open")}
                                     {el.id === 2 && t("inProgress")}
-                                    {el.id === 3 && t("checkProgress")}
-                                    {el.id === 4 && t("checkComplete")}
-                                    {el.id === 5 && t("completed")}
+                                    {el.id === 3 && t("checkProgressRequested")}
+                                    {el.id === 4 && t("checkProgressRequestAccepted")}
+                                    {el.id === 5 && t("checkProgressRequestDenied")}
+                                    {el.id === 6 && t("completeRequested")}
+                                    {el.id === 7 && t("completeRequestAccepted")}
+                                    {el.id === 8 && t("completeRequestDenied")}
                                 </Text>)
                             }))}
                             onChangeText={handleChange}

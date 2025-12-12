@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
 import DotsIcon from "../../../assets/images/dots-icon.svg";
 import styles from './TaskCard.styles';
+import stylesSm from './TaskCardSm.styles';
 import COLORS from '@/constants/colors';
 import SgPopup from '@/components/ui/Modal/Modal';
 import ClipboardIcon from "@/assets/images/clipboard-check.svg"
@@ -193,51 +194,59 @@ export default function SgSectionTaskCard(props) {
     useEffect(() => {
         setData(props || {})
     }, [props]);
+    
+    const {size = 'md'} = props;
+    
+    const taskStyles = size === 'md' ? styles : stylesSm
+    
     return (
         <View>
-            <View style={styles.card}>
-                <View style={styles.header}>
-                    <Text style={styles.time}>{data?.time}</Text>
-                    <View style={styles.rightHeader}>
+            <View style={[taskStyles.card]}>
+                <View style={taskStyles.header}>
+                    <Text style={taskStyles.time}>{data?.time}</Text>
+                    <View style={taskStyles.rightHeader}>
                         {(data?.status?.id && [1, 2, 3, 4, 5].includes(data?.status?.id)) && (
                             <View
                                 style={[
-                                    styles.statusBadge,
+                                    taskStyles.statusBadge,
                                     {backgroundColor: getStatusStyles(data?.status?.id).backgroundColor},
                                 ]}
                             >
                                 <Text
                                     style={[
-                                        styles.statusText,
+                                        taskStyles.statusText,
                                         {color: getStatusStyles(data?.status?.id).color},
                                     ]}
                                 >
                                     {data?.status?.id === 1 && t("open")}
                                     {data?.status?.id === 2 && t("inProgress")}
-                                    {data?.status?.id === 3 && t("checkProgress")}
-                                    {data?.status?.id === 4 && t("checkComplete")}
-                                    {data?.status?.id === 5 && t("completed")}
+                                    {data?.status?.id === 3 && t("checkProgressRequested")}
+                                    {data?.status?.id === 4 && t("checkProgressRequestAccepted")}
+                                    {data?.status?.id === 5 && t("checkProgressRequestDenied")}
+                                    {data?.status?.id === 6 && t("completeRequested")}
+                                    {data?.status?.id === 7 && t("completeRequestAccepted")}
+                                    {data?.status?.id === 8 && t("completeRequestDenied")}
                                 </Text>
                             </View>
                         )}
                         {(data.status?.id !== 5 && ((user?.role?.id === 3 && [1, 3, 4].includes(data?.status?.id)) || user?.role?.id === 1)) ?
-                            <TouchableOpacity style={styles.dots} onPress={() => setModalVisible(true)}>
-                                <DotsIcon width={20} height={20} style={styles.dotsIcon}/>
+                            <TouchableOpacity style={taskStyles.dots} onPress={() => setModalVisible(true)}>
+                                <DotsIcon width={20} height={20} style={taskStyles.dotsIcon}/>
                             </TouchableOpacity>
                             : null
                         }
                     </View>
                 </View>
 
-                <Pressable onPress={() => {router.push(data?.href)}} style={styles.content}>
-                    <Text style={styles.title} numberOfLines={1}>{data?.title}</Text>
-                    <Text style={styles.description} numberOfLines={2}>{data?.description}</Text>
+                <Pressable onPress={() => {router.push(data?.href)}} style={taskStyles.content}>
+                    <Text style={taskStyles.title} numberOfLines={1}>{data?.title}</Text>
+                    <Text style={taskStyles.description} numberOfLines={2}>{data?.description}</Text>
                 </Pressable>
 
-                <View style={styles.footer}>
+                <View style={taskStyles.footer}>
                     {/*<View style={{gap: 8, flexDirection: 'row', alignItems: 'center'}}>*/}
-                    {/*    <Text style={styles.date}>Points:</Text>*/}
-                    {/*    <Text style={styles.duration}>{data?.duration}</Text>*/}
+                    {/*    <Text style={taskStyles.date}>Points:</Text>*/}
+                    {/*    <Text style={taskStyles.duration}>{data?.duration}</Text>*/}
                     {/*</View>*/}
                     <View style={{
                         flexDirection: 'row',
@@ -269,14 +278,14 @@ export default function SgSectionTaskCard(props) {
                             {data?.duration}
                         </Text>
                     </View>
-                    {data?.name ? <View style={styles.userInfo}>
-                        <Text style={styles.name}>{(data?.name || '').replace(/\s+/g, " ").split(' ').splice(0, 2).join(' ')}</Text>
+                    {data?.name ? <View style={taskStyles.userInfo}>
+                        <Text style={taskStyles.name}>{(data?.name || '').replace(/\s+/g, " ").split(' ').splice(0, 2).join(' ')}</Text>
                         {data?.image ? (
-                            <Image source={{uri: data?.image}} style={styles.avatar}/>
+                            <Image source={{uri: data?.image}} style={taskStyles.avatar}/>
                         ) : (
-                            <View style={styles.placeholderAvatar}>
-                                <Text style={styles.avatarText}>
-                                    {data?.name?.split(' ').map(n => n[0]).join('')}
+                            <View style={taskStyles.placeholderAvatar}>
+                                <Text style={taskStyles.avatarText}>
+                                    {data?.name?.split(' ').map(n => n[0]).splice(0,2).join('')}
                                 </Text>
                             </View>
                         )}
@@ -291,36 +300,36 @@ export default function SgSectionTaskCard(props) {
                 description=" "
             >
                 {user?.role?.id === 3 ?
-                    <View style={styles.modalList}>
+                    <View style={taskStyles.modalList}>
                         {data?.status?.id === 3 ?
                             <TouchableOpacity onPress={toggleCheckedTaskModal}>
-                                <View style={styles.modalItem}>
-                                    <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                    <Text style={styles.modalText}>{t('checkedTask')}</Text>
+                                <View style={taskStyles.modalItem}>
+                                    <ClipboardIcon width={20} height={20} style={taskStyles.modalIcon}/>
+                                    <Text style={taskStyles.modalText}>{t('checkedTask')}</Text>
                                 </View>
                             </TouchableOpacity>
                             : null
                         }
                         {data?.status?.id === 4 ?
                             <TouchableOpacity onPress={toggleCompletedTaskModal}>
-                                <View style={styles.modalItem}>
-                                    <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                    <Text style={styles.modalText}>{t('completedTask')}</Text>
+                                <View style={taskStyles.modalItem}>
+                                    <ClipboardIcon width={20} height={20} style={taskStyles.modalIcon}/>
+                                    <Text style={taskStyles.modalText}>{t('completedTask')}</Text>
                                 </View>
                             </TouchableOpacity>
                             : null
                         }
                                 {/*<TouchableOpacity>*/}
-                                {/*    <View style={styles.modalItem}>*/}
-                                {/*        <PencilIcon width={20} height={20} style={styles.modalIcon}/>*/}
-                                {/*        <Text style={styles.modalText}>Edit task</Text>*/}
+                                {/*    <View style={taskStyles.modalItem}>*/}
+                                {/*        <PencilIcon width={20} height={20} style={taskStyles.modalIcon}/>*/}
+                                {/*        <Text style={taskStyles.modalText}>Edit task</Text>*/}
                                 {/*    </View>*/}
                                 {/*</TouchableOpacity>*/}
                         {data?.status?.id === 1 ?
                             <TouchableOpacity onPress={toggleRemoveTaskModal}>
-                                <View style={styles.modalItem}>
-                                    <TrashIcon width={20} height={20} style={styles.modalIcon}/>
-                                    <Text style={styles.modalText}>{t('removeTask')}</Text>
+                                <View style={taskStyles.modalItem}>
+                                    <TrashIcon width={20} height={20} style={taskStyles.modalIcon}/>
+                                    <Text style={taskStyles.modalText}>{t('removeTask')}</Text>
                                 </View>
                             </TouchableOpacity>
                             : null
@@ -329,17 +338,17 @@ export default function SgSectionTaskCard(props) {
                     : null
                 }
                 {user?.role?.id === 1 ?
-                    <View style={styles.modalList}>
+                    <View style={taskStyles.modalList}>
                         <TouchableOpacity onPress={toggleCompleteTaskModal}>
-                            <View style={styles.modalItem}>
-                                <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                <Text style={styles.modalText}>{t('completeRequest')}</Text>
+                            <View style={taskStyles.modalItem}>
+                                <ClipboardIcon width={20} height={20} style={taskStyles.modalIcon}/>
+                                <Text style={taskStyles.modalText}>{t('completeRequest')}</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={toggleCheckTaskModal}>
-                            <View style={styles.modalItem}>
-                                <ClipboardIcon width={20} height={20} style={styles.modalIcon}/>
-                                <Text style={styles.modalText}>{t('checkRequest')}</Text>
+                            <View style={taskStyles.modalItem}>
+                                <ClipboardIcon width={20} height={20} style={taskStyles.modalIcon}/>
+                                <Text style={taskStyles.modalText}>{t('checkRequest')}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

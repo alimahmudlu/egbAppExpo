@@ -169,6 +169,12 @@ export default function TaskCreateScreen() {
                             })),
                             type: 'select',
                             key: 'position'
+                        },
+                        {
+                            name: 'name',
+                            label: t('full_name'),
+                            type: 'input',
+                            key: 'name'
                         }
                     ]}
                 />

@@ -86,7 +86,7 @@ export default function EmployeeDocsScreen() {
                     projectId={el?.project_id}
                     key={index}
                     time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
-                    duration={el?.duration}
+                    duration={el?.points}
                     title={el?.name}
                     description={el?.description}
                     name={el?.assigned_employee?.full_name}
@@ -142,9 +142,12 @@ export default function EmployeeDocsScreen() {
                                 render: (<Text style={{fontSize: 16, fontWeight: 500}}>
                                     {el.id === 1 && t("open")}
                                     {el.id === 2 && t("inProgress")}
-                                    {el.id === 3 && t("checkProgress")}
-                                    {el.id === 4 && t("checkComplete")}
-                                    {el.id === 5 && t("completed")}
+                                    {el.id === 3 && t("checkProgressRequested")}
+                                    {el.id === 4 && t("checkProgressRequestAccepted")}
+                                    {el.id === 5 && t("checkProgressRequestDenied")}
+                                    {el.id === 6 && t("completeRequested")}
+                                    {el.id === 7 && t("completeRequestAccepted")}
+                                    {el.id === 8 && t("completeRequestDenied")}
                                 </Text>)
                             }))}
                             onChangeText={handleChange}
