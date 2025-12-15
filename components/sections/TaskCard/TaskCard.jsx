@@ -205,7 +205,7 @@ export default function SgSectionTaskCard(props) {
                 <View style={taskStyles.header}>
                     <Text style={taskStyles.time}>{data?.time}</Text>
                     <View style={taskStyles.rightHeader}>
-                        {(data?.status?.id && [1, 2, 3, 4, 5].includes(data?.status?.id)) && (
+                        {(data?.status?.id && [1, 2, 3, 4, 5, 6, 7, 8].includes(data?.status?.id)) && (
                             <View
                                 style={[
                                     taskStyles.statusBadge,
@@ -218,14 +218,15 @@ export default function SgSectionTaskCard(props) {
                                         {color: getStatusStyles(data?.status?.id).color},
                                     ]}
                                 >
-                                    {data?.status?.id === 1 && t("open")}
-                                    {data?.status?.id === 2 && t("inProgress")}
-                                    {data?.status?.id === 3 && t("checkProgressRequested")}
-                                    {data?.status?.id === 4 && t("checkProgressRequestAccepted")}
-                                    {data?.status?.id === 5 && t("checkProgressRequestDenied")}
-                                    {data?.status?.id === 6 && t("completeRequested")}
-                                    {data?.status?.id === 7 && t("completeRequestAccepted")}
-                                    {data?.status?.id === 8 && t("completeRequestDenied")}
+                                    Cox uzun test buraya gelecek ve burda asagi setre dusecek
+                                    {/*{data?.status?.id === 1 && t("open")}*/}
+                                    {/*{data?.status?.id === 2 && t("inProgress")}*/}
+                                    {/*{data?.status?.id === 3 && t("checkProgressRequested")}*/}
+                                    {/*{data?.status?.id === 4 && t("checkProgressRequestAccepted")}*/}
+                                    {/*{data?.status?.id === 5 && t("checkProgressRequestDenied")}*/}
+                                    {/*{data?.status?.id === 6 && t("completeRequested")}*/}
+                                    {/*{data?.status?.id === 7 && t("completeRequestAccepted")}*/}
+                                    {/*{data?.status?.id === 8 && t("completeRequestDenied")}*/}
                                 </Text>
                             </View>
                         )}

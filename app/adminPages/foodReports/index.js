@@ -24,14 +24,14 @@ export default function ProjectItemScreen() {
     const [errors, setErrors] = useState({});
     const [reportModal, setReportModal] = useState(false);
     const title = {
-        1: 'Breakfast',
-        2: 'Lunch',
-        3: 'Dinenr',
-        4: 'Night Lunch',
-        5: 'Extra Bread',
-        6: 'Extra Kefir',
-        7: 'Extra Sugar',
-        8: 'Extra Tea'
+        1: t('Breakfast'),
+        2: t('Lunch'),
+        3: t('Dinenr'),
+        4: t('NightLunch'),
+        5: t('ExtraBread'),
+        6: t('ExtraKefir'),
+        7: t('ExtraSugar'),
+        8: t('ExtraTea')
     }
 
     function handleChangeReport(e) {

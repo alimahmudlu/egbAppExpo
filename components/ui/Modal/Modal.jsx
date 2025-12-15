@@ -99,7 +99,7 @@ export default function SgPopup({
                   <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
                 </TouchableWithoutFeedback>
 
-                <View style={[styles.container, fullScreen && { flex: 1, height: '100%'  }]}>
+                <View style={[styles.container, fullScreen && { flex: 1, height: '100%', paddingTop: 24  }]}>
                   <View style={styles.dragHandle} />
 
                   <View style={{marginVertical: 'auto'}}>

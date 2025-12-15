@@ -36,12 +36,14 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 400,
     lineHeight: 18,
+      flex: 0
   },
 
   rightHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+      maxWidth: 200
   },
 
   dots: {
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    marginRight: 8,
+    // marginRight: 8,
   },
   statusText: {
     fontFamily: 'Inter, sans-serif',
