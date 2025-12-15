@@ -208,7 +208,7 @@ export default function SgSelect(props) {
                     )}
                 </View>
                 <ScrollView
-                    style={{flex: 1, padding: 10, maxHeight: 400, height: '100%'}}
+                    style={{flex: 1, padding: 10, height: '100%'}}
                     contentContainerStyle={{paddingBottom: 10}}
                 >
 

@@ -101,7 +101,7 @@ export default function SgSectionDatePicker(props) {
 
     const handleChange = (event, selectedDate) => {
         const currentDate = selectedDate;
-        // setShow(false);
+        setShow(false);
         setDate(currentDate);
 
         onChange(selectedDate);
