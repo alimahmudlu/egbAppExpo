@@ -50,7 +50,6 @@ export default function TaskCreateScreen() {
             url: `/position`, method: 'get',
         }).then(res => {
             setPositions(res?.data || []);
-            console.log(res?.data, 'positions');
         }).catch(err => {
             // console.log(err);
         })

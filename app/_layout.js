@@ -57,7 +57,7 @@ export default function RootLayout() {
     }, [pathname]);
 
     const onBackPress = () => {
-        console.log('onBackPress', history.current, backPressCount);
+        // console.log('onBackPress', history.current, backPressCount);
         if (history.current.length >= 2) {
             history.current.pop();
             const prev = history.current[history.current.length - 1];
