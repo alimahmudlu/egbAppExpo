@@ -99,7 +99,7 @@ export default function ProjectItemScreen() {
         request({
             url: `/admin/options/projects`, method: 'get',
         }).then(res => {
-            console.log(res, 'ressss')
+            // console.log(res, 'ressss')
             if (res.success) {
                 setProjectsList(res?.data);
             } else {
@@ -107,7 +107,7 @@ export default function ProjectItemScreen() {
                 // console.log(res.message);
             }
         }).catch(err => {
-            console.log(err, 'errrr');
+            // console.log(err, 'errrr');
         })
 
         return () => {
