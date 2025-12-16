@@ -8,6 +8,7 @@ import {useIsFocused} from "@react-navigation/native";
 import InternetStatusIndicator from "@/utils/InternetStatusIndicator";
 import GpsSignalStatusIndicator from "@/utils/GpsSignalStatusIndicator";
 import {useGpsSignalStatus} from "@/hooks/useGpsSignalStatus";
+import COLORS from "@/constants/colors";
 
 export default function SgTemplateScreenView(props) {
     const { head, children, scrollView = true } = props;
@@ -88,7 +89,7 @@ export default function SgTemplateScreenView(props) {
                         }
                     {/*</TouchableWithoutFeedback>*/}
                 </KeyboardAvoidingView>
-                <StatusBar hidden={false} style="light" />
+                <StatusBar hidden={false} style="light" backgroundColor={COLORS.brand_600}  />
             </SafeScreen>
         </React.Fragment>
     );

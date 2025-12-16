@@ -4,7 +4,7 @@ export default {
     "expo": {
         "name": "EGB",
         "slug": "egb-expo-app",
-        "version": "0.2.6",
+        "version": "0.2.7",
         "orientation": "default",
         "icon": "./assets/images/icon-color.png",
         "scheme": "egbappexpo",
@@ -33,7 +33,7 @@ export default {
             package: "com.egb.egb",
             edgeToEdgeEnabled: true,
             usesCleartextTraffic: true,
-            versionCode: 26,
+            versionCode: 27,
             adaptiveIcon: {
                 foregroundImage: "./assets/images/icon-white.png",
                 backgroundColor: "#0B322F"
@@ -86,10 +86,9 @@ export default {
                         "enableBackgroundRemoteNotifications": true
                     }
                 }
-            ]
+            ],
             // "expo-font",
-            // "expo-secure-store",
-
+            "expo-secure-store"
         ],
         "experiments": {
             "typedRoutes": true

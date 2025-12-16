@@ -218,15 +218,14 @@ export default function SgSectionTaskCard(props) {
                                         {color: getStatusStyles(data?.status?.id).color},
                                     ]}
                                 >
-                                    Cox uzun test buraya gelecek ve burda asagi setre dusecek
-                                    {/*{data?.status?.id === 1 && t("open")}*/}
-                                    {/*{data?.status?.id === 2 && t("inProgress")}*/}
-                                    {/*{data?.status?.id === 3 && t("checkProgressRequested")}*/}
-                                    {/*{data?.status?.id === 4 && t("checkProgressRequestAccepted")}*/}
-                                    {/*{data?.status?.id === 5 && t("checkProgressRequestDenied")}*/}
-                                    {/*{data?.status?.id === 6 && t("completeRequested")}*/}
-                                    {/*{data?.status?.id === 7 && t("completeRequestAccepted")}*/}
-                                    {/*{data?.status?.id === 8 && t("completeRequestDenied")}*/}
+                                    {data?.status?.id === 1 && t("open")}
+                                    {data?.status?.id === 2 && t("inProgress")}
+                                    {data?.status?.id === 3 && t("checkProgressRequested")}
+                                    {data?.status?.id === 4 && t("checkProgressRequestAccepted")}
+                                    {data?.status?.id === 5 && t("checkProgressRequestDenied")}
+                                    {data?.status?.id === 6 && t("completeRequested")}
+                                    {data?.status?.id === 7 && t("completeRequestAccepted")}
+                                    {data?.status?.id === 8 && t("completeRequestDenied")}
                                 </Text>
                             </View>
                         )}

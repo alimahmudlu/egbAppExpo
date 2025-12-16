@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     // marginRight: 8,
+      width: 200 - 42,
   },
   statusText: {
     fontFamily: 'Inter, sans-serif',
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 600,
     lineHeight: 14,
+      textAlign: 'center',
   },
 //   success: {
 //     backgroundColor: COLORS.,

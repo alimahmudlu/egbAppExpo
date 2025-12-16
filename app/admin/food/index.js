@@ -63,7 +63,7 @@ export default function ChiefMenuScreen() {
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
                         title={t('foodSchedule')}
-                        description={t('foodSchedule__description')}
+                        // description={t('foodSchedule__description')}
                         iconText={t('foodSchedule__archive')}
                         href={`/adminPages/foodReports`}
                     />

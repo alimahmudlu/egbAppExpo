@@ -10,7 +10,7 @@ import moment from "moment";
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useApi} from "@/hooks/useApi";
-import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
 import {useData} from "@/hooks/useData";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 
@@ -32,6 +32,7 @@ export default function ChiefMenuScreen() {
     const [reportModal, setReportModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({});
     const { project_id } = useLocalSearchParams();
+    const router = useRouter();
 
     function handleChange(e, type, turn = 1) {
         if (type && turn) {
@@ -85,6 +86,7 @@ export default function ChiefMenuScreen() {
             setData({
                 date: moment().add(1, 'day').format('YYYY-MM-DD')
             })
+            router.replace(`/adminPages/foodReports`);
         }).catch(err => {
             console.log(err, 'err');
         })
@@ -142,7 +144,7 @@ export default function ChiefMenuScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: t('busReports')
+                header: t('foodSchedule')
             }}/>}
         >
             <View style={{gap: 32}}>
