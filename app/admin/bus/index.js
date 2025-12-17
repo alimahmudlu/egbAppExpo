@@ -32,27 +32,27 @@ export default function ChiefMenuScreen() {
     const [projects, setProjects] = useState([]);
     const [tripTypeList, setTripTypeList] = useState([
         {
-            id: '1',
+            id: 1,
             name: 'Day Main',
             render: <Text>Day Main</Text>,
         },
         {
-            id: '2',
+            id: 2,
             name: 'Night Main',
             render: <Text>Night Main</Text>,
         },
         {
-            id: '3',
+            id: 3,
             name: 'Additional',
             render: <Text>Additional</Text>,
         },
         {
-            id: '4',
+            id: 4,
             name: 'UFMS',
             render: <Text>UFMS</Text>,
         },
         {
-            id: '5',
+            id: 5,
             name: 'Airport',
             render: <Text>Airport</Text>,
         }
@@ -78,11 +78,12 @@ export default function ChiefMenuScreen() {
             data: {
                 ...data,
                 projectId: selectedRow?.project_id,
-                tripType: selectedRow?.tripType,
-                toProjectId: selectedRow?.toProject,
+                tripTypeId: data?.tripType?.id,
+                toProjectId: data?.toProject?.id,
+                fromProjectId: data?.fromProject?.id,
                 date: selectedRow?.date || moment().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
-                turn2employees: selectedRow?.turn2employees || 0,
+                turn2employees: selectedRow?.turn2employees || 0
             },
         }).then(res => {
             setData({});
@@ -91,8 +92,6 @@ export default function ChiefMenuScreen() {
             console.log(err);
         })
     }
-
-
 
     function getData() {
         request({
@@ -107,13 +106,15 @@ export default function ChiefMenuScreen() {
         getData();
 
         request({
-            url: '/admin/projects', method: 'get',
+            url: '/admin/options/projects', method: 'get',
         }).then(res => {
         }).catch(err => {
             console.log(err);
         })
 
         return () => {
+            setProjects([])
+            setData({});
             console.log('Home tab lost focus');
         };
     }, [refreshKey]));
@@ -123,8 +124,8 @@ export default function ChiefMenuScreen() {
     }, [storeData?.cache?.[`GET:/admin/bus/projects`]])
 
     useEffect(() => {
-        setProjects(storeData?.cache?.[`GET:/admin/projects`]?.data)
-    }, [storeData?.cache?.[`GET:/admin/projects`]])
+        setProjects(storeData?.cache?.[`GET:/admin/options/projects`]?.data)
+    }, [storeData?.cache?.[`GET:/admin/options/projects`]])
 
     return (
         <SgTemplateScreen
@@ -132,7 +133,6 @@ export default function ChiefMenuScreen() {
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
                         title={t('busSchedule')}
-                        description={t('busSchedule__description')}
                         iconText={t('busSchedule__archive')}
                         href={`/adminPages/busReports`}
                     />
@@ -229,7 +229,7 @@ export default function ChiefMenuScreen() {
                             label={t('tripType')}
                             placeholder={t('tripType')}
                             modalTitle={t('selectTripType')}
-                            value={data?.tripType}
+                            value={data?.tripType || (tripTypeList || []).find(el => el.id === selectedRow?.report_status?.trip_type)}
                             name='tripType'
                             isInvalid={errors?.tripType}
                             onChangeText={handleChange}
@@ -242,9 +242,26 @@ export default function ChiefMenuScreen() {
                             label={t('toProject')}
                             placeholder={t('toProject')}
                             modalTitle={t('selectToProject')}
-                            value={data?.toProject}
+                            value={data?.toProject || (projects || []).find(el => el.id === selectedRow?.report_status?.to_project_id)}
                             name='toProject'
                             isInvalid={errors?.toProject}
+                            onChangeText={handleChange}
+                            list={(projects || []).filter(item => item.id !== selectedRow?.project_id)?.map(item => ({
+                                id: item?.id,
+                                name: item?.name,
+                                render: <Text>{item?.name}</Text>,
+                            }))}
+                        />
+                    </View>
+
+                    <View>
+                        <SgSelect
+                            label={t('fromProject')}
+                            placeholder={t('fromProject')}
+                            modalTitle={t('selectFromProject')}
+                            value={data?.fromProject || (projects || []).find(el => el.id === selectedRow?.report_status?.from_project_id)}
+                            name='fromProject'
+                            isInvalid={errors?.fromProject}
                             onChangeText={handleChange}
                             list={(projects || []).filter(item => item.id !== selectedRow?.project_id)?.map(item => ({
                                 id: item?.id,

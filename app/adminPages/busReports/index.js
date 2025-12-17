@@ -15,6 +15,34 @@ export default function ProjectItemScreen() {
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
+    const [projects, setProjects] = useState([]);
+    const [tripTypeList, setTripTypeList] = useState([
+        {
+            id: 1,
+            name: 'Day Main',
+            render: <Text>Day Main</Text>,
+        },
+        {
+            id: 2,
+            name: 'Night Main',
+            render: <Text>Night Main</Text>,
+        },
+        {
+            id: 3,
+            name: 'Additional',
+            render: <Text>Additional</Text>,
+        },
+        {
+            id: 4,
+            name: 'UFMS',
+            render: <Text>UFMS</Text>,
+        },
+        {
+            id: 5,
+            name: 'Airport',
+            render: <Text>Airport</Text>,
+        }
+    ]);
 
 
     function getData() {
@@ -29,7 +57,16 @@ export default function ProjectItemScreen() {
     useFocusEffect(useCallback(() => {
         getData();
 
+        request({
+            url: '/admin/options/projects', method: 'get',
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
+
         return () => {
+            setProjects([])
+            setList([]);
             console.log('Home tab lost focus');
         };
     }, [refreshKey]));
@@ -37,6 +74,10 @@ export default function ProjectItemScreen() {
     useEffect(() => {
         setList(storeData?.cache?.[`GET:/admin/bus/projects/history`]?.data)
     }, [storeData?.cache?.[`GET:/admin/bus/projects/history`]])
+
+    useEffect(() => {
+        setProjects(storeData?.cache?.[`GET:/admin/options/projects`]?.data)
+    }, [storeData?.cache?.[`GET:/admin/options/projects`]])
 
 
     return (<SgTemplateScreen
@@ -73,6 +114,18 @@ export default function ProjectItemScreen() {
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn2ndemployeesbus')}:</Text>
                                         <Text style={{fontSize: 16, fontWeight: '700'}}>{item.turn2_employee_count}</Text>
+                                    </View>
+                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
+                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('tripType')}:</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{(tripTypeList || []).find(el => el.id === item?.trip_type)?.name}</Text>
+                                    </View>
+                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
+                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('toProject')}:</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{(projects || []).find(el => el.id === item?.to_project_id)?.name}</Text>
+                                    </View>
+                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
+                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('fromProject')}:</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{(projects || []).find(el => el.id === item?.from_project_id)?.name}</Text>
                                     </View>
                                 </View>
                             </View>

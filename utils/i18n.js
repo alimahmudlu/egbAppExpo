@@ -323,7 +323,7 @@ i18n.use(initReactI18next).init({
                 Project: "Project",
                 BusCount: "Bus count",
                 SeatCount: "Seat count",
-                turn1stemployeesbus: "1nd turn employees",
+                turn1stemployeesbus: "Day shift employees",
                 turn2ndemployeesbus: "Night shift employees",
 
                 enterApplicationStatus: 'Enter application status',
@@ -336,7 +336,9 @@ i18n.use(initReactI18next).init({
                 tripType: 'Trip Type',
                 selectTripType: 'Select Trip Type',
                 toProject: 'to Project',
+                fromProject: 'From Project',
                 selectToProject: 'Select to Project',
+                selectFromProject: "Select from Project",
             }
         },
         ru: {
@@ -663,7 +665,9 @@ i18n.use(initReactI18next).init({
                 tripType: 'Тип поездки',
                 selectTripType: 'Выберите тип поездки',
                 toProject: 'к проекту',
+                fromProject: 'из проекта',
                 selectToProject: 'Выбрать для проекта',
+                selectFromProject: 'Выберите из проекта',
             }
         },
         uz: {
@@ -991,7 +995,9 @@ i18n.use(initReactI18next).init({
                 tripType: 'Sayohat turi',
                 selectTripType: 'Sayohat turini tanlang',
                 toProject: 'Loyihaga',
+                fromProject: 'Loyihadan',
                 selectToProject: 'Loyihalash uchun tanlang',
+                selectFromProject: 'Loyihadan tanlang',
             }
         }
     },
