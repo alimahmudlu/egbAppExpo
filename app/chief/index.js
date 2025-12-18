@@ -74,7 +74,10 @@ export default function EmployeeDashboardScreen() {
     useEffect(() => {
         if (!socket) return;
 
+        console.log('socket', socket, 'socket-chief')
+
         const handler = (data) => {
+            console.log(data, 'data-socket')
             if (data?.data?.type === 1) {
                 setStoreData(prev => ({
                     ...prev, checkIn: data?.data?.status !== 3 ? data?.data : {
@@ -124,6 +127,33 @@ export default function EmployeeDashboardScreen() {
         setCheckIn(storeData?.checkIn)
         setCheckOut(storeData?.checkOut)
     }, [storeData?.checkIn, storeData?.checkOut])
+
+    useFocusEffect(useCallback(() => {
+        request({
+            url: `/employee/activity/`, method: 'get',
+        }).then(res => {
+            setStoreData(prev => ({
+                ...prev, checkOut: (res?.data || []).find(el => el.type === 2) || {
+                    loading: true
+                }, checkIn: (res?.data || []).find(el => el.type === 1) || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            // console.log('activity error')
+            setStoreData(prev => ({
+                ...prev, checkInData: {
+                    checkIn: null, checkOut: null,
+                }
+            }));
+        })
+
+        return () => {
+            setCheckIn({})
+            setCheckOut({})
+        };
+
+    }, [refreshKey]));
 
 
     return (<SgTemplateScreen

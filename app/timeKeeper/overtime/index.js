@@ -283,6 +283,7 @@ export default function EmployeeDocsScreen() {
                                                 project={emp?.project?.name}
                                                 checkType={emp?.is_manual ? t('manual') : t('auto')}
                                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                                overTime={true}
                                             />
                                         )
                                     }))}
@@ -318,6 +319,7 @@ export default function EmployeeDocsScreen() {
                                                 project={emp?.project?.name}
                                                 checkType={emp?.is_manual ? t('manual') : t('auto')}
                                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                                overTime={true}
                                             />
                                         )
                                     }))}
@@ -357,6 +359,7 @@ export default function EmployeeDocsScreen() {
                                                 time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                                 timeRaw={emp.request_time}
                                                 editable={false}
+                                                overTime={true}
                                             />
                                         )
                                     }))}
