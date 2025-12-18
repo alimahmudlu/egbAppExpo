@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 const GpsSignalStatusIndicator = () => {
     const [isGpsWeak, setIsGpsWeak] = useState(false);
     const [isLocationEnabled, setIsLocationEnabled] = useState(true);
-    const [hasPermission, setHasPermission] = useState(false);
+    const [hasPermission, setHasPermission] = useState(true);
 
     useEffect(() => {
         let subscription = null;
@@ -95,7 +95,7 @@ const GpsSignalStatusIndicator = () => {
 
     return (
         <View style={styles.container}>
-            <View style={[styles.banner, isGpsWeak ? styles.warning : null, isLocationEnabled ? null : styles.error]}>
+            <View style={[styles.banner, isGpsWeak ? styles.warning : null, isLocationEnabled ? null : styles.error, hasPermission ? null : styles.error]}>
                 <Text style={styles.text}>{statusText}</Text>
             </View>
         </View>
