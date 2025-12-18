@@ -389,6 +389,9 @@ export default function SgSectionEmployeeCard(props) {
                 // console.log('manual', res?.data, res?.data?.checkin?.id, 'idr', storeData?.cache?.[`GET:/timekeeper/manual/list`])
                 // changeRowData(`GET:/timekeeper/manual/list`, res?.data, res?.data?.id, 'id', true)
                 removeRowFromPaginationData(`GET:/timekeeper/manual/list`, fullData)
+                removeRowFromPaginationData(`GET:/timekeeper/overtime/list/atwork`, fullData)
+                removeRowFromPaginationData(`GET:/timekeeper/overtime/list/checkin`, fullData)
+                removeRowFromPaginationData(`GET:/timekeeper/overtime/list/checkout`, fullData)
             }
             setButtonStatus(false)
             if(isManualCheckoutAvailable() && atWork) {
@@ -403,7 +406,19 @@ export default function SgSectionEmployeeCard(props) {
             }
             if(overTime && atWork) {
                 request({
-                    url: '/timekeeper/overtime/list', method: 'get'
+                    url: '/timekeeper/overtime/list/checkout', method: 'get'
+                }).then(res => {
+                }).catch(err => {
+                    console.log(err, 'apiservice control err')
+                });
+                request({
+                    url: '/timekeeper/overtime/list/atwork', method: 'get'
+                }).then(res => {
+                }).catch(err => {
+                    console.log(err, 'apiservice control err')
+                });
+                request({
+                    url: '/timekeeper/overtime/list/checkin', method: 'get'
                 }).then(res => {
                 }).catch(err => {
                     console.log(err, 'apiservice control err')
