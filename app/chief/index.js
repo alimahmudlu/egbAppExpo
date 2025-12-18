@@ -74,8 +74,6 @@ export default function EmployeeDashboardScreen() {
     useEffect(() => {
         if (!socket) return;
 
-        console.log('socket', socket, 'socket-chief')
-
         const handler = (data) => {
             console.log(data, 'data-socket')
             if (data?.data?.type === 1) {
