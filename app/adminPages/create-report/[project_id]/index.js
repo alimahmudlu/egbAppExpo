@@ -123,6 +123,11 @@ export default function ChiefMenuScreen() {
     }, [storeData?.cache?.[`GET:/admin/food/report/today`]])
 
     useEffect(() => {
+        setSelectedRow({
+            project_id: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.project_id,
+            turn1employees: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.turn1employees,
+            turn2employees: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.turn2employees,
+        })
         setData({
             turn1: {
                 breakfast: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.breakfast,

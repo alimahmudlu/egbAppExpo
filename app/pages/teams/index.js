@@ -146,9 +146,9 @@ export default function TimeKeeperUserScreen() {
         />
       }
     >
-      {data?.data && (
+      {data && (
         <FlatList
-          data={data?.data || []}
+          data={data || []}
           keyExtractor={(item) => item?.id?.toString()}
           renderItem={({ item }) => <ProjectItem project={item} />}
           contentContainerStyle={styles.listContainer}

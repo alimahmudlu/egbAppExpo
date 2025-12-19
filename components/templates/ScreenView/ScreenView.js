@@ -2,12 +2,10 @@ import {KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet} 
 import React, {useState} from "react";
 import SafeScreen from "@/components/SafeScreen";
 import {StatusBar} from "expo-status-bar";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname, useRouter, useLocalSearchParams } from "expo-router";
 import {useIsFocused} from "@react-navigation/native";
 import InternetStatusIndicator from "@/utils/InternetStatusIndicator";
 import GpsSignalStatusIndicator from "@/utils/GpsSignalStatusIndicator";
-import {useGpsSignalStatus} from "@/hooks/useGpsSignalStatus";
 import COLORS from "@/constants/colors";
 
 export default function SgTemplateScreenView(props) {
@@ -15,14 +13,11 @@ export default function SgTemplateScreenView(props) {
     const [refreshing, setRefreshing] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
-    const params = useLocalSearchParams(); // Burdan refreshKey alınır
-    const insets = useSafeAreaInsets();
+    const params = useLocalSearchParams();
 
     const refreshKey = params?.refreshKey || 0; // default 0
     const isFocused = useIsFocused();
     const [remountKey, setRemountKey] = React.useState(0);
-    // const {loadNotification} = useNotification();
-    const { renderSystemAlertBanner } = useGpsSignalStatus();
 
     React.useEffect(() => {
         if (isFocused) {

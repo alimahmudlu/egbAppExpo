@@ -22,7 +22,7 @@ import FilterIcon from "@/assets/images/filter.svg";
 export default function ProjectItemScreen() {
     const [list, setList] = useState([]);
     const {request} = useApi();
-    const {storeData} = useData();
+    const {storeData, updateData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
 
@@ -94,7 +94,7 @@ export default function ProjectItemScreen() {
     }
 
     useFocusEffect(useCallback(() => {
-        getData({...filters, project: filters?.project?.id});
+        // getData({...filters, project: filters?.project?.id});
 
         request({
             url: `/admin/options/projects`, method: 'get',
@@ -111,9 +111,11 @@ export default function ProjectItemScreen() {
         })
 
         return () => {
-            console.log('Home tab lost focus');
+            console.log('fooooood tab lost focus');
             setProjectsList([])
             setList([])
+            updateData(`GET:/admin/food/report/list`, {data: []})
+            updateData(`GET:/admin/options/projects`, {data: []})
         };
     }, [refreshKey]));
 
@@ -137,6 +139,53 @@ export default function ProjectItemScreen() {
                 />
             }
         >
+            <View style={{gap: 16}}>
+                <View style={{flex: 1}}>
+                    <SgSelect
+                        label={t("project")}
+                        placeholder={t("enterProject")}
+                        modalTitle={t("selectProject")}
+                        value={filters?.project}
+                        name='project'
+                        onChangeText={handleChange}
+                        list={(projectsList || []).map((project, index) => ({
+                            id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                key={index}
+                                title={project.name}
+                                staffData={(project?.members || []).filter(el => el.status)}
+                                id={project.id}
+                            />
+                        }))}
+                    />
+                </View>
+                <View style={{flex: 1}}>
+                    <SgDatePicker
+                        label={t('date')}
+                        placeholder="dd/mm/yyyy - hh/mm"
+                        value={filters?.date}
+                        name='date'
+                        onChangeText={handleChange}
+                    />
+                </View>
+                <View style={{flexDirection: 'row', gap: 12}}>
+                    <SgButton
+                        onPress={handleFilters}
+                        color={COLORS.white}
+                        bgColor={COLORS.primary}
+                        disabled={!(filters?.project && filters?.date)}
+                    >
+                        {t('accept')}
+                    </SgButton>
+                    <SgButton
+                        onPress={resetFilters}
+                        color={COLORS.white}
+                        bgColor={COLORS.primary}
+
+                    >
+                        {t('clearFilters')}
+                    </SgButton>
+                </View>
+            </View>
             <View style={{gap: 12}}>
                 {(list || []).map((item, index) => {
                     return (

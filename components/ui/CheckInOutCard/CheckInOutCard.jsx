@@ -64,6 +64,7 @@ export default function SgCheckInOutCard(props) {
     function toggleOverTimeModal() {
         if (overTimeModal) {
             setOverTimeData({})
+            setButtonStatus(false)
         }
 
         setOverTimeModal(!overTimeModal)
@@ -136,12 +137,16 @@ export default function SgCheckInOutCard(props) {
     function toggleCheckInModal() {
         if (checkInModal) {
             setCheckInData({})
+            setButtonStatus(false)
         }
 
         setCheckInModal(!checkInModal)
     }
 
     function toggleOpenSettingsModal() {
+        if (openSettingsModal) {
+            setButtonStatus(false)
+        }
         setOpenSettingsModal(!openSettingsModal)
     }
 
@@ -273,9 +278,9 @@ export default function SgCheckInOutCard(props) {
             toggleCheckInModal();
             setCheckInData({latitude, longitude})
         } catch (error) {
-            console.error('Error getting location:', error);
+            Alert.alert('Error getting location:', error);
             setButtonStatus(false)
-            toggleOpenSettingsModal()
+            // toggleOpenSettingsModal()
         }
     }
 
@@ -308,9 +313,9 @@ export default function SgCheckInOutCard(props) {
             toggleCheckOutModal();
             setCheckOutData({latitude, longitude})
         } catch (error) {
-            console.error('Error getting location:', error);
+            Alert.alert('Error getting location:', error);
             setButtonStatus(false)
-            toggleOpenSettingsModal()
+            // toggleOpenSettingsModal()
         }
     }
 
@@ -343,9 +348,9 @@ export default function SgCheckInOutCard(props) {
             toggleOverTimeModal();
             setOverTimeData({latitude, longitude})
         } catch (error) {
-            console.error('Error getting location:', error);
+            Alert.alert('Error getting location:', error);
             setButtonStatus(false)
-            toggleOpenSettingsModal()
+            // toggleOpenSettingsModal()
         }
     }
 
@@ -378,9 +383,9 @@ export default function SgCheckInOutCard(props) {
             toggleOverTimeOutModal();
             setOverTimeOutData({latitude, longitude})
         } catch (error) {
-            console.error('Error getting location:', error);
+            Alert.alert('Error getting location:', error);
             setButtonStatus(false)
-            toggleOpenSettingsModal()
+            // toggleOpenSettingsModal()
         }
     }
 
@@ -693,7 +698,7 @@ export default function SgCheckInOutCard(props) {
                 visible={openSettingsModal}
                 onClose={toggleOpenSettingsModal}
                 title={t('permissionError')}
-                description= {t('permissionError__description')}
+                description= {t('locationPermissionError')}
                 // icon={<CheckInModalIcon width={56} height={56}/>}
                 footerButton={
                     <SgButton

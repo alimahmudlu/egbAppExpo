@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
-import {Text, View, StyleSheet} from "react-native";
+import {Text, View, StyleSheet, Platform, TouchableOpacity} from "react-native";
 import COLORS from "@/constants/colors";
+import * as Linking from "expo-linking";
+import * as IntentLauncher from 'expo-intent-launcher';
 
 const MIN_ACCEPTABLE_ACCURACY = 30;
 
@@ -44,14 +46,16 @@ const GpsSignalStatusIndicator = () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             setHasPermission(status === 'granted');
 
+
             setInterval(async () => {
                 const enabled = await Location.isBackgroundLocationAvailableAsync();
                 setIsLocationEnabled(enabled);
             }, 5000)
 
+
             subscription = await Location.watchPositionAsync(
                 {
-                    accuracy: Location.Accuracy.Highest,
+                    accuracy: Location.Accuracy.Balanced,
                     timeInterval: 5000,
                 },
                 (location) => {
@@ -62,7 +66,7 @@ const GpsSignalStatusIndicator = () => {
                     } else {
                         setIsGpsWeak(false);
                     }
-                }
+                }, (error) => console.log('location error', error)
             );
         };
 
@@ -74,6 +78,26 @@ const GpsSignalStatusIndicator = () => {
             }
         };
     }, []);
+
+
+    function handleOpenSettings() {
+        if (!isLocationEnabled || !hasPermission) {
+            if (Platform.OS === 'ios') {
+                Linking.openURL('app-settings:')
+                    .catch(() => {
+                    });
+            } else {
+                if (!isLocationEnabled) {
+                    IntentLauncher.startActivityAsync(IntentLauncher.ActivityAction.LOCATION_SOURCE_SETTINGS);
+                }
+                else if (!hasPermission) {
+                    Linking.openSettings()
+                        .catch(() => {
+                        });
+                }
+            }
+        }
+    }
 
 
     let statusText = null;
@@ -95,9 +119,11 @@ const GpsSignalStatusIndicator = () => {
 
     return (
         <View style={styles.container}>
-            <View style={[styles.banner, isGpsWeak ? styles.warning : null, isLocationEnabled ? null : styles.error, hasPermission ? null : styles.error]}>
+            <TouchableOpacity onPress={() => {
+                handleOpenSettings()
+            }} style={[styles.banner, isGpsWeak ? styles.warning : null, isLocationEnabled ? null : styles.error, hasPermission ? null : styles.error]}>
                 <Text style={styles.text}>{statusText}</Text>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 };

@@ -28,7 +28,6 @@ export default function ChiefMenuScreen() {
         request({
             url: '/admin/food/report/today', method: 'get',
         }).then(res => {
-            console.log(res, 'ress');
         }).catch(err => {
             console.log(err);
         })
