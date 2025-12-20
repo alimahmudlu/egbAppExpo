@@ -44,13 +44,13 @@ export default function EmployeeDocsScreen() {
     const [projectsList, setProjectsList] = useState([]);
 
 
-    function getData(_filters = {}) {
+    function getData(_filters = {}, _pageCheckIn = pageCheckIn, _limit = 10) {
         request({
             url: '/timekeeper/overtime/list/checkin',
             method: 'get',
             params: {
                 page: pageCheckIn,
-                limit: 10,
+                limit: _limit,
                 ..._filters,
             }
         }).then(res => {
@@ -59,14 +59,14 @@ export default function EmployeeDocsScreen() {
         });
     }
 
-    function getDataCheckOut(_filters = {}) {
+    function getDataCheckOut(_filters = {}, _pageCheckOut = pageCheckOut, _limit = 10) {
         request({
             url: '/timekeeper/overtime/list/checkout',
             method: 'get',
             params: {
                 ..._filters,
                 page: pageCheckOut,
-                limit: 10
+                limit: _limit
             }
         }).then(res => {
         }).catch(err => {
@@ -93,23 +93,15 @@ export default function EmployeeDocsScreen() {
         if (!socket) return;
 
         const handler = (data) => {
-            // if (data?.data?.type === 3) {
-            //     insertDataWithPagination('GET:/timekeeper/overtime/list/checkin', data?.data, 1)
-            //     // setEmployeeActivitiesCheckIn((prevState) => ({
-            //     //     ...prevState,
-            //     //     total: prevState.total + 1,
-            //     // }))
-            // }
-            // if (data?.data?.type === 4) {
-            //     insertDataWithPagination('GET:/timekeeper/overtime/list/checkout', data?.data, 1)
-            //     setEmployeeActivitiesCheckOut((prevState) => ({
-            //         ...prevState,
-            //         total: Number(prevState.total || 0) + 1,
-            //     }))
-            // }
+            if (data?.data?.type === 3) {
+                getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
+            }
+            if (data?.data?.type === 4) {
+                getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
+            }
         };
         const handler2 = (data) => {
-            console.log('update_activity', data?.data)
+            console.log(data, 'socket handler2')
             // removeRowData('GET:/timekeeper/activity/list', data?.data?.activity_id, 'id')
             // changeAddRowData('GET:/timekeeper/overtime/list', {
             //     completed_status: 1
@@ -133,7 +125,7 @@ export default function EmployeeDocsScreen() {
             socket.off("new_activity", handler);
             socket.off("update_activity", handler2);
         };
-    }, [socket]);
+    }, [socket, pageCheckIn, pageCheckOut, pageAtWork, getDataStatus, filters]);
 
     useEffect(() => {
         getData({...filters})

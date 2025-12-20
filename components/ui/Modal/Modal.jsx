@@ -85,16 +85,17 @@ export default function SgPopup({
       transparent
       visible={visible}
       onRequestClose={onClose}
+      statusBarTranslucent
     >
         <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.keyboard}
         >
             <TouchableWithoutFeedback
                 onPress={Keyboard.dismiss}
                 accessible={false}
             >
-              <View style={{ flex: 1, height: Dimensions.get('window').height }}>
+              <View style={{ backgroundColor: 'transparent',flex: 1, height: Dimensions.get('window').height }}>
                 <TouchableWithoutFeedback onPress={onClose}>
                   <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
                 </TouchableWithoutFeedback>

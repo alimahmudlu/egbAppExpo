@@ -104,18 +104,16 @@ export default function EmployeeDashboardScreen() {
 
         const handler = (data) => {
             if (data?.data?.type === 1) {
-                insertDataWithPagination('GET:/timekeeper/activity/list/checkin', data?.data, 1)
-                // setEmployeeActivitiesCheckIn((prevState) => ({
-                //     ...prevState,
-                //     total: prevState.total + 1,
-                // }))
+                // insertDataWithPagination('GET:/timekeeper/activity/list/checkin', data?.data, 1)
+                getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
             }
             if (data?.data?.type === 2) {
-                insertDataWithPagination('GET:/timekeeper/activity/list/checkout', data?.data, 1)
-                setEmployeeActivitiesCheckOut((prevState) => ({
-                    ...prevState,
-                    total: Number(prevState.total || 0) + 1,
-                }))
+                // insertDataWithPagination('GET:/timekeeper/activity/list/checkout', data?.data, 1)
+                // setEmployeeActivitiesCheckOut((prevState) => ({
+                //     ...prevState,
+                //     total: Number(prevState.total || 0) + 1,
+                // }))
+                getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
             }
 
         };
@@ -143,7 +141,7 @@ export default function EmployeeDashboardScreen() {
             socket.off("new_activity", handler);
             socket.off("update_activity", handler2);
         };
-    }, [socket]);
+    }, [socket, pageCheckIn, pageCheckOut, pageAtWork, filters, getDataStatus]);
 
     useEffect(() => {
         setEmployeeActivitiesCheckIn((prevState) => {
@@ -464,7 +462,7 @@ export default function EmployeeDashboardScreen() {
                                             <SgSectionEmployeeCard
                                                 cardType={'checkIn'}
                                                 removeRowData={removeRowData}
-                                                key={index}
+                                                key={`checkIn--${index}--${emp.id}`}
                                                 fullData={emp}
                                                 title={emp?.employee?.full_name}
                                                 role={emp?.employee?.role?.name}
@@ -499,7 +497,7 @@ export default function EmployeeDashboardScreen() {
                                             <SgSectionEmployeeCard
                                                 cardType={'checkOut'}
                                                 removeRowData={removeRowData}
-                                                key={index}
+                                                key={`checkOut--${index}--${emp.id}`}
                                                 fullData={emp}
                                                 title={emp?.employee?.full_name}
                                                 role={emp?.employee?.role?.name}
@@ -535,7 +533,7 @@ export default function EmployeeDashboardScreen() {
                                             <SgSectionEmployeeCard
                                                 cardType={'atWork'}
                                                 removeRowData={removeRowData}
-                                                key={index}
+                                                key={`atwork--${index}--${emp.id}`}
                                                 fullData={emp}
                                                 atWork={true}
                                                 title={emp?.employee?.full_name}
