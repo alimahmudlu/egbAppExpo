@@ -3,14 +3,14 @@ import COLORS from '@/constants/colors';
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 8,
+    gap: 6,
   },
 
   label: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '600',
     color: COLORS.gray_700,
-    lineHeight: 20,
+    lineHeight: 18,
   },
   labelError: {
     color: COLORS.error_700,
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray_300,
     borderRadius: 12,
     backgroundColor: COLORS.white,
-    height: 56,
+    height: 46,
     paddingHorizontal: 0,
     overflow: 'hidden',
   },
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontFamily: 'Inter, sans-serif',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '400',
     fontStyle: 'normal',
     color: COLORS.black,
@@ -56,19 +56,19 @@ const styles = StyleSheet.create({
 
   textareaContainer: {
     height: 'auto',
-    minHeight: 130,
+    minHeight: 100,
     alignItems: 'stretch',
   },
 
   counterButton: {
-    width: 56,
+    width: 46,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   counterInput: {
-    paddingVertical: 8,
+    paddingVertical: 6,
     textAlign: 'center',
     color: COLORS.gray_800,
     borderLeftWidth: 1,

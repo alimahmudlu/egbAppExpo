@@ -110,17 +110,17 @@ export default function TimeKeeperUserScreen() {
 
 
     const RenderItem = ({ item, unread = true }) => (
-        <TouchableOpacity onPress={() => handleClickNotificationItem(item.url, item.id)} style={[styles.card, unread ? {borderColor: '#4F46E5'} : null]}>
+        <TouchableOpacity onPress={() => handleClickNotificationItem(item.url, item.id)} style={[styles.card, unread ? {borderColor: COLORS.brand_950} : null]}>
             <View style={styles.row}>
-                <Ionicons name="document-text-outline" size={28} color={unread ? "#4F46E5" : "#1F2937"} />
+                <Ionicons name="document-text-outline" size={28} color={unread ? COLORS.brand_950 : "#1F2937"} />
                 <View style={styles.textContainer}>
-                    <Text style={[styles.title, unread ? {color: '#4F46E5'} : null]}>
+                    <Text style={[styles.title, unread ? {color: COLORS.brand_950} : null]}>
                         {selectedLanguage?.id !== 'en' ? `${item?.[['title', selectedLanguage?.id].join('_')]}` : `${item?.title}`}
                     </Text>
-                    <Text style={[styles.description, unread ? {color: '#4F46E5'} : null]}>
+                    <Text style={[styles.description, unread ? {color: COLORS.brand_950} : null]}>
                         {selectedLanguage?.id !== 'en' ? `${item?.[['description', selectedLanguage?.id].join('_')]}` : `${item?.description}`}
                     </Text>
-                    {item.date ? <Text style={[styles.date, unread ? {color: '#4F46E5'} : null]}>{moment(item.date).format('DD/MM/YYYY HH:mm')}</Text> : null}
+                    {item.date ? <Text style={[styles.date, unread ? {color: COLORS.brand_950} : null]}>{moment(item.date).format('DD/MM/YYYY HH:mm')}</Text> : null}
                 </View>
             </View>
             {/*<Ionicons style={styles.goIcon} name="chevron-forward" size={20} color={unread ? "#4F46E5" : "#9CA3AF"} />*/}

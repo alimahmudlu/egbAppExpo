@@ -52,7 +52,7 @@ export default function ChiefMenuScreen() {
             onClose={toggleLogOutModal}
             title={t('logout')}
             description={t('logout__description')}
-            icon={<LogOutModalIcon width={56} height={56} />}
+            icon={<LogOutModalIcon width={50} height={50} />}
             footerButton={
                 <SgButton
                     bgColor={COLORS.error_600}

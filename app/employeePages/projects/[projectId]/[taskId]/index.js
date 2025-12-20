@@ -308,7 +308,7 @@ export default function ProjectItemScreen() {
                 onClose={toggleCompleteTaskModal}
                 title={t('completeTask')}
                 description={t('completeTask__description')}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -355,7 +355,7 @@ export default function ProjectItemScreen() {
                 onClose={toggleCheckTaskModal}
                 title={t("checkRequestTask")}
                 description={t("checkRequestTask__description")}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -381,7 +381,7 @@ export default function ProjectItemScreen() {
                 onClose={toggleStartTaskModal}
                 title={t("startRequestTask")}
                 description={t("startRequestTask__description")}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}

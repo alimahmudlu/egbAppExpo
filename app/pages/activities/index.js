@@ -396,7 +396,7 @@ export default function TimeKeeperUserScreen() {
             <SgPopup
                 visible={rejectModal}
                 onClose={() => handleSelectRow(null)}
-                icon={<InfoCircleModalIcon width={56} height={56}/>}
+                icon={<InfoCircleModalIcon width={50} height={50}/>}
             >
                 <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
                 <SgCard>

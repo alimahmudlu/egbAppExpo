@@ -74,7 +74,7 @@ export default function SgInput({
             onChangeText={(e) => onChangeText({ name, value: e })}
             placeholderTextColor={COLORS.gray_400}
             multiline
-            numberOfLines={10}
+            numberOfLines={4}
             textAlignVertical="top"
           />
         );

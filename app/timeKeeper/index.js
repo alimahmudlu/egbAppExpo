@@ -34,11 +34,11 @@ export default function EmployeeDashboardScreen() {
     const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
     const [employeeActivitiesAtWork, setEmployeeActivitiesAtWork] = useState({});
     const [filters, setFilters] = useState({})
+    const [filterModal, setFilterModal] = useState(false)
     const {storeData, insertDataWithPagination, setStoreData, updateData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
-    const [filterModal, setFilterModal] = useState(false)
 
     const [activeTab, setActiveTab] = useState('checkIn');
     const [projectsList, setProjectsList] = useState([]);
@@ -54,13 +54,13 @@ export default function EmployeeDashboardScreen() {
     const [getDataStatus, setDataStatus] = useState(false)
 
 
-    function getData(_filters = {}) {
+    function getData(_filters = {}, _pageCheckIn = pageCheckIn, _limit = 10) {
         request({
             url: '/timekeeper/activity/list/checkin',
             method: 'get',
             params: {
-                page: pageCheckIn,
-                limit: 10,
+                page: _pageCheckIn,
+                limit: _limit,
                 ..._filters,
             }
         }).then(res => {
@@ -69,14 +69,14 @@ export default function EmployeeDashboardScreen() {
         });
     }
 
-    function getDataCheckOut(_filters = {}) {
+    function getDataCheckOut(_filters = {}, _pageCheckOut = pageCheckOut, _limit = 10) {
         request({
             url: '/timekeeper/activity/list/checkout',
             method: 'get',
             params: {
                 ..._filters,
-                page: pageCheckOut,
-                limit: 10
+                page: _pageCheckOut,
+                limit: _limit
             }
         }).then(res => {
         }).catch(err => {
@@ -84,14 +84,14 @@ export default function EmployeeDashboardScreen() {
         });
     }
 
-    function getDataAtWork(_filters = {}) {
+    function getDataAtWork(_filters = {}, _pageAtWork = pageAtWork, _limit = 10) {
         request({
             url: '/timekeeper/activity/list/atwork',
             method: 'get',
             params: {
                 ..._filters,
-                page: pageAtWork,
-                limit: 10
+                page: _pageAtWork,
+                limit: _limit
             }
         }).then(res => {
         }).catch(err => {
@@ -147,45 +147,24 @@ export default function EmployeeDashboardScreen() {
 
     useEffect(() => {
         setEmployeeActivitiesCheckIn((prevState) => {
-            if (pageCheckIn === 1) {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})
                 }
-            } else {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {}),
-                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})?.data || [])]
-                }
-            }
         })
     }, [storeData?.cache?.['GET:/timekeeper/activity/list/checkin']])
 
     useEffect(() => {
         setEmployeeActivitiesCheckOut((prevState) => {
-            if (pageCheckOut === 1) {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})
                 }
-            } else {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {}),
-                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})?.data || [])]
-                }
-            }
         })
     }, [storeData?.cache?.['GET:/timekeeper/activity/list/checkout']])
 
     useEffect(() => {
         setEmployeeActivitiesAtWork((prevState) => {
-            if (pageAtWork === 1) {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})
-                }
-            } else {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {}),
-                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})?.data || [])]
-                }
+            return {
+                ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})
             }
         })
     }, [storeData?.cache?.['GET:/timekeeper/activity/list/atwork']])
@@ -333,19 +312,19 @@ export default function EmployeeDashboardScreen() {
 
     useEffect(() => {
         if (pageCheckIn) {
-            getData({...filters, project: (filters?.project || []).map(el => el.id)})
+            getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
         }
     }, [pageCheckIn, getDataStatus])
 
     useEffect(() => {
         if (pageCheckOut) {
-            getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)})
+            getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
         }
     }, [pageCheckOut, getDataStatus])
 
     useEffect(() => {
         if (pageAtWork) {
-            getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)})
+            getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageAtWork)
         }
     }, [pageAtWork, getDataStatus])
 
@@ -368,15 +347,9 @@ export default function EmployeeDashboardScreen() {
     }
 
     function removeRowData(fullData, type) {
-        setDataStatus(!getDataStatus)
-        // setEmployeeActivitiesCheckIn((prevState) => {
-        //     const _data = prevState.data;
-        //
-        //     return {
-        //         ...prevState,
-        //         data: _data.filter(item => item.employee?.id !== fullData?.employee?.id)
-        //     }
-        // })
+        getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
+        getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
+        getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageAtWork)
     }
 
     return (

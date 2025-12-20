@@ -5,8 +5,8 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     flex: 1,
-    minHeight: 55,
-    paddingVertical: 14,
+    minHeight: 40,
+    paddingVertical: 10,
     paddingHorizontal: 22,
     justifyContent: 'center',
     alignItems: 'center',
@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Inter, sans-serif',
-    fontSize: 18,
+    fontSize: 16,
     fontStyle: 'normal',
-    fontWeight: '600',
-    lineHeight: 28,
+    fontWeight: '700',
+    lineHeight: 20,
     color: COLORS.buttonTextColor,
       textAlign: 'center',
   }

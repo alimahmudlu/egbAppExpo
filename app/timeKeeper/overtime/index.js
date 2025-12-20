@@ -23,22 +23,25 @@ import {useSocket} from "@/hooks/useSocket";
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const [employees, setEmployees] = useState([]);
-    const [filters, setFilters] = useState({})
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
     const {storeData, insertData, updateData, changeAddRowData, insertDataWithPagination} = useData();
-    const {socket} = useSocket()
+    const {socket} = useSocket();
     const [activeTab, setActiveTab] = useState('checkIn');
 
     const [pageAtWork, setPageAtWork] = useState(1);
     const [pageCheckIn, setPageCheckIn] = useState(1);
     const [pageCheckOut, setPageCheckOut] = useState(1);
-    const [getDataStatus, setDataStatus] = useState(false)
+    const [getDataStatus, setDataStatus] = useState(false);
 
 
     const [employeeActivitiesCheckIn, setEmployeeActivitiesCheckIn] = useState({});
     const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
     const [employeeActivitiesAtWork, setEmployeeActivitiesAtWork] = useState({});
+
+    const [filters, setFilters] = useState({});
+    const [filterModal, setFilterModal] = useState(false);
+    const [projectsList, setProjectsList] = useState([]);
 
 
     function getData(_filters = {}) {
@@ -71,14 +74,14 @@ export default function EmployeeDocsScreen() {
         });
     }
 
-    function getDataAtWork(_filters = {}) {
+    function getDataAtWork(_filters = {}, _pageAtWork = pageAtWork, _limit = 10) {
         request({
             url: '/timekeeper/overtime/list/atwork',
             method: 'get',
             params: {
                 ..._filters,
-                page: pageAtWork,
-                limit: 10
+                page: _pageAtWork,
+                limit: _limit
             }
         }).then(res => {
         }).catch(err => {
@@ -142,6 +145,18 @@ export default function EmployeeDocsScreen() {
         getDataAtWork()
 
         request({
+            url: `/timekeeper/options/projects`, method: 'get',
+        }).then(res => {
+            if (res.success) {
+                setProjectsList(res?.data);
+            } else {
+                // Handle error response
+                // console.log(res.message);
+            }
+        }).catch(err => {
+        })
+
+        request({
             url: `/notifications/read/group`,
             method: 'post',
             data: {
@@ -172,46 +187,43 @@ export default function EmployeeDocsScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
+        if (pageCheckIn) {
+            getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
+        }
+    }, [pageCheckIn, getDataStatus])
+
+    useEffect(() => {
+        if (pageCheckOut) {
+            getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
+        }
+    }, [pageCheckOut, getDataStatus])
+
+    useEffect(() => {
+        if (pageAtWork) {
+            getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageAtWork)
+        }
+    }, [pageAtWork, getDataStatus])
+
+    useEffect(() => {
         setEmployeeActivitiesCheckIn((prevState) => {
-            if (pageCheckIn === 1) {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/overtime/list/checkin`]?.data || {})
                 }
-            } else {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/overtime/list/checkin`]?.data || {}),
-                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/overtime/list/checkin`]?.data || {})?.data || [])]
-                }
-            }
         })
     }, [storeData?.cache?.['GET:/timekeeper/overtime/list/checkin']])
 
     useEffect(() => {
         setEmployeeActivitiesCheckOut((prevState) => {
-            if (pageCheckOut === 1) {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/overtime/list/checkout`]?.data || {})
                 }
-            } else {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/overtime/list/checkout`]?.data || {}),
-                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/overtime/list/checkout`]?.data || {})?.data || [])]
-                }
-            }
         })
     }, [storeData?.cache?.['GET:/timekeeper/overtime/list/checkout']])
 
     useEffect(() => {
         setEmployeeActivitiesAtWork((prevState) => {
-            if (pageAtWork === 1) {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/overtime/list/atwork`]?.data || {})
-                }
-            } else {
-                return {
-                    ...(storeData?.cache?.[`GET:/timekeeper/overtime/list/atwork`]?.data || {}),
-                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/overtime/list/atwork`]?.data || {})?.data || [])]
-                }
+            return {
+                ...(storeData?.cache?.[`GET:/timekeeper/overtime/list/atwork`]?.data || {})
             }
         })
     }, [storeData?.cache?.['GET:/timekeeper/overtime/list/atwork']])
@@ -228,8 +240,33 @@ export default function EmployeeDocsScreen() {
         setPageAtWork(pageAtWork + 1);
     }
 
+
+
     function removeRowData(fullData, type) {
-        getData({...filters})
+        getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
+        getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
+        getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageAtWork)
+    }
+
+
+
+    function handleChange(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
+
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
+    }
+
+    function resetFilters() {
+        setFilters({});
+    }
+
+    function handleFilters() {
+        setDataStatus(!getDataStatus)
+        setPageCheckIn(1)
+        setPageCheckOut(1)
+        setPageAtWork(1)
     }
 
 
@@ -239,6 +276,8 @@ export default function EmployeeDocsScreen() {
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
                         title={t("overTime")}
+                        icon="filter"
+                        onPress={toggleFilterModal}
                     />
                 </View>
 
@@ -382,6 +421,74 @@ export default function EmployeeDocsScreen() {
                     }
                 ]}
             />
+
+            <SgPopup
+                visible={filterModal}
+                onClose={toggleFilterModal}
+                footerButton={
+                    <SgButton
+                        onPress={handleFilters}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        {t('accept')}
+                    </SgButton>
+                }
+            >
+                <View style={{paddingBottom: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+                        <SgButton
+                            onPress={resetFilters}
+                            color={COLORS.brand_700}
+                            style={{
+                                flex: 0,
+                                width: 'auto',
+                                marginLeft: 'auto',
+                                paddingVertical: 0,
+                                paddingHorizontal: 0,
+                                gap: 7
+                            }}
+
+                        >
+                            {t('clearFilters')}
+                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                        </SgButton>
+                    </View>
+
+                    <View style={{gap: 16}}>
+                        <View style={{flex: 1}}>
+                            <SgInput
+                                label={t('employeeName')}
+                                placeholder={t('employeeName_placeholder')}
+                                value={filters?.full_name}
+                                name='full_name'
+                                onChangeText={handleChange}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("project")}
+                                placeholder={t("enterProject")}
+                                modalTitle={t("selectProject")}
+                                value={filters?.project}
+                                name='project'
+                                multiple={true}
+                                onChangeText={handleChange}
+                                list={(projectsList || []).map((project, index) => ({
+                                    id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                        key={index}
+                                        title={project.name}
+                                        staffData={(project?.members || []).filter(el => el.status)}
+                                        id={project.id}
+                                    />
+                                }))}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </SgPopup>
         </SgTemplateScreen>
     );
 }

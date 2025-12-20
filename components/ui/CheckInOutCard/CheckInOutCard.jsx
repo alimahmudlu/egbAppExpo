@@ -250,143 +250,151 @@ export default function SgCheckInOutCard(props) {
     }
 
     async function handleCheckInRequest() {
-        setButtonStatus(true)
-        try {
-            // Request permission to access locations
-            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        setButtonStatus(true);
+        toggleCheckInModal();
 
-            if (status !== 'granted') {
-                if (!canAskAgain) {
-                    toggleOpenSettingsModal()
-                    return;
-                }
-            }
-
-            // Get the current position
-            let location = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Lowest,
-            });
-
-            const {latitude, longitude} = location.coords;
-            // Log the location data
-            if (props.onLocationReceived) {
-                props.onLocationReceived({latitude, longitude});
-            }
-
-            // onSuccess callback
-            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-            toggleCheckInModal();
-            setCheckInData({latitude, longitude})
-        } catch (error) {
-            Alert.alert('Error getting location:', error);
-            setButtonStatus(false)
-            // toggleOpenSettingsModal()
-        }
+        // try {
+        //     // Request permission to access locations
+        //     let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        //
+        //     if (status !== 'granted') {
+        //         if (!canAskAgain) {
+        //             toggleOpenSettingsModal()
+        //             return;
+        //         }
+        //     }
+        //
+        //     // Get the current position
+        //     let location = await Location.getCurrentPositionAsync({
+        //         accuracy: Location.Accuracy.Lowest,
+        //     });
+        //
+        //     const {latitude, longitude} = location.coords;
+        //     // Log the location data
+        //     if (props.onLocationReceived) {
+        //         props.onLocationReceived({latitude, longitude});
+        //     }
+        //
+        //     // onSuccess callback
+        //     // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+        //     toggleCheckInModal();
+        //     setCheckInData({latitude, longitude})
+        // } catch (error) {
+        //     Alert.alert('Error getting location:', error);
+        //     setButtonStatus(false)
+        //     // toggleOpenSettingsModal()
+        // }
     }
 
     async function handleCheckOutRequest() {
-        setButtonStatus(true)
-        try {
-            // Request permission to access locations
-            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        setButtonStatus(true);
+        toggleCheckOutModal();
 
-            if (status !== 'granted') {
-                if (!canAskAgain) {
-                    toggleOpenSettingsModal()
-                    return;
-                }
-            }
-
-            // Get the current position
-            let location = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Lowest,
-            });
-
-            const {latitude, longitude} = location.coords;
-            // Log the location data
-            if (props.onLocationReceived) {
-                props.onLocationReceived({latitude, longitude});
-            }
-
-            // onSuccess callback
-            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-            toggleCheckOutModal();
-            setCheckOutData({latitude, longitude})
-        } catch (error) {
-            Alert.alert('Error getting location:', error);
-            setButtonStatus(false)
-            // toggleOpenSettingsModal()
-        }
+        // try {
+        //     // Request permission to access locations
+        //     let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        //
+        //     if (status !== 'granted') {
+        //         if (!canAskAgain) {
+        //             toggleOpenSettingsModal()
+        //             return;
+        //         }
+        //     }
+        //
+        //     // Get the current position
+        //     let location = await Location.getCurrentPositionAsync({
+        //         accuracy: Location.Accuracy.Lowest,
+        //     });
+        //
+        //     const {latitude, longitude} = location.coords;
+        //     // Log the location data
+        //     if (props.onLocationReceived) {
+        //         props.onLocationReceived({latitude, longitude});
+        //     }
+        //
+        //     // onSuccess callback
+        //     // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+        //     toggleCheckOutModal();
+        //     setCheckOutData({latitude, longitude})
+        // } catch (error) {
+        //     Alert.alert('Error getting location:', error);
+        //     setButtonStatus(false)
+        //     // toggleOpenSettingsModal()
+        // }
     }
 
     async function handleOverTimeRequest() {
-        setButtonStatus(true)
-        try {
-            // Request permission to access locations
-            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        setButtonStatus(true);
+        toggleOverTimeModal();
 
-            if (status !== 'granted') {
-                if (!canAskAgain) {
-                    toggleOpenSettingsModal()
-                    return;
-                }
-            }
-
-            // Get the current position
-            let location = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Lowest,
-            });
-
-            const {latitude, longitude} = location.coords;
-            // Log the location data
-            if (props.onLocationReceived) {
-                props.onLocationReceived({latitude, longitude});
-            }
-
-            // onSuccess callback
-            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-            toggleOverTimeModal();
-            setOverTimeData({latitude, longitude})
-        } catch (error) {
-            Alert.alert('Error getting location:', error);
-            setButtonStatus(false)
-            // toggleOpenSettingsModal()
-        }
+        // try {
+        //     // Request permission to access locations
+        //     let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        //
+        //     if (status !== 'granted') {
+        //         if (!canAskAgain) {
+        //             toggleOpenSettingsModal()
+        //             return;
+        //         }
+        //     }
+        //
+        //     // Get the current position
+        //     let location = await Location.getCurrentPositionAsync({
+        //         accuracy: Location.Accuracy.Lowest,
+        //     });
+        //
+        //     const {latitude, longitude} = location.coords;
+        //     // Log the location data
+        //     if (props.onLocationReceived) {
+        //         props.onLocationReceived({latitude, longitude});
+        //     }
+        //
+        //     // onSuccess callback
+        //     // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+        //     toggleOverTimeModal();
+        //     setOverTimeData({latitude, longitude})
+        // } catch (error) {
+        //     Alert.alert('Error getting location:', error);
+        //     setButtonStatus(false)
+        //     // toggleOpenSettingsModal()
+        // }
     }
 
     async function handleOverTimeOutRequest() {
-        setButtonStatus(true)
-        try {
-            // Request permission to access locations
-            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        setButtonStatus(true);
+        toggleOverTimeOutModal();
 
-            if (status !== 'granted') {
-                if (!canAskAgain) {
-                    toggleOpenSettingsModal()
-                    return;
-                }
-            }
-
-            // Get the current position
-            let location = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Lowest,
-            });
-
-            const {latitude, longitude} = location.coords;
-            // Log the location data
-            if (props.onLocationReceived) {
-                props.onLocationReceived({latitude, longitude});
-            }
-
-            // onSuccess callback
-            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-            toggleOverTimeOutModal();
-            setOverTimeOutData({latitude, longitude})
-        } catch (error) {
-            Alert.alert('Error getting location:', error);
-            setButtonStatus(false)
-            // toggleOpenSettingsModal()
-        }
+        // try {
+        //     // Request permission to access locations
+        //     let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        //
+        //     if (status !== 'granted') {
+        //         if (!canAskAgain) {
+        //             toggleOpenSettingsModal()
+        //             return;
+        //         }
+        //     }
+        //
+        //     // Get the current position
+        //     let location = await Location.getCurrentPositionAsync({
+        //         accuracy: Location.Accuracy.Lowest,
+        //     });
+        //
+        //     const {latitude, longitude} = location.coords;
+        //     // Log the location data
+        //     if (props.onLocationReceived) {
+        //         props.onLocationReceived({latitude, longitude});
+        //     }
+        //
+        //     // onSuccess callback
+        //     // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+        //     toggleOverTimeOutModal();
+        //     setOverTimeOutData({latitude, longitude})
+        // } catch (error) {
+        //     Alert.alert('Error getting location:', error);
+        //     setButtonStatus(false)
+        //     // toggleOpenSettingsModal()
+        // }
     }
 
     if (type !== 'checkin' && type !== 'checkout' && type !== 'overTime' && type !== 'overTimeOut') {
@@ -394,7 +402,8 @@ export default function SgCheckInOutCard(props) {
     }
 
     return (
-        <View style={[styles.card, ['timekeeper', 'chief'].includes(employeeType) ? styles.card2 : null, type === 'overTime' ? styles.card2 : null, {backgroundColor}]}>
+        // <View style={[styles.card, ['timekeeper', 'chief'].includes(employeeType) ? styles.card2 : null, type === 'overTime' ? styles.card2 : null, {backgroundColor}]}>
+        <View style={[styles.card, ['timekeeper', 'chief'].includes(employeeType) ? styles.card2 : styles.card2, type === 'overTime' ? styles.card2 : null, {backgroundColor}]}>
             <View style={styles.content}>
                 <View style={styles.header}>
                     <View>
@@ -407,7 +416,7 @@ export default function SgCheckInOutCard(props) {
                     {time ? time : '--:--'}
                 </Text>
             </View>
-            {(!['timekeeper', 'chief'].includes(employeeType) && (isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web') ?
+            {/*{(!['timekeeper', 'chief'].includes(employeeType) && (isCheckIn && status === 2 && mapData?.checkIn?.latitude && mapData?.checkIn?.longitude) && Platform.OS !== 'web') ?
                 <View style={{flex: 1, height: 125, borderRadius: 16, overflow: 'hidden', filter: 'grayscale(1)'}}>
                         <MapView
                             style={{flex: 1, height: 125}}
@@ -482,7 +491,7 @@ export default function SgCheckInOutCard(props) {
                     </MapView>
                 </View>
                 : null
-            }
+            }*/}
             <View style={{paddingHorizontal: 4, paddingVertical: 4,}}>
                 {isCheckIn ?
                     <>
@@ -508,17 +517,17 @@ export default function SgCheckInOutCard(props) {
                             </SgButton>
                             : null
                         }
-                        {status === 2 ?
-                            <SgButton
-                                color={COLORS.brand_600}
-                                style={{paddingVertical: 8, minHeight: 36}}
-                                textStyle={{fontSize: 15}}
-                                onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}
-                            >
-                                {t('openOnMap')}
-                            </SgButton>
-                            : null
-                        }
+                        {/*{status === 2 ?*/}
+                        {/*    <SgButton*/}
+                        {/*        color={COLORS.brand_600}*/}
+                        {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
+                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*        onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}*/}
+                        {/*    >*/}
+                        {/*        {t('openOnMap')}*/}
+                        {/*    </SgButton>*/}
+                        {/*    : null*/}
+                        {/*}*/}
                     </>
                     : null
                 }
@@ -547,17 +556,17 @@ export default function SgCheckInOutCard(props) {
                             </SgButton>
                             : null
                         }
-                        {status === 2 ?
-                            <SgButton
-                                color={COLORS.error_700}
-                                onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}
-                                style={{paddingVertical: 8, minHeight: 36}}
-                                textStyle={{fontSize: 15}}
-                            >
-                                {t('openOnMap')}
-                            </SgButton>
-                            : null
-                        }
+                        {/*{status === 2 ?*/}
+                        {/*    <SgButton*/}
+                        {/*        color={COLORS.error_700}*/}
+                        {/*        onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}*/}
+                        {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
+                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*    >*/}
+                        {/*        {t('openOnMap')}*/}
+                        {/*    </SgButton>*/}
+                        {/*    : null*/}
+                        {/*}*/}
                     </>
                     : null
                 }
@@ -585,17 +594,17 @@ export default function SgCheckInOutCard(props) {
                             </SgButton>
                             : null
                         }
-                        {status === 2 ?
-                            <SgButton
-                                color={COLORS.blue_600}
-                                style={{paddingVertical: 8, minHeight: 36}}
-                                textStyle={{fontSize: 15}}
-                                onPress={() => openInMaps(mapData?.overTime.latitude, mapData?.overTime.longitude)}
-                            >
-                                {t('openOnMap')}
-                            </SgButton>
-                            : null
-                        }
+                        {/*{status === 2 ?*/}
+                        {/*    <SgButton*/}
+                        {/*        color={COLORS.blue_600}*/}
+                        {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
+                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*        onPress={() => openInMaps(mapData?.overTime.latitude, mapData?.overTime.longitude)}*/}
+                        {/*    >*/}
+                        {/*        {t('openOnMap')}*/}
+                        {/*    </SgButton>*/}
+                        {/*    : null*/}
+                        {/*}*/}
                     </>
                     : null
                 }
@@ -624,17 +633,17 @@ export default function SgCheckInOutCard(props) {
                             </SgButton>
                             : null
                         }
-                        {status === 2 ?
-                            <SgButton
-                                color={COLORS.error_700}
-                                onPress={() => openInMaps(mapData?.overTimeOut.latitude, mapData?.overTimeOut.longitude)}
-                                style={{paddingVertical: 8, minHeight: 36}}
-                                textStyle={{fontSize: 15}}
-                            >
-                                {t('openOnMap')}
-                            </SgButton>
-                            : null
-                        }
+                        {/*{status === 2 ?*/}
+                        {/*    <SgButton*/}
+                        {/*        color={COLORS.error_700}*/}
+                        {/*        onPress={() => openInMaps(mapData?.overTimeOut.latitude, mapData?.overTimeOut.longitude)}*/}
+                        {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
+                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*    >*/}
+                        {/*        {t('openOnMap')}*/}
+                        {/*    </SgButton>*/}
+                        {/*    : null*/}
+                        {/*}*/}
                     </>
                     : null
                 }
@@ -645,7 +654,7 @@ export default function SgCheckInOutCard(props) {
                 onClose={toggleCheckInModal}
                 title={t('checkIn')}
                 description={t('checkIn__description')}
-                icon={<CheckInModalIcon width={56} height={56}/>}
+                icon={<CheckInModalIcon width={50} height={50}/>}
                 footerButton={
                     <SgButton
                         loading={status === 1}
@@ -663,7 +672,7 @@ export default function SgCheckInOutCard(props) {
                 onClose={toggleOverTimeModal}
                 title={t('overTime')}
                 description={t('overTime__description')}
-                icon={<CheckInModalIcon width={56} height={56}/>}
+                icon={<CheckInModalIcon width={50} height={50}/>}
                 footerButton={
                     <SgButton
                         loading={status === 1}
@@ -681,7 +690,7 @@ export default function SgCheckInOutCard(props) {
                 onClose={toggleOverTimeOutModal}
                 title={t('overTime')}
                 description={t('overTime__description')}
-                icon={<CheckInModalIcon width={56} height={56}/>}
+                icon={<CheckInModalIcon width={50} height={50}/>}
                 footerButton={
                     <SgButton
                         loading={status === 1}
@@ -699,7 +708,7 @@ export default function SgCheckInOutCard(props) {
                 onClose={toggleOpenSettingsModal}
                 title={t('permissionError')}
                 description= {t('locationPermissionError')}
-                // icon={<CheckInModalIcon width={56} height={56}/>}
+                // icon={<CheckInModalIcon width={50} height={50}/>}
                 footerButton={
                     <SgButton
                         onPress={handleOpenSettings}
@@ -716,7 +725,7 @@ export default function SgCheckInOutCard(props) {
                 onClose={toggleCheckOutModal}
                 title={t('checkOut')}
                 description={t('checkOut__description')}
-                icon={<CheckOutModalIcon width={56} height={56}/>}
+                icon={<CheckOutModalIcon width={50} height={50}/>}
                 footerButton={
                     <SgButton
                         loading={status === 1}

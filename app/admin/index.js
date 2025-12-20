@@ -206,7 +206,7 @@ export default function EmployeeDashboardScreen() {
         <SgPopup
             visible={rejectInfoModal}
             onClose={toggleRejectInfoModal}
-            icon={<InfoCircleModalIcon width={56} height={56}/>}
+            icon={<InfoCircleModalIcon width={50} height={50}/>}
         >
             <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
             <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>

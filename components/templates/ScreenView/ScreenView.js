@@ -60,7 +60,7 @@ export default function SgTemplateScreenView(props) {
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 >
                     <InternetStatusIndicator />
-                    <GpsSignalStatusIndicator />
+                    {/*<GpsSignalStatusIndicator />*/}
                     {/*{renderSystemAlertBanner()}*/}
                     {/*<TouchableWithoutFeedback*/}
                     {/*    onPress={Keyboard.dismiss}*/}

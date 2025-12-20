@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.gray_200,
     borderRadius: 16,
-    padding: 20,
-    gap: 20,
+    padding: 16,
+    gap: 16,
     flexDirection: 'column',
   },
   item: {
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: 500,
-    lineHeight: 20,
+    lineHeight: 18,
     color: COLORS.gray_800,
   },
   divider:{ 

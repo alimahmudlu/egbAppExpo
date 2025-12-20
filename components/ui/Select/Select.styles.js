@@ -3,13 +3,13 @@ import COLORS from "@/constants/colors";
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 8,
+    gap: 6,
   },
   label: {
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: 600,
     color: COLORS.gray_700,
-    lineHeight: 20,
+    lineHeight: 18,
   },
   inputContainer: {
     flexDirection: 'row',      
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray_300,
     borderRadius: 12,
     backgroundColor: COLORS.white,
-    paddingHorizontal: 20,
-    height: 56,
+      paddingHorizontal: 14,
+    height: 46,
   },
   labelError: {
     color: COLORS.error_700,

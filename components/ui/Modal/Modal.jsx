@@ -52,11 +52,11 @@ export default function SgPopup({
   const renderIcon = () => {
     switch (iconType) {
       case 'info':
-        return <InfoIcon width={28} height={28} />;
+        return <InfoIcon width={22} height={22} />;
       case 'success':
-        return <InfoIcon width={28} height={28} />;
+        return <InfoIcon width={22} height={22} />;
       case 'danger':
-        return <InfoIcon width={28} height={28} />;
+        return <InfoIcon width={22} height={22} />;
       default:
         return icon;
     }
@@ -99,46 +99,49 @@ export default function SgPopup({
                   <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
                 </TouchableWithoutFeedback>
 
-                <View style={[styles.container, fullScreen && { flex: 1, height: '100%', paddingTop: 24  }]}>
+                <View style={[styles.container, fullScreen && { flex: 1, height: '100%', paddingTop: 12  }]}>
                   <View style={styles.dragHandle} />
 
-                  <View style={{marginVertical: 'auto'}}>
-                    {(iconType || icon) && (
-                        <View style={styles.iconContainer}>
-                          {renderIcon()}
-                        </View>
-                    )}
-
-                    {title && (
-                        <Text
-                            style={[
-                              styles.title,
-                              !iconType && styles.titleWithoutIcon,
-                            ]}
-                        >
-                          {title}
-                        </Text>
-                    )}
-                    {description && <Text style={styles.description}>{description}</Text>}
-
-                  </View>
-
                     <ScrollView>
-                        {children}
+                      <View style={{marginVertical: 'auto'}}>
+                        {(iconType || icon) && (
+                            <View style={styles.iconContainer}>
+                              {renderIcon()}
+                            </View>
+                        )}
+
+                        {title && (
+                            <Text
+                                style={[
+                                  styles.title,
+                                  !(iconType || icon) && styles.titleWithoutIcon,
+                                ]}
+                            >
+                              {title}
+                            </Text>
+                        )}
+                        {description && <Text style={styles.description}>{description}</Text>}
+
+                      </View>
+
+                        <View>
+                            {children}
+                        </View>
+
+                      <View style={styles.footerButtonsContainer}>
+                        <View style={{ flex: 1 }}>
+                          <SgButton onPress={onClose} bgColor={COLORS.buttonColor} color={COLORS.buttonNoColor}>
+                            {closeType === 'select' ? t('select') : t('close')}
+                          </SgButton>
+                        </View>
+                        {footerButton && (
+                          <View style={{ flex: 1 }}>
+                            {renderFooterButton()}
+                          </View>
+                        )}
+                      </View>
                     </ScrollView>
 
-                  <View style={styles.footerButtonsContainer}>
-                    <View style={{ flex: 1 }}>
-                      <SgButton onPress={onClose} color={COLORS.buttonNoColor}>
-                        {closeType === 'select' ? t('select') : t('close')}
-                      </SgButton>
-                    </View>
-                    {footerButton && (
-                      <View style={{ flex: 1 }}>
-                        {renderFooterButton()}
-                      </View>
-                    )}
-                  </View>
                 </View>
               </View>
             </TouchableWithoutFeedback>

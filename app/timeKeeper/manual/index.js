@@ -1,9 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, Pressable, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
-import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
 import moment from "moment/moment";
 import {useApi} from "@/hooks/useApi";
 import SgPopup from "@/components/ui/Modal/Modal";
@@ -12,11 +11,9 @@ import COLORS from "@/constants/colors";
 import ReloadArrow from "@/assets/images/reload-arrows.svg";
 import SgSelect from "@/components/ui/Select/Select";
 import SgInput from "@/components/ui/Input/Input";
-import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import {useData} from "@/hooks/useData";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
-import FilterIcon from "@/assets/images/filter.svg";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 

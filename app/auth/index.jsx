@@ -93,7 +93,7 @@ export default function Login() {
             <SgPopup
                 visible={errorModal}
                 onClose={toggleErrorModal}
-                icon={<InfoCircleModalIcon width={56} height={56} />}
+                icon={<InfoCircleModalIcon width={50} height={50} />}
                 title='Error'
                 description={errorModalData}
             />

@@ -361,7 +361,7 @@ export default function SgSectionTaskCard(props) {
                 onClose={toggleRemoveTaskModal}
                 title={t('removeTask')}
                 description={t('removeTask__description')}
-                icon={<LogOutModalIcon width={56} height={56} />}
+                icon={<LogOutModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.error_600}
@@ -389,7 +389,7 @@ export default function SgSectionTaskCard(props) {
                 onClose={toggleCompleteTaskModal}
                 title={t('completeTask')}
                 description={t('completeTask__description')}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -437,7 +437,7 @@ export default function SgSectionTaskCard(props) {
                 onClose={toggleCheckTaskModal}
                 title={t('checkRequestTask')}
                 description={t('checkRequestTask__description')}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -462,7 +462,7 @@ export default function SgSectionTaskCard(props) {
                 onClose={toggleCheckedTaskModal}
                 title={t('taskChecked')}
                 description={t('taskChecked__description')}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -487,7 +487,7 @@ export default function SgSectionTaskCard(props) {
                 onClose={toggleCompletedTaskModal}
                 title={t('completedTask')}
                 description={t('completedTask__description')}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}

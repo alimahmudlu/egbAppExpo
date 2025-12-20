@@ -132,12 +132,13 @@ const styles = StyleSheet.create({
   },
   textArea: {
     width: '100%',
-    minHeight: 160,
+    minHeight: 100,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: COLORS.gray_300,
     padding: 12,
-    verticalAlign: 'top'
+    verticalAlign: 'top',
+      color: COLORS.black,
   },
   rejectModal: {
     fontFamily: "Inter",

@@ -338,36 +338,38 @@ export default function SgSectionEmployeeCard(props) {
 
     async function handleCheckInRequest(type) {
         setButtonStatus(true)
-        try {
-            // Request permission to access locations
-            let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        handleManualCheckIn({latitude: null, longitude: null}, type)
 
-            if (status !== 'granted') {
-                if (!canAskAgain) {
-                    toggleOpenSettingsModal()
-                    return;
-                }
-            }
-
-            // Get the current position
-            let location = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Lowest,
-            });
-
-            const {latitude, longitude} = location.coords;
-            // Log the location data
-            if (props.onLocationReceived) {
-                props.onLocationReceived({latitude, longitude});
-            }
-
-            // onSuccess callback
-            // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
-            handleManualCheckIn({latitude, longitude}, type)
-        } catch (error) {
-            console.error('Error getting location:', error);
-            setButtonStatus(false)
-            toggleOpenSettingsModal()
-        }
+        // try {
+        //     // Request permission to access locations
+        //     let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+        //
+        //     if (status !== 'granted') {
+        //         if (!canAskAgain) {
+        //             toggleOpenSettingsModal()
+        //             return;
+        //         }
+        //     }
+        //
+        //     // Get the current position
+        //     let location = await Location.getCurrentPositionAsync({
+        //         accuracy: Location.Accuracy.Lowest,
+        //     });
+        //
+        //     const {latitude, longitude} = location.coords;
+        //     // Log the location data
+        //     if (props.onLocationReceived) {
+        //         props.onLocationReceived({latitude, longitude});
+        //     }
+        //
+        //     // onSuccess callback
+        //     // FIXME: This is where you would handle the successful check-in logic, sending the location and now time to your backend.
+        //     handleManualCheckIn({latitude, longitude}, type)
+        // } catch (error) {
+        //     console.error('Error getting location:', error);
+        //     setButtonStatus(false)
+        //     toggleOpenSettingsModal()
+        // }
     }
 
     function handleManualCheckIn(locationData, type = 'checkin') {
@@ -405,7 +407,9 @@ export default function SgSectionEmployeeCard(props) {
                 removeRowData()
             }
             if(overTime && atWork) {
-                request({
+
+                removeRowData()
+                /*request({
                     url: '/timekeeper/overtime/list/checkout', method: 'get'
                 }).then(res => {
                 }).catch(err => {
@@ -422,7 +426,7 @@ export default function SgSectionEmployeeCard(props) {
                 }).then(res => {
                 }).catch(err => {
                     console.log(err, 'apiservice control err')
-                });
+                });*/
             }
             toggleUserOperationModal()
         }).catch(err => {
@@ -530,7 +534,7 @@ export default function SgSectionEmployeeCard(props) {
             <SgPopup
                 visible={rejectInfoModal}
                 onClose={toggleRejectInfoModal}
-                icon={<InfoCircleModalIcon width={56} height={56}/>}
+                icon={<InfoCircleModalIcon width={50} height={50}/>}
                 autoClose={false}
             >
                 <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
@@ -638,7 +642,7 @@ export default function SgSectionEmployeeCard(props) {
                         )
                     }
                     {/*{((manual && !fullData?.checkout?.latitude && fullData?.checkin?.latitude) || (isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?*/}
-                    {(((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) || ((isManualOverTimeCheckoutAvailable() && atWork) || fullData?.type === 4) && clickType !== 'reject') ?
+                    {((((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) || ((isManualOverTimeCheckoutAvailable() && atWork) || fullData?.type === 4)) && clickType !== 'reject') ?
                         <View>
                             <TouchableOpacity
                                 activeOpacity={1}
@@ -822,7 +826,7 @@ export default function SgSectionEmployeeCard(props) {
                 onClose={() => toggleRejectCheckInModal()}
                 title={fullData?.type === 1 ? t('rejectCheckIn') : t('rejectCheckOut')}
                 description={fullData?.type === 1 ? t('rejectCheckIn__description') : t('rejectCheckOut__description')}
-                icon={<ErrorIconModal width={56} height={56}/>}
+                icon={<ErrorIconModal width={50} height={50}/>}
                 footerButton={
                     [3, 4].includes(fullData?.type) ?
                         <SgButton
@@ -849,7 +853,7 @@ export default function SgSectionEmployeeCard(props) {
                     <TextInput
                         style={styles.textArea}
                         multiline
-                        numberOfLines={6}
+                        numberOfLines={4}
                         onChangeText={(e) => {
                             setRejectReason(e)
                         }}
@@ -865,7 +869,7 @@ export default function SgSectionEmployeeCard(props) {
                 onClose={() => toggleRejectedCheckInModal()}
                 title={t('rejectedSuccessfully')}
                 description={t('rejectedSuccessfully__description')}
-                icon={<ErrorIconModal width={56} height={56}/>}
+                icon={<ErrorIconModal width={50} height={50}/>}
                 autoClose={false}
             />
 
@@ -874,7 +878,7 @@ export default function SgSectionEmployeeCard(props) {
                 onClose={() => toggleAcceptCheckInModal()}
                 title={t('accept')}
                 description={fullData?.type === 1 ? t('checkInAccept__description') : t('checkOutAccept__description')}
-                icon={<SuccessIconModal width={56} height={56}/>}
+                icon={<SuccessIconModal width={50} height={50}/>}
                 footerButton={
                     [3, 4].includes(fullData?.type) ?
                         <SgButton
@@ -967,7 +971,7 @@ export default function SgSectionEmployeeCard(props) {
                 onClose={() => toggleAcceptedCheckInModal()}
                 title={fullData?.type === 1 ? t('checkInAccepted') : t('checkOutAccepted')}
                 description={fullData?.type === 1 ? t('checkInAccepted__description') : t('checkOutAccepted__description')}
-                icon={<SuccessIconModal width={56} height={56}/>}
+                icon={<SuccessIconModal width={50} height={50}/>}
                 autoClose={false}
             />
 
@@ -976,7 +980,7 @@ export default function SgSectionEmployeeCard(props) {
                 onClose={toggleOpenSettingsModal}
                 title="Permission Error"
                 description="Location permission error. You have not given permission to access your locations. If you want to turn it on, go to settings. Open settings??"
-                // icon={<CheckInModalIcon width={56} height={56}/>}
+                // icon={<CheckInModalIcon width={50} height={50}/>}
                 footerButton={
                     <SgButton
                         onPress={handleOpenSettings}

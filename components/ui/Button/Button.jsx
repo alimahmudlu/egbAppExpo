@@ -13,7 +13,7 @@ export default function SgButton({
   return (
     <TouchableOpacity
   onPress={disabled ? null : onPress}
-  activeOpacity={disabled ? 1 : 0.8}
+  activeOpacity={disabled ? 1 : 0.9}
   style={[
     styles.button,
     style,

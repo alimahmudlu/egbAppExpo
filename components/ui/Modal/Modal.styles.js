@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.8)',
   },
     keyboard: {
-
         flex: 1,
     },
     // modalBackground: {
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: COLORS.white,
-    paddingHorizontal: 24,
+    paddingHorizontal: 12,
     paddingVertical: 12,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -48,17 +47,17 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     paddingHorizontal: 24,
-    paddingTop: 24,
-    paddingBottom: 32,
+    paddingTop: 12,
+    paddingBottom: 12,
     alignItems: 'center',
   },
   title: {
     color: COLORS.gray_900,
     fontFamily: 'Inter, sans-serif',
-    fontSize: 20,
+    fontSize: 18,
     fontStyle: 'normal',
-    fontWeight: '600',
-    lineHeight: 30,
+    fontWeight: '700',
+    lineHeight: 22,
     marginBottom: 8,
     textAlign: 'center',
     paddingHorizontal: 24,
@@ -70,10 +69,10 @@ const styles = StyleSheet.create({
   description: {
     color: COLORS.gray_700,
     fontFamily: 'Inter, sans-serif',
-    fontSize: 16,
+    fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '400',
-    lineHeight: 24,
+    lineHeight: 18,
     paddingBottom: 32,
     textAlign: 'center',
     paddingHorizontal: 24,
@@ -85,7 +84,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingBottom: 10,
-    paddingHorizontal: 24,
       marginTop: 16
   },
 });

@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontStyle: 'normal',
     fontWeight: '700',
-    lineHeight: 14,
+    lineHeight: 11,
     color: COLORS.black,
   },
   time: {

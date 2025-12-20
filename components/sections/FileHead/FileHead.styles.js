@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Inter, sans-serif',
-    fontSize: 32,
+    fontSize: 26,
     fontStyle: 'normal',
     fontWeight: 700,
-    lineHeight: 44,
+    lineHeight: 34,
     letterSpacing: -0.72,
     color: COLORS.black,
   },

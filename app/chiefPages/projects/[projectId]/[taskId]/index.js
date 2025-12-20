@@ -282,7 +282,7 @@ export default function ProjectItemScreen() {
                 onClose={toggleCheckedTaskModal}
                 title={t('checkedTask')}
                 description={t('checkedTask__description')}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -307,7 +307,7 @@ export default function ProjectItemScreen() {
                 onClose={toggleCompletedTaskModal}
                 title={t('completedTask')}
                 description={t('completedTask__description')}
-                icon={<CompleteModalIcon width={56} height={56} />}
+                icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
