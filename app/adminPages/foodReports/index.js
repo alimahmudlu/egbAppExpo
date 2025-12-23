@@ -23,7 +23,8 @@ export default function ProjectItemScreen() {
     const [list, setList] = useState([]);
     const {request} = useApi();
     const {storeData, updateData} = useData();
-    const {refreshKey} = useLocalSearchParams();
+    const {refreshKey, project_id} = useLocalSearchParams();
+    const zzz = useLocalSearchParams();
     const {t} = useTranslation();
 
     const [reportData, setReportData] = useState({});
@@ -83,6 +84,7 @@ export default function ProjectItemScreen() {
 
     function resetFilters() {
         setFilters({});
+        setList([]);
     }
 
     function handleChange(e) {
@@ -119,6 +121,19 @@ export default function ProjectItemScreen() {
         };
     }, [refreshKey]));
 
+    useFocusEffect(useCallback(() => {
+        if (project_id) {
+            setFilters({
+                project: (projectsList || []).find(el => el.id === Number(project_id)),
+                date: moment().format('YYYY-MM-DD')
+            })
+            getData({
+                project: Number(project_id),
+                date: moment().format('YYYY-MM-DD')
+            })
+        }
+    }, [project_id, projectsList]))
+
     useEffect(() => {
         setList(storeData?.cache?.[`GET:/admin/food/report/list`]?.data)
     }, [storeData?.cache?.[`GET:/admin/food/report/list`]])
@@ -132,10 +147,11 @@ export default function ProjectItemScreen() {
             head={
                 <SgTemplatePageHeader data={{
                     header: t('foodReports')
-                }} filter={
+                }}
+                /*filter={
                     <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
                         <Text><FilterIcon width={20} height={20} /></Text>
-                    </Pressable>}
+                    </Pressable>}*/
                 />
             }
         >
@@ -161,7 +177,8 @@ export default function ProjectItemScreen() {
                 <View style={{flex: 1}}>
                     <SgDatePicker
                         label={t('date')}
-                        placeholder="dd/mm/yyyy - hh/mm"
+                        placeholder="dd/mm/yyyy"
+                        mode='date'
                         value={filters?.date}
                         name='date'
                         onChangeText={handleChange}

@@ -35,7 +35,7 @@ export default function TimeKeeperUserScreen() {
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: t('dailyCheckOut'),
+                header: t('checkOut'),
             }}/>}
         >
             {employeeActivities?.map((emp, index) => (
@@ -45,6 +45,7 @@ export default function TimeKeeperUserScreen() {
                     title={emp?.employee?.full_name}
                     role={emp?.employee?.role?.name}
                     time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                    checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                     image={emp?.employee?.image}
                     editable={false}
                     status={emp.status}

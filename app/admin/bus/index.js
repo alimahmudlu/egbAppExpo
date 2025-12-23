@@ -30,6 +30,7 @@ export default function ChiefMenuScreen() {
     const [reportModal, setReportModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({});
     const [projects, setProjects] = useState([]);
+    const [camps, setCamps] = useState([]);
     const [tripTypeList, setTripTypeList] = useState([
         {
             id: 1,
@@ -37,22 +38,22 @@ export default function ChiefMenuScreen() {
             render: <Text>Day Main</Text>,
         },
         {
-            id: 2,
+            id: 3,
             name: 'Night Main',
             render: <Text>Night Main</Text>,
         },
         {
-            id: 3,
+            id: 2,
             name: 'Additional',
             render: <Text>Additional</Text>,
         },
         {
-            id: 4,
+            id: 5,
             name: 'UFMS',
             render: <Text>UFMS</Text>,
         },
         {
-            id: 5,
+            id: 4,
             name: 'Airport',
             render: <Text>Airport</Text>,
         }
@@ -79,8 +80,8 @@ export default function ChiefMenuScreen() {
                 ...data,
                 projectId: selectedRow?.project_id,
                 tripTypeId: data?.tripType?.id,
-                toProjectId: data?.toProject?.id,
-                fromProjectId: data?.fromProject?.id,
+                toProjectId: data?.toProject?.id || selectedRow?.project_id,
+                campId: data?.camp?.id,
                 date: selectedRow?.date || moment().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
                 turn2employees: selectedRow?.turn2employees || 0
@@ -112,6 +113,13 @@ export default function ChiefMenuScreen() {
             console.log(err);
         })
 
+        request({
+            url: '/admin/options/camps', method: 'get',
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
+
         return () => {
             setProjects([])
             setData({});
@@ -126,6 +134,10 @@ export default function ChiefMenuScreen() {
     useEffect(() => {
         setProjects(storeData?.cache?.[`GET:/admin/options/projects`]?.data)
     }, [storeData?.cache?.[`GET:/admin/options/projects`]])
+
+    useEffect(() => {
+        setCamps(storeData?.cache?.[`GET:/admin/options/camps`]?.data)
+    }, [storeData?.cache?.[`GET:/admin/options/camps`]])
 
     return (
         <SgTemplateScreen
@@ -239,6 +251,40 @@ export default function ChiefMenuScreen() {
 
                     <View>
                         <SgSelect
+                            label={t('Camps')}
+                            placeholder={t('Camps')}
+                            modalTitle={t('selectCamp')}
+                            value={data?.camp || (camps || []).find(el => (el.id === selectedRow?.report_status?.camp_id))}
+                            name='camp'
+                            isInvalid={errors?.camp}
+                            onChangeText={handleChange}
+                            list={(camps || []).map(item => ({
+                                id: item?.id,
+                                name: item?.name,
+                                render: <Text>{item?.name}</Text>,
+                            }))}
+                        />
+                    </View>
+
+                    <View>
+                        <SgSelect
+                            label={t('Project')}
+                            placeholder={t('Project')}
+                            modalTitle={t('selectProject')}
+                            value={data?.toProject || (projects || []).find(el => (el.id === selectedRow?.report_status?.to_project_id || el.id === selectedRow?.project_id))}
+                            name='toProject'
+                            isInvalid={errors?.toProject}
+                            onChangeText={handleChange}
+                            list={(projects || []).map(item => ({
+                                id: item?.id,
+                                name: item?.name,
+                                render: <Text>{item?.name}</Text>,
+                            }))}
+                        />
+                    </View>
+
+                    {/*<View>
+                        <SgSelect
                             label={t('toProject')}
                             placeholder={t('toProject')}
                             modalTitle={t('selectToProject')}
@@ -269,7 +315,7 @@ export default function ChiefMenuScreen() {
                                 render: <Text>{item?.name}</Text>,
                             }))}
                         />
-                    </View>
+                    </View>*/}
                 </View>
             </SgPopup>
         </SgTemplateScreen>

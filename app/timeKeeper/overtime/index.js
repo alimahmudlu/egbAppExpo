@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, Pressable} from 'react-native';
+import {View, StyleSheet, Text, Pressable, TouchableOpacity} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionEmployeeCard from "@/components/sections/EmployeeCard/EmployeeCard";
@@ -19,6 +19,7 @@ import {useTranslation} from "react-i18next";
 import FilterIcon from "@/assets/images/filter.svg";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import {useSocket} from "@/hooks/useSocket";
+import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -478,6 +479,28 @@ export default function EmployeeDocsScreen() {
                                 }))}
                             />
                         </View>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                style={styles.checkboxContainer}
+                                onPress={() => {
+                                    console.log('subcontractors', filters?.subcontractors)
+                                    handleChange({
+                                        name: 'subcontractors',
+                                        value: filters?.subcontractors ? 0 : 1
+                                    })
+                                }}
+                            >
+                                <SgCheckbox
+                                    checked={filters?.subcontractors === 1}
+                                    onToggle={() => handleChange({
+                                        name: 'subcontractors',
+                                        value: filters?.subcontractors ? 0 : 1,
+                                    })}
+                                />
+                                <Text style={styles.checkboxLabel}>{t('subcontractors')}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </SgPopup>
@@ -609,5 +632,24 @@ const styles = StyleSheet.create({
     },
     reopenButtonText: {
         color: '#fff',
+    },
+
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.gray_200,
+    },
+    checkboxLabel: {
+        fontFamily: 'Inter, sans-serif',
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 600,
+        lineHeight: 20,
+        color: COLORS.gray_800
     },
 });

@@ -36,6 +36,7 @@ export default function EmployeeDocsScreen() {
     const [getDataStatus, setDataStatus] = useState(false)
 
     function getData(_filters = {}) {
+        console.log(_filters, 'filters')
         request({
             url: '/timekeeper/history/list/checkin',
             method: 'get',
@@ -88,13 +89,13 @@ export default function EmployeeDocsScreen() {
 
     useEffect(() => {
         if (page) {
-            getData({...filters, project: filters?.project?.id})
+            getData({...filters, project: filters?.project?.id, checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id})
         }
     }, [page, filters?.full_name, getDataStatus])
 
     useEffect(() => {
         if (pageCheckOut) {
-            getDataCheckOut({...filters, project: filters?.project?.id})
+            getDataCheckOut({...filters, project: filters?.project?.id, checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id})
         }
     }, [pageCheckOut, filters?.full_name, getDataStatus])
 
@@ -358,6 +359,50 @@ export default function EmployeeDocsScreen() {
                                 value={filters?.end_date}
                                 name='end_date'
                                 onChangeText={handleChange}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkStatus")}
+                                placeholder={t("enterCheckStatus")}
+                                modalTitle={t("selectCheckStatus")}
+                                value={filters?.checkStatus}
+                                name='checkStatus'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Manual'),
+                                        render: <View><Text>{t('Manual')}</Text></View>
+                                    },
+                                    {
+                                        id: 2,
+                                        name: t('Auto'),
+                                        render: <View><Text>{t('Auto')}</Text></View>
+                                    }
+                                ]}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkType")}
+                                placeholder={t("enterCheckType")}
+                                modalTitle={t("selectCheckType")}
+                                value={filters?.checkType}
+                                name='checkType'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Normal'),
+                                        render: <View><Text>{t('Normal')}</Text></View>
+                                    },
+                                    {
+                                        id: 3,
+                                        name: t('OverTime'),
+                                        render: <View><Text>{t('OverTime')}</Text></View>
+                                    }
+                                ]}
                             />
                         </View>
                     </View>

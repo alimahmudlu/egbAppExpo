@@ -8,6 +8,14 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                // checkType: "checkType",
+                enterCheckType: "Enter Check Type",
+                selectCheckType: "Select Check Type",
+                checkStatus: "Check Status",
+                enterCheckStatus: "Enter Check Status",
+                selectCheckStatus: "Select Check Status",
+
+                subcontractors: "Subcontractors",
                 enterOrder: "Enter Order",
                 order: "Order",
                 enterNote: "Enter Note",
@@ -37,10 +45,12 @@ i18n.use(initReactI18next).init({
                 tabBar__allTasks: "All Tasks",
                 tabBar__overTime: "Overtime",
                 overTime: "Overtime",
+                OverTime: "OverTime",
                 overTime_btn: "Overtime",
                 overTime__description: "Overtime",
                 overTimeOut: "Overtime out",
                 normal: "Normal",
+                Normal: "Normal",
                 loadMore: "Load more",
 
                 checkInDate: "Check-in date",
@@ -210,7 +220,9 @@ i18n.use(initReactI18next).init({
                 startCompleteRequestSended: "Task started",
                 startCompleteRequestSended__description: "The task has been successfully started",
                 manual: "Manual",
+                Manual: "Manual",
                 auto: "Auto",
+                Auto: "Auto",
                 date: "Date",
                 startDate: "Start date",
                 endDate: "End date",
@@ -318,7 +330,8 @@ i18n.use(initReactI18next).init({
                 busSchedule__report: "Bus Schedule report",
                 Schedule: "Schedule",
                 countOfBus: "Count of Bus",
-                countOfSeatInEveryBus: "Count of seat in every Bus",
+                // countOfSeatInEveryBus: "Count of seat in every Bus",
+                countOfSeatInEveryBus: "Total seats",
                 busReports: "Bus Reports History",
                 Date: "Date",
                 Project: "Project",
@@ -340,10 +353,22 @@ i18n.use(initReactI18next).init({
                 fromProject: 'From Project',
                 selectToProject: 'Select to Project',
                 selectFromProject: "Select from Project",
+
+                Camps: "Camps",
+                Camp: "Camp",
+                selectCamp: "Select Camp"
             }
         },
         ru: {
             translation: {
+                // checkType: "checkType",
+                enterCheckType: "Введите тип проверки",
+                selectCheckType: "Выберите тип проверки",
+                checkStatus: "Проверить статус",
+                enterCheckStatus: "Введите статус проверки",
+                selectCheckStatus: "Выберите Проверить статус",
+
+                subcontractors: "Субподрядчики",
                 enterOrder: "Введите заказ",
                 order: "Заказ",
                 enterNote: "Введите примечание",
@@ -373,10 +398,12 @@ i18n.use(initReactI18next).init({
                 tabBar__allTasks: "Все задачи",
                 tabBar_overTime: "Сверхурочная работа",
                 overTime: "Запрос на сверхурочную работу",
+                OverTime: "Запрос на сверхурочную работу",
                 overTime_btn: "Запросить",
                 overTime__description: "Хотите подать заявку на сверхурочную работу",
                 overTimeOut: "Вне сверхурочной работы",
                 normal: "Нормальный",
+                Normal: "Нормальный",
                 loadMore: "Загрузить больше",
 
                 checkInDate: "Дата входа",
@@ -547,7 +574,9 @@ i18n.use(initReactI18next).init({
                 startCompleteRequestSended: "Задача начата",
                 startCompleteRequestSended__description: "Задача была успешно начата",
                 manual: "Ручной",
+                Manual: "Ручной",
                 auto: "Автоматически",
+                Auto: "Автоматически",
                 date: "Дата",
                 startDate: "Дата начала",
                 endDate: "Дата окончания",
@@ -649,7 +678,8 @@ i18n.use(initReactI18next).init({
                 "busSchedule__report": "Отчет по графику автобусов",
                 "Schedule": "График",
                 "countOfBus": "Количество автобусов",
-                "countOfSeatInEveryBus": "Количество мест в каждом автобусе",
+                // "countOfSeatInEveryBus": "Количество мест в каждом автобусе",
+                "countOfSeatInEveryBus": "Всего мест",
                 "busReports": "История отчетов по автобусам",
                 "Date": "Дата",
                 "Project": "Проект",
@@ -670,10 +700,22 @@ i18n.use(initReactI18next).init({
                 fromProject: 'из проекта',
                 selectToProject: 'Выбрать для проекта',
                 selectFromProject: 'Выберите из проекта',
+
+                Camps: "Лагеря",
+                Camp: "Лагерь",
+                selectCamp: "Выберите лагерь"
             }
         },
         uz: {
             translation: {
+                // checkType: "checkType",
+                enterCheckType: "Tekshirish turini kiriting",
+                selectCheckType: "Tekshirish turini tanlang",
+                checkStatus: "Holatni tekshirish",
+                enterCheckStatus: "Tekshirish holatini kiriting",
+                selectCheckStatus: "Holatni tekshirish-ni tanlang",
+
+                subcontractors: "Subpudratchilar",
                 enterOrder: "Buyurtmani kiriting",
                 order: "Buyurtma",
                 enterNote: "Izohni kiriting",
@@ -980,7 +1022,8 @@ i18n.use(initReactI18next).init({
                 "busSchedule__report": "Avtobus jadvali hisoboti",
                 "Schedule": "Jadval",
                 "countOfBus": "Avtobuslar soni",
-                "countOfSeatInEveryBus": "Har bir avtobusdagi o'rindiqlar soni",
+                // "countOfSeatInEveryBus": "Har bir avtobusdagi o'rindiqlar soni",
+                "countOfSeatInEveryBus": "Jami o'rindiqlar",
                 "busReports": "Avtobus hisobotlari tarixi",
                 "Date": "Sana",
                 "Project": "Loyiha",
@@ -1001,6 +1044,10 @@ i18n.use(initReactI18next).init({
                 fromProject: 'Loyihadan',
                 selectToProject: 'Loyihalash uchun tanlang',
                 selectFromProject: 'Loyihadan tanlang',
+
+                Camps: "Lagerlar",
+                Camp: "Lager",
+                selectCamp: "Lagerni tanlang"
             }
         }
     },

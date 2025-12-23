@@ -147,6 +147,7 @@ export default function TimeKeeperUserScreen() {
                         role={emp?.employee?.role?.name}
                         position={emp?.employee?.position}
                         time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                        checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                         image={emp?.employee?.image}
                         editable={false}
                         project={emp?.project?.name}

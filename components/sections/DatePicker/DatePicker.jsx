@@ -93,7 +93,7 @@ const styles2 = StyleSheet.create({
 });
 
 export default function SgSectionDatePicker(props) {
-    const {value, onChange} = props;
+    const {value, onChange, userMode} = props;
 
     const [date, setDate] = useState(value);
     const [mode, setMode] = useState('date');
@@ -127,23 +127,29 @@ export default function SgSectionDatePicker(props) {
     return (
         <View style={styles.container}>
             <View style={styles.inputRow}>
-                <Pressable
-                    onPress={showDatepicker}
-                    style={styles.input}
-                >
-                    <Text>
-                        {date ? moment(date).format('MMM D, YYYY') : 'Select Date'}
-                    </Text>
-                </Pressable>
+                {['date-time', 'date'].includes(userMode) ?
+                    <Pressable
+                        onPress={showDatepicker}
+                        style={styles.input}
+                    >
+                        <Text>
+                            {date ? moment(date).format('MMM D, YYYY') : 'Select Date'}
+                        </Text>
+                    </Pressable>
+                    : null
+                }
 
-                <Pressable
-                    onPress={showTimepicker}
-                    style={styles.input}
-                >
-                    <Text>
-                        {date ? moment(date).format('HH:mm') : 'Select Time'}
-                    </Text>
-                </Pressable>
+                {['date-time', 'time'].includes(userMode) ?
+                    <Pressable
+                        onPress={showTimepicker}
+                        style={styles.input}
+                    >
+                        <Text>
+                            {date ? moment(date).format('HH:mm') : 'Select Time'}
+                        </Text>
+                    </Pressable>
+                    : null
+                }
             </View>
 
             {show && (
@@ -151,7 +157,7 @@ export default function SgSectionDatePicker(props) {
                     testID="dateTimePicker"
                     value={date}
                     display={Platform.OS === "ios" ? "spinner" : "default"}
-                    textColor="black"   // yalnız iOS
+                    textColor="black"
                     mode={mode}
                     is24Hour={true}
                     onChange={handleChange}

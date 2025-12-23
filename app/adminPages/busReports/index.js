@@ -16,6 +16,7 @@ export default function ProjectItemScreen() {
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
     const [projects, setProjects] = useState([]);
+    const [camps, setCamps] = useState([]);
     const [tripTypeList, setTripTypeList] = useState([
         {
             id: 1,
@@ -23,22 +24,22 @@ export default function ProjectItemScreen() {
             render: <Text>Day Main</Text>,
         },
         {
-            id: 2,
+            id: 3,
             name: 'Night Main',
             render: <Text>Night Main</Text>,
         },
         {
-            id: 3,
+            id: 2,
             name: 'Additional',
             render: <Text>Additional</Text>,
         },
         {
-            id: 4,
+            id: 5,
             name: 'UFMS',
             render: <Text>UFMS</Text>,
         },
         {
-            id: 5,
+            id: 4,
             name: 'Airport',
             render: <Text>Airport</Text>,
         }
@@ -63,6 +64,12 @@ export default function ProjectItemScreen() {
         }).catch(err => {
             console.log(err);
         })
+        request({
+            url: '/admin/options/camps', method: 'get',
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
 
         return () => {
             setProjects([])
@@ -79,13 +86,17 @@ export default function ProjectItemScreen() {
         setProjects(storeData?.cache?.[`GET:/admin/options/projects`]?.data)
     }, [storeData?.cache?.[`GET:/admin/options/projects`]])
 
+    useEffect(() => {
+        setCamps(storeData?.cache?.[`GET:/admin/options/camps`]?.data)
+    }, [storeData?.cache?.[`GET:/admin/options/camps`]])
+
 
     return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: t('busReports')
             }}/>}
         >
-            <View style={{gap: 12}}>
+            <View style={{gap: 0}}>
                 {(list || []).map((item, index) => {
                     return (
                         <CollapsibleView key={index} title={`${item?.project_name} ${item.date ? `- ${moment(item.date).format('DD/MM/YYYY')}` : ''}`}>
@@ -124,9 +135,13 @@ export default function ProjectItemScreen() {
                                         <Text style={{fontSize: 16, fontWeight: '700'}}>{(projects || []).find(el => el.id === item?.to_project_id)?.name}</Text>
                                     </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
-                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('fromProject')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{(projects || []).find(el => el.id === item?.from_project_id)?.name}</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('Camp')}:</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{(camps || []).find(el => el.id === item?.camp_id)?.name}</Text>
                                     </View>
+                                    {/*<View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>*/}
+                                    {/*    <Text style={{fontSize: 16, fontWeight: '400'}}>{t('fromProject')}:</Text>*/}
+                                    {/*    <Text style={{fontSize: 16, fontWeight: '700'}}>{(projects || []).find(el => el.id === item?.from_project_id)?.name}</Text>*/}
+                                    {/*</View>*/}
                                 </View>
                             </View>
                         </CollapsibleView>

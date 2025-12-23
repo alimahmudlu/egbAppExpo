@@ -14,10 +14,16 @@ export default function SgDatePicker(props) {
         value,
         name,
         onChangeText,
-        isInvalid
+        isInvalid,
+        mode = 'date-time' // date | time | date-time
     } = props;
     const [datePickerModal, setDatePickerModal] = useState(false);
     const [newDate, setNewDate] = useState(value);
+    const formats = {
+        'date': 'YYYY-MM-DD',
+        'time': 'HH:mm',
+        'date-time': 'YYYY-MM-DD HH:mm'
+    }
 
     function toggleDatePickerModal() {
         setDatePickerModal(!datePickerModal);
@@ -32,7 +38,7 @@ export default function SgDatePicker(props) {
                     onPress={toggleDatePickerModal}
                     style={styles.input}
                 >
-                    <Text style={{color: COLORS.gray_400}}>{value ? moment(value).format('YYYY-MM-DD HH:mm') : placeholder}</Text>
+                    <Text style={{color: COLORS.gray_400}}>{value ? moment(value).format(formats?.[mode]) : placeholder}</Text>
                 </Pressable>
             </View>
         </View>
@@ -53,7 +59,7 @@ export default function SgDatePicker(props) {
                 </SgButton>
             }
         >
-            <SgSectionDatePicker value={value ? new Date(value) : new Date()} onChange={(data) => {
+            <SgSectionDatePicker userMode={mode} value={value ? new Date(value) : new Date()} onChange={(data) => {
                 setNewDate(data)
             }} />
         </SgPopup>

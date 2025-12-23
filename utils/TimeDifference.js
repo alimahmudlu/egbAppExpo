@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import moment from 'moment'
+import { Text } from 'react-native';
+import moment from 'moment';
 
 const SgUtilsTimeDifference = ({ startTime }) => {
     const [diff, setDiff] = useState('--:--:--');
@@ -8,36 +8,27 @@ const SgUtilsTimeDifference = ({ startTime }) => {
     useEffect(() => {
         if (startTime) {
             const interval = setInterval(() => {
-//                const momentNow = moment().utc();
-//                const now = new Date(momentNow);
-//                const start = new Date(startTime);
-//                let diffMs = Math.max(0, now - start);
-//
-//                console.log(now, start)
-//
-//                const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
-//                diffMs %= 1000 * 60 * 60;
-//
-//                const minutes = String(Math.floor(diffMs / (1000 * 60))).padStart(2, '0');
-//                diffMs %= 1000 * 60;
-//
-//                const seconds = String(Math.floor(diffMs / 1000)).padStart(2, '0');
-//
-//                setDiff(`${hours}:${minutes}:${seconds}`);
+                const nowUtc = moment.utc();
+                const startUtc = moment.utc(startTime);
 
-                    const now = moment();
-                      // Use end or now, depending on your use case
-                      const diff = moment.duration(now.diff(startTime));
-                      const hours = Math.floor(diff.asHours());
-                      const minutes = diff.minutes();
-                      const seconds = diff.seconds();
+                const duration = moment.duration(nowUtc.diff(startUtc));
 
-                setDiff(`${hours}:${minutes}:${seconds}`);
+                if (duration.asMilliseconds() < 0) {
+                    setDiff("0:00:00");
+                    return;
+                }
+
+                const hours = Math.floor(duration.asHours());
+                const minutes = duration.minutes();
+                const seconds = duration.seconds();
+
+                const formatted = `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                setDiff(formatted);
             }, 1000);
 
             return () => clearInterval(interval);
         }
-
     }, [startTime]);
 
     return (

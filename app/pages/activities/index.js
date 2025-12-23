@@ -155,22 +155,22 @@ export default function TimeKeeperUserScreen() {
                 </View>
             </View>
 
-            <View style={[styles.rowBetween]}>
-                {item.entry_latitude ?
-                    <TouchableOpacity onPress={() => openMap(item.entry_latitude, item.entry_longitude)}>
-                        <Text style={styles.link}>{t('checkInLocation')}</Text>
-                    </TouchableOpacity>
-                    :
-                    <Text>---</Text>
-                }
-                {item.exit_latitude ?
-                    <TouchableOpacity onPress={() => openMap(item.exit_latitude, item.exit_longitude)}>
-                        <Text style={styles.link}>{t('checkOutLocation')}</Text>
-                    </TouchableOpacity>
-                    :
-                    <Text>---</Text>
-                }
-            </View>
+            {/*<View style={[styles.rowBetween]}>*/}
+            {/*    {item.entry_latitude ?*/}
+            {/*        <TouchableOpacity onPress={() => openMap(item.entry_latitude, item.entry_longitude)}>*/}
+            {/*            <Text style={styles.link}>{t('checkInLocation')}</Text>*/}
+            {/*        </TouchableOpacity>*/}
+            {/*        :*/}
+            {/*        <Text>---</Text>*/}
+            {/*    }*/}
+            {/*    {item.exit_latitude ?*/}
+            {/*        <TouchableOpacity onPress={() => openMap(item.exit_latitude, item.exit_longitude)}>*/}
+            {/*            <Text style={styles.link}>{t('checkOutLocation')}</Text>*/}
+            {/*        </TouchableOpacity>*/}
+            {/*        :*/}
+            {/*        <Text>---</Text>*/}
+            {/*    }*/}
+            {/*</View>*/}
 
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
@@ -211,6 +211,21 @@ export default function TimeKeeperUserScreen() {
                     </Text>
                 </View>
             </View>
+            <View style={styles.rowBetween}>
+                <View style={styles.flex1}>
+                    <Text style={styles.label}>{t('checkStatus')}</Text>
+                    <Text style={styles.value}>
+                        {item.is_manual ? t('Manual') : t('Auto')}
+                    </Text>
+                </View>
+                <View style={[styles.flex1, styles.alignRight]}>
+                    <Text style={styles.label}>{t('checkType')}</Text>
+                    <Text style={{...styles.value, textAlign: "right"}}>
+                        {item.entry_type === 1 && t('Normal')}
+                        {item.entry_type === 3 && t('OverTime')}
+                    </Text>
+                </View>
+            </View>
 
             <View style={styles.center}>
                 <Text style={styles.badge}>{t('workHours')}: {item.work_duration || '00:00'}</Text>
@@ -239,14 +254,14 @@ export default function TimeKeeperUserScreen() {
                     {
                         element: (
                             <>
-                                <View>
-                                    {employeeActivities?.filter(el => el.type === 1).map((emp, index) => (
+                                <View style={{gap: 16}}>
+                                    {employeeActivities?.filter(el => (el.type === 1 || el.type === 3)).map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
-                                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                            checkType={`${emp?.manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}
@@ -263,14 +278,14 @@ export default function TimeKeeperUserScreen() {
                     {
                         element: (
                             <>
-                                <View>
-                                    {employeeActivities?.filter(el => el.type === 2).map((emp, index) => (
+                                <View style={{gap: 16}}>
+                                    {employeeActivities?.filter(el => (el.type === 2 || el.type === 4)).map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
-                                            checkType={emp?.employee?.manual ? t('manual') : t('auto')}
+                                            checkType={`${emp?.manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}
@@ -287,7 +302,7 @@ export default function TimeKeeperUserScreen() {
                     {
                         element: (
                             <>
-                                <View>
+                                <View style={{gap: 16}}>
                                     {employeeWorkHours?.map((item, index) => (
                                         <RenderItem
                                             key={index}
