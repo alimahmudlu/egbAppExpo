@@ -120,6 +120,16 @@ export default function WorkerTabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="reports/index"
+                options={{
+                    title: t('tabBar__reports'),
+                    tabBarLabel: t('tabBar__reports'),
+                    headerTitle: t('tabBar__reports'),
+                    tabBarIcon: ({color, focused}) => focused ? <ProjectsActiveIcon width={20} height={20}/> :
+                        <ProjectsIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
                 name="menu/index"
                 options={{
                     title: t('tabBar__menu'),
