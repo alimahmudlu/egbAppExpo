@@ -9,13 +9,14 @@ import SgInput from "@/components/ui/Input/Input";
 import moment from "moment";
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useApi} from "@/hooks/useApi";
-import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
 import {useData} from "@/hooks/useData";
 import SgSelect from "@/components/ui/Select/Select";
 
 
 export default function ChiefMenuScreen() {
     const {t} = useTranslation();
+    const router = useRouter();
     const {request} = useApi();
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
@@ -89,6 +90,7 @@ export default function ChiefMenuScreen() {
         }).then(res => {
             setData({});
             getData();
+            router.replace(`/adminPages/busReports?project_id=${selectedRow?.project_id}`);
         }).catch(err => {
             console.log(err);
         })

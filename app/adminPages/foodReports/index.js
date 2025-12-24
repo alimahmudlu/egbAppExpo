@@ -24,7 +24,6 @@ export default function ProjectItemScreen() {
     const {request} = useApi();
     const {storeData, updateData} = useData();
     const {refreshKey, project_id} = useLocalSearchParams();
-    const zzz = useLocalSearchParams();
     const {t} = useTranslation();
 
     const [reportData, setReportData] = useState({});
@@ -113,7 +112,6 @@ export default function ProjectItemScreen() {
         })
 
         return () => {
-            console.log('fooooood tab lost focus');
             setProjectsList([])
             setList([])
             updateData(`GET:/admin/food/report/list`, {data: []})
@@ -221,9 +219,13 @@ export default function ProjectItemScreen() {
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1strest')}:</Text>
                                         <Text style={{fontSize: 16, fontWeight: '700'}}>{item.rest}</Text>
                                     </View>
-                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
+                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('turn1stmissing')}:</Text>
                                         <Text style={{fontSize: 16, fontWeight: '700'}}>{item.missing}</Text>
+                                    </View>
+                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#eee', paddingTop: 8, paddingBottom: 8}}>
+                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('consumed')}:</Text>
+                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{item.real}</Text>
                                     </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('note')}:</Text>

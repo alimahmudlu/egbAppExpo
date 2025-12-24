@@ -25,13 +25,15 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontStyle: 'normal',
     fontWeight: 400,
-    lineHeight: 18,
+    lineHeight: 16,
+    flex: 0
   },
 
   rightHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    maxWidth: 200
   },
 
   dots: {
@@ -133,7 +135,8 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    marginRight: 8,
+    // marginRight: 8,
+    width: 200 - 42,
   },
   statusText: {
     fontFamily: 'Inter, sans-serif',
@@ -141,6 +144,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 600,
     lineHeight: 14,
+    textAlign: 'center',
   },
 //   success: {
 //     backgroundColor: COLORS.,

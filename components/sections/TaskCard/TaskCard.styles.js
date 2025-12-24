@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: 700,
-    lineHeight: 30,
+    lineHeight: 18,
     // color: COLORS.gray_500,
       width: 30,
       height: 30,
