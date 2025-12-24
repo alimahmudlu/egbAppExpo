@@ -31,7 +31,6 @@ export default function EmployeeDocsScreen() {
         request({
             url: `/chief/task/clickup/list`, method: 'get', params: {..._filters, status: _filters?.status?.id}
         }).then(resp => {
-            console.log(resp?.data, 'ppppal');
         }).catch(err => {
             // console.log(err);
         })

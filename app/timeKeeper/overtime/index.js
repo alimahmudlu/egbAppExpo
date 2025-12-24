@@ -102,7 +102,6 @@ export default function EmployeeDocsScreen() {
             }
         };
         const handler2 = (data) => {
-            console.log(data, 'socket handler2')
             // removeRowData('GET:/timekeeper/activity/list', data?.data?.activity_id, 'id')
             // changeAddRowData('GET:/timekeeper/overtime/list', {
             //     completed_status: 1
@@ -528,7 +527,6 @@ export default function EmployeeDocsScreen() {
                                 activeOpacity={1}
                                 style={styles.checkboxContainer}
                                 onPress={() => {
-                                    console.log('subcontractors', filters?.subcontractors)
                                     handleChange({
                                         name: 'subcontractors',
                                         value: filters?.subcontractors ? 0 : 1

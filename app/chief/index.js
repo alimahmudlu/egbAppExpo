@@ -75,7 +75,6 @@ export default function EmployeeDashboardScreen() {
         if (!socket) return;
 
         const handler = (data) => {
-            console.log(data, 'data-socket')
             if (data?.data?.type === 1) {
                 setStoreData(prev => ({
                     ...prev, checkIn: data?.data?.status !== 3 ? data?.data : {

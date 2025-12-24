@@ -680,7 +680,6 @@ export default function EmployeeDashboardScreen() {
                                 activeOpacity={1}
                                 style={styles.checkboxContainer}
                                 onPress={() => {
-                                    console.log('subcontractors', filters?.subcontractors)
                                     handleChange({
                                         name: 'subcontractors',
                                         value: filters?.subcontractors ? 0 : 1
