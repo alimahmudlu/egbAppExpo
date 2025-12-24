@@ -24,6 +24,17 @@ export default function ChiefMenuScreen() {
         router.navigate(`/adminPages/create-report/${item?.project_id}`)
     }
 
+    function deleteReport(item) {
+        request({
+            method: "delete",
+            url: `/admin/food/report/delete/${item?.project_id}`,
+        }).then(res => {
+            getData();
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
     function getData() {
         request({
             url: '/admin/food/report/today', method: 'get',
@@ -91,14 +102,23 @@ export default function ChiefMenuScreen() {
                                         </View>
                                     </View>
                                     <View>
-                                        {item?.status ?
-                                            <SgButton
-                                                bgColor={COLORS.gray_600}
-                                                color={COLORS.white}
-                                                onPress={() => toggleReportModal(item)}
-                                            >
-                                                {t('ViewScheduleReport')}
-                                            </SgButton>
+                                        {(item?.breakfast?.id || item?.lunch?.id || item?.dinner?.id || item?.nightlunch?.id) ?
+                                            <View style={{gap: 6, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                <SgButton
+                                                    bgColor={COLORS.gray_600}
+                                                    color={COLORS.white}
+                                                    onPress={() => toggleReportModal(item)}
+                                                >
+                                                    {t('Edit')}
+                                                </SgButton>
+                                                <SgButton
+                                                    bgColor={COLORS.error_600}
+                                                    color={COLORS.white}
+                                                    onPress={() => deleteReport(item)}
+                                                >
+                                                    {t('Delete')}
+                                                </SgButton>
+                                            </View>
                                             :
                                             <SgButton
                                                 bgColor={COLORS.brand_600}

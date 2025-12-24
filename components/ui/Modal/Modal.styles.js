@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
       top: '-20',
+    marginBottom: '-20',
     // bottom: 0,
     // left: 0,
     // right: 0,

@@ -79,9 +79,9 @@ export default function ChiefMenuScreen() {
             data: {
                 ...data,
                 projectId: selectedRow?.project_id,
-                tripTypeId: data?.tripType?.id,
-                toProjectId: data?.toProject?.id || selectedRow?.project_id,
-                campId: data?.camp?.id,
+                tripTypeId: data?.tripType?.id || selectedRow?.report_status?.trip_type,
+                toProjectId: data?.toProject?.id || selectedRow?.report_status?.to_project_id || selectedRow?.project_id,
+                campId: data?.camp?.id || selectedRow?.report_status?.camp_id,
                 date: selectedRow?.date || moment().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
                 turn2employees: selectedRow?.turn2employees || 0
@@ -171,23 +171,13 @@ export default function ChiefMenuScreen() {
                                     </View>
                                 </View>
                                 <View>
-                                    {item?.report_status ?
-                                        <SgButton
-                                            bgColor={COLORS.gray_600}
-                                            color={COLORS.white}
-                                            onPress={() => toggleReportModal(item)}
-                                        >
-                                            {t('ViewScheduleReport')}
-                                        </SgButton>
-                                        :
-                                        <SgButton
-                                            bgColor={COLORS.brand_600}
-                                            color={COLORS.white}
-                                            onPress={() => toggleReportModal(item)}
-                                        >
-                                            {t('ScheduleABus')}
-                                        </SgButton>
-                                    }
+                                    <SgButton
+                                        bgColor={COLORS.brand_600}
+                                        color={COLORS.white}
+                                        onPress={() => toggleReportModal(item)}
+                                    >
+                                        {t('ScheduleABus')}
+                                    </SgButton>
                                 </View>
                             </View>
                         ))}
@@ -202,7 +192,7 @@ export default function ChiefMenuScreen() {
                 title={t('busSchedule__report')}
                 description={`${selectedRow?.project_name}`}
                 footerButton={
-                    selectedRow?.report_status ? null :
+
                         <SgButton
                             bgColor={COLORS.brand_600}
                             color={COLORS.white}
@@ -221,7 +211,7 @@ export default function ChiefMenuScreen() {
                             name='countOfBus'
                             onChangeText={handleChange}
                             type='number'
-                            disabled={selectedRow?.report_status}
+                            // disabled={selectedRow?.report_status}
                         />
                     </View>
                     <View>
@@ -232,7 +222,7 @@ export default function ChiefMenuScreen() {
                             name='countOfSeatInEveryBus'
                             onChangeText={handleChange}
                             type='number'
-                            disabled={selectedRow?.report_status}
+                            // disabled={selectedRow?.report_status}
                         />
                     </View>
 

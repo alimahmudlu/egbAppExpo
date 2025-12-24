@@ -251,6 +251,50 @@ export default function EmployeeDocsScreen() {
                                 ]}
                             />
                         </View>
+                        {/*<View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkStatus")}
+                                placeholder={t("enterCheckStatus")}
+                                modalTitle={t("selectCheckStatus")}
+                                value={filters?.checkStatus}
+                                name='checkStatus'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Manual'),
+                                        render: <View><Text>{t('Manual')}</Text></View>
+                                    },
+                                    {
+                                        id: 2,
+                                        name: t('Auto'),
+                                        render: <View><Text>{t('Auto')}</Text></View>
+                                    }
+                                ]}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkType")}
+                                placeholder={t("enterCheckType")}
+                                modalTitle={t("selectCheckType")}
+                                value={filters?.checkType}
+                                name='checkType'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Normal'),
+                                        render: <View><Text>{t('Normal')}</Text></View>
+                                    },
+                                    {
+                                        id: 3,
+                                        name: t('OverTime'),
+                                        render: <View><Text>{t('OverTime')}</Text></View>
+                                    }
+                                ]}
+                            />
+                        </View>*/}
                         <View style={{flex: 1}}>
                             <TouchableOpacity
                                 activeOpacity={1}
@@ -268,6 +312,28 @@ export default function EmployeeDocsScreen() {
                                     })}
                                 />
                                 <Text style={styles.checkboxLabel}>{t('iosUser')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                style={styles.checkboxContainer}
+                                onPress={() => {
+                                    console.log('subcontractors', filters?.subcontractors)
+                                    handleChange({
+                                        name: 'subcontractors',
+                                        value: filters?.subcontractors ? 0 : 1
+                                    })
+                                }}
+                            >
+                                <SgCheckbox
+                                    checked={filters?.subcontractors === 1}
+                                    onToggle={() => handleChange({
+                                        name: 'subcontractors',
+                                        value: filters?.subcontractors ? 0 : 1,
+                                    })}
+                                />
+                                <Text style={styles.checkboxLabel}>{t('subcontractors')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

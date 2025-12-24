@@ -106,7 +106,7 @@ export default function EmployeeDashboardScreen() {
         const handler = (data) => {
             if (data?.data?.type === 1) {
                 // insertDataWithPagination('GET:/timekeeper/activity/list/checkin', data?.data, 1)
-                getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
+                getData({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckIn)
             }
             if (data?.data?.type === 2) {
                 // insertDataWithPagination('GET:/timekeeper/activity/list/checkout', data?.data, 1)
@@ -114,7 +114,7 @@ export default function EmployeeDashboardScreen() {
                 //     ...prevState,
                 //     total: Number(prevState.total || 0) + 1,
                 // }))
-                getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
+                getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckOut)
             }
 
         };
@@ -219,9 +219,9 @@ export default function EmployeeDashboardScreen() {
         }).catch(err => {
         })
 
-        getData({...filters, project: (filters?.project || []).map(el => el.id)})
-        getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)})
-        getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)})
+        getData({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id})
+        getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id})
+        getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id})
 
         return () => {
             setProjectsList([])
@@ -311,19 +311,19 @@ export default function EmployeeDashboardScreen() {
 
     useEffect(() => {
         if (pageCheckIn) {
-            getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
+            getData({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckIn)
         }
     }, [pageCheckIn, getDataStatus])
 
     useEffect(() => {
         if (pageCheckOut) {
-            getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
+            getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckOut)
         }
     }, [pageCheckOut, getDataStatus])
 
     useEffect(() => {
         if (pageAtWork) {
-            getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageAtWork)
+            getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageAtWork)
         }
     }, [pageAtWork, getDataStatus])
 
@@ -346,9 +346,9 @@ export default function EmployeeDashboardScreen() {
     }
 
     function removeRowData(fullData, type) {
-        getData({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckIn)
-        getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageCheckOut)
-        getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id)}, 1, 10 * pageAtWork)
+        getData({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckIn)
+        getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckOut)
+        getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageAtWork)
     }
 
     return (
@@ -629,6 +629,50 @@ export default function EmployeeDashboardScreen() {
                                         id={project.id}
                                     />
                                 }))}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkStatus")}
+                                placeholder={t("enterCheckStatus")}
+                                modalTitle={t("selectCheckStatus")}
+                                value={filters?.checkStatus}
+                                name='checkStatus'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Manual'),
+                                        render: <View><Text>{t('Manual')}</Text></View>
+                                    },
+                                    {
+                                        id: 2,
+                                        name: t('Auto'),
+                                        render: <View><Text>{t('Auto')}</Text></View>
+                                    }
+                                ]}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkType")}
+                                placeholder={t("enterCheckType")}
+                                modalTitle={t("selectCheckType")}
+                                value={filters?.checkType}
+                                name='checkType'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Normal'),
+                                        render: <View><Text>{t('Normal')}</Text></View>
+                                    },
+                                    {
+                                        id: 3,
+                                        name: t('OverTime'),
+                                        render: <View><Text>{t('OverTime')}</Text></View>
+                                    }
+                                ]}
                             />
                         </View>
                         <View style={{flex: 1}}>

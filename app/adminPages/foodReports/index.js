@@ -64,7 +64,7 @@ export default function ProjectItemScreen() {
         request({
             url: `/admin/food/report/edit/${reportData?.id}`, method: 'post', data: _data
         }).then(res => {
-            getData();
+            getData({...filters, project: filters?.project?.id});
         }).catch(err => {
             console.log(err);
         })

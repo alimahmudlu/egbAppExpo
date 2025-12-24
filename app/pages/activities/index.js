@@ -57,14 +57,22 @@ export default function TimeKeeperUserScreen() {
         request({
             url: `/currentUser/activities/list`,
             method: 'get',
-            params: filters,
+            params: {
+                ...filters,
+                checkStatus: filters?.checkStatus?.id,
+                checkType: filters?.checkType?.id
+            },
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
         request({
             url: `/currentUser/activities/work_hours`,
             method: 'get',
-            params: filters,
+            params: {
+                ...filters,
+                checkStatus: filters?.checkStatus?.id,
+                checkType: filters?.checkType?.id
+            },
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
@@ -74,14 +82,22 @@ export default function TimeKeeperUserScreen() {
         request({
             url: `/currentUser/activities/list`,
             method: 'get',
-            params: filters,
+            params: {
+                ...filters,
+                checkStatus: filters?.checkStatus?.id,
+                checkType: filters?.checkType?.id
+            },
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
         request({
             url: `/currentUser/activities/work_hours`,
             method: 'get',
-            params: filters,
+            params: {
+                ...filters,
+                checkStatus: filters?.checkStatus?.id,
+                checkType: filters?.checkType?.id
+            },
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
@@ -215,7 +231,7 @@ export default function TimeKeeperUserScreen() {
                 <View style={styles.flex1}>
                     <Text style={styles.label}>{t('checkStatus')}</Text>
                     <Text style={styles.value}>
-                        {item.is_manual ? t('Manual') : t('Auto')}
+                        {item.entry_manual ? t('Manual') : t('Auto')}
                     </Text>
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
@@ -261,7 +277,7 @@ export default function TimeKeeperUserScreen() {
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
-                                            checkType={`${emp?.manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
+                                            checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}
@@ -285,7 +301,7 @@ export default function TimeKeeperUserScreen() {
                                             fullData={emp}
                                             title={emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
-                                            checkType={`${emp?.manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
+                                            checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                                             time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                                             image={emp?.employee?.image}
                                             editable={false}
@@ -402,6 +418,50 @@ export default function TimeKeeperUserScreen() {
                                 value={filters?.end_date}
                                 name='end_date'
                                 onChangeText={handleChange}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkStatus")}
+                                placeholder={t("enterCheckStatus")}
+                                modalTitle={t("selectCheckStatus")}
+                                value={filters?.checkStatus}
+                                name='checkStatus'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Manual'),
+                                        render: <View><Text>{t('Manual')}</Text></View>
+                                    },
+                                    {
+                                        id: 2,
+                                        name: t('Auto'),
+                                        render: <View><Text>{t('Auto')}</Text></View>
+                                    }
+                                ]}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("checkType")}
+                                placeholder={t("enterCheckType")}
+                                modalTitle={t("selectCheckType")}
+                                value={filters?.checkType}
+                                name='checkType'
+                                onChangeText={handleChange}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('Normal'),
+                                        render: <View><Text>{t('Normal')}</Text></View>
+                                    },
+                                    {
+                                        id: 3,
+                                        name: t('OverTime'),
+                                        render: <View><Text>{t('OverTime')}</Text></View>
+                                    }
+                                ]}
                             />
                         </View>
                     </View>
