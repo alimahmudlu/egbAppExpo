@@ -114,6 +114,7 @@ export default function EmployeeDashboardScreen() {
         if (!socket) return;
 
         const handler = (data) => {
+            console.log(data, 'employee socket update_activity')
             if (data?.data?.type === 1) {
                 setStoreData(prev => ({
                     ...prev,

@@ -9,6 +9,8 @@ import ProjectsActiveIcon from "@/assets/images/bag-active.svg";
 import ProjectsIcon from "@/assets/images/bag.svg";
 import MenuActiveIcon from "@/assets/images/menu-active.svg";
 import MenuIcon from "@/assets/images/menu.svg";
+import ReportsActiveIcon from "@/assets/images/bold.svg";
+import ReportsIcon from "@/assets/images/solid.svg";
 import {useData} from "@/hooks/useData";
 import {useSocket} from "@/hooks/useSocket";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";
@@ -125,8 +127,8 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__reports'),
                     tabBarLabel: t('tabBar__reports'),
                     headerTitle: t('tabBar__reports'),
-                    tabBarIcon: ({color, focused}) => focused ? <ProjectsActiveIcon width={20} height={20}/> :
-                        <ProjectsIcon width={20} height={20}/>
+                    tabBarIcon: ({color, focused}) => focused ? <ReportsActiveIcon width={20} height={20}/> :
+                        <ReportsIcon width={20} height={20}/>
                 }}
             />
             <Tabs.Screen

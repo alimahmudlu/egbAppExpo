@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, Dimensions, Text, ScrollView} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
@@ -53,17 +53,24 @@ export default function EmployeeDocsScreen() {
   const {storeData} = useData();
   const {refreshKey} = useLocalSearchParams();
   const {t} = useTranslation()
+  const [data, setData] = useState([])
 
 
   useFocusEffect(useCallback(() => {
+    request({
+      url: `/chief/reports/list`, method: 'get',
+    }).then(res => {
+    }).catch(err => {
+      console.log(err);
+    })
 
         return () => {};
       }, [refreshKey])
   );
 
-  // useEffect(() => {
-    // setDocList(storeData?.cache?.[`GET:/chief/doc/list`]?.data)
-  // }, [storeData?.cache?.[`GET:/chief/doc/list`]]);
+  useEffect(() => {
+    setData(storeData?.cache?.[`GET:/chief/reports/list`]?.data)
+  }, [storeData?.cache?.[`GET:/chief/reports/list`]]);
 
 
   return (
@@ -71,10 +78,8 @@ export default function EmployeeDocsScreen() {
       head={
         <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
           <SgSectionFileHead
-              title={t('myDocs')}
-              description={t('myDocs__description')}
-              iconText={t('seeExpiredDocs')}
-              href={`/employeePages/docs/archive`}
+              title={t('reports')}
+              // description={t('reports__description')}
           />
         </View>
       }
@@ -91,7 +96,7 @@ export default function EmployeeDocsScreen() {
       </ScrollView>
 
       <View style={styles.projectSection}>
-        {PROJECTS_DATA.map((project) => (
+        {(data || []).map((project) => (
             <View key={project.id} style={styles.projectBlock}>
 
               {/* Project Header */}
@@ -108,44 +113,44 @@ export default function EmployeeDocsScreen() {
               <View style={styles.gridContainer}>
                 {/* SIRA 1 */}
                 <View style={styles.gridItem}>
-                  <Text style={styles.gridLabel}>Employees</Text>
-                  <Text style={styles.gridValue}>{project.employees}</Text>
+                  <Text style={styles.gridLabel}>{t('Total_employee')}</Text>
+                  <Text style={styles.gridValue}>{project.member_count}</Text>
                 </View>
                 <View style={styles.gridItem}>
-                  <Text style={styles.gridLabel}>Ind. Emp.</Text>
-                  <Text style={styles.gridValue}>{project.indirect}</Text>
+                  <Text style={styles.gridLabel}>{t('Indirect_employee')}</Text>
+                  <Text style={styles.gridValue}>{project.indirect_member_count}</Text>
                 </View>
                 <View style={styles.gridItem}>
-                  <Text style={styles.gridLabel}>Dir. Emp.</Text>
-                  <Text style={styles.gridValue}>{project.direct}</Text>
+                  <Text style={styles.gridLabel}>{t('Direct_employee')}</Text>
+                  <Text style={styles.gridValue}>{project.direct_member_count}</Text>
                 </View>
 
                 {/* SIRA 2 */}
                 <View style={styles.gridItem}>
-                  <Text style={[styles.gridLabel, {color: '#10B981'}]}>Checked In</Text>
-                  <Text style={styles.gridValue}>{project.checkedIn}</Text>
+                  <Text style={styles.gridLabel}>{t('Total_check_in')}</Text>
+                  <Text style={styles.gridValue}>{project.total_checkin_count}</Text>
                 </View>
                 <View style={styles.gridItem}>
-                  <Text style={styles.gridLabel}>Ind. Checked</Text>
-                  <Text style={styles.gridValue}>{project.indChecked}</Text>
+                  <Text style={styles.gridLabel}>{t('Check_in_indirect_employee')}</Text>
+                  <Text style={styles.gridValue}>{project.indirect_checkin_count}</Text>
                 </View>
                 <View style={styles.gridItem}>
-                  <Text style={styles.gridLabel}>Dir. Checked</Text>
-                  <Text style={styles.gridValue}>{project.dirChecked}</Text>
+                  <Text style={styles.gridLabel}>{t('Check_in_direct_employee')}</Text>
+                  <Text style={styles.gridValue}>{project.direct_checkin_count}</Text>
                 </View>
 
                 {/* SIRA 3 */}
                 <View style={styles.gridItem}>
-                  <Text style={[styles.gridLabel, {color: '#EF4444'}]}>Not Checked</Text>
-                  <Text style={styles.gridValue}>{project.notChecked}</Text>
+                  <Text style={styles.gridLabel}>{t('Not_Checked_in_Employees')}</Text>
+                  <Text style={styles.gridValue}>{project?.member_count - project?.total_checkin_count}</Text>
                 </View>
                 <View style={styles.gridItem}>
-                  <Text style={styles.gridLabel}>Ind. Not Chk.</Text>
-                  <Text style={styles.gridValue}>{project.indNotChecked}</Text>
+                  <Text style={styles.gridLabel}>{t('Indirect_Not_Checked_in_Employees')}</Text>
+                  <Text style={styles.gridValue}>{project?.indirect_member_count - project?.indirect_checkin_count}</Text>
                 </View>
                 <View style={styles.gridItem}>
-                  <Text style={styles.gridLabel}>Dir. Not Chk.</Text>
-                  <Text style={styles.gridValue}>{project.dirNotChecked}</Text>
+                  <Text style={styles.gridLabel}>{t('Direct_Not_Checked_in_Employees')}</Text>
+                  <Text style={styles.gridValue}>{project?.direct_member_count - project?.direct_checkin_count}</Text>
                 </View>
               </View>
 
@@ -159,9 +164,6 @@ export default function EmployeeDocsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 20,
-  },
   summaryWrapper: {
     display: 'flex',
     flexDirection: 'row',
@@ -169,11 +171,10 @@ const styles = StyleSheet.create({
     gap: 16,
     // flexWrap: 'wrap', // Ekrana sığmasa aşağı düşməsi üçün
     // justifyContent: 'space-between',
-    paddingHorizontal: 20,
     marginBottom: 25,
   },
   summaryCard: {
-    minWidth: width / 2 + 20,
+    minWidth: width * 2 / 3,
     backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 16,
@@ -215,7 +216,6 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
   },
   projectSection: {
-    paddingHorizontal: 16,
   },
   projectBlock: {
     backgroundColor: '#FFFFFF',

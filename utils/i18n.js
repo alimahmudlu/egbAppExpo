@@ -8,6 +8,26 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                Total_employee: "Employees #",
+                Indirect_employee: "Indirect Employees #",
+                Direct_employee: "Direct Employees #",
+                Total_check_in: "Checked in Employees #",
+                Check_in_indirect_employee: "Indirect Checked in Employees #",
+                Check_in_direct_employee: "Direct Checked in Employees #",
+                Not_Checked_in_Employees: "Not Checked in Employees #",
+                Indirect_Not_Checked_in_Employees: "Indirect Not Checked in Employees #",
+                Direct_Not_Checked_in_Employees: "Direct Not Checked in Employees #",
+
+                reports: "Reports",
+                tabBar__reports: "Reports",
+                Replaced: "Replaced",
+                enterReplaced: "Enter Replaced",
+                selectReplaced: "Select Replaced",
+                Yes: "Yes",
+                No: "No",
+
+
+
                 // checkType: "checkType",
                 enterCheckType: "Enter Check Type",
                 selectCheckType: "Select Check Type",

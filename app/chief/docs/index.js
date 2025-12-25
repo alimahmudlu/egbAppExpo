@@ -355,7 +355,7 @@ export default function EmployeeDocsScreen() {
               title={t('myDocs')}
               description={t('myDocs__description')}
               iconText={t('seeExpiredDocs')}
-              href={`/employeePages/docs/archive`}
+              href={`/chiefPages/docs/archive`}
           />
         </View>
       }
