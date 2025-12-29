@@ -20,13 +20,20 @@ import FilterIcon from "@/assets/images/filter.svg";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import {useSocket} from "@/hooks/useSocket";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
+import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
+import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
+import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
+import LoginIcon from "@/assets/images/login.svg";
+import SgCard from "@/components/ui/Card/Card";
+import SgUtilsTimeDifference from "@/utils/TimeDifference";
+import Clock from "@/assets/images/clock.svg";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const [employees, setEmployees] = useState([]);
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
-    const {storeData, insertData, updateData, changeAddRowData, insertDataWithPagination} = useData();
+    const {storeData, setStoreData, insertData, updateData, changeAddRowData, insertDataWithPagination} = useData();
     const {socket} = useSocket();
     const [activeTab, setActiveTab] = useState('checkIn');
 
@@ -126,10 +133,6 @@ export default function EmployeeDocsScreen() {
             socket.off("update_activity", handler2);
         };
     }, [socket, pageCheckIn, pageCheckOut, pageAtWork, getDataStatus, filters]);
-
-    // useEffect(() => {
-    //     getData({...filters})
-    // }, [filters])
 
     useFocusEffect(useCallback(() => {
         getData()
@@ -232,15 +235,11 @@ export default function EmployeeDocsScreen() {
         setPageAtWork(pageAtWork + 1);
     }
 
-
-
     function removeRowData(fullData, type) {
         getData({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckIn)
         getDataCheckOut({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageCheckOut)
         getDataAtWork({...filters, project: (filters?.project || []).map(el => el.id), checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id}, 1, 10 * pageAtWork)
     }
-
-
 
     function handleChange(e) {
         setFilters({...filters, [e.name]: e.value});
@@ -259,6 +258,113 @@ export default function EmployeeDocsScreen() {
         setPageCheckIn(1)
         setPageCheckOut(1)
         setPageAtWork(1)
+
+        if (filters?.checkStatus?.id || filters?.checkType?.id) {
+            setActiveTab('atWork')
+        }
+    }
+
+
+
+    const [checkIn, setCheckIn] = useState({});
+    const [checkOut, setCheckOut] = useState({});
+    const [overTime, setOverTime] = useState({});
+    const [overTimeOut, setOverTimeOut] = useState({});
+    const [rejectInfoModal, setRejectInfoModal] = useState(false);
+    const [rejectInfoData, setRejectInfoData] = useState("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum");
+
+
+    useFocusEffect(useCallback(() => {
+        request({
+            url: `/admin/activity/`, method: 'get',
+        }).then(res => {
+            setStoreData(prev => ({
+                ...prev,
+                checkOut: (res?.data || []).find(el => el.type === 2) || {
+                    loading: true
+                },
+                checkIn: (res?.data || []).find(el => el.type === 1) || {
+                    loading: true
+                },
+                overTime: (res?.data || []).find(el => el.type === 3) || {
+                    loading: true
+                },
+                overTimeOut: (res?.data || []).find(el => el.type === 4) || {
+                    loading: true
+                },
+            }));
+        }).catch(err => {
+            setStoreData(prev => ({
+                ...prev, checkInData: {
+                    checkIn: null, checkOut: null,
+                }
+            }));
+        })
+
+        return () => {
+            console.log('Home tab lost focus');
+        };
+
+    }, [refreshKey]));
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handler = (data) => {
+            if (data?.data?.type === 1) {
+                console.log('update_activity', data?.data)
+                setStoreData(prev => ({
+                    ...prev,
+                    checkIn: data?.data?.status !== 3 ? data?.data : {
+                        status: 3, type: 1, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+            else if (data?.data?.type === 2) {
+                setStoreData(prev => ({
+                    ...prev,
+                    checkIn: {
+                        ...prev?.checkIn, completed_status: data?.data?.status !== 3 ? 1 : 0,
+                    },
+                    checkOut: data?.data?.status !== 3 ? data?.data : {
+                        status: 3, type: 2, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+            else if (data?.data?.type === 3) {
+                setStoreData(prev => ({
+                    ...prev,
+                    overTime: data?.data?.status !== 3 ? data?.data : {
+                        status: 3, type: 1, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+            else if (data?.data?.type === 4) {
+                setStoreData(prev => ({
+                    ...prev,
+
+                    overTime: {
+                        ...prev?.overTime, completed_status: data?.data?.status !== 3 ? 1 : 0,
+                    },
+                    overTimeOut: data?.data?.status !== 3 ? data?.data : {
+                        status: 3, type: 2, reject_reason: data?.data?.reject_reason
+                    },
+                }));
+            }
+        };
+
+        // socket.on('connect', () => {
+        socket.on("update_activity", handler);
+        // })
+
+        return () => {
+            socket.off("update_activity", handler);
+        };
+    }, [socket]);
+
+    function toggleRejectInfoModal(reject_reason) {
+        setRejectInfoData(reject_reason || '')
+        setRejectInfoModal(!rejectInfoModal);
     }
 
 
@@ -268,13 +374,83 @@ export default function EmployeeDocsScreen() {
                 <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
                     <SgSectionFileHead
                         title={t("overTime")}
-                        icon="filter"
-                        onPress={toggleFilterModal}
+                        // icon="filter"
+                        // onPress={toggleFilterModal}
                     />
                 </View>
 
             }
         >
+
+
+            {storeData?.overTime?.status === 3 ? <SgNoticeCard
+                icon={<LoginIcon width={20} height={20}/>}
+                title={t('checkInRejected')}
+                buttonText={t('rejectDetail')}
+                onClick={() => toggleRejectInfoModal(storeData?.overTime?.reject_reason)}
+                bgCard="danger"
+                bgButton="danger"
+            /> : null}
+            {storeData?.overTimeOut?.status === 3 ? <SgNoticeCard
+                icon={<LoginIcon width={20} height={20}/>}
+                title={t('checkOutRejected')}
+                buttonText={t('rejectDetail')}
+                onClick={() => toggleRejectInfoModal(storeData?.overTimeOut?.reject_reason)}
+                bgCard="danger"
+                bgButton="danger"
+            /> : null}
+
+            <SgCheckInOutGroup>
+                <SgCheckInOutCard
+                    employeeType={'admin'}
+                    type="overTime"
+                    title={t('overTime')}
+                    time={overTime?.status !== 3 ? (overTime?.review_time ? moment.tz(overTime?.review_time, overTime?.reviewer_timezone).format('HH:mm') : '') : ''}
+                    buttonLabel={t('overTime')}
+                    status={overTime?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    mapData={{
+                        overTime: {
+                            latitude: overTime?.latitude || 0, longitude: overTime?.longitude || 0,
+                        },
+                    }}
+                    reviewer={overTime?.reviewer || {}}
+                />
+
+                <SgCheckInOutCard
+                    employeeType={'admin'}
+                    type="overTimeOut"
+                    title={t('overTimeOut')}
+                    time={checkOut?.status !== 3 ? (overTimeOut?.review_time ? moment.tz(overTimeOut?.review_time, overTimeOut?.reviewer_timezone).format('HH:mm') : '') : ''}
+                    buttonLabel={t('overTimeOut')}
+                    status={overTimeOut?.status} // 0: not checked in, 1: waiting, 2: checked in
+                    checkInStatus={overTime?.status === 2}
+                    checkInId={overTime?.id}
+                    mapData={{
+                        overTimeOut: {
+                            latitude: overTimeOut?.latitude || 0, longitude: overTimeOut?.longitude || 0,
+                        },
+                    }}
+                    reviewer={overTimeOut?.reviewer || {}}
+                />
+            </SgCheckInOutGroup>
+
+
+            <SgCard
+                title={t('workTime')}
+                time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
+                    startTime={overTime?.review_time ? moment(overTime?.review_time).format('') : null}/>}
+                icon={Clock}
+            />
+
+
+
+            <SgNoticeCard
+                title={t('requests')}
+                buttonText={<FilterIcon width={20} height={20}/>}
+                bgButton="lightSuccess"
+                onClick={toggleFilterModal}
+            />
+
             <SgFilterTab
                 defaultTabId={activeTab || 'checkIn'}
                 tabs={[
@@ -500,7 +676,7 @@ export default function EmployeeDocsScreen() {
                                 ]}
                             />
                         </View>
-                        <View style={{flex: 1}}>
+                        {/*<View style={{flex: 1}}>
                             <SgSelect
                                 label={t("checkType")}
                                 placeholder={t("enterCheckType")}
@@ -521,7 +697,7 @@ export default function EmployeeDocsScreen() {
                                     }
                                 ]}
                             />
-                        </View>
+                        </View>*/}
                         <View style={{flex: 1}}>
                             <TouchableOpacity
                                 activeOpacity={1}

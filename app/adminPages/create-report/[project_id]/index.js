@@ -153,6 +153,7 @@ export default function ChiefMenuScreen() {
             }}/>}
         >
             <View style={{gap: 32}}>
+                <Text style={{textAlign: 'center', fontWeight: 600}}>DATE: {moment().format('DD/MM/YYYY')}</Text>
                 <View style={{gap: 16}}>
                     <Text style={{fontSize: 18, fontWeight: 700, textAlign: 'center'}}>{t('DayShift')}</Text>
 

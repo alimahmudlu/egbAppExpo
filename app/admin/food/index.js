@@ -25,11 +25,16 @@ export default function ChiefMenuScreen() {
     }
 
     function deleteReport(item) {
+        const date = item?.breakfast?.date;
         request({
             method: "delete",
             url: `/admin/food/report/delete/${item?.project_id}`,
+            params: {
+                date: date
+            }
         }).then(res => {
             getData();
+            console.log(res);
         }).catch(err => {
             console.log(err);
         })

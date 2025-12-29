@@ -5,10 +5,10 @@ import Clock from "@/assets/images/clock.svg";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {StyleSheet, Text} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import SgUtilsTimeDifference from "@/utils/TimeDifference";
@@ -19,6 +19,12 @@ import LoginIcon from "@/assets/images/login.svg";
 import COLORS from "@/constants/colors";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
+import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import SgButton from "@/components/ui/Button/Button";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
+import SgInput from "@/components/ui/Input/Input";
+import SgSelect from "@/components/ui/Select/Select";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 
 export default function EmployeeDashboardScreen() {
     const {user, getRating} = useAuth();
@@ -35,6 +41,27 @@ export default function EmployeeDashboardScreen() {
     const {socket} = useSocket();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
+    const [filters, setFilters] = useState({})
+    const [filterModal, setFilterModal] = useState(false)
+    const [getDataStatus, setDataStatus] = useState(false)
+    const [taskList, setTaskList] = useState([]);
+
+
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
+    }
+
+    function handleChange(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
+
+    function resetFilters() {
+        setFilters({});
+    }
+
+    function handleFilters() {
+        setDataStatus(!getDataStatus)
+    }
 
     useFocusEffect(useCallback(() => {
         request({
@@ -61,6 +88,12 @@ export default function EmployeeDashboardScreen() {
                     checkIn: null, checkOut: null,
                 }
             }));
+        })
+
+        request({
+            url: '/employee/project/tasks', method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
         })
 
         getRating()
@@ -127,6 +160,10 @@ export default function EmployeeDashboardScreen() {
         setRejectInfoData(reject_reason || '')
         setRejectInfoModal(!rejectInfoModal);
     }
+
+    useEffect(() => {
+        setTaskList(storeData?.cache?.[`GET:/employee/project/tasks`]?.data)
+    }, [storeData?.cache?.[`GET:/employee/project/tasks`]])
 
     useEffect(() => {
         // Alert.alert('checkIn change')
@@ -202,6 +239,112 @@ export default function EmployeeDashboardScreen() {
                 startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}/>}
             icon={Clock}
         />
+
+        <SgCard>
+            <Text style={styles.title}>{t('myTasks')}</Text>
+        </SgCard>
+        {/*<SgNoticeCard
+            title={<Text style={styles.title}>{t('myTasks')}</Text>}
+            buttonText={<FilterIcon width={20} height={20}/>}
+            bgButton="lightSuccess"
+            onClick={toggleFilterModal}
+        />*/}
+
+        <View style={{gap: 12}}>
+            {(taskList || []).map((el, index) => {
+                return (
+                    <SgSectionTaskCard
+                        id={el?.id}
+                        projectId={el?.project_id}
+                        key={index}
+                        time={el?.deadline ? moment(el?.deadline).format('DD/MM/YYYY / HH:mm') : ''}
+                        duration={el?.points}
+                        title={el?.name}
+                        description={el?.description}
+                        name={el?.reporter_employee?.full_name}
+                        image={null}
+                        status={el?.status}
+                        href={`/employeePages/projects/${el?.project_id}/${el?.id}`}
+                    />
+                )
+            })}
+        </View>
+        <SgPopup
+            visible={rejectInfoModal}
+            onClose={toggleRejectInfoModal}
+            icon={<InfoCircleModalIcon width={50} height={50}/>}
+        >
+            <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
+            <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
+        </SgPopup>
+
+        <SgPopup
+            visible={filterModal}
+            onClose={toggleFilterModal}
+            footerButton={
+                <SgButton
+                    onPress={handleFilters}
+                    bgColor={COLORS.primary}
+                    color={COLORS.white}
+                >
+                    {t('accept')}
+                </SgButton>
+            }
+        >
+            <View style={{paddingBottom: 20}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+                    <SgButton
+                        onPress={resetFilters}
+                        color={COLORS.brand_700}
+                        style={{
+                            flex: 0,
+                            width: 'auto',
+                            marginLeft: 'auto',
+                            paddingVertical: 0,
+                            paddingHorizontal: 0,
+                            gap: 7
+                        }}
+
+                    >
+                        {t('clearFilters')}
+                        <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                    </SgButton>
+                </View>
+
+                <View style={{gap: 16}}>
+                    <View style={{flex: 1}}>
+                        <SgInput
+                            label={t('employeeName')}
+                            placeholder={t('employeeName_placeholder')}
+                            value={filters?.full_name}
+                            name='full_name'
+                            onChangeText={handleChange}
+                        />
+                    </View>
+                    <View style={{flex: 1}}>
+                        <SgSelect
+                            label={t("project")}
+                            placeholder={t("enterProject")}
+                            modalTitle={t("selectProject")}
+                            value={filters?.project}
+                            name='project'
+                            multiple={true}
+                            onChangeText={handleChange}
+                            list={(projectsList || []).map((project, index) => ({
+                                id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                    key={index}
+                                    title={project.name}
+                                    staffData={(project?.members || []).filter(el => el.status)}
+                                    id={project.id}
+                                />
+                            }))}
+                        />
+                    </View>
+                </View>
+            </View>
+        </SgPopup>
 
         <SgPopup
             visible={rejectInfoModal}

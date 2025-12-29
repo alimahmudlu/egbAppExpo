@@ -289,6 +289,7 @@ export default function EmployeeDashboardScreen() {
                 )
             })}
         </View>
+
         <SgPopup
             visible={rejectInfoModal}
             onClose={toggleRejectInfoModal}

@@ -157,6 +157,7 @@ export default function SgSectionEmployeeCard(props) {
 
 
     function handleSubmitAccept() {
+        setButtonStatus(true)
         ApiService.post('/timekeeper/activity/accept', {
             employee_id: fullData?.employee?.id,
             confirm_time: moment(),
@@ -169,7 +170,6 @@ export default function SgSectionEmployeeCard(props) {
                 'authorization': accessToken || ''
             }
         }).then(res => {
-            setButtonStatus(false)
             if (res.data.success) {
                 setAcceptCheckInModal(false);
                 setUserOperationModal(false)
@@ -223,6 +223,7 @@ export default function SgSectionEmployeeCard(props) {
             else {
                 Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
+            setButtonStatus(false)
         }).catch(err => {
             setButtonStatus(false)
             // console.log(err?.message)
@@ -231,6 +232,7 @@ export default function SgSectionEmployeeCard(props) {
     }
 
     function handleSubmitAcceptOverTime() {
+        setButtonStatus(true)
         ApiService.post('/timekeeper/overtime/accept', {
             employee_id: fullData?.employee?.id,
             confirm_time: moment(),
@@ -243,7 +245,6 @@ export default function SgSectionEmployeeCard(props) {
                 'authorization': accessToken || ''
             }
         }).then(res => {
-            setButtonStatus(false)
             if (res.data.success) {
                 // // setAcceptCheckInModal(false);
                 // // setAcceptedCheckInModal(false);
@@ -308,6 +309,7 @@ export default function SgSectionEmployeeCard(props) {
             else {
                 Alert.alert('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
+            setButtonStatus(false)
         }).catch(err => {
             setButtonStatus(false)
             // console.log(err?.message)
@@ -395,7 +397,6 @@ export default function SgSectionEmployeeCard(props) {
                 removeRowFromPaginationData(`GET:/timekeeper/overtime/list/checkin`, fullData)
                 removeRowFromPaginationData(`GET:/timekeeper/overtime/list/checkout`, fullData)
             }
-            setButtonStatus(false)
             if(isManualCheckoutAvailable() && atWork) {
                 // request({
                 //     url: '/timekeeper/activity/list', method: 'get'
@@ -429,6 +430,7 @@ export default function SgSectionEmployeeCard(props) {
                 });*/
             }
             toggleUserOperationModal()
+            setButtonStatus(false)
         }).catch(err => {
             console.log('err')
             console.log(err)

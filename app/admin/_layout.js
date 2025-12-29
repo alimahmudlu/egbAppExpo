@@ -11,6 +11,8 @@ import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "@/hooks/useAuth";
+import OvertimeActiveIcon from "@/assets/images/overtime-active.svg";
+import OvertimeIcon from "@/assets/images/overtime.svg";
 
 export default function WorkerTabLayout() {
     const {t} = useTranslation()
@@ -55,6 +57,17 @@ export default function WorkerTabLayout() {
                     headerTitle: t('tabBar__home'),
                     tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
                         <HomeIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
+                name="overTime/index"
+                options={{
+                    freezeOnBlur: false,
+                    title: t('tabBar__overTime'),
+                    tabBarLabel: t('tabBar__overTime'),
+                    headerTitle: t('tabBar__overTime'),
+                    tabBarIcon: ({color, focused}) => focused ? <OvertimeActiveIcon width={20} height={20}/> :
+                        <OvertimeIcon width={20} height={20}/>
                 }}
             />
             <Tabs.Screen

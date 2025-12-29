@@ -69,13 +69,23 @@ export default function ProjectItemScreen() {
 
     function toggleReportModal(item = {}) {
         setSelectedRow(item);
+        setData({
+            countOfBus: item?.bus_count,
+            countOfSeatInEveryBus: item?.seat_count,
+            projectId: item?.project_id,
+            tripTypeId: item?.trip_type,
+            toProjectId: item?.to_project_id || item?.project_id,
+            campId: item?.camp_id,
+            date: item?.date || moment().format('YYYY-MM-DD'),
+        })
         setReportModal(!reportModal);
     }
 
     function deleteReport(item) {
+        console.log(item, 'item')
         request({
             method: "delete",
-            url: `/admin/bus/report/delete/${item?.project_id}`,
+            url: `/admin/bus/report/delete/${item?.id}`,
         }).then(res => {
             getData();
         }).catch(err => {
@@ -95,7 +105,7 @@ export default function ProjectItemScreen() {
                 tripTypeId: data?.tripType?.id || selectedRow?.trip_type,
                 toProjectId: data?.toProject?.id || selectedRow?.to_project_id || selectedRow?.project_id,
                 campId: data?.camp?.id || selectedRow?.camp_id,
-                date: selectedRow?.date || moment().format('YYYY-MM-DD'),
+                date: selectedRow?.date || moment().utc().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
                 turn2employees: selectedRow?.turn2employees || 0
             },
@@ -341,7 +351,7 @@ export default function ProjectItemScreen() {
                     <SgInput
                         label={t('countOfBus')}
                         placeholder={t('countOfBus')}
-                        value={data?.countOfBus || selectedRow?.bus_count}
+                        value={data?.countOfBus || ''}
                         name='countOfBus'
                         onChangeText={handleChangeReport}
                         type='number'
@@ -352,7 +362,7 @@ export default function ProjectItemScreen() {
                     <SgInput
                         label={t('countOfSeatInEveryBus')}
                         placeholder={t('countOfSeatInEveryBus')}
-                        value={data?.countOfSeatInEveryBus || selectedRow?.seat_count}
+                        value={data?.countOfSeatInEveryBus || ''}
                         name='countOfSeatInEveryBus'
                         onChangeText={handleChangeReport}
                         type='number'
@@ -365,7 +375,7 @@ export default function ProjectItemScreen() {
                         label={t('tripType')}
                         placeholder={t('tripType')}
                         modalTitle={t('selectTripType')}
-                        value={data?.tripType || (tripTypeList || []).find(el => el.id === selectedRow?.trip_type)}
+                        value={data?.tripType || (tripTypeList || []).find(el => el.id === data?.tripTypeId) || ''}
                         name='tripType'
                         isInvalid={errors?.tripType}
                         onChangeText={handleChangeReport}
@@ -378,7 +388,7 @@ export default function ProjectItemScreen() {
                         label={t('Camps')}
                         placeholder={t('Camps')}
                         modalTitle={t('selectCamp')}
-                        value={data?.camp || (camps || []).find(el => (el.id === selectedRow?.camp_id))}
+                        value={data?.camp || (camps || []).find(el => (el.id === data?.campId)) || ''}
                         name='camp'
                         isInvalid={errors?.camp}
                         onChangeText={handleChangeReport}
@@ -395,7 +405,7 @@ export default function ProjectItemScreen() {
                         label={t('Project')}
                         placeholder={t('Project')}
                         modalTitle={t('selectProject')}
-                        value={data?.toProject || (projects || []).find(el => (el.id === selectedRow?.to_project_id || el.id === selectedRow?.project_id))}
+                        value={data?.toProject || (projects || []).find(el => (el.id === data?.toProjectId)) || ''}
                         name='toProject'
                         isInvalid={errors?.toProject}
                         onChangeText={handleChangeReport}

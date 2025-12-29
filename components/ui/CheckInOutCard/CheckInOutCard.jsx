@@ -16,6 +16,9 @@ import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
 import {useTranslation} from "react-i18next";
 import SgRadio from "@/components/ui/Radio/Radio";
+import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
+import SgCard from "@/components/ui/Card/Card";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function SgCheckInOutCard(props) {
     const {request} = useApi();
@@ -51,7 +54,16 @@ export default function SgCheckInOutCard(props) {
     const isOverTimeOut = type === 'overTimeOut';
     const backgroundColor = isCheckIn ? COLORS.brand_50 : (isOverTime ? COLORS.blue_50 : COLORS.error_100);
     const Icon = isCheckIn ? CheckIn : (isOverTime ? CheckIn : CheckOut);
-    const {t} = useTranslation()
+    const {t} = useTranslation();
+    const [rejectInfoModal, setRejectInfoModal] = useState(false);
+    const [rejectInfoData, setRejectInfoData] = useState({});
+    const { selectedLanguage } = useLanguage()
+
+
+    function toggleRejectInfoModal(reject_reason) {
+        setRejectInfoData(reject_reason || {})
+        setRejectInfoModal(!rejectInfoModal);
+    }
 
     function handleChangeConfirmType(type) {
         setConfirmType(type)
@@ -90,6 +102,8 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
+            console.log(err?.response?.data?.message, 'errr cc');
+            toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
 
@@ -126,6 +140,8 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
+            console.log(err?.response?.data?.message, 'errr cc');
+            toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
 
@@ -170,6 +186,8 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
+            console.log(err?.response?.data?.message, 'errr cc');
+            toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
 
@@ -212,6 +230,8 @@ export default function SgCheckInOutCard(props) {
             }
         }).catch(err => {
             setButtonStatus(false)
+            console.log(err?.response?.data?.message, 'errr cc');
+            toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
         toggleCheckOutModal()
@@ -801,6 +821,14 @@ export default function SgCheckInOutCard(props) {
                     </View>
                     : null
                 }
+            </SgPopup>
+            <SgPopup
+                visible={rejectInfoModal}
+                onClose={toggleRejectInfoModal}
+                icon={<InfoCircleModalIcon width={50} height={50}/>}
+                title={t('Error')}
+            >
+                <SgCard><Text style={styles.title}>{rejectInfoData?.[selectedLanguage?.id]}</Text></SgCard>
             </SgPopup>
         </View>
     );

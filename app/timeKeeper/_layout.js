@@ -64,6 +64,16 @@ export default function TimeKeeperTabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="tasks/index"
+                options={{
+                    title: t('tabBar__allTasks'),
+                    tabBarLabel: t('tabBar__allTasks'),
+                    headerTitle: t('tabBar__allTasks'),
+                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
+                        <HistoryIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
                 name="docs/index"
                 options={{
                     unmountOnBlur: true,

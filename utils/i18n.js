@@ -8,6 +8,7 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                Error: "Error",
                 Total_employee: "Employees #",
                 Indirect_employee: "Indirect Employees #",
                 Direct_employee: "Direct Employees #",
@@ -385,6 +386,7 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                Error: "Ошибка",
                 "Total_employee": "Общее кол-во сотрудников #",
                 "Indirect_employee": "Косвенные сотрудники #",
                 "Direct_employee": "Прямые сотрудники #",
@@ -753,6 +755,7 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                Error: "Xato",
                 "Total_employee": "Umumiy xodimlar soni #",
                 "Indirect_employee": "Bilvosita xodimlar #",
                 "Direct_employee": "Bevosita xodimlar #",

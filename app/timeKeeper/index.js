@@ -307,6 +307,10 @@ export default function EmployeeDashboardScreen() {
         setPageCheckIn(1)
         setPageCheckOut(1)
         setPageAtWork(1)
+
+        if (filters?.checkStatus?.id || filters?.checkType?.id) {
+            setActiveTab('atWork')
+        }
     }
 
     useEffect(() => {
@@ -653,7 +657,7 @@ export default function EmployeeDashboardScreen() {
                                 ]}
                             />
                         </View>
-                        <View style={{flex: 1}}>
+                        {/*<View style={{flex: 1}}>
                             <SgSelect
                                 label={t("checkType")}
                                 placeholder={t("enterCheckType")}
@@ -674,7 +678,7 @@ export default function EmployeeDashboardScreen() {
                                     }
                                 ]}
                             />
-                        </View>
+                        </View>*/}
                         <View style={{flex: 1}}>
                             <TouchableOpacity
                                 activeOpacity={1}
