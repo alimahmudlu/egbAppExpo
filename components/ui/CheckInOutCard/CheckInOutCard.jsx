@@ -102,7 +102,6 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err?.response?.data?.message, 'errr cc');
             toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
@@ -140,7 +139,6 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err?.response?.data?.message, 'errr cc');
             toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
@@ -186,7 +184,6 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err?.response?.data?.message, 'errr cc');
             toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
@@ -230,7 +227,6 @@ export default function SgCheckInOutCard(props) {
             }
         }).catch(err => {
             setButtonStatus(false)
-            console.log(err?.response?.data?.message, 'errr cc');
             toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
