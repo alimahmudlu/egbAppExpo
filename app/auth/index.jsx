@@ -35,12 +35,13 @@ export default function Login() {
     login(id, password).then((resp) => {
         if (!resp.success) {
             setErrorModalData(resp.error || 'Login failed');
-            // console.log(resp.error || 'Login failed');
+            console.log(resp.error || 'Login failed', 'iffffffffff');
             toggleErrorModal()
         }
     }).catch((error) => {
         setErrorModalData('Login failed 2');
-        // console.log(error, 'error');
+        console.log(error, 'error', 'catchhhhhhhhhhhhhhhhh');
+        toggleErrorModal()
     }).finally(() => {
         setTimeout(() => {
             setLoading(false)

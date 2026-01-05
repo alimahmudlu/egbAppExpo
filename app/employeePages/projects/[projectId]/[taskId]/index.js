@@ -42,6 +42,7 @@ export default function ProjectItemScreen() {
     const [selectedFiles, setSelectedFiles] = useState([])
 
     const toggleCompleteTaskModal = () => {
+        setSelectedFiles([])
         setCompleteTaskModal(!completeTaskModal);
     };
     const toggleCompleteTaskInfoModal = () => {
@@ -53,7 +54,7 @@ export default function ProjectItemScreen() {
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: 4,
+                status: 6,
                 files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
@@ -61,7 +62,7 @@ export default function ProjectItemScreen() {
             setTaskDetails({
                 ...taskDetails,
                 status: {
-                    id: 4,
+                    id: 6,
                     name: t('checkComplete')
                 },
                 files: []
@@ -70,9 +71,16 @@ export default function ProjectItemScreen() {
         }).catch(err => {
             // console.log(err)
         })
+        request({
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
+        })
     };
 
     const toggleCheckTaskModal = () => {
+        setSelectedFiles([])
         setCheckTaskModal(!checkTaskModal);
     };
     const toggleCheckTaskInfoModal = () => {
@@ -84,7 +92,8 @@ export default function ProjectItemScreen() {
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: 3
+                status: 3,
+                files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
             setTaskDetails({...taskDetails, status: {
@@ -94,6 +103,12 @@ export default function ProjectItemScreen() {
             toggleCheckTaskInfoModal();
         }).catch(err => {
             // console.log(err)
+        })
+        request({
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
         })
     };
 
@@ -109,7 +124,8 @@ export default function ProjectItemScreen() {
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: 2
+                status: 2,
+                files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
             setTaskDetails({...taskDetails, status: {
@@ -119,6 +135,12 @@ export default function ProjectItemScreen() {
             toggleStartTaskInfoModal();
         }).catch(err => {
             // console.log(err)
+        })
+        request({
+            url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
         })
     };
 
@@ -190,7 +212,7 @@ export default function ProjectItemScreen() {
             {taskDetails?.status?.id === 3 ?
                 <SgSectionStatusInfo
                     title={t("progress")}
-                    status={t("checkProgress")}
+                    status={t("Task_check_progress_requested")}
                     statusType="warning"
                 />
                 : null
@@ -198,16 +220,40 @@ export default function ProjectItemScreen() {
             {taskDetails?.status?.id === 4 ?
                 <SgSectionStatusInfo
                     title={t("progress")}
-                    status={t("checkComplete")}
-                    statusType="success"
+                    status={t("Task_check_progress_request_accepted_In_progress")}
+                    statusType="warning"
                 />
                 : null
             }
             {taskDetails?.status?.id === 5 ?
                 <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("Task_check_progress_request_denied_In_progress")}
+                    statusType="warning"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 6 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("Task_complete_requested")}
+                    statusType="warning"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 7 ?
+                <SgSectionStatusInfo
                     title={t("completed")}
-                    status={t("completed")}
+                    status={t("Task_complete_request_accepted_Done")}
                     statusType="success"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 8 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("Task_complete_request_denied_In_progress")}
+                    statusType="warning"
                 />
                 : null
             }
@@ -280,7 +326,7 @@ export default function ProjectItemScreen() {
                 : null
             }
 
-            {([2].includes(taskDetails?.status?.id)) ?
+            {([2, 4, 5, 8].includes(taskDetails?.status?.id)) ?
                 <View style={{
                     gap: 12,
                     flexDirection: 'row',
@@ -365,7 +411,27 @@ export default function ProjectItemScreen() {
                         {t('yesCheck')}
                     </SgButton>
                 }
-            />
+            >
+                <SgTemplateUploadScreen
+                    setSelectedFiles={setSelectedFiles}
+                    selectedFiles={selectedFiles}
+                />
+
+                {(selectedFiles || []).map((el, index) => (
+                    <SgSectionAddFile
+                        handleRemove={() => handleRemoveFile(index)}
+                        key={index}
+                        title={el?.name}
+                        type={el?.type}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
+                        url={el?.filepath}
+                        onPress={() => {
+                            // console.log('file.filename')
+                        }}
+                        remove={true}
+                    />
+                ))}
+            </SgPopup>
             <SgPopup
                 visible={checkTaskInfoModal}
                 onClose={toggleCheckTaskInfoModal}
@@ -391,7 +457,27 @@ export default function ProjectItemScreen() {
                         {t('yesCheck')}
                     </SgButton>
                 }
-            />
+            >
+                <SgTemplateUploadScreen
+                    setSelectedFiles={setSelectedFiles}
+                    selectedFiles={selectedFiles}
+                />
+
+                {(selectedFiles || []).map((el, index) => (
+                    <SgSectionAddFile
+                        handleRemove={() => handleRemoveFile(index)}
+                        key={index}
+                        title={el?.name}
+                        type={el?.type}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
+                        url={el?.filepath}
+                        onPress={() => {
+                            // console.log('file.filename')
+                        }}
+                        remove={true}
+                    />
+                ))}
+            </SgPopup>
             <SgPopup
                 visible={startTaskInfoModal}
                 onClose={toggleStartTaskInfoModal}

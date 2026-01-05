@@ -119,6 +119,7 @@ export default function ChiefMenuScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
+        console.log(storeData?.cache?.[`GET:/admin/food/report/today`]?.data, 'aaa')
         setToday(storeData?.cache?.[`GET:/admin/food/report/today`]?.data)
     }, [storeData?.cache?.[`GET:/admin/food/report/today`]])
 
@@ -128,6 +129,22 @@ export default function ChiefMenuScreen() {
             turn1employees: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.turn1employees,
             turn2employees: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.turn2employees,
         })
+        console.log({
+            turn1: {
+                breakfast: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.breakfast,
+                lunch: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.lunch,
+                dinner: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.dinner,
+            },
+            turn2: {
+                lunch: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.nightlunch,
+            },
+            turnextras: {
+                bread: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.bread,
+                kefir: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.kefir,
+                sugar: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.sugar,
+                tea: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.tea,
+            }
+        }, 'pros')
         setData({
             turn1: {
                 breakfast: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.breakfast,

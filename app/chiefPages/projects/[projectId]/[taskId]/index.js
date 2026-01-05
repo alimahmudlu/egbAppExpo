@@ -40,19 +40,19 @@ export default function ProjectItemScreen() {
     const toggleRejectedTaskInfoModal = () => {
         setRejectedTaskInfoModal(!rejectedTaskInfoModal);
     };
-    const handleRejectedTask = () => {
+    const handleRejectedTask = (status) => {
         request({
             url: `/chief/project/item/${projectId}/tasks/item/${taskId}/status`,
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: 2,
+                status: status,
             }
         }).then(res => {
             setTaskDetails({
                 ...taskDetails,
                 status: {
-                    id: 2,
+                    id: status,
                     name: 'In Progress'
                 },
                 files: []
@@ -75,13 +75,13 @@ export default function ProjectItemScreen() {
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: 5,
+                status: 7,
             }
         }).then(res => {
             setTaskDetails({
                 ...taskDetails,
                 status: {
-                    id: 5,
+                    id:75,
                     name: 'Completed'
                 },
                 files: []
@@ -104,11 +104,11 @@ export default function ProjectItemScreen() {
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: 2
+                status: 4
             }
         }).then(res => {
             setTaskDetails({...taskDetails, status: {
-                    id: 2,
+                    id: 4,
                     name: 'In progress'
                 }})
             toggleCheckedTaskInfoModal();
@@ -152,14 +152,14 @@ export default function ProjectItemScreen() {
                 size="lg"
                 clickable={`/chiefPages/users/${taskDetails?.assigned_employee?.id}/`}
             />
-            {/*{taskDetails?.status?.id === 1 ?*/}
+            {taskDetails?.status?.id === 1 ?
                 <SgSectionStatusInfo
-                    title={t("status")}
+                    title={t("open")}
                     status={t("open")}
                     statusType=""
                 />
-                {/*: null*/}
-            {/*}*/}
+                : null
+            }
             {taskDetails?.status?.id === 2 ?
                 <SgSectionStatusInfo
                     title={t("progress")}
@@ -171,7 +171,7 @@ export default function ProjectItemScreen() {
             {taskDetails?.status?.id === 3 ?
                 <SgSectionStatusInfo
                     title={t("progress")}
-                    status={t("checkProgress")}
+                    status={t("Task_check_progress_requested")}
                     statusType="warning"
                 />
                 : null
@@ -179,15 +179,39 @@ export default function ProjectItemScreen() {
             {taskDetails?.status?.id === 4 ?
                 <SgSectionStatusInfo
                     title={t("progress")}
-                    status={t("checkComplete")}
+                    status={t("Task_check_progress_request_accepted_In_progress")}
                     statusType="success"
                 />
                 : null
             }
             {taskDetails?.status?.id === 5 ?
                 <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("Task_check_progress_request_denied_In_progress")}
+                    statusType="success"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 6 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("Task_complete_requested")}
+                    statusType="success"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 7 ?
+                <SgSectionStatusInfo
                     title={t("completed")}
-                    status={t("completed")}
+                    status={t("Task_complete_request_accepted_Done")}
+                    statusType="success"
+                />
+                : null
+            }
+            {taskDetails?.status?.id === 8 ?
+                <SgSectionStatusInfo
+                    title={t("progress")}
+                    status={t("Task_complete_request_denied_In_progress")}
                     statusType="success"
                 />
                 : null
@@ -244,6 +268,13 @@ export default function ProjectItemScreen() {
                     flexDirection: 'row',
                 }}>
                     <SgButton
+                        bgColor = {COLORS.error_50}
+                        color= {COLORS.error_700}
+                        onPress={() => handleRejectedTask(5)}
+                    >
+                        {t('rejected')}
+                    </SgButton>
+                    <SgButton
                         bgColor = {COLORS.primary}
                         color= {COLORS.white}
                         onPress={toggleCheckedTaskModal}
@@ -254,7 +285,7 @@ export default function ProjectItemScreen() {
                 : null
             }
 
-            {taskDetails?.status?.id === 4 ?
+            {taskDetails?.status?.id === 6 ?
                 <View style={{
                     gap: 12,
                     flexDirection: 'row',
@@ -262,7 +293,7 @@ export default function ProjectItemScreen() {
                     <SgButton
                         bgColor = {COLORS.error_50}
                         color= {COLORS.error_700}
-                        onPress={handleRejectedTask}
+                        onPress={() => handleRejectedTask(8)}
                     >
                         {t('rejected')}
                     </SgButton>

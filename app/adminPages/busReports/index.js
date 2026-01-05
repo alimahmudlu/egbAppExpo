@@ -87,7 +87,7 @@ export default function ProjectItemScreen() {
             method: "delete",
             url: `/admin/bus/report/delete/${item?.id}`,
         }).then(res => {
-            getData();
+            getData({...filters, project: filters?.project?.id})
         }).catch(err => {
             console.log(err);
         })

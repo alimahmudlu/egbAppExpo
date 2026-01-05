@@ -8,6 +8,15 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                Task_complete_request_denied_In_progress: "Task complete request denied - In progress",
+                Task_complete_request_accepted_Done: "Task complete request accepted - Done",
+                Task_complete_requested: "Task complete requested",
+                Task_check_progress_request_denied_In_progress: "Task check progress request denied - In progress",
+                Task_check_progress_request_accepted_In_progress: "Task check progress request accepted - In progress",
+                Task_check_progress_requested: "Task check progress requested",
+
+
+
                 Error: "Error",
                 Total_employee: "Employees #",
                 Indirect_employee: "Indirect Employees #",
@@ -386,6 +395,14 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                Task_complete_request_denied_In_progress: "Запрос на завершение задачи отклонен - процессе",
+                Task_complete_request_accepted_Done: "Запрос на завершение задачи принят - Выполнено",
+                Task_complete_requested: "Запрос на завершение задачи запрошен",
+                Task_check_progress_request_denied_In_progress: "Запрос на проверку хода выполнения задачи отклонен - процессе",
+                Task_check_progress_request_accepted_In_progress: "Запрос на проверку хода выполнения задачи принят - В процессе",
+                Task_check_progress_requested: "Запрос на проверку хода выполнения задачи запрошен",
+
+
                 Error: "Ошибка",
                 "Total_employee": "Общее кол-во сотрудников #",
                 "Indirect_employee": "Косвенные сотрудники #",
@@ -755,6 +772,13 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                Task_complete_request_denied_In_progress: "Vazifa bajarilishi so'rovi rad etildi - Bajarilmoqda",
+                Task_complete_request_accepted_Done: "Vazifa bajarilishi so'rovi qabul qilindi - Bajarildi",
+                Task_complete_requested: "Vazifa bajarilishi so'rovi",
+                Task_check_progress_request_denied_In_progress: "Vazifa bajarilishini tekshirish so'rovi rad etildi - Bajarilmoqda",
+                Task_check_progress_request_accepted_In_progress: "Vazifa bajarilishini tekshirish so'rovi qabul qilindi - Bajarilmoqda",
+                Task_check_progress_requested: "Vazifa bajarilishini tekshirish so'rovi",
+
                 Error: "Xato",
                 "Total_employee": "Umumiy xodimlar soni #",
                 "Indirect_employee": "Bilvosita xodimlar #",
