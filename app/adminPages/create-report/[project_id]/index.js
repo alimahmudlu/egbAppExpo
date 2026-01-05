@@ -77,14 +77,14 @@ export default function ChiefMenuScreen() {
             url: "/admin/food/report/add",
             data: {
                 ...data,
-                date: moment().format('YYYY-MM-DD'),
+                date: moment().tz("Europe/Moscow").format('YYYY-MM-DD'),
                 project_id: selectedRow?.project_id,
                 turn1employees: selectedRow?.turn1employees || 0,
                 turn2employees: selectedRow?.turn2employees || 0,
             },
         }).then(res => {
             setData({
-                date: moment().format('YYYY-MM-DD')
+                date: moment().tz("Europe/Moscow").format('YYYY-MM-DD')
             })
             router.replace(`/adminPages/foodReports?project_id=${selectedRow?.project_id}`);
         }).catch(err => {

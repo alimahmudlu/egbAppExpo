@@ -352,6 +352,7 @@ i18n.use(initReactI18next).init({
                 Edit: "Edit",
                 Delete: "Delete",
                 AddReport: "Add Report",
+                EditReport: "Edit Report",
 
                 busSchedule: "Bus Schedule",
                 busSchedule__description: "Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule Bus Schedule ",
@@ -731,6 +732,7 @@ i18n.use(initReactI18next).init({
                 Edit: "Редактировать",
                 Delete: "Удалить",
                 "AddReport": "Добавить отчет",
+                "EditReport": "Редактировать отчет",
                 "busSchedule": "График автобусов",
                 "busSchedule__description": "Описание графика автобусов Описание графика автобусов Описание графика автобусов Описание графика автобусов Описание графика автобусов Описание графика автобусов",
                 "busSchedule__archive": "Отчеты",
@@ -1104,6 +1106,7 @@ i18n.use(initReactI18next).init({
                 Edit: "Tahrirlash",
                 Delete: "O'chirish",
                 "AddReport": "Hisobot qo'shish",
+                "EditReport": "Hisobotni tahrirlash",
                 "busSchedule": "Avtobus jadvali",
                 "busSchedule__description": "Avtobus jadvali tavsifi Avtobus jadvali tavsifi Avtobus jadvali tavsifi Avtobus jadvali tavsifi Avtobus jadvali tavsifi Avtobus jadvali tavsifi",
                 "busSchedule__archive": "Hisobotlar",

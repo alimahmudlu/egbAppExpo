@@ -123,11 +123,11 @@ export default function ProjectItemScreen() {
         if (project_id) {
             setFilters({
                 project: (projectsList || []).find(el => el.id === Number(project_id)),
-                date: moment().format('YYYY-MM-DD')
+                date: moment().tz("Europe/Moscow").format('YYYY-MM-DD')
             })
             getData({
                 project: Number(project_id),
-                date: moment().format('YYYY-MM-DD')
+                date: moment().tz("Europe/Moscow").format('YYYY-MM-DD')
             })
         }
     }, [project_id, projectsList]))
@@ -233,13 +233,23 @@ export default function ProjectItemScreen() {
                                     </View>
                                 </View>
                                 <View>
-                                    {item?.status !== 2 ?
+                                    {item?.status === 0 ?
                                         <SgButton
                                             bgColor={COLORS.brand_600}
                                             color={COLORS.white}
                                             onPress={(e) => toggleReportModal(e, item)}
                                         >
                                             {t('AddReport')}
+                                        </SgButton>
+                                        : null
+                                    }
+                                    {item?.status === 1 ?
+                                        <SgButton
+                                            bgColor={COLORS.brand_600}
+                                            color={COLORS.white}
+                                            onPress={(e) => toggleReportModal(e, item)}
+                                        >
+                                            {t('EditReport')}
                                         </SgButton>
                                         : null
                                     }
