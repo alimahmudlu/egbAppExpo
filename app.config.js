@@ -4,12 +4,12 @@ export default {
     "expo": {
         "name": "EGB",
         "slug": "egb-expo-app",
-        "version": "0.2.39",
+        "version": "0.3.1",
         "orientation": "default",
         "icon": "./assets/images/icon-color.png",
         "scheme": "egbappexpo",
         "userInterfaceStyle": "automatic",
-        "newArchEnabled": true,
+        "newArchEnabled": false,
         ios: {
             bundleIdentifier: "com.egb.egb",
             supportsTablet: true,
@@ -33,7 +33,7 @@ export default {
             package: "com.egb.egb",
             edgeToEdgeEnabled: true,
             usesCleartextTraffic: true,
-            versionCode: 39,
+            versionCode: 40,
             "softwareKeyboardLayoutMode": "resize",
             adaptiveIcon: {
                 foregroundImage: "./assets/images/icon-white.png",
@@ -88,7 +88,14 @@ export default {
                     }
                 }
             ],
-            // "expo-font",
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "allowNativeHeapPointerTagging": false
+                    }
+                }
+            ],
             "expo-secure-store"
         ],
         "experiments": {
