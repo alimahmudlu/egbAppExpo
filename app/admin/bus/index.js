@@ -82,6 +82,7 @@ export default function ChiefMenuScreen() {
                 projectId: selectedRow?.project_id,
                 tripTypeId: data?.tripType?.id || selectedRow?.report_status?.trip_type,
                 toProjectId: data?.toProject?.id || selectedRow?.report_status?.to_project_id || selectedRow?.project_id,
+                fromProjectId: data?.toProject?.id || selectedRow?.report_status?.fromProjectId,
                 campId: data?.camp?.id || selectedRow?.report_status?.camp_id,
                 date: selectedRow?.date || moment().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
