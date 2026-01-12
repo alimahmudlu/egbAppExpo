@@ -169,6 +169,7 @@ export default function EmployeeDashboardScreen() {
     }, [storeData?.cache?.['GET:/timekeeper/activity/list/atwork']])
 
     useFocusEffect(useCallback(() => {
+        console.log(refreshKey, 'refreshKey')
         request({
             url: `/employee/activity/`, method: 'get',
         }).then(res => {

@@ -1,7 +1,7 @@
 import {View, StyleSheet, Text} from "react-native";
 import React, {useEffect, useState} from "react";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
-import {useLocalSearchParams} from "expo-router";
+import {useLocalSearchParams, useRouter} from "expo-router";
 import SgCard from "@/components/ui/Card/Card";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgButton from "@/components/ui/Button/Button";
@@ -16,14 +16,20 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useTranslation} from "react-i18next";
+import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
+import {useSocket} from "@/hooks/useSocket";
 
 export default function ProjectItemScreen() {
     const { request } = useApi();
-    const {storeData} = useData();
+    const {storeData, updateData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const { projectId, taskId } = useLocalSearchParams();
     const { t } = useTranslation();
     const [taskDetails, setTaskDetails] = useState({});
+    const [selectedFiles, setSelectedFiles] = useState([])
+    const [rejectStatus, setRejectStatus] = useState(5)
+    const {socket} = useSocket();
+    const router = useRouter();
 
     const [checkedTaskModal, setCheckedTaskModal] = useState(false);
     const [checkedTaskInfoModal, setCheckedTaskInfoModal] = useState(false);
@@ -34,7 +40,8 @@ export default function ProjectItemScreen() {
     const [rejectedTaskModal, setRejectedTaskModal] = useState(false);
     const [rejectedTaskInfoModal, setRejectedTaskInfoModal] = useState(false);
 
-    const toggleRejectedTaskModal = () => {
+    const toggleRejectedTaskModal = (status) => {
+        setRejectStatus(status)
         setRejectedTaskModal(!rejectedTaskModal);
     };
     const toggleRejectedTaskInfoModal = () => {
@@ -46,20 +53,21 @@ export default function ProjectItemScreen() {
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: status,
+                status: rejectStatus,
+                files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
-            setTaskDetails({
-                ...taskDetails,
-                status: {
-                    id: status,
-                    name: 'In Progress'
-                },
-                files: []
-            })
             toggleRejectedTaskInfoModal();
         }).catch(err => {
             // console.log(err)
+        })
+
+        setSelectedFiles([])
+        request({
+            url: `/chief/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
         })
     };
 
@@ -78,17 +86,17 @@ export default function ProjectItemScreen() {
                 status: 7,
             }
         }).then(res => {
-            setTaskDetails({
-                ...taskDetails,
-                status: {
-                    id:75,
-                    name: 'Completed'
-                },
-                files: []
-            })
             toggleCompletedTaskInfoModal();
         }).catch(err => {
             // console.log(err)
+        })
+
+        setSelectedFiles([])
+        request({
+            url: `/chief/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
         })
     };
 
@@ -104,16 +112,21 @@ export default function ProjectItemScreen() {
             method: 'post',
             data: {
                 date: moment().format(''),
-                status: 4
+                status: 4,
+                files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
-            setTaskDetails({...taskDetails, status: {
-                    id: 4,
-                    name: 'In progress'
-                }})
             toggleCheckedTaskInfoModal();
         }).catch(err => {
             // console.log(err)
+        })
+
+        setSelectedFiles([])
+        request({
+            url: `/chief/project/item/${projectId}/tasks/item/${taskId}`,
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
         })
     };
 
@@ -135,6 +148,28 @@ export default function ProjectItemScreen() {
         _selectedFiles.splice(index, 1)
         setTaskDetails({...taskDetails, files: _selectedFiles})
     }
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const removeTask = (data) => {
+            router.back();
+        };
+
+        const taskStatus = (data) => {
+            updateData(`GET:/chief/project/item/${projectId}/tasks/item/${taskId}`, data)
+        };
+
+        // socket.on('connect', () => {
+        socket.on("remove_task", removeTask);
+        socket.on("change_task__by_employee", taskStatus);
+        // })
+
+        return () => {
+            socket.off("remove_task", removeTask);
+            socket.off("change_task__by_chief", taskStatus);
+        };
+    }, [socket]);
 
 
     return (
@@ -270,7 +305,7 @@ export default function ProjectItemScreen() {
                     <SgButton
                         bgColor = {COLORS.error_50}
                         color= {COLORS.error_700}
-                        onPress={() => handleRejectedTask(5)}
+                        onPress={() => toggleRejectedTaskModal(5)}
                     >
                         {t('rejected')}
                     </SgButton>
@@ -293,7 +328,7 @@ export default function ProjectItemScreen() {
                     <SgButton
                         bgColor = {COLORS.error_50}
                         color= {COLORS.error_700}
-                        onPress={() => handleRejectedTask(8)}
+                        onPress={() => toggleRejectedTaskModal(8)}
                     >
                         {t('rejected')}
                     </SgButton>
@@ -323,7 +358,27 @@ export default function ProjectItemScreen() {
                         {t('yesChecked')}
                     </SgButton>
                 }
-            />
+            >
+                <SgTemplateUploadScreen
+                    setSelectedFiles={setSelectedFiles}
+                    selectedFiles={selectedFiles}
+                />
+
+                {(selectedFiles || []).map((el, index) => (
+                    <SgSectionAddFile
+                        handleRemove={() => handleRemoveFile(index)}
+                        key={index}
+                        title={el?.name}
+                        type={el?.type}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
+                        url={el?.filepath}
+                        onPress={() => {
+                            // console.log('file.filename')
+                        }}
+                        remove={true}
+                    />
+                ))}
+            </SgPopup>
             <SgPopup
                 visible={checkedTaskInfoModal}
                 onClose={toggleCheckedTaskInfoModal}
@@ -372,7 +427,27 @@ export default function ProjectItemScreen() {
                         {t('yesCompleted')}
                     </SgButton>
                 }
-            />
+            >
+                <SgTemplateUploadScreen
+                    setSelectedFiles={setSelectedFiles}
+                    selectedFiles={selectedFiles}
+                />
+
+                {(selectedFiles || []).map((el, index) => (
+                    <SgSectionAddFile
+                        handleRemove={() => handleRemoveFile(index)}
+                        key={index}
+                        title={el?.name}
+                        type={el?.type}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
+                        url={el?.filepath}
+                        onPress={() => {
+                            // console.log('file.filename')
+                        }}
+                        remove={true}
+                    />
+                ))}
+            </SgPopup>
             <SgPopup
                 visible={rejectedTaskInfoModal}
                 onClose={toggleRejectedTaskInfoModal}

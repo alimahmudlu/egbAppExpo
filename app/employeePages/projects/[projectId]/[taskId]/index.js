@@ -58,19 +58,12 @@ export default function ProjectItemScreen() {
                 files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
-            setSelectedFiles([])
-            setTaskDetails({
-                ...taskDetails,
-                status: {
-                    id: 6,
-                    name: t('checkComplete')
-                },
-                files: []
-            })
             toggleCompleteTaskInfoModal();
         }).catch(err => {
             // console.log(err)
         })
+
+        setSelectedFiles([])
         request({
             url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
             method: 'get',
@@ -96,14 +89,11 @@ export default function ProjectItemScreen() {
                 files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
-            setTaskDetails({...taskDetails, status: {
-                                id: 3,
-                                name: t('checkProgress')
-                                }})
             toggleCheckTaskInfoModal();
         }).catch(err => {
             // console.log(err)
         })
+        setSelectedFiles([])
         request({
             url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
             method: 'get',
@@ -128,14 +118,12 @@ export default function ProjectItemScreen() {
                 files: (selectedFiles || []).map(el => el?.id) || [],
             }
         }).then(res => {
-            setTaskDetails({...taskDetails, status: {
-                                id: 2,
-                                name: t('inProgress')
-                                }})
             toggleStartTaskInfoModal();
         }).catch(err => {
             // console.log(err)
         })
+
+        setSelectedFiles([])
         request({
             url: `/employee/project/item/${projectId}/tasks/item/${taskId}`,
             method: 'get',
@@ -152,7 +140,6 @@ export default function ProjectItemScreen() {
             // console.log(err);
         })
     }, [projectId, refreshKey]);
-
 
     useEffect(() => {
         setTaskDetails(storeData?.cache?.[`GET:/employee/project/item/${projectId}/tasks/item/${taskId}`]?.data)

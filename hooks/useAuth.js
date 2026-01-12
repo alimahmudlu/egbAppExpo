@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { router } from 'expo-router';
+import {router, usePathname} from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import Constants from 'expo-constants';
@@ -37,6 +37,12 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+
+
+  useEffect(() => {
+    loadStoredAuth()
+  }, [pathname]);
 
   const loadStoredAuth = async () => {
     try {
@@ -53,29 +59,34 @@ export function AuthProvider({ children }) {
         const userData = JSON.parse(JSON.parse(storedUserData));
         setUser(userData);
 
-        // const currentUser = await api({
-        //   url: '/currentUser',
-        //   method: 'get',
-        //   headers: {
-        //     'authorization': storedToken
-        //   }
-        // })
-        //
-        // if (currentUser.status === 200) {
-        //   setUser(currentUser?.data?.data || userData);
-        //     // if (currentUser?.data?.data?.role?.id === 1) {
-        //     //     router.replace('/employee');
-        //     // } else if (currentUser?.data?.data?.role?.id === 2) {
-        //     //     router.replace('/timeKeeper');
-        //     // } else if (currentUser?.data?.data?.role?.id === 3) {
-        //     //     router.replace('/chief');
-        //     // } else if (currentUser?.data?.data?.role?.id === 4) {
-        //     //     router.replace('/admin');
-        //     // }
-        // }
-        // else {
-        //   // logout();
-        // }
+        if (storedToken) {
+          const currentUser = await api({
+            url: '/currentUser',
+            method: 'get',
+            headers: {
+              'authorization': storedToken
+            }
+          })
+
+          if (currentUser.status === 200 && currentUser?.data?.data) {
+            setUser(currentUser?.data?.data || userData);
+            await storeAuthData(accessToken, currentUser?.data?.data);
+            if (currentUser?.data?.data?.role?.id !== userData?.role?.id) {
+              if (currentUser?.data?.data?.role?.id === 1) {
+                router.replace('/employee');
+              } else if (currentUser?.data?.data?.role?.id === 2) {
+                router.replace('/timeKeeper');
+              } else if (currentUser?.data?.data?.role?.id === 3) {
+                router.replace('/chief');
+              } else if (currentUser?.data?.data?.role?.id === 4) {
+                router.replace('/admin');
+              }
+            }
+          }
+          else {
+            // logout();
+          }
+        }
       }
     } catch (error) {
       console.error('Failed to load authentication data:', error);
@@ -133,6 +144,7 @@ export function AuthProvider({ children }) {
 
   // Store authentication data
   const storeAuthData = async (token, userData) => {
+    console.log(token, userData, 'USER DATA');
     try {
       await storage.setItemAsync(AUTH_TOKEN_KEY, token);
       await storage.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify(userData)));
@@ -278,6 +290,7 @@ export function AuthProvider({ children }) {
         loading,
         storeAuthData,
         getRating,
+        loadStoredAuth,
         login,
         logout
       }}>

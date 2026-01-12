@@ -7,6 +7,7 @@ import {useIsFocused} from "@react-navigation/native";
 import InternetStatusIndicator from "@/utils/InternetStatusIndicator";
 import GpsSignalStatusIndicator from "@/utils/GpsSignalStatusIndicator";
 import COLORS from "@/constants/colors";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function SgTemplateScreenView(props) {
     const { head, children, scrollView = true } = props;
@@ -14,6 +15,7 @@ export default function SgTemplateScreenView(props) {
     const router = useRouter();
     const pathname = usePathname();
     const params = useLocalSearchParams();
+    const {loadStoredAuth} = useAuth()
 
     const refreshKey = params?.refreshKey || 0; // default 0
     const isFocused = useIsFocused();
@@ -27,6 +29,8 @@ export default function SgTemplateScreenView(props) {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+
+        loadStoredAuth()
 
         if (!pathname) {
             console.warn("Pathname tapılmadı. Refresh dayandırıldı.");

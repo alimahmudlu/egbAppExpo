@@ -16,6 +16,9 @@ import {validate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants"
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useTranslation} from "react-i18next";
+import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
+import SgSectionAddFile from "@/components/sections/AddFile/AddFile";
+import moment from "moment";
 
 export default function TaskCreateScreen() {
     const {request} = useApi();
@@ -27,6 +30,13 @@ export default function TaskCreateScreen() {
     const [createTaskInfoModal, setCreateTaskInfoModal] = useState(false);
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation();
+    const [selectedFiles, setSelectedFiles] = useState([])
+
+    function handleRemoveFile(index) {
+        const _selectedFiles = [...selectedFiles];
+        _selectedFiles.splice(index, 1)
+        setSelectedFiles(_selectedFiles)
+    }
 
     function handleChange(e) {
         setErrors({...errors, [e.name]: ''});
@@ -95,6 +105,7 @@ export default function TaskCreateScreen() {
                     description: data?.description,
                     assigned_employee_id: data?.assigned_employee?.id,
                     project_id: data?.project?.id,
+                    files: (selectedFiles || []).map(el => el?.id) || [],
                 }
             }).then(res => {
                 toggleCreateTaskInfoModal()
@@ -214,6 +225,26 @@ export default function TaskCreateScreen() {
                     isInvalid={errors?.deadline}
                     onChangeText={handleChange}
                 />
+                <SgTemplateUploadScreen
+                    setSelectedFiles={setSelectedFiles}
+                    selectedFiles={selectedFiles}
+                    multiple={true }
+                />
+
+                {(selectedFiles || []).map((el, index) => (
+                    <SgSectionAddFile
+                        handleRemove={() => handleRemoveFile(index)}
+                        key={index}
+                        title={el?.name}
+                        type={el?.type}
+                        datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
+                        url={el?.filepath}
+                        onPress={() => {
+                            // console.log('file.filename')
+                        }}
+                        remove={true}
+                    />
+                ))}
 
                 <SgButton
                     onPress={handleSubmit}
