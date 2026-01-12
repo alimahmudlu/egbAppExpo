@@ -144,7 +144,6 @@ export function AuthProvider({ children }) {
 
   // Store authentication data
   const storeAuthData = async (token, userData) => {
-    console.log(token, userData, 'USER DATA');
     try {
       await storage.setItemAsync(AUTH_TOKEN_KEY, token);
       await storage.setItemAsync(USER_DATA_KEY, JSON.stringify(JSON.stringify(userData)));
