@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgButton from "@/components/ui/Button/Button";
 import COLORS from "@/constants/colors";
@@ -12,6 +12,7 @@ import {useApi} from "@/hooks/useApi";
 import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
 import {useData} from "@/hooks/useData";
 import SgSelect from "@/components/ui/Select/Select";
+import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 
 
 export default function ChiefMenuScreen() {
@@ -35,33 +36,39 @@ export default function ChiefMenuScreen() {
     const [tripTypeList, setTripTypeList] = useState([
         {
             id: 1,
-            name: 'Day Main',
-            render: <Text>Day Main</Text>,
+            name: 'Bus Main Day',
+            render: <Text>Bus Main Day</Text>,
         },
         {
             id: 3,
-            name: 'Night Main',
-            render: <Text>Night Main</Text>,
+            name: 'Bus Main Night',
+            render: <Text>Bus Main Night</Text>,
         },
         {
             id: 2,
-            name: 'Additional',
-            render: <Text>Additional</Text>,
-        },
-        {
-            id: 5,
-            name: 'UFMS',
-            render: <Text>UFMS</Text>,
+            name: 'Bus Additional',
+            render: <Text>Bus Additional</Text>,
         },
         {
             id: 4,
-            name: 'Airport',
-            render: <Text>Airport</Text>,
+            name: 'Transit Main Day',
+            render: <Text>Transit Main Day</Text>,
+        },
+        {
+            id: 5,
+            name: 'Transit Main Night',
+            render: <Text>Transit Main Night</Text>,
+        },
+        {
+            id: 6,
+            name: 'Transit Additional',
+            render: <Text>Transit Additional</Text>,
         }
     ]);
 
     function handleChange(e) {
         setData({...data, [e.name]: e.value});
+        console.log({...data, [e.name]: e.value});
     }
 
     function handleChangeReport(e) {
@@ -81,12 +88,12 @@ export default function ChiefMenuScreen() {
                 ...data,
                 projectId: selectedRow?.project_id,
                 tripTypeId: data?.tripType?.id || selectedRow?.report_status?.trip_type,
-                toProjectId: data?.toProject?.id || selectedRow?.report_status?.to_project_id || selectedRow?.project_id,
-                fromProjectId: data?.toProject?.id || selectedRow?.report_status?.fromProjectId,
-                campId: data?.camp?.id || selectedRow?.report_status?.camp_id,
+                toProjectId: data?.toProject?.map(el => el.id) || selectedRow?.report_status?.to_project_id || selectedRow?.project_id,
+                campId: data?.camp?.map(el => el.id) || selectedRow?.report_status?.camp_id,
                 date: selectedRow?.date || moment().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
-                turn2employees: selectedRow?.turn2employees || 0
+                turn2employees: selectedRow?.turn2employees || 0,
+                otherCamps: data?.otherCamps || []
             },
         }).then(res => {
             setData({});
@@ -141,6 +148,35 @@ export default function ChiefMenuScreen() {
     useEffect(() => {
         setCamps(storeData?.cache?.[`GET:/admin/options/camps`]?.data)
     }, [storeData?.cache?.[`GET:/admin/options/camps`]])
+
+
+    const addOtherCamp = () => {
+        const currentOthers = data?.otherCamps || [];
+
+        handleChange({
+            name: 'otherCamps',
+            value: [...currentOthers, ""]
+        });
+    };
+
+    const removeOtherCamp = (index) => {
+        const currentOthers = [...(data?.otherCamps || [])];
+        currentOthers.splice(index, 1);
+        handleChange({
+            name: 'otherCamps',
+            value: currentOthers
+        });
+    };
+
+    const handleOtherCampChange = (index, text) => {
+        const currentOthers = [...(data?.otherCamps || [])];
+        currentOthers[index] = text.value;
+
+        handleChange({
+            name: 'otherCamps',
+            value: currentOthers
+        });
+    };
 
     return (
         <SgTemplateScreen
@@ -249,6 +285,7 @@ export default function ChiefMenuScreen() {
                             modalTitle={t('selectCamp')}
                             value={data?.camp || (camps || []).find(el => (el.id === selectedRow?.report_status?.camp_id))}
                             name='camp'
+                            multiple={true}
                             isInvalid={errors?.camp}
                             onChangeText={handleChange}
                             list={(camps || []).map(item => ({
@@ -266,6 +303,7 @@ export default function ChiefMenuScreen() {
                             modalTitle={t('selectProject')}
                             value={data?.toProject || (projects || []).find(el => (el.id === selectedRow?.report_status?.to_project_id || el.id === selectedRow?.project_id))}
                             name='toProject'
+                            multiple={true}
                             isInvalid={errors?.toProject}
                             onChangeText={handleChange}
                             list={(projects || []).map(item => ({
@@ -276,44 +314,58 @@ export default function ChiefMenuScreen() {
                         />
                     </View>
 
-                    {/*<View>
-                        <SgSelect
-                            label={t('toProject')}
-                            placeholder={t('toProject')}
-                            modalTitle={t('selectToProject')}
-                            value={data?.toProject || (projects || []).find(el => el.id === selectedRow?.report_status?.to_project_id)}
-                            name='toProject'
-                            isInvalid={errors?.toProject}
-                            onChangeText={handleChange}
-                            list={(projects || []).filter(item => item.id !== selectedRow?.project_id)?.map(item => ({
-                                id: item?.id,
-                                name: item?.name,
-                                render: <Text>{item?.name}</Text>,
-                            }))}
-                        />
-                    </View>
 
-                    <View>
-                        <SgSelect
-                            label={t('fromProject')}
-                            placeholder={t('fromProject')}
-                            modalTitle={t('selectFromProject')}
-                            value={data?.fromProject || (projects || []).find(el => el.id === selectedRow?.report_status?.from_project_id)}
-                            name='fromProject'
-                            isInvalid={errors?.fromProject}
-                            onChangeText={handleChange}
-                            list={(projects || []).filter(item => item.id !== selectedRow?.project_id)?.map(item => ({
-                                id: item?.id,
-                                name: item?.name,
-                                render: <Text>{item?.name}</Text>,
-                            }))}
-                        />
-                    </View>*/}
+                    <TouchableOpacity
+                        onPress={addOtherCamp}
+                        style={styles.checkboxContainer}
+                    >
+                        <Text style={styles.checkboxLabel}>
+                            + {t('addOtherCamp')}
+                        </Text>
+                    </TouchableOpacity>
+
+                    {(data?.otherCamps || []).map((item, index) => (
+                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                            <View style={{ flex: 1 }}>
+                                <SgInput
+                                    label={`${t('otherCamp')} ${index + 1}`}
+                                    placeholder={t('enterCampName')}
+                                    value={item}
+                                    onChangeText={(text) => handleOtherCampChange(index, text)}
+                                />
+                            </View>
+                            <TouchableOpacity
+                                onPress={() => removeOtherCamp(index)}
+                                style={{ marginTop: 25, padding: 8 }}
+                            >
+                                <Text style={{ color: 'red', fontSize: 24, fontWeight: 'bold' }}>−</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ))}
                 </View>
             </SgPopup>
         </SgTemplateScreen>
     );
 }
 
+
 const styles = StyleSheet.create({
-})
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.gray_200,
+    },
+    checkboxLabel: {
+        fontFamily: 'Inter, sans-serif',
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 600,
+        lineHeight: 20,
+        color: COLORS.gray_800
+    },
+});

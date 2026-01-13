@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text} from "react-native";
+import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
@@ -28,28 +28,33 @@ export default function ProjectItemScreen() {
     const [tripTypeList, setTripTypeList] = useState([
         {
             id: 1,
-            name: 'Day Main',
-            render: <Text>Day Main</Text>,
+            name: 'Bus Main Day',
+            render: <Text>Bus Main Day</Text>,
         },
         {
             id: 3,
-            name: 'Night Main',
-            render: <Text>Night Main</Text>,
+            name: 'Bus Main Night',
+            render: <Text>Bus Main Night</Text>,
         },
         {
             id: 2,
-            name: 'Additional',
-            render: <Text>Additional</Text>,
-        },
-        {
-            id: 5,
-            name: 'UFMS',
-            render: <Text>UFMS</Text>,
+            name: 'Bus Additional',
+            render: <Text>Bus Additional</Text>,
         },
         {
             id: 4,
-            name: 'Airport',
-            render: <Text>Airport</Text>,
+            name: 'Transit Main Day',
+            render: <Text>Transit Main Day</Text>,
+        },
+        {
+            id: 5,
+            name: 'Transit Main Night',
+            render: <Text>Transit Main Night</Text>,
+        },
+        {
+            id: 6,
+            name: 'Transit Additional',
+            render: <Text>Transit Additional</Text>,
         }
     ]);
     const [filters, setFilters] = useState({})
@@ -74,15 +79,15 @@ export default function ProjectItemScreen() {
             countOfSeatInEveryBus: item?.seat_count,
             projectId: item?.project_id,
             tripTypeId: item?.trip_type,
-            toProjectId: item?.to_project_id || item?.project_id,
-            campId: item?.camp_id,
+            toProjectId: item?.to_project_ids || [],
+            campId: item?.camp_ids,
             date: item?.date || moment().format('YYYY-MM-DD'),
+            otherCamps: item?.othercamps || []
         })
         setReportModal(!reportModal);
     }
 
     function deleteReport(item) {
-        console.log(item, 'item')
         request({
             method: "delete",
             url: `/admin/bus/report/delete/${item?.id}`,
@@ -103,11 +108,12 @@ export default function ProjectItemScreen() {
                 countOfSeatInEveryBus: data?.countOfSeatInEveryBus || selectedRow?.seat_count,
                 projectId: selectedRow?.project_id,
                 tripTypeId: data?.tripType?.id || selectedRow?.trip_type,
-                toProjectId: data?.toProject?.id || selectedRow?.to_project_id || selectedRow?.project_id,
-                campId: data?.camp?.id || selectedRow?.camp_id,
+                toProjectId: data?.toProjectId?.map(el => el.id),
+                campId: data?.campId?.map(el => el.id),
                 date: selectedRow?.date || moment().utc().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
-                turn2employees: selectedRow?.turn2employees || 0
+                turn2employees: selectedRow?.turn2employees || 0,
+                otherCamps: data?.otherCamps || []
             },
         }).then(res => {
             getData({...filters, project: filters?.project?.id});
@@ -206,6 +212,40 @@ export default function ProjectItemScreen() {
     }, [storeData?.cache?.[`GET:/admin/options/camps`]])
 
 
+    const addOtherCamp = () => {
+        const currentOthers = data?.otherCamps || [];
+
+        handleChangeReport({
+            name: 'otherCamps',
+            value: [...currentOthers, ""]
+        });
+    };
+
+    const removeOtherCamp = (index) => {
+        const currentOthers = [...(data?.otherCamps || [])];
+        currentOthers.splice(index, 1);
+        handleChangeReport({
+            name: 'otherCamps',
+            value: currentOthers
+        });
+    };
+
+    const handleOtherCampChange = (index, text) => {
+        const currentOthers = [...(data?.otherCamps || [])];
+        currentOthers[index] = text.value;
+
+        console.log({
+            name: 'otherCamps',
+            value: currentOthers
+        })
+
+        handleChangeReport({
+            name: 'otherCamps',
+            value: currentOthers
+        });
+    };
+
+
     return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: t('busReports')
@@ -295,16 +335,22 @@ export default function ProjectItemScreen() {
                                     </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('toProject')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{(projects || []).find(el => el.id === item?.to_project_id)?.name}</Text>
+                                        <View style={{gap: 4}}>
+                                            {item?.to_project_ids?.map((el, i) => (<View key={i}><Text style={{textAlign: 'right',fontSize: 12, fontWeight: '700'}}>{el.name}</Text></View>))}
+                                        </View>
                                     </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('Camp')}:</Text>
-                                        <Text style={{fontSize: 16, fontWeight: '700'}}>{(camps || []).find(el => el.id === item?.camp_id)?.name}</Text>
+                                        <View style={{gap: 4}}>
+                                            {item?.camp_ids?.map((el, i) => (<View key={i}><Text style={{textAlign: 'right',fontSize: 12, fontWeight: '700'}}>{el.name}</Text></View>))}
+                                        </View>
                                     </View>
-                                    {/*<View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>*/}
-                                    {/*    <Text style={{fontSize: 16, fontWeight: '400'}}>{t('fromProject')}:</Text>*/}
-                                    {/*    <Text style={{fontSize: 16, fontWeight: '700'}}>{(projects || []).find(el => el.id === item?.from_project_id)?.name}</Text>*/}
-                                    {/*</View>*/}
+                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
+                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('otherCamps')}:</Text>
+                                        <View style={{gap: 4}}>
+                                            {item?.othercamps?.map((el, i) => (<View key={i}><Text style={{textAlign: 'right',fontSize: 12, fontWeight: '700'}}>{el}</Text></View>))}
+                                        </View>
+                                    </View>
                                 </View>
                                 <View>
                                     <View style={{gap: 6, flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -388,9 +434,10 @@ export default function ProjectItemScreen() {
                         label={t('Camps')}
                         placeholder={t('Camps')}
                         modalTitle={t('selectCamp')}
-                        value={data?.camp || (camps || []).find(el => (el.id === data?.campId)) || ''}
-                        name='camp'
-                        isInvalid={errors?.camp}
+                        value={data?.campId || []}
+                        name='campId'
+                        multiple={true}
+                        isInvalid={errors?.campId}
                         onChangeText={handleChangeReport}
                         list={(camps || []).map(item => ({
                             id: item?.id,
@@ -405,9 +452,10 @@ export default function ProjectItemScreen() {
                         label={t('Project')}
                         placeholder={t('Project')}
                         modalTitle={t('selectProject')}
-                        value={data?.toProject || (projects || []).find(el => (el.id === data?.toProjectId)) || ''}
-                        name='toProject'
-                        isInvalid={errors?.toProject}
+                        value={data?.toProjectId || []}
+                        name='toProjectId'
+                        multiple={true}
+                        isInvalid={errors?.toProjectId}
                         onChangeText={handleChangeReport}
                         list={(projects || []).map(item => ({
                             id: item?.id,
@@ -417,39 +465,33 @@ export default function ProjectItemScreen() {
                     />
                 </View>
 
-                {/*<View>
-                        <SgSelect
-                            label={t('toProject')}
-                            placeholder={t('toProject')}
-                            modalTitle={t('selectToProject')}
-                            value={data?.toProject || (projects || []).find(el => el.id === selectedRow?.report_status?.to_project_id)}
-                            name='toProject'
-                            isInvalid={errors?.toProject}
-                            onChangeText={handleChange}
-                            list={(projects || []).filter(item => item.id !== selectedRow?.project_id)?.map(item => ({
-                                id: item?.id,
-                                name: item?.name,
-                                render: <Text>{item?.name}</Text>,
-                            }))}
-                        />
-                    </View>
+                <TouchableOpacity
+                    onPress={addOtherCamp}
+                    style={styles.checkboxContainer}
+                >
+                    <Text style={styles.checkboxLabel}>
+                        + {t('addOtherCamp')}
+                    </Text>
+                </TouchableOpacity>
 
-                    <View>
-                        <SgSelect
-                            label={t('fromProject')}
-                            placeholder={t('fromProject')}
-                            modalTitle={t('selectFromProject')}
-                            value={data?.fromProject || (projects || []).find(el => el.id === selectedRow?.report_status?.from_project_id)}
-                            name='fromProject'
-                            isInvalid={errors?.fromProject}
-                            onChangeText={handleChange}
-                            list={(projects || []).filter(item => item.id !== selectedRow?.project_id)?.map(item => ({
-                                id: item?.id,
-                                name: item?.name,
-                                render: <Text>{item?.name}</Text>,
-                            }))}
-                        />
-                    </View>*/}
+                {(data?.otherCamps || []).map((item, index) => (
+                    <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <View style={{ flex: 1 }}>
+                            <SgInput
+                                label={`${t('otherCamp')} ${index + 1}`}
+                                placeholder={t('enterCampName')}
+                                value={item}
+                                onChangeText={(text) => handleOtherCampChange(index, text)}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => removeOtherCamp(index)}
+                            style={{ marginTop: 25, padding: 8 }}
+                        >
+                            <Text style={{ color: 'red', fontSize: 24, fontWeight: 'bold' }}>−</Text>
+                        </TouchableOpacity>
+                    </View>
+                ))}
             </View>
         </SgPopup>
         </SgTemplateScreen>);
@@ -477,5 +519,24 @@ const styles = StyleSheet.create({
         flex: 1,
     }, contentText: {
         fontSize: 16,
-    }
+    },
+
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.gray_200,
+    },
+    checkboxLabel: {
+        fontFamily: 'Inter, sans-serif',
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 600,
+        lineHeight: 20,
+        color: COLORS.gray_800
+    },
 });

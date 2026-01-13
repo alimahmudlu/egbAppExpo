@@ -98,11 +98,11 @@ export default function SgSelect(props) {
         e.stopPropagation();
 
         if (multiple) {
-            const isSelected = selectedValue.some(selected => selected.id === item.id);
+            const isSelected = selectedValue?.some(selected => selected.id === item.id);
             let newSelectedValue;
 
             if (isSelected) {
-                newSelectedValue = selectedValue.filter(selected => selected.id !== item.id);
+                newSelectedValue = selectedValue?.filter(selected => selected.id !== item.id);
             } else {
                 newSelectedValue = [...selectedValue, {id: item.id, name: item.name}];
             }
@@ -133,9 +133,9 @@ export default function SgSelect(props) {
     const getDisplayValue = () => {
         if (multiple) {
             if (selectedValue.length > 0) {
-                const names = selectedValue.map(item => item.name);
+                const names = selectedValue?.map(item => item?.name);
                 if (names.length > 2) {
-                    return `${names.slice(0, 2).join(', ')} və ${names.length - 2} daha...`;
+                    return `${names?.slice(0, 2).join(', ')} və ${names.length - 2} daha...`;
                 }
                 return names.join(', ');
             }
