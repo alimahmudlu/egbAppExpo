@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingBottom: 10,
-      marginTop: 16
+      marginTop: "auto",
   },
 });
 

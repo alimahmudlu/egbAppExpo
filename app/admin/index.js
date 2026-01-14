@@ -240,9 +240,9 @@ export default function EmployeeDashboardScreen() {
             icon={Clock}
         />
 
-        <SgCard>
+        {/*<SgCard>
             <Text style={styles.title}>{t('myTasks')}</Text>
-        </SgCard>
+        </SgCard>*/}
         {/*<SgNoticeCard
             title={<Text style={styles.title}>{t('myTasks')}</Text>}
             buttonText={<FilterIcon width={20} height={20}/>}
@@ -250,7 +250,7 @@ export default function EmployeeDashboardScreen() {
             onClick={toggleFilterModal}
         />*/}
 
-        <View style={{gap: 12}}>
+        {/*<View style={{gap: 12}}>
             {(taskList || []).map((el, index) => {
                 return (
                     <SgSectionTaskCard
@@ -268,7 +268,8 @@ export default function EmployeeDashboardScreen() {
                     />
                 )
             })}
-        </View>
+        </View>*/}
+
         <SgPopup
             visible={rejectInfoModal}
             onClose={toggleRejectInfoModal}

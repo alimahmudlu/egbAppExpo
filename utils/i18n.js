@@ -14,6 +14,11 @@ i18n.use(initReactI18next).init({
                 Task_check_progress_request_denied_In_progress: "Task check progress request denied - In progress",
                 Task_check_progress_request_accepted_In_progress: "Task check progress request accepted - In progress",
                 Task_check_progress_requested: "Task check progress requested",
+                addOtherCamp: "Add Other Camp",
+                otherCamp: "Other Camp",
+                enterCampName: "Enter Camp name",
+                and: "and",
+                more: "more",
 
 
 
@@ -402,6 +407,11 @@ i18n.use(initReactI18next).init({
                 Task_check_progress_request_denied_In_progress: "Запрос на проверку хода выполнения задачи отклонен - процессе",
                 Task_check_progress_request_accepted_In_progress: "Запрос на проверку хода выполнения задачи принят - В процессе",
                 Task_check_progress_requested: "Запрос на проверку хода выполнения задачи запрошен",
+                addOtherCamp: "Добавить другой лагерь",
+                otherCamp: "Другой лагерь",
+                enterCampName: "Введите название лагеря",
+                and: "и",
+                more: "более",
 
 
                 Error: "Ошибка",
@@ -780,6 +790,11 @@ i18n.use(initReactI18next).init({
                 Task_check_progress_request_denied_In_progress: "Vazifa bajarilishini tekshirish so'rovi rad etildi - Bajarilmoqda",
                 Task_check_progress_request_accepted_In_progress: "Vazifa bajarilishini tekshirish so'rovi qabul qilindi - Bajarilmoqda",
                 Task_check_progress_requested: "Vazifa bajarilishini tekshirish so'rovi",
+                addOtherCamp: "Boshqa lager qo'shish",
+                otherCamp: "Boshqa lager",
+                enterCampName: "Lager nomini kiriting",
+                and: "va",
+                more: "Ko'proq",
 
                 Error: "Xato",
                 "Total_employee": "Umumiy xodimlar soni #",

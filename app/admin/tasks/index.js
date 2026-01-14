@@ -69,7 +69,6 @@ export default function EmployeeDocsScreen() {
     }, [storeData?.cache?.[`GET:/employee/options/task_statuses`]])
 
     useEffect(() => {
-        console.log()
         setTaskList(storeData?.cache?.[`GET:/employee/task/clickup/list`]?.data)
     }, [storeData?.cache?.[`GET:/employee/task/clickup/list`]])
 

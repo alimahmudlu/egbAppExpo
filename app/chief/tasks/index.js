@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
@@ -17,6 +17,7 @@ import {useTranslation} from "react-i18next";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import TaskListScreen from "@/components/sections/ClickupTask/TaskListScreen";
 
+import FilterIcon from "@/assets/images/filter.svg";
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const {storeData} = useData();
@@ -78,7 +79,13 @@ export default function EmployeeDocsScreen() {
                     href: '/chiefPages/create-task',
                     header: t('addTask')
                 }
-            }}/>}
+            }}
+            filter={
+                <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
+                <Text><FilterIcon width={20} height={20} /></Text>
+                </Pressable>
+            }
+            />}
         >
             <TaskListScreen
                 taskList={taskList || []}
@@ -125,7 +132,7 @@ export default function EmployeeDocsScreen() {
                             modalTitle={t("selectProject")}
                             value={filters?.status}
                             name='status'
-                            list={(taskStatuses || []).map((el) => ({
+                            list={(taskStatuses || []).sort((a, b) => a.id - b.id).map((el) => ({
                                 id: el.id,
                                 name: el.name,
                                 render: (<Text style={{fontSize: 16, fontWeight: 500}}>
@@ -189,6 +196,14 @@ export default function EmployeeDocsScreen() {
 }
 
 const styles = StyleSheet.create({
+
+    iconWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.brand_50,
+        padding: 14,
+        borderRadius: 50,
+    },
     container: {
         flex: 1, backgroundColor: '#f5f5f5',
     }, header: {

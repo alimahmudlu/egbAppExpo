@@ -20,7 +20,7 @@ const TaskCard = ({ task, color }) => (
     </TouchableOpacity>
 );
 
-const TaskStatusList = ({ statusId, statusData, taskData }) => {
+const TaskStatusList = ({ statusId, statusData, taskData, prefix = '/chiefPages/projects/' }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { name, color } = statusData.info;
     const taskCount = statusData.tasks.length;
@@ -65,7 +65,7 @@ const TaskStatusList = ({ statusId, statusData, taskData }) => {
                             name={el?.assigned_employee?.full_name}
                             image={null}
                             status={el?.status}
-                            href={`/chiefPages/projects/${el?.project_id}/${el?.id}`}
+                            href={`${prefix}${el?.project_id}/${el?.id}`}
                         />
                         // <TaskCard key={el.id} task={el} color={color} />
                     ))}

@@ -170,10 +170,16 @@ export default function SgSectionTaskCard(props) {
 
     const getStatusStyles = () => {
         switch (data?.status?.id) {
+            case 8:
+                return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
+            case 7:
+                return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
+            case 6:
+                return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
             case 5:
-                return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
+                return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
             case 4:
-                return {backgroundColor: COLORS.success_100, color: COLORS.success_700};
+                return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
             case 3:
                 return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
             case 2:

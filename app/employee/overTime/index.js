@@ -227,11 +227,11 @@ export default function EmployeeDashboardScreen() {
                 icon={Clock}
             />
 
-            <SgCard>
+            {/*<SgCard>
                 <Text style={styles.title}>{t('myTasks')}</Text>
-            </SgCard>
+            </SgCard>*/}
 
-            <View style={{gap: 12}}>
+            {/*<View style={{gap: 12}}>
                 {(projectsList || []).map((project, index) => {
                     return (<SgSectionProjectListItem
                             key={index}
@@ -241,7 +241,8 @@ export default function EmployeeDashboardScreen() {
                             href={`/employeePages/projects/${project.id}`}
                         />)
                 })}
-            </View>
+            </View>*/}
+
             <SgPopup
                 visible={rejectInfoModal}
                 onClose={toggleRejectInfoModal}

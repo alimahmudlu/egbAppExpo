@@ -30,7 +30,7 @@ const groupTasksByStatus = (tasks) => {
     }, {});
 };
 
-const TaskListScreen = ({taskList}) => {
+const TaskListScreen = ({taskList, prefix}) => {
     const tasks = taskList || [];
 
     const groupedTasks = groupTasksByStatus(tasks);
@@ -45,6 +45,7 @@ const TaskListScreen = ({taskList}) => {
                     if (statusData ) {
                         return (
                             <TaskStatusList
+                                prefix={prefix}
                                 key={statusId}
                                 statusId={statusId}
                                 statusData={statusData}

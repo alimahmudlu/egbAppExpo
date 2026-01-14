@@ -73,7 +73,8 @@ export default function EmployeeDocsScreen() {
         setTaskList(storeData?.cache?.[`GET:/employee/task/clickup/list`]?.data)
     }, [storeData?.cache?.[`GET:/employee/task/clickup/list`]])
 
-    return (<SgTemplateScreen
+    return (
+        <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: t('allTasks'),
             }}
@@ -90,107 +91,108 @@ export default function EmployeeDocsScreen() {
             />
 
 
-        <SgPopup
-            visible={filterModal}
-            onClose={toggleFilterModal}
-            footerButton={<SgButton
-                onPress={handleFilters}
-                bgColor={COLORS.primary}
-                color={COLORS.white}
+            <SgPopup
+                visible={filterModal}
+                onClose={toggleFilterModal}
+                footerButton={<SgButton
+                    onPress={handleFilters}
+                    bgColor={COLORS.primary}
+                    color={COLORS.white}
+                >
+                    {t('accept')}
+                </SgButton>}
             >
-                {t('accept')}
-            </SgButton>}
-        >
-            <View style={{paddingBottom: 20}}>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+                <View style={{paddingBottom: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
 
-                    <SgButton
-                        onPress={resetFilters}
-                        color={COLORS.brand_700}
-                        style={{
-                            flex: 0,
-                            width: 'auto',
-                            marginLeft: 'auto',
-                            paddingVertical: 0,
-                            paddingHorizontal: 0,
-                            gap: 7
-                        }}
+                        <SgButton
+                            onPress={resetFilters}
+                            color={COLORS.brand_700}
+                            style={{
+                                flex: 0,
+                                width: 'auto',
+                                marginLeft: 'auto',
+                                paddingVertical: 0,
+                                paddingHorizontal: 0,
+                                gap: 7
+                            }}
 
-                    >
-                        {t('clearFilters')}
-                        <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
-                    </SgButton>
-                </View>
-
-                <View style={{gap: 16}}>
-                    <SgSelect
-                        label={t('progress')}
-                        placeholder={t('select')}
-                        modalTitle={t("selectProject")}
-                        value={filters?.status}
-                        name='status'
-                        list={(taskStatuses || []).sort((a, b) => a.id - b.id).map((el) => ({
-                            id: el.id,
-                            name: el.name,
-                            render: (<Text style={{fontSize: 16, fontWeight: 500}}>
-                                {el.id === 1 && t("open")}
-                                {el.id === 2 && t("inProgress")}
-                                {el.id === 3 && t("checkProgressRequested")}
-                                {el.id === 4 && t("checkProgressRequestAccepted")}
-                                {el.id === 5 && t("checkProgressRequestDenied")}
-                                {el.id === 6 && t("completeRequested")}
-                                {el.id === 7 && t("completeRequestAccepted")}
-                                {el.id === 8 && t("completeRequestDenied")}
-                            </Text>)
-                        }))}
-                        onChangeText={handleChange}
-                    />
-                    <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
-                        <View style={{flex: 1}}>
-                            <SgInput
-                                label={t("scoreRange")}
-                                placeholder={t('min')}
-                                value={filters?.score_min}
-                                name='score_min'
-                                onChangeText={handleChange}
-                                type='number'
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                            <SgInput
-                                label=""
-                                placeholder={t('max')}
-                                value={filters?.score_max}
-                                name='score_max'
-                                onChangeText={handleChange}
-                                type='number'
-                            />
-                        </View>
+                        >
+                            {t('clearFilters')}
+                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                        </SgButton>
                     </View>
-                    <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
-                        <View style={{flex: 1}}>
-                            <SgDatePicker
-                                label={t('deadlineDateRange')}
-                                placeholder="min."
-                                value={filters?.deadline_min}
-                                name='deadline_min'
-                                onChangeText={handleChange}
-                            />
+
+                    <View style={{gap: 16}}>
+                        <SgSelect
+                            label={t('progress')}
+                            placeholder={t('select')}
+                            modalTitle={t("selectProject")}
+                            value={filters?.status}
+                            name='status'
+                            list={(taskStatuses || []).sort((a, b) => a.id - b.id).map((el) => ({
+                                id: el.id,
+                                name: el.name,
+                                render: (<Text style={{fontSize: 16, fontWeight: 500}}>
+                                    {el.id === 1 && t("open")}
+                                    {el.id === 2 && t("inProgress")}
+                                    {el.id === 3 && t("checkProgressRequested")}
+                                    {el.id === 4 && t("checkProgressRequestAccepted")}
+                                    {el.id === 5 && t("checkProgressRequestDenied")}
+                                    {el.id === 6 && t("completeRequested")}
+                                    {el.id === 7 && t("completeRequestAccepted")}
+                                    {el.id === 8 && t("completeRequestDenied")}
+                                </Text>)
+                            }))}
+                            onChangeText={handleChange}
+                        />
+                        <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
+                            <View style={{flex: 1}}>
+                                <SgInput
+                                    label={t("scoreRange")}
+                                    placeholder={t('min')}
+                                    value={filters?.score_min}
+                                    name='score_min'
+                                    onChangeText={handleChange}
+                                    type='number'
+                                />
+                            </View>
+                            <View style={{flex: 1}}>
+                                <SgInput
+                                    label=""
+                                    placeholder={t('max')}
+                                    value={filters?.score_max}
+                                    name='score_max'
+                                    onChangeText={handleChange}
+                                    type='number'
+                                />
+                            </View>
                         </View>
-                        <View style={{flex: 1}}>
-                            <SgDatePicker
-                                placeholder={t('max')}
-                                value={filters?.deadline_max}
-                                name='deadline_max'
-                                onChangeText={handleChange}
-                            />
+                        <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
+                            <View style={{flex: 1}}>
+                                <SgDatePicker
+                                    label={t('deadlineDateRange')}
+                                    placeholder="min."
+                                    value={filters?.deadline_min}
+                                    name='deadline_min'
+                                    onChangeText={handleChange}
+                                />
+                            </View>
+                            <View style={{flex: 1}}>
+                                <SgDatePicker
+                                    placeholder={t('max')}
+                                    value={filters?.deadline_max}
+                                    name='deadline_max'
+                                    onChangeText={handleChange}
+                                />
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
-        </SgPopup>
-        </SgTemplateScreen>);
+            </SgPopup>
+        </SgTemplateScreen>
+    );
 }
 
 const styles = StyleSheet.create({

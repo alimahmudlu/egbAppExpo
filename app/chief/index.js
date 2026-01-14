@@ -205,14 +205,14 @@ export default function EmployeeDashboardScreen() {
                 <SgSectionInfoCard
                     icon="log-in-outline"
                     title={t('activeTasks')}
-                    count={taskList?.length - taskList?.filter(el => el?.status?.id === 5)?.length}
+                    count={taskList?.length - taskList?.filter(el => el?.status?.id === 7)?.length}
                     type="activeTasks"
                     href={`/chiefPages/tasks/active`}
                 />
                 <SgSectionInfoCard
                     icon="log-out-outline"
                     title={t('completedTasks')}
-                    count={taskList?.filter(el => el?.status?.id === 5)?.length}
+                    count={taskList?.filter(el => el?.status?.id === 7)?.length}
                     type="completedTasks"
                     href={`/chiefPages/tasks/completed`}
                 />
@@ -226,7 +226,7 @@ export default function EmployeeDashboardScreen() {
             />
 
         <View style={{gap: 16}}>
-            {taskList?.filter(el => [3, 4].includes(el?.status?.id))?.map((el, index) => (
+            {taskList?.filter(el => [2, 3, 4, 5, 6, 8].includes(el?.status?.id))?.map((el, index) => (
                 <SgSectionTaskCard
                     id={el?.id}
                     projectId={el?.project_id}

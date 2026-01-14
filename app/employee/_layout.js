@@ -12,6 +12,8 @@ import OvertimeActiveIcon from '@/assets/images/overtime-active.svg';
 import {useTranslation} from "react-i18next";
 import {useSocket} from "@/hooks/useSocket";
 import {useAuth} from "@/hooks/useAuth";
+import HistoryActiveIcon from "@/assets/images/history-active.svg";
+import HistoryIcon from "@/assets/images/history.svg";
 
 export default function EmployeeTabLayout() {
     const {t} = useTranslation();
@@ -86,6 +88,16 @@ export default function EmployeeTabLayout() {
                     headerTitle: t('tabBar__overTime'),
                     tabBarIcon: ({color, focused}) => focused ? <OvertimeActiveIcon width={20} height={20}/> :
                         <OvertimeIcon width={20} height={20}/>
+                }}
+            />
+            <Tabs.Screen
+                name="tasks/index"
+                options={{
+                    title: t('tabBar__allTasks'),
+                    tabBarLabel: t('tabBar__allTasks'),
+                    headerTitle: t('tabBar__allTasks'),
+                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
+                        <HistoryIcon width={20} height={20}/>
                 }}
             />
             <Tabs.Screen

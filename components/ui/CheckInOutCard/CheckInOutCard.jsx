@@ -9,7 +9,7 @@ import SgButton from '@/components/ui/Button/Button';
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
 import SgPopup from "@/components/ui/Modal/Modal";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import moment from "moment-timezone";
 import MapView, {Marker} from 'react-native-maps';
 import {useApi} from "@/hooks/useApi";
@@ -57,7 +57,8 @@ export default function SgCheckInOutCard(props) {
     const {t} = useTranslation();
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
     const [rejectInfoData, setRejectInfoData] = useState({});
-    const { selectedLanguage } = useLanguage()
+    const { selectedLanguage } = useLanguage();
+    const isSubmitting = useRef(false);
 
 
     function toggleRejectInfoModal(reject_reason) {
@@ -83,6 +84,10 @@ export default function SgCheckInOutCard(props) {
     }
 
     function handleSubmitOverTime() {
+        if (isSubmitting.current) return;
+
+        isSubmitting.current = true;
+
         request({
             url: `/${employeeType}/activity/overtime`,
             method: 'post',
@@ -94,6 +99,7 @@ export default function SgCheckInOutCard(props) {
             }
         }).then(res => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             setStoreData(prev => ({
                 ...prev,
                 overTime: res?.data || {
@@ -102,6 +108,7 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
@@ -119,6 +126,10 @@ export default function SgCheckInOutCard(props) {
     }
 
     function handleSubmitOverTimeOut() {
+        if (isSubmitting.current) return;
+
+        isSubmitting.current = true;
+
         request({
             url: `/${employeeType}/activity/overtimeout`,
             method: 'post',
@@ -131,6 +142,7 @@ export default function SgCheckInOutCard(props) {
             }
         }).then(res => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             setStoreData(prev => ({
                 ...prev,
                 overTimeOut: res?.data || {
@@ -139,6 +151,7 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })
@@ -165,6 +178,10 @@ export default function SgCheckInOutCard(props) {
     }
 
     function handleSubmitCheckIn() {
+        if (isSubmitting.current) return;
+
+        isSubmitting.current = true;
+
         request({
             url: `/${employeeType}/activity/checkin`,
             method: 'post',
@@ -176,6 +193,7 @@ export default function SgCheckInOutCard(props) {
             }
         }).then(res => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             setStoreData(prev => ({
                 ...prev,
                 checkIn: res?.data || {
@@ -184,7 +202,9 @@ export default function SgCheckInOutCard(props) {
             }));
         }).catch(err => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             toggleRejectInfoModal(err?.response?.data?.message)
+            console.log(err?.response?.data?.message, 'err?.response?.data?.message')
             // console.log(err);
         })
 
@@ -201,6 +221,10 @@ export default function SgCheckInOutCard(props) {
     }
 
     function handleSubmitCheckOut() {
+        if (isSubmitting.current) return;
+
+        isSubmitting.current = true;
+
         request({
             url: `/${employeeType}/activity/checkout`,
             method: 'post',
@@ -214,6 +238,7 @@ export default function SgCheckInOutCard(props) {
             }
         }).then(res => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             if (res.success) {
                 setStoreData(prev => ({
                     ...prev,
@@ -227,6 +252,7 @@ export default function SgCheckInOutCard(props) {
             }
         }).catch(err => {
             setButtonStatus(false)
+            isSubmitting.current = false;
             toggleRejectInfoModal(err?.response?.data?.message)
             // console.log(err);
         })

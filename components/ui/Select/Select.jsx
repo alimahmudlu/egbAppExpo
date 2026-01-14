@@ -7,7 +7,8 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import SgRadio from "@/components/ui/Radio/Radio";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
-import SgInput from "@/components/ui/Input/Input"; // Multi-select üçün fərz edilən import
+import SgInput from "@/components/ui/Input/Input";
+import {useTranslation} from "react-i18next"; // Multi-select üçün fərz edilən import
 
 export default function SgSelect(props) {
     const {
@@ -25,6 +26,7 @@ export default function SgSelect(props) {
     const [userFilters, setUserFilters] = useState({});
     const [originalArray, setOriginalArray] = useState(list ? [...list] : [])
     const [array, setArray] = useState(list ? [...list] : [])
+    const {t} = useTranslation();
 
     useEffect(() => {
         setArray(list ? [...list] : [])
@@ -135,7 +137,7 @@ export default function SgSelect(props) {
             if (selectedValue.length > 0) {
                 const names = selectedValue?.map(item => item?.name);
                 if (names.length > 2) {
-                    return `${names?.slice(0, 2).join(', ')} və ${names.length - 2} daha...`;
+                    return `${names?.slice(0, 2).join(', ')} ${t('and')} ${names.length - 2} ${t('more')}...`;
                 }
                 return names.join(', ');
             }
@@ -213,7 +215,6 @@ export default function SgSelect(props) {
                 >
 
                     {(array || []).map((item, index) => {
-                        // Seçim vəziyyətini yoxla
                         const isSelected = multiple
                             ? selectedValue.some(selected => selected.id === item.id)
                             : item?.id === selectedValue?.id;
@@ -243,14 +244,11 @@ export default function SgSelect(props) {
                                 >
                                     <View>
                                         {multiple ? (
-                                            // Çox seçim üçün SgCheckbox (fərz olunur)
                                             <SgCheckbox checked={isSelected} />
                                         ) : (
-                                            // Tək seçim üçün SgRadio
                                             <SgRadio selected={isSelected} />
                                         )}
                                     </View>
-                                    {/* Render propu olan elementlərin görünüşünü tənzimləmək üçün */}
                                     <View style={{flex: 1}}>{item?.render || <Text>{item?.name}</Text>}</View>
                                     <View style={{flex: 1, opacity: 1, position: 'absolute', zIndex: 999, top: 0, left: 0, bottom: 0, right: 0}}></View>
                                 </View>
