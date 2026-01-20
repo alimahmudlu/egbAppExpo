@@ -123,11 +123,11 @@ export default function ProjectItemScreen() {
         if (project_id) {
             setFilters({
                 project: (projectsList || []).find(el => el.id === Number(project_id)),
-                date: moment().tz("Europe/Moscow").format('YYYY-MM-DD')
+                date: moment().tz("Europe/Moscow").add(1, 'days').format('YYYY-MM-DD')
             })
             getData({
                 project: Number(project_id),
-                date: moment().tz("Europe/Moscow").format('YYYY-MM-DD')
+                date: moment().tz("Europe/Moscow").add(1, 'days').format('YYYY-MM-DD')
             })
         }
     }, [project_id, projectsList]))

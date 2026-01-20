@@ -46,6 +46,14 @@ export default function TimeKeeperTabLayout() {
                         headerShown: false, // Başlığı göstər
                     }}
                 />
+
+                <Stack.Screen
+                    name="create-report/index" // faylın adı: index.js
+                    options={{
+                        headerTitle: 'User page',
+                        headerShown: false, // Başlığı göstər
+                    }}
+                />
             </Stack>
         </>
     );

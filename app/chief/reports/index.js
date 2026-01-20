@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Dimensions, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useApi} from "@/hooks/useApi";
 import {useData} from "@/hooks/useData";
-import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
 import {useAuth} from "@/hooks/useAuth";
 import {useTranslation} from "react-i18next";
 import moment from "moment";
@@ -18,53 +18,11 @@ import SgPopup from "@/components/ui/Modal/Modal";
 
 const {width} = Dimensions.get('window');
 
-const SUMMARY_DATA = [
-    {id: '1', title: 'Employees #', value: '697', sub: '125 Ind. / 570 Dir.'},
-    {id: '2', title: 'Checked In #', value: '638', sub: '299 Man. / 339 Auto'},
-    {id: '3', title: 'Not Checked In #', value: '59', sub: '35 Ind. / 22 Dir.'},
-];
-
-const PROJECTS_DATA = [
-    {
-        id: '18', name: 'Camp Representatives', employees: 10,
-        indirect: 9,
-        direct: 1,
-        checkedIn: 8,
-        indChecked: 7,
-        dirChecked: 1,
-        notChecked: 2,
-        indNotChecked: 2,
-        dirNotChecked: 0
-    },
-    {
-        id: '17', name: 'Central Office', employees: 10,
-        indirect: 9,
-        direct: 1,
-        checkedIn: 8,
-        indChecked: 7,
-        dirChecked: 1,
-        notChecked: 2,
-        indNotChecked: 2,
-        dirNotChecked: 0
-    },
-    {
-        id: '15', name: 'SberCity B-11 Apartments', employees: 10,
-        indirect: 9,
-        direct: 1,
-        checkedIn: 8,
-        indChecked: 7,
-        dirChecked: 1,
-        notChecked: 2,
-        indNotChecked: 2,
-        dirNotChecked: 0
-    },
-];
-
-
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const {user} = useAuth();
     const {storeData} = useData();
+    const router = useRouter();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
     const [data, setData] = useState([])
@@ -93,16 +51,21 @@ export default function EmployeeDocsScreen() {
     }
 
     function handleFilters() {
-        getData()
+        getData();
+        // console.log(filters);
     }
 
     function getData() {
+        console.log({
+            ...filters,
+            project: filters?.project?.map(el => el.id),
+        })
         request({
             url: `/chief/reports/list`,
             method: 'get',
             params: {
                 ...filters,
-                project: filters?.project?.id,
+                project: filters?.project?.map(el => el.id),
             }
         }).then(res => {
         }).catch(err => {
@@ -112,8 +75,8 @@ export default function EmployeeDocsScreen() {
             url: `/chief/reports/statistics`,
             method: 'get',
             params: {
-                start_date: moment().endOf('day').utc().startOf('day').format('YYYY-MM-DD'),
-                end_date: moment().endOf('day').utc().endOf('day').format('YYYY-MM-DD'),
+                ...filters,
+                project: filters?.project?.map(el => el.id),
             }
         }).then(res => {
         }).catch(err => {
@@ -169,31 +132,81 @@ export default function EmployeeDocsScreen() {
                         showsHorizontalScrollIndicator={false} style={styles.summaryWrapper}>
                 <View style={styles.summaryCard}>
                     <Text style={styles.summaryLabel}>Employees</Text>
-                    <Text style={styles.summaryValue}>{statistics?.member_count}</Text>
-                    <Text style={styles.summarySubText}>Indirect Employees #: <Text
-                        style={{fontWeight: 700}}>{statistics?.indirect_member_count}</Text></Text>
-                    <Text style={styles.summarySubText}>Direct Employees #: <Text
-                        style={{fontWeight: 700}}>{statistics?.direct_member_count}</Text></Text>
+                    <TouchableOpacity onPress={() => {
+                        router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?start=${filters?.start_date}&end=${filters?.end_date}`)
+                    }}>
+                        <Text style={styles.summaryValue}>{statistics?.member_count}</Text>
+                    </TouchableOpacity>
+
+                    <Text style={styles.summarySubText}>
+                        Indirect Employees #:
+                        <TouchableOpacity onPress={() => {
+                            router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                        }}>
+                            <Text style={{fontWeight: 700}}>{statistics?.indirect_member_count}</Text>
+                        </TouchableOpacity>
+                    </Text>
+                    <Text style={styles.summarySubText}>
+                        Direct Employees #:
+                        <TouchableOpacity onPress={() => {
+                            router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
+                        }}>
+                            <Text style={{fontWeight: 700}}>{statistics?.direct_member_count}</Text>
+                        </TouchableOpacity>
+                    </Text>
                 </View>
                 <View style={styles.summaryCard}>
                     <Text style={styles.summaryLabel}>Employees</Text>
-                    <Text style={styles.summaryValue}>{statistics?.total_checkin_count}</Text>
+                    <TouchableOpacity onPress={() => {
+                        router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
+                    }}>
+                        <Text style={styles.summaryValue}>{statistics?.total_checkin_count}</Text>
+                    </TouchableOpacity>
+
                     <Text style={styles.summarySubText}>(<Text
                         style={{fontWeight: 700}}>{statistics?.total_manual_checkin_count}</Text> Manual, <Text
                         style={{fontWeight: 700}}>{(statistics?.total_checkin_count || 0) - (statistics?.total_manual_checkin_count || 0)}</Text> Auto)</Text>
-                    <Text style={styles.summarySubText}>Indirect Employees #: <Text
-                        style={{fontWeight: 700}}>{statistics?.indirect_checkin_count}</Text></Text>
-                    <Text style={styles.summarySubText}>Direct Employees #: <Text
-                        style={{fontWeight: 700}}>{statistics?.direct_checkin_count}</Text></Text>
+
+                    <Text style={styles.summarySubText}>
+                        Indirect Employees #:
+                        <TouchableOpacity onPress={() => {
+                            router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=2&checkin_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
+                        }}>
+                            <Text style={{fontWeight: 700}}>{statistics?.indirect_checkin_count}</Text>
+                        </TouchableOpacity>
+                    </Text>
+                    <Text style={styles.summarySubText}>
+                        Direct Employees #:
+                        <TouchableOpacity onPress={() => {
+                            router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=1&checkin_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
+                        }}>
+                            <Text style={{fontWeight: 700}}>{statistics?.direct_checkin_count}</Text>
+                        </TouchableOpacity>
+                    </Text>
                 </View>
                 <View style={styles.summaryCard}>
                     <Text style={styles.summaryLabel}>Employees</Text>
-                    <Text
-                        style={styles.summaryValue}>{statistics?.member_count - statistics?.total_checkin_count || '0'}</Text>
-                    <Text style={styles.summarySubText}>Indirect Employees #: <Text
-                        style={{fontWeight: 700}}>{statistics?.indirect_member_count - statistics?.indirect_checkin_count}</Text></Text>
-                    <Text style={styles.summarySubText}>Direct Employees #: <Text
-                        style={{fontWeight: 700}}>{statistics?.direct_member_count - statistics?.direct_checkin_count}</Text></Text>
+                    <TouchableOpacity onPress={() => {
+                        router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                    }}>
+                        <Text style={styles.summaryValue}>{statistics?.member_count - statistics?.total_checkin_count || '0'}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.summarySubText}>
+                        Indirect Employees #:
+                        <TouchableOpacity onPress={() => {
+                            router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=2&checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                        }}>
+                            <Text style={{fontWeight: 700}}>{statistics?.indirect_member_count - statistics?.indirect_checkin_count}</Text>
+                        </TouchableOpacity>
+                    </Text>
+                    <Text style={styles.summarySubText}>
+                        Direct Employees #:
+                        <TouchableOpacity onPress={() => {
+                            router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=1&checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                        }}>
+                            <Text style={{fontWeight: 700}}>{statistics?.direct_member_count - statistics?.direct_checkin_count}</Text>
+                        </TouchableOpacity>
+                    </Text>
                 </View>
             </ScrollView>
 
@@ -203,10 +216,14 @@ export default function EmployeeDocsScreen() {
 
                         {/* Project Header */}
                         <View style={styles.projectHeader}>
-                            <View>
-                                <Text style={styles.projectName}>{project.name}</Text>
-                                <Text style={styles.projectId}>ID: {project.id}</Text>
-                            </View>
+                            <TouchableOpacity onPress={() => {
+                                router.navigate(`/chiefPages/reports/${project.id}?start=${filters?.start_date}&end=${filters?.end_date}`)
+                            }}>
+                                <View>
+                                    <Text style={styles.projectName}>{project.name}</Text>
+                                    <Text style={styles.projectId}>ID: {project.id}</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={styles.line}/>
@@ -215,47 +232,80 @@ export default function EmployeeDocsScreen() {
                         <View style={styles.gridContainer}>
                             {/* SIRA 1 */}
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Total_employee')}</Text>
-                                <Text style={styles.gridValue}>{project.member_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Total_employee')}</Text>
+                                    <Text style={styles.gridValue}>{project.member_count}</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Indirect_employee')}</Text>
-                                <Text style={styles.gridValue}>{project.indirect_member_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?staff_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Indirect_employee')}</Text>
+                                    <Text style={styles.gridValue}>{project.indirect_member_count}</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Direct_employee')}</Text>
-                                <Text style={styles.gridValue}>{project.direct_member_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?staff_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Direct_employee')}</Text>
+                                    <Text style={styles.gridValue}>{project.direct_member_count}</Text>
+                                </TouchableOpacity>
                             </View>
 
                             {/* SIRA 2 */}
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Total_check_in')}</Text>
-                                <Text style={styles.gridValue}>{project.total_checkin_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?checkin_status=1start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Total_check_in')}</Text>
+                                    <Text style={styles.gridValue}>{project.total_checkin_count}</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Check_in_indirect_employee')}</Text>
-                                <Text style={styles.gridValue}>{project.indirect_checkin_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?staff_status=2&checkin_status=1start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Check_in_indirect_employee')}</Text>
+                                    <Text style={styles.gridValue}>{project.indirect_checkin_count}</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Check_in_direct_employee')}</Text>
-                                <Text style={styles.gridValue}>{project.direct_checkin_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?staff_status=1&checkin_status=1start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Check_in_direct_employee')}</Text>
+                                    <Text style={styles.gridValue}>{project.direct_checkin_count}</Text>
+                                </TouchableOpacity>
                             </View>
 
                             {/* SIRA 3 */}
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Not_Checked_in_Employees')}</Text>
-                                <Text
-                                    style={styles.gridValue}>{project?.member_count - project?.total_checkin_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Not_Checked_in_Employees')}</Text>
+                                    <Text style={styles.gridValue}>{project?.member_count - project?.total_checkin_count}</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Indirect_Not_Checked_in_Employees')}</Text>
-                                <Text
-                                    style={styles.gridValue}>{project?.indirect_member_count - project?.indirect_checkin_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?staff_status=2&checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Indirect_Not_Checked_in_Employees')}</Text>
+                                    <Text style={styles.gridValue}>{project?.indirect_member_count - project?.indirect_checkin_count}</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.gridItem}>
-                                <Text style={styles.gridLabel}>{t('Direct_Not_Checked_in_Employees')}</Text>
-                                <Text
-                                    style={styles.gridValue}>{project?.direct_member_count - project?.direct_checkin_count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    router.navigate(`/chiefPages/reports/${project.id}?staff_status=1&checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
+                                }}>
+                                    <Text style={styles.gridLabel}>{t('Direct_Not_Checked_in_Employees')}</Text>
+                                    <Text style={styles.gridValue}>{project?.direct_member_count - project?.direct_checkin_count}</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
 
@@ -306,6 +356,7 @@ export default function EmployeeDocsScreen() {
                                 modalTitle={t("selectProject")}
                                 value={filters?.project}
                                 name='project'
+                                multiple={true}
                                 onChangeText={handleChange}
                                 list={(projectsList || []).map((project, index) => ({
                                     id: project?.id, name: project?.name, render: <SgSectionProjectListItem
@@ -379,6 +430,7 @@ const styles = StyleSheet.create({
     summarySubText: {
         fontSize: 10,
         color: '#838a97',
+        marginTop: 12,
     },
     header: {
         flexDirection: 'row',

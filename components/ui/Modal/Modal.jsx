@@ -100,7 +100,7 @@ export default function SgPopup({
                   <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
                 </TouchableWithoutFeedback>
 
-                <View style={[styles.container, fullScreen && { height: '100%', paddingTop: 12  }]}>
+                <View style={[styles.container, fullScreen && { height: '100%', paddingTop: 24  }]}>
                   <View style={styles.dragHandle} />
 
                     <ScrollView>

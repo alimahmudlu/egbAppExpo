@@ -16,77 +16,85 @@ export default function TimeKeeperTabLayout() {
         <>
             <Stack>
                 <Stack.Screen
-                    name="create-task/index" // faylın adı: index.js
+                    name="create-task/index"
                     options={{
                         headerTitle: 'User page',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
 
                 <Stack.Screen
-                    name="docs/archive/index" // faylın adı: index.js
+                    name="docs/archive/index"
                     options={{
                         headerTitle: 'Əsas Səhifə',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
 
                 <Stack.Screen
-                    name="projects/[projectId]/[taskId]/index" // faylın adı: index.js
+                    name="projects/[projectId]/[taskId]/index"
                     options={{
                         headerTitle: 'Task page',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen
-                    name="projects/[projectId]/overview/index" // faylın adı: index.js
+                    name="projects/[projectId]/overview/index"
                     options={{
                         headerTitle: 'Task page',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen
-                    name="projects/[projectId]/index" // faylın adı: index.js
+                    name="projects/[projectId]/index"
                     options={{
                         headerTitle: 'Task page',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
 
                 <Stack.Screen
-                    name="tasks/active/index" // faylın adı: index.js
+                    name="reports/[project_id]/index"
+                    options={{
+                        headerTitle: 'Task page',
+                        headerShown: false,
+                    }}
+                />
+
+                <Stack.Screen
+                    name="tasks/active/index"
                     options={{
                         headerTitle: 'User Check In',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen
-                    name="tasks/completed/index" // faylın adı: index.js
+                    name="tasks/completed/index"
                     options={{
                         headerTitle: 'User Check Out',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
 
                 <Stack.Screen
-                    name="users/[userId]/tasks/active/index" // faylın adı: index.js
+                    name="users/[userId]/tasks/active/index"
                     options={{
                         headerTitle: 'User Check In',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen
-                    name="users/[userId]/tasks/completed/index" // faylın adı: index.js
+                    name="users/[userId]/tasks/completed/index"
                     options={{
                         headerTitle: 'User Check Out',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen
-                    name="users/[userId]/index" // faylın adı: index.js
+                    name="users/[userId]/index"
                     options={{
                         headerTitle: 'User Check Out',
-                        headerShown: false, // Başlığı göstər
+                        headerShown: false,
                     }}
                 />
             </Stack>

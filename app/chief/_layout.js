@@ -107,6 +107,7 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__history'),
                     tabBarLabel: t('tabBar__history'),
                     headerTitle: t('tabBar__history'),
+                    href: null,
                     tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
                         <HistoryIcon width={20} height={20}/>
                 }}

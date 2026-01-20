@@ -219,8 +219,9 @@ export default function TaskCreateScreen() {
                 />
                 <SgDatePicker
                     label={t('deadlineDate')}
-                    placeholder="dd/mm/yyyy - HH/mm"
+                    placeholder="dd/mm/yyyy"
                     value={data?.deadline}
+                    mode="date"
                     name='deadline'
                     isInvalid={errors?.deadline}
                     onChangeText={handleChange}

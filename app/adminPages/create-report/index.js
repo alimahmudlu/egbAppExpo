@@ -10,6 +10,9 @@ import {useApi} from "@/hooks/useApi";
 import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
 import {useData} from "@/hooks/useData";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import SgSelect from "@/components/ui/Select/Select";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 
 
 export default function ChiefMenuScreen() {
@@ -22,10 +25,11 @@ export default function ChiefMenuScreen() {
     const [data, setData] = useState({
         turn1order: 0,
         turn2order: 0,
-        date: moment().add(1, 'day').format('YYYY-MM-DD')
+        date: moment().tz("Europe/Moscow").add(1, 'day').format('YYYY-MM-DD')
     });
     const [reportData, setReportData] = useState({});
     const [errors, setErrors] = useState({});
+    const [projectsList, setProjectsList] = useState([]);
     const [reportModal, setReportModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({});
     const { project_id } = useLocalSearchParams();
@@ -74,7 +78,6 @@ export default function ChiefMenuScreen() {
             url: "/admin/food/report/add",
             data: {
                 ...data,
-                date: moment().tz("Europe/Moscow").add(1, 'days').format('YYYY-MM-DD'),
                 project_id: selectedRow?.project_id,
                 turn1employees: selectedRow?.turn1employees || 0,
                 turn2employees: selectedRow?.turn2employees || 0,
@@ -100,7 +103,10 @@ export default function ChiefMenuScreen() {
         })
 
         request({
-            url: `/admin/food/projects/${project_id}`, method: 'get',
+            url: `/admin/food/projects/${data?.project?.id}`, method: 'get',
+            params: {
+                date: data?.date
+            }
         }).then(res => {
         }).catch(err => {
             console.log(err);
@@ -108,7 +114,19 @@ export default function ChiefMenuScreen() {
     }
 
     useFocusEffect(useCallback(() => {
-        getData();
+        request({
+            url: `/admin/options/projects`, method: 'get',
+        }).then(res => {
+            // console.log(res, 'ressss')
+            if (res.success) {
+                setProjectsList(res?.data);
+            } else {
+                // Handle error response
+                // console.log(res.message);
+            }
+        }).catch(err => {
+            // console.log(err, 'errrr');
+        })
 
         return () => {
             console.log('Home tab lost focus');
@@ -116,48 +134,40 @@ export default function ChiefMenuScreen() {
     }, [refreshKey]));
 
     useEffect(() => {
+        if(data?.project?.id) {
+            getData();
+        }
+    }, [data?.project, data?.date]);
+
+    useEffect(() => {
         setToday(storeData?.cache?.[`GET:/admin/food/report/today`]?.data)
     }, [storeData?.cache?.[`GET:/admin/food/report/today`]])
 
     useEffect(() => {
         setSelectedRow({
-            project_id: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.project_id,
-            turn1employees: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.turn1employees,
-            turn2employees: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.turn2employees,
+            project_id: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.project_id || data?.project?.id,
+            turn1employees: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.turn1employees,
+            turn2employees: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.turn2employees,
         })
-        console.log({
-            turn1: {
-                breakfast: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.breakfast,
-                lunch: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.lunch,
-                dinner: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.dinner,
-            },
-            turn2: {
-                lunch: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.nightlunch,
-            },
-            turnextras: {
-                bread: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.bread,
-                kefir: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.kefir,
-                sugar: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.sugar,
-                tea: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.tea,
-            }
-        }, 'pros')
+
         setData({
+            ...data,
             turn1: {
-                breakfast: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.breakfast,
-                lunch: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.lunch,
-                dinner: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.dinner,
+                breakfast: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.breakfast,
+                lunch: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.lunch,
+                dinner: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.dinner,
             },
             turn2: {
-                lunch: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.nightlunch,
+                lunch: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.nightlunch,
             },
             turnextras: {
-                bread: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.bread,
-                kefir: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.kefir,
-                sugar: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.sugar,
-                tea: storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]?.data?.tea,
+                bread: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.bread,
+                kefir: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.kefir,
+                sugar: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.sugar,
+                tea: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.tea,
             }
         })
-    }, [storeData?.cache?.[`GET:/admin/food/projects/${project_id}`]])
+    }, [storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]])
 
     return (
         <SgTemplateScreen
@@ -166,7 +176,37 @@ export default function ChiefMenuScreen() {
             }}/>}
         >
             <View style={{gap: 32}}>
-                <Text style={{textAlign: 'center', fontWeight: 600}}>DATE: {moment().add(1, 'days').format('DD/MM/YYYY')}</Text>
+                {/*<Text style={{textAlign: 'center', fontWeight: 600}}>DATE: {moment().add(1, 'days').format('DD/MM/YYYY')}</Text>*/}
+                <View style={{gap: 16}}>
+                    <View style={{flex: 1}}>
+                        <SgDatePicker
+                            label={t('date')}
+                            placeholder={t('date')}
+                            value={data?.date}
+                            name='date'
+                            mode='date'
+                            onChangeText={handleChange}
+                        />
+                    </View>
+                    <View style={{flex: 1}}>
+                        <SgSelect
+                            label={t("project")}
+                            placeholder={t("enterProject")}
+                            modalTitle={t("selectProject")}
+                            value={data?.project}
+                            name='project'
+                            onChangeText={handleChange}
+                            list={(projectsList || []).map((project, index) => ({
+                                id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                    key={index}
+                                    title={project.name}
+                                    staffData={(project?.members || []).filter(el => el.status)}
+                                    id={project.id}
+                                />
+                            }))}
+                        />
+                    </View>
+                </View>
                 <View style={{gap: 16}}>
                     <Text style={{fontSize: 18, fontWeight: 700, textAlign: 'center'}}>{t('DayShift')}</Text>
 

@@ -86,6 +86,13 @@ export default function ChiefMenuScreen() {
             }
         >
             <View style={{gap: 32}}>
+                <SgButton
+                    bgColor={COLORS.brand_600}
+                    color={COLORS.white}
+                    onPress={() => router.push('/adminPages/create-report')}
+                >
+                    {t('FoodScheduleOtherDate')}
+                </SgButton>
                 <View style={{gap: 16}}>
                     <Text style={{fontSize: 18, fontWeight: 700}}>
                         {t('ORDER')}

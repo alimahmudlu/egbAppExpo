@@ -27,13 +27,14 @@ import COLORS from "@/constants/colors";
 import ReloadArrow from "@/assets/images/reload-arrows.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
+import SgLoading from "@/components/sections/Loading/Loading";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
     const {request} = useApi();
-    const [employeeActivitiesCheckIn, setEmployeeActivitiesCheckIn] = useState({});
-    const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
-    const [employeeActivitiesAtWork, setEmployeeActivitiesAtWork] = useState({});
+    const [employeeActivitiesCheckIn, setEmployeeActivitiesCheckIn] = useState({loading: true, data: []});
+    const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({loading: true, data: []});
+    const [employeeActivitiesAtWork, setEmployeeActivitiesAtWork] = useState({loading: true, data: []});
     const [filters, setFilters] = useState({})
     const [filterModal, setFilterModal] = useState(false)
     const {storeData, insertDataWithPagination, setStoreData, updateData} = useData();
@@ -66,7 +67,11 @@ export default function EmployeeDashboardScreen() {
             }
         }).then(res => {
         }).catch(err => {
-            // console.log(err, 'apiservice control err')
+            setEmployeeActivitiesCheckIn((prevState) => {
+                return {
+                    error: err?.response?.data?.message || err?.response?.status || 'err'
+                }
+            })
         });
     }
 
@@ -81,7 +86,11 @@ export default function EmployeeDashboardScreen() {
             }
         }).then(res => {
         }).catch(err => {
-            // console.log(err, 'apiservice control err')
+            setEmployeeActivitiesCheckOut((prevState) => {
+                return {
+                    error: err?.response?.data?.message || err?.response?.status || 'err'
+                }
+            })
         });
     }
 
@@ -96,7 +105,11 @@ export default function EmployeeDashboardScreen() {
             }
         }).then(res => {
         }).catch(err => {
-            // console.log(err, 'apiservice control err')
+            setEmployeeActivitiesAtWork((prevState) => {
+                return {
+                    error: err?.response?.data?.message || err?.response?.status || 'err'
+                }
+            })
         });
     }
 
@@ -146,30 +159,53 @@ export default function EmployeeDashboardScreen() {
 
     useEffect(() => {
         setEmployeeActivitiesCheckIn((prevState) => {
+            if ((storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})?.data) {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})
                 }
+            }
+            else {
+                return {
+                    loading: true,
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkin`]?.data || {})
+                }
+            }
         })
     }, [storeData?.cache?.['GET:/timekeeper/activity/list/checkin']])
 
     useEffect(() => {
         setEmployeeActivitiesCheckOut((prevState) => {
+            if ((storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})?.data) {
                 return {
                     ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})
                 }
+            }
+            else {
+                return {
+                    loading: true,
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/checkout`]?.data || {})
+                }
+            }
         })
     }, [storeData?.cache?.['GET:/timekeeper/activity/list/checkout']])
 
     useEffect(() => {
         setEmployeeActivitiesAtWork((prevState) => {
-            return {
-                ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})
+            if ((storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})?.data) {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})
+                }
+            }
+            else {
+                return {
+                    loading: true,
+                    ...(storeData?.cache?.[`GET:/timekeeper/activity/list/atwork`]?.data || {})
+                }
             }
         })
     }, [storeData?.cache?.['GET:/timekeeper/activity/list/atwork']])
 
     useFocusEffect(useCallback(() => {
-        console.log(refreshKey, 'refreshKey')
         request({
             url: `/employee/activity/`, method: 'get',
         }).then(res => {
@@ -233,12 +269,12 @@ export default function EmployeeDashboardScreen() {
             setPageCheckIn(1)
             setPageCheckOut(1)
             setPageAtWork(1)
-            setEmployeeActivitiesCheckIn({data: []})
-            setEmployeeActivitiesCheckOut({data: []})
-            setEmployeeActivitiesAtWork({data: []})
-            updateData(`GET:/timekeeper/activity/list/checkin`, {data: []})
-            updateData(`GET:/timekeeper/activity/list/checkout`, {data: []})
-            updateData(`GET:/timekeeper/activity/list/atwork`, {data: []})
+            setEmployeeActivitiesCheckIn({data: [], loading: true})
+            setEmployeeActivitiesCheckOut({data: [], loading: true})
+            setEmployeeActivitiesAtWork({data: [], loading: true})
+            updateData(`GET:/timekeeper/activity/list/checkin`, {data: {data: [], loading: true}})
+            updateData(`GET:/timekeeper/activity/list/checkout`, {data: {data: [], loading: true}})
+            updateData(`GET:/timekeeper/activity/list/atwork`, {data: {data: [], loading: true}})
             setActiveTab('checkIn')
         };
 
@@ -463,21 +499,30 @@ export default function EmployeeDashboardScreen() {
                         element:
                             <>
                                 <View style={{gap: 8}}>
-                                    {(((employeeActivitiesCheckIn || {})?.data || [])?.map((emp, index) => {
-                                        return (
-                                            <SgSectionEmployeeCard
-                                                cardType={'checkIn'}
-                                                removeRowData={removeRowData}
-                                                key={`checkIn--${index}--${emp.id}`}
-                                                fullData={emp}
-                                                title={emp?.employee?.full_name}
-                                                role={emp?.employee?.role?.name}
-                                                project={emp?.project?.name}
-                                                checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                            />
-                                        )
-                                    }))}
+                                    {(employeeActivitiesCheckIn || {})?.error ?
+                                        <Text style={{backgroundColor: COLORS.error_600, color: COLORS.white, padding: 6, borderRadius: 4}}>{(employeeActivitiesCheckIn || {})?.error}</Text>
+                                        :
+                                        ''
+                                    }
+                                    {(employeeActivitiesCheckIn || {})?.loading ?
+                                        <SgLoading />
+                                        :
+                                        (((employeeActivitiesCheckIn || {})?.data || [])?.map((emp, index) => {
+                                            return (
+                                                <SgSectionEmployeeCard
+                                                    cardType={'checkIn'}
+                                                    removeRowData={removeRowData}
+                                                    key={`checkIn--${index}--${emp.id}`}
+                                                    fullData={emp}
+                                                    title={emp?.employee?.full_name}
+                                                    role={emp?.employee?.role?.name}
+                                                    project={emp?.project?.name}
+                                                    checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                                />
+                                            )
+                                        }))
+                                    }
                                     {((employeeActivitiesCheckIn || {})?.total || 0) > pageCheckIn * 10 ?
                                         <View style={{marginTop: 16}}>
                                             <SgButton
@@ -498,21 +543,25 @@ export default function EmployeeDashboardScreen() {
                         element:
                             <>
                                 <View style={{gap: 8}}>
-                                    {(((employeeActivitiesCheckOut || {})?.data || [])?.map((emp, index) => {
-                                        return (
-                                            <SgSectionEmployeeCard
-                                                cardType={'checkOut'}
-                                                removeRowData={removeRowData}
-                                                key={`checkOut--${index}--${emp.id}`}
-                                                fullData={emp}
-                                                title={emp?.employee?.full_name}
-                                                role={emp?.employee?.role?.name}
-                                                project={emp?.project?.name}
-                                                checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                            />
-                                        )
-                                    }))}
+                                    {(employeeActivitiesCheckOut || {})?.loading ?
+                                        <SgLoading />
+                                        :
+                                        (((employeeActivitiesCheckOut || {})?.data || [])?.map((emp, index) => {
+                                            return (
+                                                <SgSectionEmployeeCard
+                                                    cardType={'checkOut'}
+                                                    removeRowData={removeRowData}
+                                                    key={`checkOut--${index}--${emp.id}`}
+                                                    fullData={emp}
+                                                    title={emp?.employee?.full_name}
+                                                    role={emp?.employee?.role?.name}
+                                                    project={emp?.project?.name}
+                                                    checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                                />
+                                            )
+                                        }))
+                                    }
 
                                     {((employeeActivitiesCheckOut || {})?.total || 0) > pageCheckOut * 10 ?
                                         <View style={{marginTop: 16}}>
@@ -534,24 +583,28 @@ export default function EmployeeDashboardScreen() {
                         element:
                             <>
                                 <View style={{gap: 8}}>
-                                    {(((employeeActivitiesAtWork || {})?.data || [])?.map((emp, index) => {
-                                        return (
-                                            <SgSectionEmployeeCard
-                                                cardType={'atWork'}
-                                                removeRowData={removeRowData}
-                                                key={`atwork--${index}--${emp.id}`}
-                                                fullData={emp}
-                                                atWork={true}
-                                                title={emp?.employee?.full_name}
-                                                role={emp?.employee?.role?.name}
-                                                project={emp?.project?.name}
-                                                checkType={emp?.is_manual ? t('manual') : t('auto')}
-                                                time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
-                                                timeRaw={emp.request_time}
-                                                editable={false}
-                                            />
-                                        )
-                                    }))}
+                                    {(employeeActivitiesAtWork || {})?.loading ?
+                                        <SgLoading />
+                                        :
+                                        (((employeeActivitiesAtWork || {})?.data || [])?.map((emp, index) => {
+                                            return (
+                                                <SgSectionEmployeeCard
+                                                    cardType={'atWork'}
+                                                    removeRowData={removeRowData}
+                                                    key={`atwork--${index}--${emp.id}`}
+                                                    fullData={emp}
+                                                    atWork={true}
+                                                    title={emp?.employee?.full_name}
+                                                    role={emp?.employee?.role?.name}
+                                                    project={emp?.project?.name}
+                                                    checkType={emp?.is_manual ? t('manual') : t('auto')}
+                                                    time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                                    timeRaw={emp.request_time}
+                                                    editable={false}
+                                                />
+                                            )
+                                        }))
+                                    }
 
                                     {((employeeActivitiesAtWork || {})?.total || 0) > pageAtWork * 10 ?
                                         <View style={{marginTop: 16}}>
