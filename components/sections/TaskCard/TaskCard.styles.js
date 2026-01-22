@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
 
   statusBadge: {
-    borderRadius: 20,
+    borderRadius: 8,
     paddingVertical: 6,
     paddingHorizontal: 12,
     width: 200 - 42,
