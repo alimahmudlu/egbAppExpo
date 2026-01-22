@@ -24,7 +24,10 @@ export default function SgSectionUserInfo({
         }
     }
 
-    const getRoleColor = (colorKey) => {
+    const getRoleColor = (colorKey, isOnDark = false) => {
+        if (isOnDark) {
+            return COLORS.brand_300;
+        }
         switch (colorKey) {
             case 'success':
                 return COLORS.brand_600;
@@ -69,7 +72,7 @@ export default function SgSectionUserInfo({
         }
     };
 
-    const appliedRoleColor = getRoleColor(roleColor);
+    const appliedRoleColor = getRoleColor(roleColor, color === 'white');
     const appliedColor = getTitleColor(color);
     const appliedSize = getSizeStyles(size);
 
