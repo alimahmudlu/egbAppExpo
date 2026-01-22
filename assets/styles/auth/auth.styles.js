@@ -8,14 +8,13 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
     backgroundColor: COLORS.background,
-    // padding: 16,
-    // paddingTop: 48,
     flexDirection: "column",
-    // justifyContent: "space-between",
+    justifyContent: "space-between",
   },
   buttonLayout: {
-      // paddingVertical: 16,
-      paddingHorizontal: 24,
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+    paddingTop: 24,
   },
 });
 

@@ -2,31 +2,34 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
-    gap: 16,
-    marginBottom: 48,
+    gap: 12,
+    marginBottom: 40,
+    paddingTop: 24,
   },
   title: {
     fontFamily: 'Inter, sans-serif',
-    fontSize: 48,
+    fontSize: 36,
     fontStyle: 'normal',
     fontWeight: 700,
-    lineHeight: 60,
-    letterSpacing: -0.96,  
+    lineHeight: 44,
+    letterSpacing: -0.72,
+    marginTop: 8,
   },
   description: {
     color: '#000',
     fontFamily: 'Inter, sans-serif',
-    fontSize: 12,
+    fontSize: 14,
     fontStyle: 'normal',
-    fontWeight: 500,
-    lineHeight: 18,
-    opacity: 0.5,
+    fontWeight: 400,
+    lineHeight: 20,
+    opacity: 0.6,
+    marginTop: 4,
   },
   logo: {
-    width: 60,
-    height: 80,
+    width: 56,
+    height: 72,
     resizeMode: 'contain',
-    aspectRatio: 60/80
+    aspectRatio: 56/72
   },
 });
 

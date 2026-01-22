@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: COLORS.gray_300,
-    borderRadius: 12,
+    borderRadius: 14,
     backgroundColor: COLORS.white,
-    height: 46,
+    height: 52,
     paddingHorizontal: 0,
     overflow: 'hidden',
   },
@@ -35,12 +35,12 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontFamily: 'Inter, sans-serif',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '400',
     fontStyle: 'normal',
     color: COLORS.black,
-    paddingHorizontal: 14,
-      height: '100%'
+    paddingHorizontal: 16,
+    height: '100%'
   },
 
   icon: {
