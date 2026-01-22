@@ -7,16 +7,16 @@ const styles = StyleSheet.create({
     },
     listArea: {
         flex: 1,
-        paddingHorizontal: 10,
+        paddingHorizontal: 6,
     },
     // TaskStatusList Stili
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 12,
+        paddingVertical: 14,
         borderBottomWidth: 1,
-        borderBottomColor: '#eee',
+        borderBottomColor: '#f0f0f0',
     },
     headerLeft: {
         flexDirection: 'row',
@@ -24,34 +24,34 @@ const styles = StyleSheet.create({
     },
     headerText: {
         color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 14,
+        fontWeight: '600',
+        fontSize: 12,
+        letterSpacing: 0.3,
     },
     headerRight: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     statusButton: {
-        paddingHorizontal: 8,
+        paddingHorizontal: 10,
         paddingVertical: 6,
-        borderRadius: 4,
+        borderRadius: 6,
         marginRight: 8,
-        marginLeft: 5,
+        marginLeft: 8,
     },
     statusButtonText: {
         color: '#fff',
-        fontWeight: 'bold',
+        fontWeight: '600',
         fontSize: 12,
     },
     taskCountText: {
-        fontSize: 14,
-        color: '#666',
-        fontWeight: '400',
+        fontSize: 13,
+        color: '#888',
+        fontWeight: '500',
     },
     taskList: {
-        paddingTop: 5,
-        paddingBottom: 10,
-        // backgroundColor: '#f9f9f9', // Task listesi fonu
+        paddingTop: 12,
+        paddingBottom: 16,
     },
     noTasksText: {
         padding: 10,

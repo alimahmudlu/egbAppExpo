@@ -6,21 +6,25 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderColor: COLORS.gray_200,
     borderWidth: 1,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 18,
+    padding: 18,
     position: 'relative',
-    elevation: 1,
-    gap: 24
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 2,
+    gap: 20
   },
     card__sm: {
         backgroundColor: COLORS.white,
         borderColor: COLORS.gray_200,
         borderWidth: 1,
-        borderRadius: 8,
-        padding: 12,
+        borderRadius: 12,
+        padding: 14,
         position: 'relative',
         elevation: 1,
-        gap: 12
+        gap: 14
     },
   header: {
     flexDirection: 'row',
@@ -34,9 +38,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter, sans-serif',
     fontSize: 12,
     fontStyle: 'normal',
-    fontWeight: 400,
+    fontWeight: '500',
     lineHeight: 18,
-      flex: 0
+    flex: 0
   },
 
   rightHeader: {
@@ -60,28 +64,28 @@ const styles = StyleSheet.create({
 
   content: {
     flexDirection: "column",
-    gap: 8,
+    gap: 6,
     display: 'flex',
   },
   title: {
     flex: 1,
     fontFamily: 'Inter, sans-serif',
-    fontSize: 14,
+    fontSize: 15,
     fontStyle: 'normal',
-    fontWeight: 500,
-    lineHeight: 20,
+    fontWeight: '600',
+    lineHeight: 22,
     color: COLORS.gray_800,
     display: 'flex',
   },
   description: {
     flex: 1,
     fontFamily: 'Inter, sans-serif',
-    fontSize: 10,
+    fontSize: 12,
     fontStyle: 'normal',
-    fontWeight: 400,
-    lineHeight: 14,
+    fontWeight: '400',
+    lineHeight: 17,
     color: COLORS.gray_500,
-    marginTop: 4,
+    marginTop: 2,
     display: 'flex',
   },
   footer: {
@@ -142,19 +146,18 @@ const styles = StyleSheet.create({
   },
 
   statusBadge: {
-    borderRadius: 24,
+    borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    // marginRight: 8,
-      width: 200 - 42,
+    width: 200 - 42,
   },
   statusText: {
     fontFamily: 'Inter, sans-serif',
-    fontSize: 10,
+    fontSize: 11,
     fontStyle: 'normal',
-    fontWeight: 600,
-    lineHeight: 14,
-      textAlign: 'center',
+    fontWeight: '600',
+    lineHeight: 15,
+    textAlign: 'center',
   },
 //   success: {
 //     backgroundColor: COLORS.,

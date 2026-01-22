@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: COLORS.brand_50,
-        padding: 14,
-        borderRadius: 50,
+        padding: 12,
+        borderRadius: 14,
     },
     container: {
         flex: 1, backgroundColor: '#f5f5f5',
