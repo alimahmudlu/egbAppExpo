@@ -333,12 +333,12 @@ export default function ProjectItemScreen() {
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('tripType')}:</Text>
                                         <Text style={{fontSize: 16, fontWeight: '700'}}>{(tripTypeList || []).find(el => el.id === item?.trip_type)?.name}</Text>
                                     </View>
-                                    {/*<View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>*/}
-                                    {/*    <Text style={{fontSize: 16, fontWeight: '400'}}>{t('toProject')}:</Text>*/}
-                                    {/*    <View style={{gap: 4}}>*/}
-                                    {/*        {item?.to_project_ids?.map((el, i) => (<View key={i}><Text style={{textAlign: 'right',fontSize: 12, fontWeight: '700'}}>{el.name}</Text></View>))}*/}
-                                    {/*    </View>*/}
-                                    {/*</View>*/}
+                                    <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
+                                        <Text style={{fontSize: 16, fontWeight: '400'}}>{t('toProject')}:</Text>
+                                        <View style={{gap: 4}}>
+                                            {item?.to_project_ids?.map((el, i) => (<View key={i}><Text style={{textAlign: 'right',fontSize: 12, fontWeight: '700'}}>{el.name}</Text></View>))}
+                                        </View>
+                                    </View>
                                     <View style={{gap: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8}}>
                                         <Text style={{fontSize: 16, fontWeight: '400'}}>{t('Camp')}:</Text>
                                         <View style={{gap: 4}}>
@@ -447,23 +447,23 @@ export default function ProjectItemScreen() {
                     />
                 </View>
 
-                {/*<View>*/}
-                {/*    <SgSelect*/}
-                {/*        label={t('Project')}*/}
-                {/*        placeholder={t('Project')}*/}
-                {/*        modalTitle={t('selectProject')}*/}
-                {/*        value={data?.toProjectId || []}*/}
-                {/*        name='toProjectId'*/}
-                {/*        multiple={true}*/}
-                {/*        isInvalid={errors?.toProjectId}*/}
-                {/*        onChangeText={handleChangeReport}*/}
-                {/*        list={(projects || []).map(item => ({*/}
-                {/*            id: item?.id,*/}
-                {/*            name: item?.name,*/}
-                {/*            render: <Text>{item?.name}</Text>,*/}
-                {/*        }))}*/}
-                {/*    />*/}
-                {/*</View>*/}
+                <View>
+                    <SgSelect
+                        label={t('Project')}
+                        placeholder={t('Project')}
+                        modalTitle={t('selectProject')}
+                        value={data?.toProjectId || []}
+                        name='toProjectId'
+                        multiple={true}
+                        isInvalid={errors?.toProjectId}
+                        onChangeText={handleChangeReport}
+                        list={(projects || []).map(item => ({
+                            id: item?.id,
+                            name: item?.name,
+                            render: <Text>{item?.name}</Text>,
+                        }))}
+                    />
+                </View>
 
                 <TouchableOpacity
                     onPress={addOtherCamp}

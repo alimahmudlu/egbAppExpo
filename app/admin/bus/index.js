@@ -306,23 +306,23 @@ export default function ChiefMenuScreen() {
                         />
                     </View>
 
-                    {/*<View>*/}
-                    {/*    <SgSelect*/}
-                    {/*        label={t('Project')}*/}
-                    {/*        placeholder={t('Project')}*/}
-                    {/*        modalTitle={t('selectProject')}*/}
-                    {/*        value={data?.toProject || (projects || []).find(el => (el.id === selectedRow?.report_status?.to_project_id || el.id === selectedRow?.project_id))}*/}
-                    {/*        name='toProject'*/}
-                    {/*        multiple={true}*/}
-                    {/*        isInvalid={errors?.toProject}*/}
-                    {/*        onChangeText={handleChange}*/}
-                    {/*        list={(projects || []).map(item => ({*/}
-                    {/*            id: item?.id,*/}
-                    {/*            name: item?.name,*/}
-                    {/*            render: <Text>{item?.name}</Text>,*/}
-                    {/*        }))}*/}
-                    {/*    />*/}
-                    {/*</View>*/}
+                    <View>
+                        <SgSelect
+                            label={t('Project')}
+                            placeholder={t('Project')}
+                            modalTitle={t('selectProject')}
+                            value={data?.toProject || (projects || []).find(el => (el.id === selectedRow?.report_status?.to_project_id || el.id === selectedRow?.project_id))}
+                            name='toProject'
+                            multiple={true}
+                            isInvalid={errors?.toProject}
+                            onChangeText={handleChange}
+                            list={(projects || []).map(item => ({
+                                id: item?.id,
+                                name: item?.name,
+                                render: <Text>{item?.name}</Text>,
+                            }))}
+                        />
+                    </View>
 
 
                     <TouchableOpacity
