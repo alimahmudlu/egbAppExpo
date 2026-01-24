@@ -10,6 +10,8 @@ i18n.use(initReactI18next).init({
             translation: {
                 FoodScheduleOtherDate: "Food Schedule Other Date",
                 complete__description: "",
+                check__description: "",
+                showOnlyMyTasks: "Show only my tasks",
                 reporterAndAssigner: "Reporter and Assigner",
 
                 Task_complete_request_denied_In_progress: "Task complete request denied - In progress",
@@ -432,6 +434,8 @@ i18n.use(initReactI18next).init({
             translation: {
                 FoodScheduleOtherDate: "Расписание питания Другая дата",
                 complete__description: "",
+                check__description: "",
+                showOnlyMyTasks: "Показать только мои задачи",
                 reporterAndAssigner: "Отчет, назначение",
 
                 Task_complete_request_denied_In_progress: "Запрос на завершение задачи отклонен - процессе",
@@ -844,6 +848,8 @@ i18n.use(initReactI18next).init({
             translation: {
                 FoodScheduleOtherDate: "Oziq-ovqat jadvali boshqa sana",
                 complete__description: "",
+                check__description: "",
+                showOnlyMyTasks: "Faqat vazifalarimni ko'rsatish",
                 reporterAndAssigner: "Hisobot, topshiriq",
 
                 Task_complete_request_denied_In_progress: "Vazifa bajarilishi so'rovi rad etildi - Bajarilmoqda",

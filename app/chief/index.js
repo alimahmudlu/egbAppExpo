@@ -226,7 +226,7 @@ export default function EmployeeDashboardScreen() {
             />
 
         <View style={{gap: 16}}>
-            {taskList?.filter(el => [2, 3, 4, 5, 6, 8].includes(el?.status?.id))?.map((el, index) => (
+            {taskList?.filter(el => [3, 6].includes(el?.status?.id))?.map((el, index) => (
                 <SgSectionTaskCard
                     id={el?.id}
                     projectId={el?.project_id}
