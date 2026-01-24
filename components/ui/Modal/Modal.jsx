@@ -23,6 +23,7 @@ export default function SgPopup({
   title,
   description,
     icon,
+  onShow,
   iconType = null,
   children = null,
   footerButton = null,
@@ -86,6 +87,7 @@ export default function SgPopup({
       visible={visible}
       onRequestClose={onClose}
       statusBarTranslucent
+      onShow={onShow}
     >
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}

@@ -277,7 +277,7 @@ export default function EmployeeDashboardScreen() {
                         id={el?.id}
                         projectId={el?.project_id}
                         key={index}
-                        time={el?.deadline ? moment(el?.deadline).format('DD/MM/YYYY / HH:mm') : ''}
+                        time={el?.deadline ? moment(el?.deadline).format('') : ''}
                         duration={el?.points}
                         title={el?.name}
                         description={el?.description}

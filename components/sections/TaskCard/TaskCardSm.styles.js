@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
     elevation: 1,
     gap: 12
   },
+  cardError: {
+    borderColor: COLORS.error_600,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

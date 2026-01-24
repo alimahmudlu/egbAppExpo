@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, TouchableOpacity} from 'react-native';
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
@@ -18,6 +18,7 @@ import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import TaskListScreen from "@/components/sections/ClickupTask/TaskListScreen";
 
 import FilterIcon from "@/assets/images/filter.svg";
+import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const {storeData} = useData();
@@ -189,6 +190,25 @@ export default function EmployeeDocsScreen() {
                                 />
                             </View>
                         </View>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                style={styles.checkboxContainer}
+                                onPress={() => handleChange({
+                                    name: 'showOnlyMyTasks',
+                                    value: filters?.showOnlyMyTasks ? '0' : '1'
+                                })}
+                            >
+                                <SgCheckbox
+                                    checked={filters?.showOnlyMyTasks === '1'}
+                                    onToggle={() => handleChange({
+                                        name: 'showOnlyMyTasks',
+                                        value: filters?.showOnlyMyTasks ? '0' : '1',
+                                    })}
+                                />
+                                <Text style={styles.checkboxLabel}>{t('showOnlyMyTasks')}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </SgPopup>
@@ -197,6 +217,24 @@ export default function EmployeeDocsScreen() {
 
 const styles = StyleSheet.create({
 
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.gray_200,
+    },
+    checkboxLabel: {
+        fontFamily: 'Inter, sans-serif',
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 600,
+        lineHeight: 20,
+        color: COLORS.gray_800
+    },
     iconWrapper: {
         justifyContent: 'center',
         alignItems: 'center',

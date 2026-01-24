@@ -185,7 +185,7 @@ export default function SgSectionTaskCard(props) {
             case 2:
                 return {backgroundColor: COLORS.warning_100, color: COLORS.warning_700};
             case 1:
-                return {backgroundColor: COLORS.white, color: COLORS.black};
+                return {backgroundColor: COLORS.blue_50, color: COLORS.black};
             default:
                 return {backgroundColor: COLORS.white, color: COLORS.black};
         }
@@ -203,13 +203,13 @@ export default function SgSectionTaskCard(props) {
     
     const {size = 'md'} = props;
     
-    const taskStyles = size === 'md' ? styles : stylesSm
+    const taskStyles = size === 'md' ? styles : stylesSm;
     
     return (
         <View>
-            <View style={[taskStyles.card]}>
+            <View style={[taskStyles.card, (data?.status?.id !== 8 && moment().isAfter(data?.time)) ? taskStyles.cardError : '']}>
                 <View style={taskStyles.header}>
-                    <Text style={taskStyles.time}>{data?.time}</Text>
+                    <Text style={taskStyles.time}>{moment(data?.time).format('DD/MM/YYYY / HH:mm')}</Text>
                     <View style={taskStyles.rightHeader}>
                         {(data?.status?.id && [1, 2, 3, 4, 5, 6, 7, 8].includes(data?.status?.id)) && (
                             <View

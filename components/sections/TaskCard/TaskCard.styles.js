@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
     elevation: 1,
     gap: 24
   },
+  cardError: {
+    borderColor: COLORS.error_600,
+  },
     card__sm: {
         backgroundColor: COLORS.white,
         borderColor: COLORS.gray_200,

@@ -93,11 +93,11 @@ const styles2 = StyleSheet.create({
 });
 
 export default function SgSectionDatePicker(props) {
-    const {value, onChange, userMode} = props;
+    const {value, onChange, userMode, firstShow} = props;
 
     const [date, setDate] = useState(value);
     const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(firstShow);
 
     const handleChange = (event, selectedDate) => {
         const currentDate = selectedDate;

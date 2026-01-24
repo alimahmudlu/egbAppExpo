@@ -48,7 +48,7 @@ export default function TimeKeeperUserScreen() {
                     id={el?.id}
                     projectId={el?.project_id}
                     key={index}
-                    time={moment(el?.deadline).format('DD.MM.YYYY / h:mm A') || ''}
+                    time={moment(el?.deadline).format('') || ''}
                     duration={el?.points}
                     title={el?.name}
                     description={el?.description}

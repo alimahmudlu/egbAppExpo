@@ -18,6 +18,7 @@ export default function SgDatePicker(props) {
         mode = 'date-time' // date | time | date-time
     } = props;
     const [datePickerModal, setDatePickerModal] = useState(false);
+    const [showPicker, setShowPicker] = useState(false);
     const [newDate, setNewDate] = useState(value);
     const formats = {
         'date': 'YYYY-MM-DD',
@@ -46,6 +47,10 @@ export default function SgDatePicker(props) {
         <SgPopup
             visible={datePickerModal}
             onClose={toggleDatePickerModal}
+            onShow={() => {
+                console.log('acildi')
+                setShowPicker(true)
+            }}
             footerButton={
                 <SgButton
                     bgColor={COLORS.brand_600}
@@ -59,9 +64,12 @@ export default function SgDatePicker(props) {
                 </SgButton>
             }
         >
-            <SgSectionDatePicker userMode={mode} value={value ? new Date(value) : new Date()} onChange={(data) => {
-                setNewDate(data)
-            }} />
+            {showPicker ?
+                <SgSectionDatePicker firstShow={showPicker} userMode={mode} value={value ? new Date(value) : new Date()} onChange={(data) => {
+                    setNewDate(data)
+                }} />
+                : null
+            }
         </SgPopup>
     </>
   );

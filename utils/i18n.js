@@ -9,6 +9,8 @@ i18n.use(initReactI18next).init({
         en: {
             translation: {
                 FoodScheduleOtherDate: "Food Schedule Other Date",
+                complete__description: "",
+                reporterAndAssigner: "Reporter and Assigner",
 
                 Task_complete_request_denied_In_progress: "Task complete request denied - In progress",
                 Task_complete_request_accepted_Done: "Task complete request accepted - Done",
@@ -18,6 +20,7 @@ i18n.use(initReactI18next).init({
                 Task_check_progress_requested: "Task check progress requested",
                 addOtherCamp: "Add Other Camp",
                 otherCamp: "Other Camp",
+                otherCamps: "Other Camps",
                 enterCampName: "Enter Camp name",
                 and: "and",
                 more: "more",
@@ -428,6 +431,8 @@ i18n.use(initReactI18next).init({
         ru: {
             translation: {
                 FoodScheduleOtherDate: "Расписание питания Другая дата",
+                complete__description: "",
+                reporterAndAssigner: "Отчет, назначение",
 
                 Task_complete_request_denied_In_progress: "Запрос на завершение задачи отклонен - процессе",
                 Task_complete_request_accepted_Done: "Запрос на завершение задачи принят - Выполнено",
@@ -436,7 +441,8 @@ i18n.use(initReactI18next).init({
                 Task_check_progress_request_accepted_In_progress: "Запрос на проверку хода выполнения задачи принят - В процессе",
                 Task_check_progress_requested: "Запрос на проверку хода выполнения задачи запрошен",
                 addOtherCamp: "Добавить другой лагерь",
-                otherCamp: "Другой лагерь",
+                otherCamp: "Другие лагеря",
+                otherCamps: "Другие лагеря",
                 enterCampName: "Введите название лагеря",
                 and: "и",
                 more: "более",
@@ -837,6 +843,8 @@ i18n.use(initReactI18next).init({
         uz: {
             translation: {
                 FoodScheduleOtherDate: "Oziq-ovqat jadvali boshqa sana",
+                complete__description: "",
+                reporterAndAssigner: "Hisobot, topshiriq",
 
                 Task_complete_request_denied_In_progress: "Vazifa bajarilishi so'rovi rad etildi - Bajarilmoqda",
                 Task_complete_request_accepted_Done: "Vazifa bajarilishi so'rovi qabul qilindi - Bajarildi",
@@ -846,6 +854,7 @@ i18n.use(initReactI18next).init({
                 Task_check_progress_requested: "Vazifa bajarilishini tekshirish so'rovi",
                 addOtherCamp: "Boshqa lager qo'shish",
                 otherCamp: "Boshqa lager",
+                otherCamps: "Boshqa lager",
                 enterCampName: "Lager nomini kiriting",
                 and: "va",
                 more: "Ko'proq",
