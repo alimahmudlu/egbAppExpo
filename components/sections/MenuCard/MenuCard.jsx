@@ -37,7 +37,9 @@ export default function SgSectionMenuCard({ extraItems = [] }) {
             ? "employee"
             : user?.role?.id === 2
                 ? "timeKeeper"
-                : "chief";
+                : user?.role?.id === 3
+                    ? "chief"
+                    : "admin";
 
     const openLink = async (url) => {
         try {
@@ -66,7 +68,7 @@ export default function SgSectionMenuCard({ extraItems = [] }) {
                             <View style={styles.iconContainer}>
                                 <DocsIcon width={20} height={20} />
                             </View>
-                            <Text style={styles.title}>{t('tabBar__myDocs')}</Text>
+                            <Text style={styles.title}>{t('tabBar__myDocs')}-{`/${rolePath}/docs`}</Text>
                         </View>
                         <RightIcon width={20} height={20} />
                     </TouchableOpacity>

@@ -11,6 +11,7 @@ i18n.use(initReactI18next).init({
                 FoodScheduleOtherDate: "Food Schedule Other Date",
                 complete__description: "",
                 check__description: "",
+                reject__description: "",
                 showOnlyMyTasks: "Show only my tasks",
                 reporterAndAssigner: "Reporter and Assigner",
 
@@ -351,7 +352,7 @@ i18n.use(initReactI18next).init({
                 download: "Download",
                 documentRemove: "Document Remove",
                 remove: "Remove",
-                seeExpiredDocs: "See expired docs",
+                seeExpiredDocs: "Archive",
                 logout_description: "Are you about to logout. Are you sure?",
                 teamMembers: "Team Members",
                 enterRole: "Enter role",
@@ -435,6 +436,7 @@ i18n.use(initReactI18next).init({
                 FoodScheduleOtherDate: "Расписание питания Другая дата",
                 complete__description: "",
                 check__description: "",
+                reject__description: "",
                 showOnlyMyTasks: "Показать только мои задачи",
                 reporterAndAssigner: "Отчет, назначение",
 
@@ -771,7 +773,7 @@ i18n.use(initReactI18next).init({
                 download: "Скачать",
                 documentRemove: "Удалить документ",
                 remove: "удалять",
-                seeExpiredDocs: "Просмотреть просроченные документы",
+                seeExpiredDocs: "Архив",
                 logout_description: "Вы собираетесь выйти. Вы уверены?",
                 teamMembers: "Члены команды",
                 enterRole: "Введите роль",
@@ -849,6 +851,7 @@ i18n.use(initReactI18next).init({
                 FoodScheduleOtherDate: "Oziq-ovqat jadvali boshqa sana",
                 complete__description: "",
                 check__description: "",
+                reject__description: "",
                 showOnlyMyTasks: "Faqat vazifalarimni ko'rsatish",
                 reporterAndAssigner: "Hisobot, topshiriq",
 
@@ -1180,7 +1183,7 @@ i18n.use(initReactI18next).init({
                 download: "Yuklab",
                 documentRemove: "Hujjatni olib tashlash",
                 remove: "o'chirish",
-                seeExpiredDocs: "Muddati oʻtgan hujjatlarni koʻring",
+                seeExpiredDocs: "Arxiv",
                 logout_description: "Chiqishni istaysizmi?",
 
                 teamMembers: "Jamoa a'zolari",

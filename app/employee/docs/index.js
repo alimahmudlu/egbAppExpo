@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
+import {View, StyleSheet, Text, ToastAndroid, Pressable} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
@@ -20,6 +20,8 @@ import validationConstraints from "@/app/chiefPages/create-task/constants";
 import {validate} from "@/utils/validate";
 import {useTranslation} from "react-i18next";
 import {useLanguage} from "@/hooks/useLanguage";
+import FilterIcon from "@/assets/images/filter.svg";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
 
 export default function EmployeeDocsScreen() {
   const [docList, setDocList] = useState([]);
@@ -256,6 +258,38 @@ export default function EmployeeDocsScreen() {
     ])
   const {refreshKey} = useLocalSearchParams();
   const [removeModal, setRemoveModal] = useState(false);
+    const [filterModal, setFilterModal] = useState(false)
+    const [filters, setFilters] = useState({})
+
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
+    }
+    function resetFilters() {
+        setFilters({});
+        request({
+            url: '/employee/doc/list',
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
+        })
+        toggleFilterModal()
+    }
+
+    function handleChangeFilter(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
+
+    function handleFilters() {
+        request({
+            url: '/employee/doc/list',
+            method: 'get',
+            params: {
+                replaced: filters?.replaced?.id
+            }
+        }).then().catch(err => {
+            // console.log(err);
+        })
+    }
 
   function toggleAddDocsModal() {
     setAddDocsModal(!addDocsModal)
@@ -359,6 +393,11 @@ export default function EmployeeDocsScreen() {
               description={t('myDocs__description')}
               iconText={t('seeExpiredDocs')}
               href={`/employeePages/docs/archive`}
+              filter={
+                  <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
+                      <Text><FilterIcon width={20} height={20} /></Text>
+                  </Pressable>
+              }
           />
         </View>
       }
@@ -473,6 +512,70 @@ export default function EmployeeDocsScreen() {
         </View>
       </SgPopup>
 
+        <SgPopup
+            visible={filterModal}
+            onClose={toggleFilterModal}
+            footerButton={
+                <SgButton
+                    onPress={handleFilters}
+                    bgColor={COLORS.primary}
+                    color={COLORS.white}
+                >
+                    {t('accept')}
+                </SgButton>
+            }
+        >
+            <View style={{paddingBottom: 20}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+                    <SgButton
+                        onPress={resetFilters}
+                        color={COLORS.brand_700}
+                        style={{
+                            flex: 0,
+                            width: 'auto',
+                            marginLeft: 'auto',
+                            paddingVertical: 0,
+                            paddingHorizontal: 0,
+                            gap: 7
+                        }}
+
+                    >
+                        {t('clearFilters')}
+                        <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                    </SgButton>
+                </View>
+
+                <View style={{gap: 16}}>
+                    <View style={{flex: 1}}>
+                        <SgSelect
+                            label={t("Status")}
+                            placeholder={t("enterStatus")}
+                            modalTitle={t("selectStatus")}
+                            value={filters?.status}
+                            name='status'
+                            onChangeText={handleChangeFilter}
+                            list={[
+                                {
+                                    id: 1,
+                                    name: t('active')
+                                },
+                                {
+                                    id: 2,
+                                    name: t('expiresSoon')
+                                },
+                                {
+                                    id: 3,
+                                    name: t('expired')
+                                }
+                            ]}
+                        />
+                    </View>
+                </View>
+            </View>
+        </SgPopup>
+
     </SgTemplateScreen>
   );
 }
@@ -482,6 +585,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+    iconWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.brand_50,
+        padding: 14,
+        borderRadius: 50,
+    },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

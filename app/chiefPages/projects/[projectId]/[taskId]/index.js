@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 import { useSocket } from "@/hooks/useSocket";
 import { useAuth } from "@/hooks/useAuth";
+import SgInput from "@/components/ui/Input/Input";
 
 export default function TaskDetailsScreen() {
     // Hooks
@@ -90,6 +91,11 @@ export default function TaskDetailsScreen() {
             successModalTitle__description: 'taskRejected__description',
         },
     })
+    const [data, setData] = useState({});
+
+    function handleChange(e) {
+        setData({ ...data, [e?.name]: e?.value });
+    }
 
 
 
@@ -144,6 +150,7 @@ export default function TaskDetailsScreen() {
                 date: moment().format(''),
                 status: statusId,
                 files: (selectedFiles || []).map(el => el?.id) || [],
+                comment: data?.comment || '',
             }
         }).then(() => {
             setActionModal({ visible: false, type: '', status: null });
@@ -154,6 +161,7 @@ export default function TaskDetailsScreen() {
                 desc: t(statuses?.[statusId]?.successModalTitle__description || '')
             });
             fetchData();
+            setData({});
         });
     };
 
@@ -225,7 +233,7 @@ export default function TaskDetailsScreen() {
             <SgSectionStatusInfo
                 title={taskDetails?.status?.id === 7 ? t("completed") : t("progress")}
                 status={t(statuses?.[taskDetails?.status?.id]?.title || '')}
-                statusType={[3, 6].includes(taskDetails?.status?.id) ? "warning" : "success"}
+                statusType={[2,3,4,5,6,8].includes(taskDetails?.status?.id) ? "warning" : "success"}
             />
 
             {/* Common Info Cards */}
@@ -240,6 +248,20 @@ export default function TaskDetailsScreen() {
                     <SgCard><Text style={styles.title}>{t('addedFiles')}</Text></SgCard>
                     {taskDetails.files.map((el, index) => (
                         <SgSectionAddFile key={index} fileType={el.mimetype} title={el?.upload?.filename} url={el?.upload?.filepath} />
+                    ))}
+                </>
+            )}
+
+            {/* Files List */}
+            {((taskDetails?.activities || []).filter((ac, ac_i) => ac.comment))?.length > 0 && (
+                <>
+                    <SgCard><Text style={styles.title}>{t('Comments')}</Text></SgCard>
+                    {((taskDetails?.activities || []).filter((ac, ac_i) => ac.comment)).map((ac, ac_i) => (
+                        <View key={ac_i} style={{borderBottomWidth: 1, paddingVertical: 8, borderBottomColor: COLORS.gray_200, gap: 4}}>
+                            <Text style={{ fontWeight: 'bold'}}>{ac?.status?.name}</Text>
+                            <Text style={{fontSize: 10, fontWeight: 700}}>{moment(ac.created_at).format('DD/MM/YYYY HH:mm')}</Text>
+                            <Text style={{fontSize: 14, marginTop: 4 }}>{ac.comment}</Text>
+                        </View>
                     ))}
                 </>
             )}
@@ -311,10 +333,24 @@ export default function TaskDetailsScreen() {
                     </SgButton>
                 }
             >
-                <SgTemplateUploadScreen setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
-                {selectedFiles.map((el, index) => (
-                    <SgSectionAddFile key={index} title={el?.name} remove={true} handleRemove={() => handleRemoveFile(index)} />
-                ))}
+                <View style={{ gap: 16 }}>
+                    <View>
+                        <SgInput
+                            placeholder={t('enterNote')}
+                            label={t('note')}
+                            value={data?.comment || ''}
+                            name='comment'
+                            onChangeText={(e) => handleChange(e)}
+                            type='textarea'
+                        />
+                    </View>
+                    <View>
+                        <SgTemplateUploadScreen setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
+                        {selectedFiles.map((el, index) => (
+                            <SgSectionAddFile key={index} title={el?.name} remove={true} handleRemove={() => handleRemoveFile(index)} />
+                        ))}
+                    </View>
+                </View>
             </SgPopup>
 
             {/* Success Info Popup */}

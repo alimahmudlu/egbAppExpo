@@ -30,13 +30,15 @@ export default function SgSectionFileHead ({ title, description, icon, iconText,
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.title}>{title}</Text>
-        {icon ? <Pressable style={styles.iconWrapper} onPress={handleClick}>
-          {renderIcon()}
-        </Pressable> : ''}
+        <View style={styles.headerRow2}>
+          {icon ? <Pressable style={styles.iconWrapper} onPress={handleClick}>
+            {renderIcon()}
+          </Pressable> : ''}
           {iconText ? <Pressable style={styles.iconWrapper} onPress={handleClick}>
-              <Text>{iconText}</Text>
+            <Text>{iconText}</Text>
           </Pressable> : ''}
           {filter ? filter : null}
+        </View>
       </View>
         {description ? <Text style={styles.description}>{description}</Text> : null}
     </View>

@@ -207,7 +207,7 @@ export default function SgSectionTaskCard(props) {
     
     return (
         <View>
-            <View style={[taskStyles.card, (data?.status?.id !== 8 && moment().isAfter(data?.time)) ? taskStyles.cardError : '']}>
+            <Pressable onPress={() => {router.push(data?.href)}} style={[taskStyles.card, (data?.status?.id !== 8 && moment().isAfter(data?.time)) ? taskStyles.cardError : '']}>
                 <View style={taskStyles.header}>
                     <Text style={taskStyles.time}>{moment(data?.time).format('DD/MM/YYYY / HH:mm')}</Text>
                     <View style={taskStyles.rightHeader}>
@@ -297,7 +297,7 @@ export default function SgSectionTaskCard(props) {
                         )}
                     </View> : null}
                 </View>
-            </View>
+            </Pressable>
 
             <SgPopup
                 visible={modalVisible}

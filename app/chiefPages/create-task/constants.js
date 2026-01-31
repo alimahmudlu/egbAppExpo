@@ -37,7 +37,7 @@ const AddDocsValidation = {
         }
     },
     date_of_expiry: {
-        custom: function (key, row) {
+        custom: function (date_of_expiry, row) {
             if (!row.document ||  row?.fileTypes.find(el => el?.key === row?.document)?.dateRequired && !date_of_expiry) {
                 return { errors: { date_of_expiry: 'blank' } }
             } else {

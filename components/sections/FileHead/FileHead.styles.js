@@ -10,8 +10,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
       gap: 16,
       flexWrap: 'wrap',
-    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  headerRow2: {
+    flexDirection: 'row',
+      gap: 16,
+      flexWrap: 'wrap',
+    alignItems: 'center',
+    marginLeft: 'auto'
   },
   iconWrapper: {
     justifyContent: 'center',

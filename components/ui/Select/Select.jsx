@@ -8,7 +8,8 @@ import SgRadio from "@/components/ui/Radio/Radio";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 import SgSectionUserInfo from "@/components/sections/UserInfo/UserInfo";
 import SgInput from "@/components/ui/Input/Input";
-import {useTranslation} from "react-i18next"; // Multi-select üçün fərz edilən import
+import {useTranslation} from "react-i18next";
+import SgButton from "@/components/ui/Button/Button"; // Multi-select üçün fərz edilən import
 
 export default function SgSelect(props) {
     const {
@@ -176,6 +177,13 @@ export default function SgSelect(props) {
                 fullScreen={true}
                 title={modalTitle || placeholder}
                 closeType={multiple ? "default" : "select"}
+                footerButton={
+                    !multiple ?
+                        <SgButton onPress={toggleSelectModal} bgColor={COLORS.buttonColor} color={COLORS.buttonNoColor}>
+                            {t('close')}
+                        </SgButton>
+                        : ''
+                }
             >
                 <View style={{gap: 8, paddingBottom: 8}}>
                     {filters.length > 0 && (

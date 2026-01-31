@@ -68,6 +68,8 @@ export default function ProjectItemScreen() {
     useEffect(() => {
         setDocList(storeData?.cache?.[`GET:/employee/doc/history`]?.data)
     }, [storeData?.cache?.[`GET:/employee/doc/history`]])
+
+
     return (<SgTemplateScreen
             head={<SgTemplatePageHeader data={{
                 header: t('docsArchive')

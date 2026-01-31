@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
+import {View, StyleSheet, Text, ToastAndroid, Pressable} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
@@ -16,10 +16,12 @@ import moment from "moment";
 import SgSelect from "@/components/ui/Select/Select";
 import {useAuth} from "@/hooks/useAuth";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import validationConstraints from "@/app/chiefPages/create-task/constants";
+import {validate} from "@/utils/validate";
 import {useTranslation} from "react-i18next";
 import {useLanguage} from "@/hooks/useLanguage";
-import {validate} from "@/utils/validate";
-import validationConstraints from "@/app/chiefPages/create-task/constants";
+import FilterIcon from "@/assets/images/filter.svg";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
 
 export default function EmployeeDocsScreen() {
   const [docList, setDocList] = useState([]);
@@ -27,6 +29,7 @@ export default function EmployeeDocsScreen() {
   const {user} = useAuth();
   const {storeData} = useData();
   const {selectedLanguage} = useLanguage();
+  const {t} = useTranslation();
   const [addDocsModal, setAddDocsModal] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState([])
   const [data, setData] = useState({})
@@ -39,7 +42,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Pasport',
       flow: ['patent', 'bkc', 'russian'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'notarized_translation',
@@ -48,7 +51,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Tarjima qilingan passport',
       flow: ['patent', 'bkc'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'migration_card',
@@ -57,7 +60,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Migratsiya kartasi',
       flow: ['patent', 'bkc'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'registration_card',
@@ -66,7 +69,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Ro’yxatga olish hujjati',
       flow: ['patent', 'bkc'],
       dateRequired: true,
-        show: true
+      show: true
     },
     {
       key: 'patent',
@@ -74,7 +77,7 @@ export default function EmployeeDocsScreen() {
       label_ru: 'Патент',
       label_uz: 'Patent',
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'language_certificate',
@@ -83,7 +86,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Til sertifikati',
       flow: ['patent'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'contract',
@@ -92,34 +95,34 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Mehnat shartnomasi',
       flow: ['patent', 'bkc'],
       dateRequired: false,
-        show: false
+      show: false
     },
-      {
-          key: 'notification_from_a_legal_entity',
-          label: 'Notification from a legal entity',
-          label_ru: 'Уведомление от юр лица',
-          label_uz: 'Yuridik shaxsdan bildirishnoma',
-          flow: ['patent', 'bkc'],
-          issueRequired: false,
-          expiryRequired: false,
-          serialRequired: false,
-          numberRequired: false,
-          dateRequired: false,
-          show: false
-      },
-      {
-          key: 'notification_from_an_individual',
-          label: 'Notification from an individual',
-          label_ru: 'Уведомление от физ лица',
-          label_uz: 'Shaxsdan bildirishnoma',
-          flow: ['patent'],
-          issueRequired: false,
-          expiryRequired: false,
-          serialRequired: false,
-          numberRequired: false,
-          dateRequired: false,
-          show: false
-      },
+    {
+      key: 'notification_from_a_legal_entity',
+      label: 'Notification from a legal entity',
+      label_ru: 'Уведомление от юр лица',
+      label_uz: 'Yuridik shaxsdan bildirishnoma',
+      flow: ['patent', 'bkc'],
+      issueRequired: false,
+      expiryRequired: false,
+      serialRequired: false,
+      numberRequired: false,
+      dateRequired: false,
+      show: false
+    },
+    {
+      key: 'notification_from_an_individual',
+      label: 'Notification from an individual',
+      label_ru: 'Уведомление от физ лица',
+      label_uz: 'Shaxsdan bildirishnoma',
+      flow: ['patent'],
+      issueRequired: false,
+      expiryRequired: false,
+      serialRequired: false,
+      numberRequired: false,
+      dateRequired: false,
+      show: false
+    },
     {
       key: 'payment_receipt',
       label: 'Payment receipt',
@@ -127,7 +130,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'To’lov kvitansiyasi',
       flow: ['patent'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'visa',
@@ -136,7 +139,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Viza',
       flow: ['bkc'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'work_authorization',
@@ -144,7 +147,7 @@ export default function EmployeeDocsScreen() {
       label_ru: 'Разрешение на работу',
       label_uz: 'Mehnatga ruxsatnoma',
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'health_insurance',
@@ -153,7 +156,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Sog’liqni sug’urtasi',
       flow: ['patent', 'bkc'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'medical_certification',
@@ -162,7 +165,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Tibbiy ma’lumotnoma',
       flow: ['patent', 'bkc', 'russian'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'photo',
@@ -171,7 +174,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Rasm',
       flow: ['patent', 'bkc'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'fingerprint_certification',
@@ -180,7 +183,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Barmoq izi sertifikati',
       flow: ['patent', 'bkc'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'patent',
@@ -189,7 +192,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Patent',
       flow: ['patent'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'bkc_payment_receipt',
@@ -198,7 +201,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'BKC to‘lovi kvitansiyasi',
       flow: ['bkc'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'immigration_committee_notification',
@@ -207,7 +210,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Immigratsiya qo‘mitasiga xabarnoma',
       flow: ['bkc'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'invitation_visa',
@@ -216,7 +219,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Tashrif vizasi',
       flow: ['bkc'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'bkc',
@@ -225,7 +228,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'BKC',
       flow: ['bkc'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'military_id_card',
@@ -234,7 +237,7 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Harbiy guvohnoma',
       flow: ['russian'],
       dateRequired: true,
-        show: false
+      show: false
     },
     {
       key: 'diploma',
@@ -243,19 +246,50 @@ export default function EmployeeDocsScreen() {
       label_uz: 'Diplom',
       flow: ['russian'],
       dateRequired: false,
-        show: false
+      show: false
     },
     {
       key: 'entry_form_document',
       label: 'Entry Form document',
       flow: ['patent', 'bkc', 'russian'],
       dateRequired: false,
-        show: false
+      show: false
     }
   ])
   const {refreshKey} = useLocalSearchParams();
-  const {t} = useTranslation()
   const [removeModal, setRemoveModal] = useState(false);
+  const [filterModal, setFilterModal] = useState(false)
+  const [filters, setFilters] = useState({})
+
+  function toggleFilterModal() {
+    setFilterModal(!filterModal);
+  }
+  function resetFilters() {
+    setFilters({});
+    request({
+      url: '/chief/doc/list',
+      method: 'get',
+    }).then().catch(err => {
+      // console.log(err);
+    })
+    toggleFilterModal()
+  }
+
+  function handleChangeFilter(e) {
+    setFilters({...filters, [e.name]: e.value});
+  }
+
+  function handleFilters() {
+    request({
+      url: '/chief/doc/list',
+      method: 'get',
+      params: {
+        replaced: filters?.replaced?.id
+      }
+    }).then().catch(err => {
+      // console.log(err);
+    })
+  }
 
   function toggleAddDocsModal() {
     setAddDocsModal(!addDocsModal)
@@ -263,6 +297,9 @@ export default function EmployeeDocsScreen() {
     setData({})
     setErrors({})
   }
+
+
+
   function handleSubmitDoc() {
     let errors = validate({...data, fileTypes: fileTypes, file: selectedFiles?.[0]?.id}, 'addDocs', validationConstraints);
 
@@ -284,7 +321,7 @@ export default function EmployeeDocsScreen() {
         // setData({})
         // setErrors({})
         request({
-          url: '/employee/doc/list',
+          url: '/chief/doc/list',
           method: 'get',
         }).then().catch(err => {
           // console.log(err);
@@ -348,129 +385,198 @@ export default function EmployeeDocsScreen() {
   }
 
   return (
-    <SgTemplateScreen
-      head={
-        <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
-          <SgSectionFileHead
-              title={t('myDocs')}
-              description={t('myDocs__description')}
-              iconText={t('seeExpiredDocs')}
-              href={`/chiefPages/docs/archive`}
-          />
-        </View>
-      }
-    >
-      <SgNoticeCard
-          title={t('docsArchive')}
-          buttonText={t('addDocument')}
-          bgButton="success"
-          onClick={toggleAddDocsModal}
-      />
-
-      <View style={{gap: 12}}>
-        {(docList || []).map((el, index) => (
-            <SgFileCard
-                key={index}
-                auid={el?.id}
-                fileType={el.mimetype}
-                title={el?.filename}
-                url={el?.filepath}
-                expiryDate={el?.date_of_expiry}
-                issueDate={el?.date_of_issue}
-                deletePermission={el?.employee_id === user?.id && user.role.id === 2}
-                handleRemove={handleRemove}
-                setRemoveModal={setRemoveModal}
-                removeModal={removeModal}
-                type={el?.type}
-                migrationId={fileTypes?.find(item => item.key === el?.type)?.[selectedLanguage?.id !== 'en' ? `label_${selectedLanguage?.id}` : 'label'] || el?.type}
-            />
-        ))}
-      </View>
-
-
-      <SgPopup
-          autoClose={false}
-          visible={addDocsModal}
-          onClose={toggleAddDocsModal}
-          title={t('addDocument')}
-          description={t('addDocument__description')}
-          footerButton={
-            <SgButton
-                bgColor={COLORS.brand_600}
-                color={COLORS.white}
-                onPress={handleSubmitDoc}
-                disabled={selectedFiles.length === 0}
-            >
-              {t('addDocument')}
-            </SgButton>
+      <SgTemplateScreen
+          head={
+            <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
+              <SgSectionFileHead
+                  title={t('myDocs')}
+                  description={t('myDocs__description')}
+                  iconText={t('seeExpiredDocs')}
+                  href={`/employeePages/docs/archive`}
+                  filter={
+                    <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
+                      <Text><FilterIcon width={20} height={20} /></Text>
+                    </Pressable>
+                  }
+              />
+            </View>
           }
       >
-        <View style={{gap: 16}}>
-          <View>
-            <SgSelect
-                label={t("documentType")}
-                placeholder={t("selectDocumentType")}
-                modalTitle={t("selectDocumentType")}
-                value={data?.document}
-                name='document'
-                isInvalid={errors?.document}
-                onChangeText={handleChange}
-                list={(fileTypes || [])?.filter(el => (el.flow || [])?.includes(user?.flow) && el.show)?.map((fileType, index) => ({
-                  id: fileType?.key, name: fileType?.label, render: <Text key={index}>{selectedLanguage?.id !== 'en' ? fileType?.[`label_${selectedLanguage?.id}`] : fileType?.label}</Text>
-                }))}
-            />
-          </View>
-          {(fileTypes || []).find(el => el.key === data?.document?.id)?.dateRequired ?
-              <>
-                <View>
-                  <SgDatePicker
-                      label={t('dateOfIssue')}
-                      placeholder={t('enterDate')}
-                      type="date"
-                      value={data?.date_of_issue}
-                      name='date_of_issue'
-                      isInvalid={errors?.date_of_issue}
-                      onChangeText={handleChange}
-                  />
-                </View>
-                <View>
-                  <SgDatePicker
-                      label={t('dateOfExpired')}
-                      placeholder={t('enterDate')}
-                      type="date"
-                      value={data?.date_of_expiry}
-                      name='date_of_expiry'
-                      isInvalid={errors?.date_of_expiry}
-                      onChangeText={handleChange}
-                  />
-                </View>
-              </>
-              : null
-          }
-          <View>
-            <SgTemplateUploadScreen
-                setSelectedFiles={setSelectedFiles}
-                selectedFiles={selectedFiles}
-                multiple={false}
-            />
+        <SgNoticeCard
+            title={t('activeDocs')}
+            buttonText={t('addDocument')}
+            bgButton="success"
+            onClick={toggleAddDocsModal}
+        />
 
-            {(selectedFiles || []).map((el, index) => (
-                <SgSectionAddFile
-                    handleRemove={() => handleRemoveFile(index)}
-                    key={index}
-                    title={el?.name}
-                    type={el?.type}
-                    datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
-                    url={el?.filepath}
-                    onPress={() => {}}
-                    remove={true}
-                />
-            ))}
-          </View>
+        <View style={{gap: 12}}>
+          {(docList || []).map((el, index) => (
+              <SgFileCard
+                  key={index}
+                  auid={el?.id}
+                  fileType={el.mimetype}
+                  title={el?.filename}
+                  url={el?.filepath}
+                  expiryDate={el?.date_of_expiry}
+                  issueDate={el?.date_of_issue}
+                  deletePermission={el?.employee_id === user?.id && user.role.id === 2}
+                  handleRemove={handleRemove}
+                  setRemoveModal={setRemoveModal}
+                  removeModal={removeModal}
+                  type={el?.type}
+                  migrationId={fileTypes?.find(item => item.key === el?.type)?.[selectedLanguage?.id !== 'en' ? `label_${selectedLanguage?.id}` : 'label'] || el?.type}
+              />
+          ))}
         </View>
-      </SgPopup>
 
-    </SgTemplateScreen>
+
+        <SgPopup
+            autoClose={false}
+            visible={addDocsModal}
+            onClose={toggleAddDocsModal}
+            title={t('addDocument')}
+            description={t('addDocument__description')}
+            footerButton={
+              <SgButton
+                  bgColor={COLORS.brand_600}
+                  color={COLORS.white}
+                  onPress={handleSubmitDoc}
+                  disabled={selectedFiles.length === 0}
+              >
+                {t('addDocument')}
+              </SgButton>
+            }
+        >
+          <View style={{gap: 16}}>
+            <View>
+              <SgSelect
+                  label={t('documentType')}
+                  placeholder={t('selectDocumentType')}
+                  modalTitle={t('selectDocumentType')}
+                  value={data?.document}
+                  name='document'
+                  isInvalid={errors?.document}
+                  onChangeText={handleChange}
+                  list={(fileTypes || [])?.filter(el => (el.flow || [])?.includes(user?.flow) && el.show)?.map((fileType, index) => ({
+                    id: fileType?.key, name: fileType?.label, render: <Text key={index}>{fileType?.label}</Text>
+                  }))}
+              />
+            </View>
+            {(fileTypes || []).find(el => el.key === data?.document?.id)?.dateRequired ?
+                <>
+                  <View>
+                    <SgDatePicker
+                        label={t('dateOfIssue')}
+                        placeholder={t('enterDate')}
+                        type="date"
+                        value={data?.date_of_issue}
+                        name='date_of_issue'
+                        isInvalid={errors?.date_of_issue}
+                        onChangeText={handleChange}
+                    />
+                  </View>
+                  <View>
+                    <SgDatePicker
+                        label={t('dateOfExpired')}
+                        placeholder={t('enterDate')}
+                        type="date"
+                        value={data?.date_of_expiry}
+                        name='date_of_expiry'
+                        isInvalid={errors?.date_of_expiry}
+                        onChangeText={handleChange}
+                    />
+                  </View>
+                </>
+                : null
+            }
+            <View>
+              <SgTemplateUploadScreen
+                  setSelectedFiles={setSelectedFiles}
+                  selectedFiles={selectedFiles}
+                  multiple={false}
+              />
+
+              {(selectedFiles || []).map((el, index) => (
+                  <SgSectionAddFile
+                      handleRemove={() => handleRemoveFile(index)}
+                      key={index}
+                      title={el?.name}
+                      type={el?.type}
+                      datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
+                      url={el?.filepath}
+                      onPress={() => {}}
+                      remove={true}
+                  />
+              ))}
+            </View>
+          </View>
+        </SgPopup>
+
+        <SgPopup
+            visible={filterModal}
+            onClose={toggleFilterModal}
+            footerButton={
+              <SgButton
+                  onPress={handleFilters}
+                  bgColor={COLORS.primary}
+                  color={COLORS.white}
+              >
+                {t('accept')}
+              </SgButton>
+            }
+        >
+          <View style={{paddingBottom: 20}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+              <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+              <SgButton
+                  onPress={resetFilters}
+                  color={COLORS.brand_700}
+                  style={{
+                    flex: 0,
+                    width: 'auto',
+                    marginLeft: 'auto',
+                    paddingVertical: 0,
+                    paddingHorizontal: 0,
+                    gap: 7
+                  }}
+
+              >
+                {t('clearFilters')}
+                <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+              </SgButton>
+            </View>
+
+            <View style={{gap: 16}}>
+              <View style={{flex: 1}}>
+                <SgSelect
+                    label={t("Status")}
+                    placeholder={t("enterStatus")}
+                    modalTitle={t("selectStatus")}
+                    value={filters?.status}
+                    name='status'
+                    onChangeText={handleChangeFilter}
+                    list={[
+                      {
+                        id: 1,
+                        name: t('active')
+                      },
+                      {
+                        id: 2,
+                        name: t('expiresSoon')
+                      },
+                      {
+                        id: 3,
+                        name: t('expired')
+                      }
+                    ]}
+                />
+              </View>
+            </View>
+          </View>
+        </SgPopup>
+
+      </SgTemplateScreen>
   );
 }
 
@@ -478,6 +584,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  iconWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.brand_50,
+    padding: 14,
+    borderRadius: 50,
   },
   header: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
+import {View, StyleSheet, Text, ToastAndroid, Pressable} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
@@ -16,21 +16,24 @@ import moment from "moment";
 import SgSelect from "@/components/ui/Select/Select";
 import {useAuth} from "@/hooks/useAuth";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
-import {useTranslation} from "react-i18next";
-import {validate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants";
+import {validate} from "@/utils/validate";
+import {useTranslation} from "react-i18next";
 import {useLanguage} from "@/hooks/useLanguage";
+import FilterIcon from "@/assets/images/filter.svg";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
 
 export default function EmployeeDocsScreen() {
-  const [docList, setDocList] = useState([]);
-  const {request} = useApi();
-  const {user} = useAuth();
-  const {storeData} = useData();
-  const {selectedLanguage} = useLanguage();
-  const [addDocsModal, setAddDocsModal] = useState(false)
-  const [selectedFiles, setSelectedFiles] = useState([])
-  const [data, setData] = useState({})
-  const [errors, setErrors] = useState({})
+    const [docList, setDocList] = useState([]);
+    const {request} = useApi();
+    const {user} = useAuth();
+    const {storeData} = useData();
+    const {selectedLanguage} = useLanguage();
+    const {t} = useTranslation();
+    const [addDocsModal, setAddDocsModal] = useState(false)
+    const [selectedFiles, setSelectedFiles] = useState([])
+    const [data, setData] = useState({})
+    const [errors, setErrors] = useState({})
     const [fileTypes, setFileTypes] = useState([
         {
             key: 'passport',
@@ -253,355 +256,460 @@ export default function EmployeeDocsScreen() {
             show: false
         }
     ])
-  const {refreshKey} = useLocalSearchParams();
-  const {t} = useTranslation()
-  const [removeModal, setRemoveModal] = useState(false);
+    const {refreshKey} = useLocalSearchParams();
+    const [removeModal, setRemoveModal] = useState(false);
+    const [filterModal, setFilterModal] = useState(false)
+    const [filters, setFilters] = useState({})
 
-  function toggleAddDocsModal() {
-    setAddDocsModal(!addDocsModal)
-    setSelectedFiles([])
-    setData({})
-    setErrors({})
-  }
-
-  function handleSubmitDoc() {
-    let errors = validate({...data, fileTypes: fileTypes, file: selectedFiles?.[0]?.id}, 'addDocs', validationConstraints);
-
-    if (Object.keys(errors).length > 0) {
-      setErrors(errors);
-      ToastAndroid.show("error var", ToastAndroid.SHORT)
-    } else {
-      request({
-        url: '/admin/doc/add',
-        method: 'post',
-        data: {
-          ...data,
-          file: selectedFiles[0]?.id,
-          application_id: user?.application_id
-        }
-      }).then(res => {
-        toggleAddDocsModal()
-        // setSelectedFiles([])
-        // setData({})
-        // setErrors({})
-        request({
-          url: '/admin/doc/list',
-          method: 'get',
-        }).then().catch(err => {
-          console.log(err);
-        })
-      }).catch(err => {
-        console.log(err);
-      })
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
     }
-  }
-
-  function handleRemove(selectedFileId, title) {
-    request({
-      url: '/admin/doc/remove',
-      method: 'post',
-      data: {
-        title,
-        file: selectedFileId,
-        application_id: user?.application_id
-      }
-    }).then(res => {
-      setRemoveModal(false)
-      request({
-        url: '/admin/doc/list',
-        method: 'get',
-      }).then().catch(err => {
-        console.log(err);
-      })
-    }).catch(err => {
-      console.log(err);
-    })
-  }
-
-  function handleRemoveFile(index) {
-    const _selectedFiles = [...selectedFiles];
-    _selectedFiles.splice(index, 1)
-    setSelectedFiles(_selectedFiles)
-  }
-
-
-
-
-  function handleChange(e) {
-    setErrors({...errors, [e.name]: ''});
-    setData({...data, [e.name]: e.value});
-  }
-
-
-  useFocusEffect(
-      React.useCallback(() => {
+    function resetFilters() {
+        setFilters({});
         request({
-          url: '/admin/doc/list',
-          method: 'get',
+            url: '/admin/doc/list',
+            method: 'get',
         }).then().catch(err => {
-          console.log(err);
+            // console.log(err);
         })
+        toggleFilterModal()
+    }
 
-        return () => {
-          console.log('doc tab lost focus');
-        };
-      }, [refreshKey])
-  );
+    function handleChangeFilter(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
 
-  useEffect(() => {
-    setDocList(storeData?.cache?.[`GET:/admin/doc/list`]?.data)
-  }, [storeData?.cache?.[`GET:/admin/doc/list`]])
+    function handleFilters() {
+        request({
+            url: '/admin/doc/list',
+            method: 'get',
+            params: {
+                replaced: filters?.replaced?.id
+            }
+        }).then().catch(err => {
+            // console.log(err);
+        })
+    }
 
-  return (
-    <SgTemplateScreen
-      head={
-        <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
-          <SgSectionFileHead
-              title={t('myDocs')}
-              description={t('myDocs__description')}
-              iconText={t('seeExpiredDocs')}
-              href={`/adminPages/docs/archive`}
-          />
-        </View>
-      }
-    >
-      <SgNoticeCard
-          title={t('activeDocs')}
-          buttonText={t('addDocument')}
-          bgButton="success"
-          onClick={toggleAddDocsModal}
-      />
+    function toggleAddDocsModal() {
+        setAddDocsModal(!addDocsModal)
+        setSelectedFiles([])
+        setData({})
+        setErrors({})
+    }
 
-      <View style={{gap: 12}}>
-        {(docList || []).map((el, index) => (
-            <SgFileCard
-                key={index}
-                auid={el?.id}
-                fileType={el.mimetype}
-                title={el?.filename}
-                url={el?.filepath}
-                expiryDate={el?.date_of_expiry}
-                issueDate={el?.date_of_issue}
-                deletePermission={el?.employee_id === user?.id && user.role.id === 2}
-                handleRemove={handleRemove}
-                setRemoveModal={setRemoveModal}
-                removeModal={removeModal}
-                type={el?.type}
-                migrationId={fileTypes?.find(item => item.key === el?.type)?.[selectedLanguage?.id !== 'en' ? `label_${selectedLanguage?.id}` : 'label'] || el?.type}
+
+
+    function handleSubmitDoc() {
+        let errors = validate({...data, fileTypes: fileTypes, file: selectedFiles?.[0]?.id}, 'addDocs', validationConstraints);
+
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            ToastAndroid.show("error var", ToastAndroid.SHORT)
+        } else {
+            request({
+                url: '/admin/doc/add',
+                method: 'post',
+                data: {
+                    ...data,
+                    file: selectedFiles[0]?.id,
+                    application_id: user?.application_id
+                }
+            }).then(res => {
+                toggleAddDocsModal()
+                // setSelectedFiles([])
+                // setData({})
+                // setErrors({})
+                request({
+                    url: '/admin/doc/list',
+                    method: 'get',
+                }).then().catch(err => {
+                    // console.log(err);
+                })
+            }).catch(err => {
+                // console.log(err);
+            })
+        }
+    }
+
+    function handleRemove(selectedFileId, title) {
+        request({
+            url: '/admin/doc/remove',
+            method: 'post',
+            data: {
+                title,
+                file: selectedFileId,
+                application_id: user?.application_id
+            }
+        }).then(res => {
+            setRemoveModal(false)
+            request({
+                url: '/admin/doc/list',
+                method: 'get',
+            }).then().catch(err => {
+                // console.log(err);
+            })
+        }).catch(err => {
+            // console.log(err);
+        })
+    }
+
+
+    function handleChange(e) {
+        setErrors({...errors, [e.name]: ''});
+        setData({...data, [e.name]: e.value});
+    }
+
+
+    useFocusEffect(
+        React.useCallback(() => {
+            request({
+                url: '/admin/doc/list',
+                method: 'get',
+            }).then().catch(err => {
+                // console.log(err);
+            })
+
+            return () => {};
+        }, [refreshKey])
+    );
+
+    useEffect(() => {
+        setDocList(storeData?.cache?.[`GET:/admin/doc/list`]?.data)
+    }, [storeData?.cache?.[`GET:/admin/doc/list`]]);
+
+    function handleRemoveFile(index) {
+        const _selectedFiles = [...selectedFiles];
+        _selectedFiles.splice(index, 1)
+        setSelectedFiles(_selectedFiles)
+    }
+
+    return (
+        <SgTemplateScreen
+            head={
+                <View style={{paddingVertical: 16, paddingHorizontal: 16}}>
+                    <SgSectionFileHead
+                        title={t('myDocs')}
+                        description={t('myDocs__description')}
+                        iconText={t('seeExpiredDocs')}
+                        href={`/employeePages/docs/archive`}
+                        filter={
+                            <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
+                                <Text><FilterIcon width={20} height={20} /></Text>
+                            </Pressable>
+                        }
+                    />
+                </View>
+            }
+        >
+            <SgNoticeCard
+                title={t('activeDocs')}
+                buttonText={t('addDocument')}
+                bgButton="success"
+                onClick={toggleAddDocsModal}
             />
-        ))}
-      </View>
+
+            <View style={{gap: 12}}>
+                {(docList || []).map((el, index) => (
+                    <SgFileCard
+                        key={index}
+                        auid={el?.id}
+                        fileType={el.mimetype}
+                        title={el?.filename}
+                        url={el?.filepath}
+                        expiryDate={el?.date_of_expiry}
+                        issueDate={el?.date_of_issue}
+                        deletePermission={el?.employee_id === user?.id && user.role.id === 2}
+                        handleRemove={handleRemove}
+                        setRemoveModal={setRemoveModal}
+                        removeModal={removeModal}
+                        type={el?.type}
+                        migrationId={fileTypes?.find(item => item.key === el?.type)?.[selectedLanguage?.id !== 'en' ? `label_${selectedLanguage?.id}` : 'label'] || el?.type}
+                    />
+                ))}
+            </View>
 
 
-      <SgPopup
-          autoClose={false}
-          visible={addDocsModal}
-          onClose={toggleAddDocsModal}
-          title={t("addDocument")}
-          description={t("addDocument__description")}
-          footerButton={
-            <SgButton
-                bgColor={COLORS.brand_600}
-                color={COLORS.white}
-                onPress={handleSubmitDoc}
-                disabled={selectedFiles.length === 0}
+            <SgPopup
+                autoClose={false}
+                visible={addDocsModal}
+                onClose={toggleAddDocsModal}
+                title={t('addDocument')}
+                description={t('addDocument__description')}
+                footerButton={
+                    <SgButton
+                        bgColor={COLORS.brand_600}
+                        color={COLORS.white}
+                        onPress={handleSubmitDoc}
+                        disabled={selectedFiles.length === 0}
+                    >
+                        {t('addDocument')}
+                    </SgButton>
+                }
             >
-              {t("addDocument")}
-            </SgButton>
-          }
-      >
-        <View style={{gap: 16, marginBottom: 16}}>
-          <View>
-            <SgSelect
-                label={t("documentType")}
-                placeholder={t("selectDocumentType")}
-                modalTitle={t("selectDocumentType")}
-                value={data?.document}
-                name='document'
-                isInvalid={errors?.document}
-                onChangeText={handleChange}
-                list={(fileTypes || [])?.filter(el => (el.flow || [])?.includes(user?.flow) && el.show)?.map((fileType, index) => ({
-                  id: fileType?.key, name: fileType?.label, render: <Text key={index}>{fileType?.label}</Text>
-                }))}
-            />
-          </View>
-          {(fileTypes || []).find(el => el.key === data?.document?.id)?.dateRequired ?
-              <>
-                <View>
-                  <SgDatePicker
-                      label={t("dateOfIssue")}
-                      placeholder={t("enterDate")}
-                      type="date"
-                      value={data?.date_of_issue}
-                      name='date_of_issue'
-                      isInvalid={errors?.date_of_issue}
-                      onChangeText={handleChange}
-                  />
-                </View>
-                <View>
-                  <SgDatePicker
-                      label={t("dateOfExpired")}
-                      placeholder={t("enterDate")}
-                      type="date"
-                      value={data?.date_of_expiry}
-                      name='date_of_expiry'
-                      isInvalid={errors?.date_of_expiry}
-                      onChangeText={handleChange}
-                  />
-                </View>
-              </>
-              : null
-          }
-          <View>
-            <SgTemplateUploadScreen
-                setSelectedFiles={setSelectedFiles}
-                selectedFiles={selectedFiles}
-                multiple={false}
-            />
+                <View style={{gap: 16}}>
+                    <View>
+                        <SgSelect
+                            label={t('documentType')}
+                            placeholder={t('selectDocumentType')}
+                            modalTitle={t('selectDocumentType')}
+                            value={data?.document}
+                            name='document'
+                            isInvalid={errors?.document}
+                            onChangeText={handleChange}
+                            list={(fileTypes || [])?.filter(el => (el.flow || [])?.includes(user?.flow) && el.show)?.map((fileType, index) => ({
+                                id: fileType?.key, name: fileType?.label, render: <Text key={index}>{fileType?.label}</Text>
+                            }))}
+                        />
+                    </View>
+                    {(fileTypes || []).find(el => el.key === data?.document?.id)?.dateRequired ?
+                        <>
+                            <View>
+                                <SgDatePicker
+                                    label={t('dateOfIssue')}
+                                    placeholder={t('enterDate')}
+                                    type="date"
+                                    value={data?.date_of_issue}
+                                    name='date_of_issue'
+                                    isInvalid={errors?.date_of_issue}
+                                    onChangeText={handleChange}
+                                />
+                            </View>
+                            <View>
+                                <SgDatePicker
+                                    label={t('dateOfExpired')}
+                                    placeholder={t('enterDate')}
+                                    type="date"
+                                    value={data?.date_of_expiry}
+                                    name='date_of_expiry'
+                                    isInvalid={errors?.date_of_expiry}
+                                    onChangeText={handleChange}
+                                />
+                            </View>
+                        </>
+                        : null
+                    }
+                    <View>
+                        <SgTemplateUploadScreen
+                            setSelectedFiles={setSelectedFiles}
+                            selectedFiles={selectedFiles}
+                            multiple={false}
+                        />
 
-            {(selectedFiles || []).map((el, index) => (
-                <SgSectionAddFile
-                    key={index}
-                    handleRemove={() => handleRemoveFile(index)}
-                    title={el?.name}
-                    type={el?.type}
-                    datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
-                    url={el?.filepath}
-                    onPress={() => console.log('file.filename')}
-                    remove={true}
-                />
-            ))}
-          </View>
-        </View>
-      </SgPopup>
+                        {(selectedFiles || []).map((el, index) => (
+                            <SgSectionAddFile
+                                handleRemove={() => handleRemoveFile(index)}
+                                key={index}
+                                title={el?.name}
+                                type={el?.type}
+                                datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
+                                url={el?.filepath}
+                                onPress={() => {}}
+                                remove={true}
+                            />
+                        ))}
+                    </View>
+                </View>
+            </SgPopup>
 
-    </SgTemplateScreen>
-  );
+            <SgPopup
+                visible={filterModal}
+                onClose={toggleFilterModal}
+                footerButton={
+                    <SgButton
+                        onPress={handleFilters}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        {t('accept')}
+                    </SgButton>
+                }
+            >
+                <View style={{paddingBottom: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+                        <SgButton
+                            onPress={resetFilters}
+                            color={COLORS.brand_700}
+                            style={{
+                                flex: 0,
+                                width: 'auto',
+                                marginLeft: 'auto',
+                                paddingVertical: 0,
+                                paddingHorizontal: 0,
+                                gap: 7
+                            }}
+
+                        >
+                            {t('clearFilters')}
+                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                        </SgButton>
+                    </View>
+
+                    <View style={{gap: 16}}>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("Status")}
+                                placeholder={t("enterStatus")}
+                                modalTitle={t("selectStatus")}
+                                value={filters?.status}
+                                name='status'
+                                onChangeText={handleChangeFilter}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('active')
+                                    },
+                                    {
+                                        id: 2,
+                                        name: t('expiresSoon')
+                                    },
+                                    {
+                                        id: 3,
+                                        name: t('expired')
+                                    }
+                                ]}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </SgPopup>
+
+        </SgTemplateScreen>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  addButton: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 5,
-  },
-  addButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  listContainer: {
-    padding: 15,
-  },
-  jobCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  jobHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  jobTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    flex: 1,
-  },
-  statusBadge: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-  },
-  activeBadge: {
-    backgroundColor: '#e6f7ee',
-  },
-  closedBadge: {
-    backgroundColor: '#ffebee',
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  activeText: {
-    color: '#00a86b',
-  },
-  closedText: {
-    color: '#f44336',
-  },
-  jobDetails: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 10,
-  },
-  jobInfo: {
-    fontSize: 14,
-    color: '#666',
-    marginRight: 15,
-    marginBottom: 5,
-  },
-  applicantsContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    paddingVertical: 10,
-    marginVertical: 10,
-  },
-  applicantsText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  actionButton: {
-    flex: 1,
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  closeButton: {
-    backgroundColor: '#f44336',
-  },
-  reopenButton: {
-    backgroundColor: '#4caf50',
-  },
-  actionButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  closeButtonText: {
-    color: '#fff',
-  },
-  reopenButtonText: {
-    color: '#fff',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+    },
+    iconWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.brand_50,
+        padding: 14,
+        borderRadius: 50,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 15,
+        backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    headerTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    addButton: {
+        backgroundColor: '#007BFF',
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 5,
+    },
+    addButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    listContainer: {
+        padding: 15,
+    },
+    jobCard: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    jobHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    jobTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        flex: 1,
+    },
+    statusBadge: {
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        borderRadius: 4,
+    },
+    activeBadge: {
+        backgroundColor: '#e6f7ee',
+    },
+    closedBadge: {
+        backgroundColor: '#ffebee',
+    },
+    statusText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    activeText: {
+        color: '#00a86b',
+    },
+    closedText: {
+        color: '#f44336',
+    },
+    jobDetails: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginBottom: 10,
+    },
+    jobInfo: {
+        fontSize: 14,
+        color: '#666',
+        marginRight: 15,
+        marginBottom: 5,
+    },
+    applicantsContainer: {
+        borderTopWidth: 1,
+        borderTopColor: '#eee',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+        paddingVertical: 10,
+        marginVertical: 10,
+    },
+    applicantsText: {
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    actionButton: {
+        flex: 1,
+        backgroundColor: '#007BFF',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginHorizontal: 5,
+    },
+    closeButton: {
+        backgroundColor: '#f44336',
+    },
+    reopenButton: {
+        backgroundColor: '#4caf50',
+    },
+    actionButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    closeButtonText: {
+        color: '#fff',
+    },
+    reopenButtonText: {
+        color: '#fff',
+    },
 });

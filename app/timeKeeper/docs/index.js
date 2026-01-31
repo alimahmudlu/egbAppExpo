@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
+import {View, StyleSheet, Text, ToastAndroid, Pressable} from 'react-native';
 import SgSectionFileHead from "@/components/sections/FileHead/FileHead";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgNoticeCard from "@/components/ui/NoticeCard/NoticeCard";
@@ -16,17 +16,20 @@ import moment from "moment";
 import SgSelect from "@/components/ui/Select/Select";
 import {useAuth} from "@/hooks/useAuth";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
-import {useTranslation} from "react-i18next";
-import {validate} from "@/utils/validate";
 import validationConstraints from "@/app/chiefPages/create-task/constants";
+import {validate} from "@/utils/validate";
+import {useTranslation} from "react-i18next";
 import {useLanguage} from "@/hooks/useLanguage";
+import FilterIcon from "@/assets/images/filter.svg";
+import ReloadArrow from "@/assets/images/reload-arrows.svg";
 
 export default function EmployeeDocsScreen() {
     const [docList, setDocList] = useState([]);
     const {request} = useApi();
     const {user} = useAuth();
-    const {storeData, updateData} = useData();
+    const {storeData} = useData();
     const {selectedLanguage} = useLanguage();
+    const {t} = useTranslation();
     const [addDocsModal, setAddDocsModal] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState([])
     const [data, setData] = useState({})
@@ -254,8 +257,39 @@ export default function EmployeeDocsScreen() {
         }
     ])
     const {refreshKey} = useLocalSearchParams();
-    const {t} = useTranslation()
     const [removeModal, setRemoveModal] = useState(false);
+    const [filterModal, setFilterModal] = useState(false)
+    const [filters, setFilters] = useState({})
+
+    function toggleFilterModal() {
+        setFilterModal(!filterModal);
+    }
+    function resetFilters() {
+        setFilters({});
+        request({
+            url: '/timekeeper/doc/list',
+            method: 'get',
+        }).then().catch(err => {
+            // console.log(err);
+        })
+        toggleFilterModal()
+    }
+
+    function handleChangeFilter(e) {
+        setFilters({...filters, [e.name]: e.value});
+    }
+
+    function handleFilters() {
+        request({
+            url: '/timekeeper/doc/list',
+            method: 'get',
+            params: {
+                replaced: filters?.replaced?.id
+            }
+        }).then().catch(err => {
+            // console.log(err);
+        })
+    }
 
     function toggleAddDocsModal() {
         setAddDocsModal(!addDocsModal)
@@ -264,12 +298,10 @@ export default function EmployeeDocsScreen() {
         setErrors({})
     }
 
+
+
     function handleSubmitDoc() {
-        let errors = validate({
-            ...data,
-            fileTypes: fileTypes,
-            file: selectedFiles?.[0]?.id
-        }, 'addDocs', validationConstraints);
+        let errors = validate({...data, fileTypes: fileTypes, file: selectedFiles?.[0]?.id}, 'addDocs', validationConstraints);
 
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
@@ -318,15 +350,10 @@ export default function EmployeeDocsScreen() {
                 // console.log(err);
             })
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
         })
     }
 
-    function handleRemoveFile(index) {
-        const _selectedFiles = [...selectedFiles];
-        _selectedFiles.splice(index, 1)
-        setSelectedFiles(_selectedFiles)
-    }
 
     function handleChange(e) {
         setErrors({...errors, [e.name]: ''});
@@ -340,19 +367,22 @@ export default function EmployeeDocsScreen() {
                 url: '/timekeeper/doc/list',
                 method: 'get',
             }).then().catch(err => {
-                console.log(err);
+                // console.log(err);
             })
 
-            return () => {
-                setDocList([])
-                updateData(`GET:/timekeeper/doc/list`, {data: []})
-            };
+            return () => {};
         }, [refreshKey])
     );
 
     useEffect(() => {
         setDocList(storeData?.cache?.[`GET:/timekeeper/doc/list`]?.data)
-    }, [storeData?.cache?.[`GET:/timekeeper/doc/list`]])
+    }, [storeData?.cache?.[`GET:/timekeeper/doc/list`]]);
+
+    function handleRemoveFile(index) {
+        const _selectedFiles = [...selectedFiles];
+        _selectedFiles.splice(index, 1)
+        setSelectedFiles(_selectedFiles)
+    }
 
     return (
         <SgTemplateScreen
@@ -362,7 +392,12 @@ export default function EmployeeDocsScreen() {
                         title={t('myDocs')}
                         description={t('myDocs__description')}
                         iconText={t('seeExpiredDocs')}
-                        href={`/timeKeeperPages/docs/archive`}
+                        href={`/employeePages/docs/archive`}
+                        filter={
+                            <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
+                                <Text><FilterIcon width={20} height={20} /></Text>
+                            </Pressable>
+                        }
                     />
                 </View>
             }
@@ -399,8 +434,8 @@ export default function EmployeeDocsScreen() {
                 autoClose={false}
                 visible={addDocsModal}
                 onClose={toggleAddDocsModal}
-                title={t("addDocument")}
-                description={t("addDocument__description")}
+                title={t('addDocument')}
+                description={t('addDocument__description')}
                 footerButton={
                     <SgButton
                         bgColor={COLORS.brand_600}
@@ -408,24 +443,22 @@ export default function EmployeeDocsScreen() {
                         onPress={handleSubmitDoc}
                         disabled={selectedFiles.length === 0}
                     >
-                        {t("addDocument")}
+                        {t('addDocument')}
                     </SgButton>
                 }
             >
-                <View style={{gap: 16, marginBottom: 16}}>
+                <View style={{gap: 16}}>
                     <View>
                         <SgSelect
-                            label={t("documentType")}
-                            placeholder={t("selectDocumentType")}
-                            modalTitle={t("selectDocumentType")}
+                            label={t('documentType')}
+                            placeholder={t('selectDocumentType')}
+                            modalTitle={t('selectDocumentType')}
                             value={data?.document}
                             name='document'
                             isInvalid={errors?.document}
                             onChangeText={handleChange}
                             list={(fileTypes || [])?.filter(el => (el.flow || [])?.includes(user?.flow) && el.show)?.map((fileType, index) => ({
-                                id: fileType?.key,
-                                name: fileType?.label,
-                                render: <Text key={index}>{fileType?.label}</Text>
+                                id: fileType?.key, name: fileType?.label, render: <Text key={index}>{fileType?.label}</Text>
                             }))}
                         />
                     </View>
@@ -433,8 +466,8 @@ export default function EmployeeDocsScreen() {
                         <>
                             <View>
                                 <SgDatePicker
-                                    label={t("dateOfIssue")}
-                                    placeholder={t("enterDate")}
+                                    label={t('dateOfIssue')}
+                                    placeholder={t('enterDate')}
                                     type="date"
                                     value={data?.date_of_issue}
                                     name='date_of_issue'
@@ -444,8 +477,8 @@ export default function EmployeeDocsScreen() {
                             </View>
                             <View>
                                 <SgDatePicker
-                                    label={t("dateOfExpired")}
-                                    placeholder={t("enterDate")}
+                                    label={t('dateOfExpired')}
+                                    placeholder={t('enterDate')}
                                     type="date"
                                     value={data?.date_of_expiry}
                                     name='date_of_expiry'
@@ -465,16 +498,80 @@ export default function EmployeeDocsScreen() {
 
                         {(selectedFiles || []).map((el, index) => (
                             <SgSectionAddFile
-                                key={index}
                                 handleRemove={() => handleRemoveFile(index)}
+                                key={index}
                                 title={el?.name}
                                 type={el?.type}
                                 datetime={el?.date ? moment(el?.date).format('DD.MM.YYYY / HH:mm') : null}
                                 url={el?.filepath}
-                                onPress={() => console.log('file.filename')}
+                                onPress={() => {}}
                                 remove={true}
                             />
                         ))}
+                    </View>
+                </View>
+            </SgPopup>
+
+            <SgPopup
+                visible={filterModal}
+                onClose={toggleFilterModal}
+                footerButton={
+                    <SgButton
+                        onPress={handleFilters}
+                        bgColor={COLORS.primary}
+                        color={COLORS.white}
+                    >
+                        {t('accept')}
+                    </SgButton>
+                }
+            >
+                <View style={{paddingBottom: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
+
+                        <SgButton
+                            onPress={resetFilters}
+                            color={COLORS.brand_700}
+                            style={{
+                                flex: 0,
+                                width: 'auto',
+                                marginLeft: 'auto',
+                                paddingVertical: 0,
+                                paddingHorizontal: 0,
+                                gap: 7
+                            }}
+
+                        >
+                            {t('clearFilters')}
+                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
+                        </SgButton>
+                    </View>
+
+                    <View style={{gap: 16}}>
+                        <View style={{flex: 1}}>
+                            <SgSelect
+                                label={t("Status")}
+                                placeholder={t("enterStatus")}
+                                modalTitle={t("selectStatus")}
+                                value={filters?.status}
+                                name='status'
+                                onChangeText={handleChangeFilter}
+                                list={[
+                                    {
+                                        id: 1,
+                                        name: t('active')
+                                    },
+                                    {
+                                        id: 2,
+                                        name: t('expiresSoon')
+                                    },
+                                    {
+                                        id: 3,
+                                        name: t('expired')
+                                    }
+                                ]}
+                            />
+                        </View>
                     </View>
                 </View>
             </SgPopup>
@@ -487,6 +584,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f5f5f5',
+    },
+    iconWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.brand_50,
+        padding: 14,
+        borderRadius: 50,
     },
     header: {
         flexDirection: 'row',
@@ -520,7 +624,7 @@ const styles = StyleSheet.create({
         padding: 15,
         marginBottom: 15,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 2,
