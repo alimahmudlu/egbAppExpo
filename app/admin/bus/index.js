@@ -13,6 +13,8 @@ import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
 import {useData} from "@/hooks/useData";
 import SgSelect from "@/components/ui/Select/Select";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
+import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 
 
 export default function ChiefMenuScreen() {
@@ -25,7 +27,7 @@ export default function ChiefMenuScreen() {
     const [data, setData] = useState({
         turn1order: 0,
         turn2order: 0,
-        date: moment().add(1, 'day').format('YYYY-MM-DD')
+        date: moment().add(1, 'day')
     });
     const [reportData, setReportData] = useState({});
     const [errors, setErrors] = useState({});
@@ -78,7 +80,6 @@ export default function ChiefMenuScreen() {
 
     function handleChange(e) {
         setData({...data, [e.name]: e.value});
-        console.log({...data, [e.name]: e.value});
     }
 
     function handleChangeReport(e) {
@@ -100,7 +101,7 @@ export default function ChiefMenuScreen() {
                 tripTypeId: data?.tripType?.id || selectedRow?.report_status?.trip_type,
                 toProjectId: data?.toProject?.map(el => el.id) || selectedRow?.report_status?.to_project_id || selectedRow?.project_id,
                 campId: data?.camp?.map(el => el.id) || selectedRow?.report_status?.camp_id,
-                date: selectedRow?.date || moment().format('YYYY-MM-DD'),
+                date: data?.date || selectedRow?.date || moment().format('YYYY-MM-DD'),
                 turn1employees: selectedRow?.turn1employees || 0,
                 turn2employees: selectedRow?.turn2employees || 0,
                 otherCamps: data?.otherCamps || []
@@ -201,6 +202,13 @@ export default function ChiefMenuScreen() {
             }
         >
             <View style={{gap: 32}}>
+                {/*<SgButton*/}
+                {/*    bgColor={COLORS.brand_600}*/}
+                {/*    color={COLORS.white}*/}
+                {/*    onPress={() => toggleReportModal({})}*/}
+                {/*>*/}
+                {/*    {t('ScheduleABusOtherDate')}*/}
+                {/*</SgButton>*/}
                 <View style={{gap: 16}}>
                     <Text style={{fontSize: 18, fontWeight: 700}}>
                         {t('PROJECTS')}
@@ -251,107 +259,152 @@ export default function ChiefMenuScreen() {
                         </SgButton>
                 }
             >
-                <View style={{gap: 16}}>
-                    <View>
-                        <SgInput
-                            label={t('countOfBus')}
-                            placeholder={t('countOfBus')}
-                            value={data?.countOfBus || selectedRow?.report_status?.bus_count}
-                            name='countOfBus'
-                            onChangeText={handleChange}
-                            type='number'
-                            // disabled={selectedRow?.report_status}
-                        />
-                    </View>
-                    <View>
-                        <SgInput
-                            label={t('countOfSeatInEveryBus')}
-                            placeholder={t('countOfSeatInEveryBus')}
-                            value={data?.countOfSeatInEveryBus || selectedRow?.report_status?.seat_count}
-                            name='countOfSeatInEveryBus'
-                            onChangeText={handleChange}
-                            type='number'
-                            // disabled={selectedRow?.report_status}
-                        />
-                    </View>
-
-                    <View>
-                        <SgSelect
-                            label={t('tripType')}
-                            placeholder={t('tripType')}
-                            modalTitle={t('selectTripType')}
-                            value={data?.tripType || (tripTypeList || []).find(el => el.id === selectedRow?.report_status?.trip_type)}
-                            name='tripType'
-                            isInvalid={errors?.tripType}
-                            onChangeText={handleChange}
-                            list={(tripTypeList || [])}
-                        />
-                    </View>
-
-                    <View>
-                        <SgSelect
-                            label={t('Camps')}
-                            placeholder={t('Camps')}
-                            modalTitle={t('selectCamp')}
-                            value={data?.camp || (camps || []).find(el => (el.id === selectedRow?.report_status?.camp_id))}
-                            name='camp'
-                            multiple={true}
-                            isInvalid={errors?.camp}
-                            onChangeText={handleChange}
-                            list={(camps || []).map(item => ({
-                                id: item?.id,
-                                name: item?.name,
-                                render: <Text>{item?.name}</Text>,
-                            }))}
-                        />
-                    </View>
-
-                    <View>
-                        <SgSelect
-                            label={t('Project')}
-                            placeholder={t('Project')}
-                            modalTitle={t('selectProject')}
-                            value={data?.toProject || (projects || []).find(el => (el.id === selectedRow?.report_status?.to_project_id || el.id === selectedRow?.project_id))}
-                            name='toProject'
-                            multiple={true}
-                            isInvalid={errors?.toProject}
-                            onChangeText={handleChange}
-                            list={(projects || []).map(item => ({
-                                id: item?.id,
-                                name: item?.name,
-                                render: <Text>{item?.name}</Text>,
-                            }))}
-                        />
-                    </View>
-
-
-                    <TouchableOpacity
-                        onPress={addOtherCamp}
-                        style={styles.checkboxContainer}
-                    >
-                        <Text style={styles.checkboxLabel}>
-                            + {t('addOtherCamp')}
-                        </Text>
-                    </TouchableOpacity>
-
-                    {(data?.otherCamps || []).map((item, index) => (
-                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <View style={{ flex: 1 }}>
-                                <SgInput
-                                    label={`${t('otherCamp')} ${index + 1}`}
-                                    placeholder={t('enterCampName')}
-                                    value={item}
-                                    onChangeText={(text) => handleOtherCampChange(index, text)}
+                <View style={{gap: 32}}>
+                    {!selectedRow?.project_id ?
+                        <View style={{gap: 16}}>
+                            <View style={{flex: 1}}>
+                                <SgDatePicker
+                                    label={t('date')}
+                                    placeholder={t('date')}
+                                    value={data?.date}
+                                    name='date'
+                                    mode='date'
+                                    onChangeText={handleChange}
                                 />
                             </View>
-                            <TouchableOpacity
-                                onPress={() => removeOtherCamp(index)}
-                                style={{ marginTop: 25, padding: 8 }}
-                            >
-                                <Text style={{ color: 'red', fontSize: 24, fontWeight: 'bold' }}>−</Text>
-                            </TouchableOpacity>
+                            <View style={{flex: 1}}>
+                                <SgSelect
+                                    label={t("project")}
+                                    placeholder={t("enterProject")}
+                                    modalTitle={t("selectProject")}
+                                    value={data?.project}
+                                    name='project'
+                                    onChangeText={handleChange}
+                                    list={(projects || []).map((project, index) => ({
+                                        id: project?.id, name: project?.name, render: <SgSectionProjectListItem
+                                            key={index}
+                                            title={project.name}
+                                            staffData={(project?.members || []).filter(el => el.status)}
+                                            id={project.id}
+                                        />
+                                    }))}
+                                />
+                            </View>
                         </View>
-                    ))}
+                        : null
+                    }
+                    <View style={{gap: 16}}>
+                        <View style={{flex: 1}}>
+                            <SgDatePicker
+                                label={t('date')}
+                                placeholder={t('date')}
+                                value={data?.date}
+                                name='date'
+                                mode='date'
+                                onChangeText={handleChange}
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                label={t('countOfBus')}
+                                placeholder={t('countOfBus')}
+                                value={data?.countOfBus || selectedRow?.report_status?.bus_count}
+                                name='countOfBus'
+                                onChangeText={handleChange}
+                                type='number'
+                                // disabled={selectedRow?.report_status}
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                label={t('countOfSeatInEveryBus')}
+                                placeholder={t('countOfSeatInEveryBus')}
+                                value={data?.countOfSeatInEveryBus || selectedRow?.report_status?.seat_count}
+                                name='countOfSeatInEveryBus'
+                                onChangeText={handleChange}
+                                type='number'
+                                // disabled={selectedRow?.report_status}
+                            />
+                        </View>
+
+                        <View>
+                            <SgSelect
+                                label={t('tripType')}
+                                placeholder={t('tripType')}
+                                modalTitle={t('selectTripType')}
+                                value={data?.tripType || (tripTypeList || []).find(el => el.id === selectedRow?.report_status?.trip_type)}
+                                name='tripType'
+                                isInvalid={errors?.tripType}
+                                onChangeText={handleChange}
+                                list={(tripTypeList || [])}
+                            />
+                        </View>
+
+                        <View>
+                            <SgSelect
+                                label={t('Camps')}
+                                placeholder={t('Camps')}
+                                modalTitle={t('selectCamp')}
+                                value={data?.camp || (camps || []).find(el => (el.id === selectedRow?.report_status?.camp_id))}
+                                name='camp'
+                                multiple={true}
+                                isInvalid={errors?.camp}
+                                onChangeText={handleChange}
+                                list={(camps || []).map(item => ({
+                                    id: item?.id,
+                                    name: item?.name,
+                                    render: <Text>{item?.name}</Text>,
+                                }))}
+                            />
+                        </View>
+
+                        <View>
+                            <SgSelect
+                                label={t('Project')}
+                                placeholder={t('Project')}
+                                modalTitle={t('selectProject')}
+                                value={data?.toProject || (projects || []).find(el => (el.id === selectedRow?.report_status?.to_project_id || el.id === selectedRow?.project_id))}
+                                name='toProject'
+                                multiple={true}
+                                isInvalid={errors?.toProject}
+                                onChangeText={handleChange}
+                                list={(projects || []).map(item => ({
+                                    id: item?.id,
+                                    name: item?.name,
+                                    render: <Text>{item?.name}</Text>,
+                                }))}
+                            />
+                        </View>
+
+
+                        <TouchableOpacity
+                            onPress={addOtherCamp}
+                            style={styles.checkboxContainer}
+                        >
+                            <Text style={styles.checkboxLabel}>
+                                + {t('addOtherCamp')}
+                            </Text>
+                        </TouchableOpacity>
+
+                        {(data?.otherCamps || []).map((item, index) => (
+                            <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                <View style={{ flex: 1 }}>
+                                    <SgInput
+                                        label={`${t('otherCamp')} ${index + 1}`}
+                                        placeholder={t('enterCampName')}
+                                        value={item}
+                                        onChangeText={(text) => handleOtherCampChange(index, text)}
+                                    />
+                                </View>
+                                <TouchableOpacity
+                                    onPress={() => removeOtherCamp(index)}
+                                    style={{ marginTop: 25, padding: 8 }}
+                                >
+                                    <Text style={{ color: 'red', fontSize: 24, fontWeight: 'bold' }}>−</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ))}
+                    </View>
                 </View>
             </SgPopup>
         </SgTemplateScreen>
