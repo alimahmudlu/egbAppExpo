@@ -7,6 +7,7 @@ import AppInfoImage from "@/assets/images/appInfoImage.png";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useTranslation} from "react-i18next";
 import Constants from 'expo-constants';
+import COLORS from "@/constants/colors";
 
 export default function ProjectItemScreen() {
     const {t} = useTranslation();
@@ -15,35 +16,28 @@ export default function ProjectItemScreen() {
         return Constants.manifest?.version || Constants.expoConfig?.version || 'unknown';
     }
 
-
     return (
         <SgTemplateScreen
             head={<SgTemplatePageHeader data={{
-                header: 'App Info'
+                header: t('appInfo') || 'App Info'
             }} />}
         >
-            <View gap={32}>
-                <View>
+            <View style={styles.container}>
+                <View style={styles.imageContainer}>
                     <Image
                         source={AppInfoImage}
-                        style={{
-                            width: '100%',
-                            // height: '100%',
-                            // objectFit: 'cover',
-                            // resizeMode: 'cover',
-                            aspectRatio: 344/216
-                        }}
+                        style={styles.image}
+                        contentFit="cover"
+                    />
+                </View>
 
-                    />
-                </View>
-                <View>
-                    <SgSectionDownloadApp
-                        version={getAppVersion()}
-                        title={t('appInfo1')}
-                        platforms={['android', 'ios']}
-                    />
-                </View>
-                <View>
+                <SgSectionDownloadApp
+                    version={getAppVersion()}
+                    title={t('appInfo1')}
+                    platforms={['android', 'ios']}
+                />
+
+                <View style={styles.textContainer}>
                     <Text style={styles.contentDescription}>
                         {t('appInfo2')}
                     </Text>
@@ -57,57 +51,41 @@ export default function ProjectItemScreen() {
 }
 
 const styles = StyleSheet.create({
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    },
-    backButton: {
-        padding: 8,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-    },
-    overviewButton: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 4,
-    },
-    overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter, sans-serif',
-        fontWeight: '500',
-        fontSize: 16,
-        // lineHeight: '24px',
-},
     container: {
-        flex: 1,
+        gap: 20,
     },
-    contentText: {
-        fontSize: 16,
+    imageContainer: {
+        borderRadius: 16,
+        overflow: 'hidden',
+        backgroundColor: COLORS.gray_50,
+        shadowColor: COLORS.brand_950,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.04,
+        shadowRadius: 8,
+        elevation: 2,
     },
-
-
-    contentTitle: {
-        fontSize: 18,
-        fontWeight: 600,
-        marginBottom: 8,
-        lineHeight: 28,
-        color: '#0C111D'
+    image: {
+        width: '100%',
+        aspectRatio: 344 / 216,
+    },
+    textContainer: {
+        backgroundColor: COLORS.white,
+        borderRadius: 16,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: COLORS.gray_100,
+        shadowColor: COLORS.brand_950,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.04,
+        shadowRadius: 8,
+        elevation: 2,
     },
     contentDescription: {
+        fontFamily: 'Inter_400Regular',
         fontSize: 14,
-        fontWeight: 400,
-        marginBottom: 24,
-        lineHeight: 20,
-        color: '#0C111D'
+        fontWeight: '400',
+        lineHeight: 22,
+        color: COLORS.gray_700,
+        marginBottom: 16,
     },
 });

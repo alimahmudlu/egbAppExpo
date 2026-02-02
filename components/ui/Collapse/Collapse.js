@@ -1,45 +1,67 @@
 import React, { useState, useRef } from 'react';
-import {View, Text, TouchableOpacity, Animated, StyleSheet, LayoutChangeEvent, Platform} from 'react-native';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, Platform } from 'react-native';
 import COLORS from "@/constants/colors";
+import { Ionicons } from '@expo/vector-icons';
 
 const CollapsibleView = ({ title, children }) => {
     const [collapsed, setCollapsed] = useState(true);
-    const [contentHeight, setContentHeight] = useState(0); // Məzmunun real hündürlüyü
+    const [contentHeight, setContentHeight] = useState(0);
 
-    // Animasiya üçün dəyər: 0 (yığılmış) və 1 (açılmış) arasında olacaq
     const animation = useRef(new Animated.Value(0)).current;
+    const rotateAnimation = useRef(new Animated.Value(0)).current;
 
-    // Hündürlüyün 0-dan real hündürlüyə interpolasiyası
     const heightInterpolate = animation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, contentHeight], // contentHeight burada kritikdir!
+        outputRange: [0, contentHeight],
     });
 
-    // Məzmunun hündürlüyünü ölçmək üçün funksiya
+    const rotateInterpolate = rotateAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '180deg'],
+    });
+
     const onContentLayout = (event) => {
-        // Hündürlük yalnız bir dəfə ölçülür (əgər 0-dırsa)
         if (contentHeight === 0) {
             setContentHeight(event.nativeEvent.layout.height);
         }
     };
 
     const toggleCollapse = () => {
-        const toValue = collapsed ? 1 : 0; // 1-ə (aç) və ya 0-a (yığ)
+        const toValue = collapsed ? 1 : 0;
 
-        Animated.timing(animation, {
-            toValue: toValue,
-            duration: 300, // Animasiya müddəti
-            useNativeDriver: false, // Hündürlüyü animasiya edərkən 'false' olmalıdır
-        }).start();
+        Animated.parallel([
+            Animated.timing(animation, {
+                toValue: toValue,
+                duration: 250,
+                useNativeDriver: false,
+            }),
+            Animated.timing(rotateAnimation, {
+                toValue: toValue,
+                duration: 250,
+                useNativeDriver: true,
+            }),
+        ]).start();
 
         setCollapsed(!collapsed);
     };
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={toggleCollapse} style={styles.header}>
-                <Text style={styles.title}>{title}</Text>
-                <Text>{collapsed ? '+' : '-'}</Text>
+            <TouchableOpacity
+                onPress={toggleCollapse}
+                style={styles.header}
+                activeOpacity={0.7}
+            >
+                <View style={styles.titleContainer}>
+                    {title}
+                </View>
+                <Animated.View style={[styles.iconContainer, { transform: [{ rotate: rotateInterpolate }] }]}>
+                    <Ionicons
+                        name="chevron-down"
+                        size={20}
+                        color={COLORS.gray_500}
+                    />
+                </Animated.View>
             </TouchableOpacity>
 
             <Animated.View style={[styles.collapsibleContainer, { height: heightInterpolate }]}>
@@ -54,41 +76,36 @@ const CollapsibleView = ({ title, children }) => {
     );
 };
 
-const isAndroid = Platform.OS === 'android';
-
 const styles = StyleSheet.create({
     container: {
-        // borderWidth: 1,
-        // borderColor: '#ccc',
-        // borderRadius: 5,
         overflow: 'hidden',
-
-
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.white,
         borderRadius: 16,
-        // padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-        // Modern Kölgə Effekti (Minimalist qalır)
-        shadowColor: '#000',
+        borderWidth: 1,
+        borderColor: COLORS.gray_100,
+        shadowColor: COLORS.brand_950,
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 10,
-        elevation: 5,
-        borderWidth: isAndroid ? 0 : 0.5,
-        borderColor: isAndroid ? 'transparent' : COLORS.gray_200,
+        shadowOpacity: 0.04,
+        shadowRadius: 8,
+        elevation: 2,
     },
     header: {
-        padding: 15,
-        // backgroundColor: '#f0f0f0',
+        padding: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    title: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: '#333333',
+    titleContainer: {
+        flex: 1,
+        paddingRight: 12,
+    },
+    iconContainer: {
+        width: 32,
+        height: 32,
+        borderRadius: 8,
+        backgroundColor: COLORS.gray_50,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     collapsibleContainer: {
         overflow: 'hidden',
@@ -96,8 +113,8 @@ const styles = StyleSheet.create({
     content: {
         position: 'absolute',
         width: '100%',
-        padding: 15,
-        paddingTop: 0,
+        paddingHorizontal: 16,
+        paddingBottom: 16,
     },
 });
 

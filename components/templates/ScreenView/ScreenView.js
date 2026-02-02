@@ -88,7 +88,7 @@ export default function SgTemplateScreenView(props) {
                         }
                     {/*</TouchableWithoutFeedback>*/}
                 </KeyboardAvoidingView>
-                <StatusBar hidden={false} style="light" backgroundColor={COLORS.brand_600}  />
+                <StatusBar hidden={false} style="dark" backgroundColor={COLORS.white} />
             </SafeScreen>
         </React.Fragment>
     );

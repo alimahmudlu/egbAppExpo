@@ -15,16 +15,16 @@ export default function SgCard({
                                }) {
     const Icon = icon ? icon : null;
 
-    const getBackgroundColor = (type = 'gray') => {
+    const getBackgroundColor = (type) => {
         switch (type) {
             case "gray":
-                return COLORS.gray_100;
+                return COLORS.gray_50;
             case "green":
-                return COLORS.success_100;
+                return COLORS.success_50;
             case "yellow":
-                return COLORS.warning_100;
+                return COLORS.warning_50;
             case "danger":
-                return COLORS.error_100;
+                return COLORS.error_50;
             default:
                 return COLORS.white;
         }
@@ -42,6 +42,7 @@ export default function SgCard({
     }
 
     const showHeader = title || icon;
+    const hasContent = contentTitle || contentDescription;
 
     const dynamicStyle = {
         backgroundColor: resolvedBgColor,
@@ -52,8 +53,7 @@ export default function SgCard({
             <View style={[
                 styles.content,
                 !padding && {
-                    // paddingVertical: 0,
-                    paddingHorizontal: 0,
+                    paddingHorizontal: 12,
                 }
             ]}>
                 {showHeader && (
@@ -67,16 +67,20 @@ export default function SgCard({
                     <Text style={styles.time}>{displayTime}</Text>
                 )}
 
-                <View>
-                    {contentTitle && (
-                        <Text style={styles.contentTitle}>{contentTitle}</Text>
-                    )}
-                    {contentDescription && (
-                        <Text style={styles.contentDesc}>{contentDescription}</Text>
-                    )}
-                </View>
+                {hasContent && (
+                    <View>
+                        {contentTitle && (
+                            <Text style={styles.contentTitle}>{contentTitle}</Text>
+                        )}
+                        {contentDescription ? (
+                            <Text style={styles.contentDesc}>{contentDescription}</Text>
+                        ) : (
+                            <Text style={[styles.contentDesc, {color: COLORS.gray_400}]}>—</Text>
+                        )}
+                    </View>
+                )}
 
-                <View style={styles.children}>{children}</View>
+                {children && <View style={styles.children}>{children}</View>}
             </View>
         </View>
     );

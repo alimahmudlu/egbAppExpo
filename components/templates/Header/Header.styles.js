@@ -1,67 +1,121 @@
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import COLORS from "@/constants/colors";
 
 const styles = StyleSheet.create({
-  vectorBackground: {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  zIndex: 0,
-},
-wrapper: {
-  backgroundColor: COLORS.brand_950,
-  borderBottomLeftRadius: 28,
-  borderBottomRightRadius: 28,
-  width: '100%',
-  position: 'relative',
-  overflow: 'hidden',
-  display: 'flex',
-  flexDirection: 'row',
-},
-  container: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
-    paddingBottom: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flex: 1
-  },
-    rightSection: {
-      padding: 20,
-      paddingTop: 24,
+    wrapper: {
+        backgroundColor: COLORS.white,
     },
-
-    notification: {
-        backgroundColor: 'rgba(255,255,255,0.15)',
-        padding: 12,
-        borderRadius: 50,
-        position: 'relative'
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        paddingHorizontal: 20,
+        paddingTop: 12,
+        paddingBottom: 20,
     },
-    notificationIcon: {
-        width: 20,
-        height: 20
+    leftSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 14,
+        flex: 1,
+    },
+    avatarContainer: {
+        width: 48,
+        height: 48,
+        borderRadius: 14,
+        backgroundColor: COLORS.brand_950,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatar: {
+        width: 48,
+        height: 48,
+        borderRadius: 14,
+    },
+    avatarText: {
+        fontFamily: 'Inter_700Bold',
+        fontSize: 16,
+        fontWeight: '700',
+        color: COLORS.white,
+    },
+    infoSection: {
+        flex: 1,
+        gap: 2,
+    },
+    greeting: {
+        fontFamily: 'Inter_400Regular',
+        fontSize: 13,
+        fontWeight: '400',
+        color: COLORS.gray_500,
+    },
+    name: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 17,
+        fontWeight: '600',
+        color: COLORS.gray_900,
+        marginBottom: 4,
+    },
+    metaRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    roleBadge: {
+        backgroundColor: COLORS.brand_950,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 6,
+    },
+    roleText: {
+        fontFamily: 'Inter_500Medium',
+        fontSize: 11,
+        fontWeight: '500',
+        color: COLORS.white,
+    },
+    ratingBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+        backgroundColor: COLORS.warning_100,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+    },
+    ratingText: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 12,
+        fontWeight: '600',
+        color: COLORS.warning_700,
+    },
+    notificationButton: {
+        width: 44,
+        height: 44,
+        borderRadius: 12,
+        backgroundColor: COLORS.brand_950,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
     },
     notificationBadge: {
         position: 'absolute',
         top: -4,
         right: -4,
-        color: COLORS.gray_700,
-        // color: COLORS.error_700,
-        fontWeight: 700,
-        fontSize: 10,
-        lineHeight: 20,
-        backgroundColor: '#ccc',
-        borderRadius: 25,
-        padding: 0,
-        width: '100%',
-        maxWidth: 40,
-        minWidth: 26,
-        height: 22,
-        textAlign: 'center',
+        minWidth: 18,
+        height: 18,
+        borderRadius: 9,
+        backgroundColor: COLORS.error_600,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+        paddingHorizontal: 5,
+        borderWidth: 2,
+        borderColor: COLORS.white,
+    },
+    notificationBadgeText: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 10,
+        fontWeight: '600',
+        color: COLORS.white,
+    },
 });
 
 export default styles;

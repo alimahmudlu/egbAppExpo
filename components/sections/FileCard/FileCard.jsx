@@ -334,7 +334,7 @@ export default function SgFileCard({ auid, fileType, title, description, type, i
             title={t('documentView')}
             footerButton={
                 <SgButton
-                    bgColor={COLORS.brand_600}
+                    bgColor={COLORS.brand_950}
                     color={COLORS.white}
                     onPress={handleDownload}
                 >
@@ -372,11 +372,10 @@ export default function SgFileCard({ auid, fileType, title, description, type, i
             onClose={toggleOpenSettingsModal}
             title="Permission Error"
             description="Location permission error. You have not given permission to access your locations. If you want to turn it on, go to settings. Open settings??"
-            // icon={<CheckInModalIcon width={50} height={50}/>}
             footerButton={
                 <SgButton
                     onPress={handleOpenSettings}
-                    bgColor={COLORS.primary}
+                    bgColor={COLORS.brand_950}
                     color={COLORS.white}
                 >
                     Open

@@ -267,21 +267,15 @@ export default function ProjectItemScreen() {
             <SgCard
                 contentTitle={t('task')}
                 contentDescription={taskDetails?.name}
-                padding={false}
-                bgColor={null}
             />
             <SgCard
                 contentTitle={t('description')}
                 contentDescription={taskDetails?.description}
-                padding={false}
-                bgColor={null}
             />
 
             {(taskDetails?.files || []).length > 0 ?
                 <>
-                    <SgCard>
-                        <Text style={styles.title}>Added Files</Text>
-                    </SgCard>
+                    <Text style={styles.sectionTitle}>{t('addedFiles')}</Text>
                     {(taskDetails?.files || []).map((el, index) => (
                         <SgSectionAddFile
                             handleRemove={() => handleRemoveFile(index)}
@@ -298,13 +292,10 @@ export default function ProjectItemScreen() {
             }
 
             {([1].includes(taskDetails?.status?.id)) ?
-                <View style={{
-                    gap: 12,
-                    flexDirection: 'row',
-                }}>
+                <View style={styles.actionButtons}>
                     <SgButton
-                        bgColor='#FEF0C7'
-                        color='#B54708'
+                        bgColor={COLORS.warning_100}
+                        color={COLORS.warning_700}
                         onPress={toggleStartTaskModal}
                     >
                         {t('started')}
@@ -314,20 +305,17 @@ export default function ProjectItemScreen() {
             }
 
             {([2, 4, 5, 8].includes(taskDetails?.status?.id)) ?
-                <View style={{
-                    gap: 12,
-                    flexDirection: 'row',
-                }}>
+                <View style={styles.actionButtons}>
                     <SgButton
-                        bgColor='#FEF0C7'
-                        color='#B54708'
+                        bgColor={COLORS.warning_100}
+                        color={COLORS.warning_700}
                         onPress={toggleCheckTaskModal}
                     >
                         {t('checkRequest')}
                     </SgButton>
                     <SgButton
-                        bgColor='#D2F5EC'
-                        color='#1A554E'
+                        bgColor={COLORS.brand_100}
+                        color={COLORS.brand_800}
                         onPress={toggleCompleteTaskModal}
                     >
                         {t('completeTask')}
@@ -344,7 +332,7 @@ export default function ProjectItemScreen() {
                 icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
-                        bgColor={COLORS.brand_600}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                         onPress={handleCompleteTask}
                         disabled={selectedFiles.length === 0}
@@ -391,7 +379,7 @@ export default function ProjectItemScreen() {
                 icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
-                        bgColor={COLORS.brand_600}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                         onPress={handleCheckTask}
                     >
@@ -437,7 +425,7 @@ export default function ProjectItemScreen() {
                 icon={<CompleteModalIcon width={50} height={50} />}
                 footerButton={
                     <SgButton
-                        bgColor={COLORS.brand_600}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                         onPress={handleStartTask}
                     >
@@ -479,41 +467,18 @@ export default function ProjectItemScreen() {
 }
 
 const styles = StyleSheet.create({
-    headerContainer: {
+    sectionTitle: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 15,
+        fontWeight: '600',
+        lineHeight: 20,
+        color: COLORS.gray_800,
+        marginTop: 8,
+        marginBottom: 4,
+    },
+    actionButtons: {
+        gap: 12,
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
+        marginTop: 8,
     },
-    backButton: {
-        padding: 8,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-    },
-    overviewButton: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 4,
-    },
-    overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter, sans-serif',
-        fontWeight: '500',
-        fontSize: 16,
-        // lineHeight: '24px',
-},
-    container: {
-        flex: 1,
-    },
-    contentText: {
-        fontSize: 16,
-    }
 });

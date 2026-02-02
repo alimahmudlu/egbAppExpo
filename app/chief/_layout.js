@@ -17,6 +17,7 @@ import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "@/hooks/useAuth";
+import COLORS from '@/constants/colors';
 
 export default function WorkerTabLayout() {
     const {changeRowData} = useData();
@@ -38,9 +39,7 @@ export default function WorkerTabLayout() {
             changeRowData(`GET:/chief/task/list`, data?.data, data?.data?.id)
         };
 
-        // socket.on('connect', () => {
-            socket.on("change_task__by_employee", handler);
-        // })
+        socket.on("change_task__by_employee", handler);
 
         return () => {
             socket.off("change_task__by_employee", handler);
@@ -51,23 +50,37 @@ export default function WorkerTabLayout() {
         <Tabs
             screenOptions={{
                 headerShown: false,
-                tabBarInActiveTintColor: '#98A2B3',
-                tabBarActiveTintColor: '#182230',
-                tabBarActiveBackgroundColor: '#F2F4F7',
+                tabBarInactiveTintColor: COLORS.gray_400,
+                tabBarActiveTintColor: COLORS.brand_950,
                 tabBarStyle: Platform.select({
                     ios: {
-                        // Use a transparent background on iOS to show the blur effect
-                        // position: 'absolute',
+                        position: 'absolute',
+                        backgroundColor: COLORS.white,
+                        borderTopWidth: 1,
+                        borderTopColor: COLORS.gray_100,
+                        height: 85,
+                        paddingTop: 8,
+                        paddingBottom: 28,
                     },
                     default: {
-                        boxShadow: '0px -24px 40px -20px #00000014',
-                        border: 'none',
-                        borderColor: '#FFFFFF'
+                        backgroundColor: COLORS.white,
+                        borderTopWidth: 1,
+                        borderTopColor: COLORS.gray_100,
+                        height: 64,
+                        paddingTop: 8,
+                        paddingBottom: 8,
                     },
                 }),
                 tabBarItemStyle: {
-                    borderRadius: 12,
-                    overflow: "hidden"
+                    gap: 4,
+                },
+                tabBarLabelStyle: {
+                    fontFamily: 'Inter_600SemiBold',
+                    fontSize: 10,
+                    fontWeight: '600',
+                },
+                tabBarIconStyle: {
+                    marginBottom: 0,
                 },
             }}
         >
@@ -77,8 +90,9 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__home'),
                     tabBarLabel: t('tabBar__home'),
                     headerTitle: t('tabBar__home'),
-                    tabBarIcon: ({color, focused}) => focused ? <HomeActiveIcon width={20} height={20}/> :
-                        <HomeIcon width={20} height={20}/>
+                    tabBarIcon: ({focused}) => focused
+                        ? <HomeActiveIcon width={24} height={24} />
+                        : <HomeIcon width={24} height={24} color={COLORS.gray_400} />
                 }}
             />
             <Tabs.Screen
@@ -88,7 +102,9 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__myDocs'),
                     tabBarLabel: t('tabBar__myDocs'),
                     headerTitle: t('tabBar__myDocs'),
-                    tabBarIcon: ({ color, focused }) => focused ? <DocsActiveIcon width={20} height={20} /> : <DocsIcon width={20} height={20} />
+                    tabBarIcon: ({focused}) => focused
+                        ? <DocsActiveIcon width={24} height={24} />
+                        : <DocsIcon width={24} height={24} color={COLORS.gray_400} />
                 }}
             />
             <Tabs.Screen
@@ -97,8 +113,9 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__allTasks'),
                     tabBarLabel: t('tabBar__allTasks'),
                     headerTitle: t('tabBar__allTasks'),
-                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
-                        <HistoryIcon width={20} height={20}/>
+                    tabBarIcon: ({focused}) => focused
+                        ? <HistoryActiveIcon width={24} height={24} />
+                        : <HistoryIcon width={24} height={24} color={COLORS.gray_400} />
                 }}
             />
             <Tabs.Screen
@@ -108,8 +125,9 @@ export default function WorkerTabLayout() {
                     tabBarLabel: t('tabBar__history'),
                     headerTitle: t('tabBar__history'),
                     href: null,
-                    tabBarIcon: ({color, focused}) => focused ? <HistoryActiveIcon width={20} height={20}/> :
-                        <HistoryIcon width={20} height={20}/>
+                    tabBarIcon: ({focused}) => focused
+                        ? <HistoryActiveIcon width={24} height={24} />
+                        : <HistoryIcon width={24} height={24} color={COLORS.gray_400} />
                 }}
             />
             <Tabs.Screen
@@ -118,8 +136,9 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__projects'),
                     tabBarLabel: t('tabBar__projects'),
                     headerTitle: t('tabBar__projects'),
-                    tabBarIcon: ({color, focused}) => focused ? <ProjectsActiveIcon width={20} height={20}/> :
-                        <ProjectsIcon width={20} height={20}/>
+                    tabBarIcon: ({focused}) => focused
+                        ? <ProjectsActiveIcon width={24} height={24} />
+                        : <ProjectsIcon width={24} height={24} color={COLORS.gray_400} />
                 }}
             />
             <Tabs.Screen
@@ -128,8 +147,9 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__reports'),
                     tabBarLabel: t('tabBar__reports'),
                     headerTitle: t('tabBar__reports'),
-                    tabBarIcon: ({color, focused}) => focused ? <ReportsActiveIcon width={20} height={20}/> :
-                        <ReportsIcon width={20} height={20}/>
+                    tabBarIcon: ({focused}) => focused
+                        ? <ReportsActiveIcon width={24} height={24} />
+                        : <ReportsIcon width={24} height={24} color={COLORS.gray_400} />
                 }}
             />
             <Tabs.Screen
@@ -138,8 +158,9 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__menu'),
                     tabBarLabel: t('tabBar__menu'),
                     headerTitle: t('tabBar__menu'),
-                    tabBarIcon: ({color, focused}) => focused ? <MenuActiveIcon width={20} height={20}/> :
-                        <MenuIcon width={20} height={20}/>
+                    tabBarIcon: ({focused}) => focused
+                        ? <MenuActiveIcon width={24} height={24} />
+                        : <MenuIcon width={24} height={24} color={COLORS.gray_400} />
                 }}
             />
         </Tabs>

@@ -52,7 +52,7 @@ export default function SgCheckInOutCard(props) {
     const isCheckOut = type === 'checkout';
     const isOverTime = type === 'overTime';
     const isOverTimeOut = type === 'overTimeOut';
-    const backgroundColor = isCheckIn ? COLORS.brand_50 : (isOverTime ? COLORS.blue_50 : COLORS.error_100);
+    const backgroundColor = isCheckIn ? COLORS.brand_25 : (isOverTime ? COLORS.blue_25 : COLORS.error_25);
     const Icon = isCheckIn ? CheckIn : (isOverTime ? CheckIn : CheckOut);
     const {t} = useTranslation();
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
@@ -542,7 +542,7 @@ export default function SgCheckInOutCard(props) {
                                       onPress={handleCheckInRequest}
                                       disabled={buttonStatus}
                                       style={{paddingVertical: 8, minHeight: 36}}
-                                      textStyle={{fontSize: 15}}
+                                      textStyle={{fontSize: 14}}
                             >
                                 {t('checkIn')}
                             </SgButton>
@@ -551,7 +551,7 @@ export default function SgCheckInOutCard(props) {
                         {status === 1 ?
                             <SgButton
                                 style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
-                                textStyle={{fontSize: 15}}
+                                textStyle={{fontSize: 14}}
                                 color={COLORS.white}
                                 bgColor={COLORS?.brand_600}
                             >
@@ -563,7 +563,7 @@ export default function SgCheckInOutCard(props) {
                         {/*    <SgButton*/}
                         {/*        color={COLORS.brand_600}*/}
                         {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
-                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*        textStyle={{fontSize: 14}}*/}
                         {/*        onPress={() => openInMaps(mapData?.checkIn.latitude, mapData?.checkIn.longitude)}*/}
                         {/*    >*/}
                         {/*        {t('openOnMap')}*/}
@@ -581,7 +581,7 @@ export default function SgCheckInOutCard(props) {
                                 onPress={handleCheckOutRequest}
                                 disabled={buttonStatus}
                                 style={{paddingVertical: 8, minHeight: 36}}
-                                textStyle={{fontSize: 15}}
+                                textStyle={{fontSize: 14}}
                             >
                                 {t('checkOut')}
                             </SgButton>
@@ -592,7 +592,7 @@ export default function SgCheckInOutCard(props) {
                                 color={COLORS.white}
                                 bgColor={COLORS?.error_600}
                                 style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
-                                textStyle={{fontSize: 15}}
+                                textStyle={{fontSize: 14}}
                             >
                                 {t('waiting')}...
                             </SgButton>
@@ -603,7 +603,7 @@ export default function SgCheckInOutCard(props) {
                         {/*        color={COLORS.error_700}*/}
                         {/*        onPress={() => openInMaps(mapData?.checkOut.latitude, mapData?.checkOut.longitude)}*/}
                         {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
-                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*        textStyle={{fontSize: 14}}*/}
                         {/*    >*/}
                         {/*        {t('openOnMap')}*/}
                         {/*    </SgButton>*/}
@@ -615,11 +615,11 @@ export default function SgCheckInOutCard(props) {
                 {isOverTime ?
                     <>
                         {!status ?
-                            <SgButton color={COLORS.brand_600}
+                            <SgButton color={COLORS.blue_700}
                                       onPress={handleOverTimeRequest}
                                       disabled={buttonStatus}
                                       style={{paddingVertical: 8, minHeight: 36}}
-                                      textStyle={{fontSize: 15}}
+                                      textStyle={{fontSize: 14}}
                             >
                                 {t('overTime_btn')}
                             </SgButton>
@@ -628,9 +628,9 @@ export default function SgCheckInOutCard(props) {
                         {status === 1 ?
                             <SgButton
                                 style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
-                                textStyle={{fontSize: 15}}
+                                textStyle={{fontSize: 14}}
                                 color={COLORS.white}
-                                bgColor={COLORS?.blue_600}
+                                bgColor={COLORS.blue_600}
                             >
                                 {t('waiting')}...
                             </SgButton>
@@ -640,7 +640,7 @@ export default function SgCheckInOutCard(props) {
                         {/*    <SgButton*/}
                         {/*        color={COLORS.blue_600}*/}
                         {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
-                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*        textStyle={{fontSize: 14}}*/}
                         {/*        onPress={() => openInMaps(mapData?.overTime.latitude, mapData?.overTime.longitude)}*/}
                         {/*    >*/}
                         {/*        {t('openOnMap')}*/}
@@ -658,7 +658,7 @@ export default function SgCheckInOutCard(props) {
                                 onPress={handleOverTimeOutRequest}
                                 disabled={buttonStatus}
                                 style={{paddingVertical: 8, minHeight: 36}}
-                                textStyle={{fontSize: 15}}
+                                textStyle={{fontSize: 14}}
                             >
                                 {t('checkOut')}
                             </SgButton>
@@ -669,7 +669,7 @@ export default function SgCheckInOutCard(props) {
                                 color={COLORS.white}
                                 bgColor={COLORS?.error_600}
                                 style={{paddingVertical: 8, minHeight: 36, borderRadius: 12}}
-                                textStyle={{fontSize: 15}}
+                                textStyle={{fontSize: 14}}
                             >
                                 {t('waiting')}...
                             </SgButton>
@@ -680,7 +680,7 @@ export default function SgCheckInOutCard(props) {
                         {/*        color={COLORS.error_700}*/}
                         {/*        onPress={() => openInMaps(mapData?.overTimeOut.latitude, mapData?.overTimeOut.longitude)}*/}
                         {/*        style={{paddingVertical: 8, minHeight: 36}}*/}
-                        {/*        textStyle={{fontSize: 15}}*/}
+                        {/*        textStyle={{fontSize: 14}}*/}
                         {/*    >*/}
                         {/*        {t('openOnMap')}*/}
                         {/*    </SgButton>*/}
@@ -701,7 +701,7 @@ export default function SgCheckInOutCard(props) {
                     <SgButton
                         loading={status === 1}
                         onPress={handleSubmitCheckIn}
-                        bgColor={COLORS.primary}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                     >
                         {t('checkIn')}
@@ -719,7 +719,7 @@ export default function SgCheckInOutCard(props) {
                     <SgButton
                         loading={status === 1}
                         onPress={handleSubmitOverTime}
-                        bgColor={COLORS.primary}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                     >
                         {t('overTime_btn')}
@@ -754,7 +754,7 @@ export default function SgCheckInOutCard(props) {
                 footerButton={
                     <SgButton
                         onPress={handleOpenSettings}
-                        bgColor={COLORS.primary}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                     >
                         {t('open')}

@@ -107,7 +107,7 @@ export default function SgPopup({
                       <View style={{marginVertical: 'auto'}}>
                         {(iconType || icon) && (
                             <View style={styles.iconContainer}>
-                              {renderIcon()}
+                              {React.cloneElement(renderIcon(), { width: 36, height: 36 })}
                             </View>
                         )}
 

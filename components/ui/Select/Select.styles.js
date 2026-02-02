@@ -6,20 +6,21 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   label: {
+    fontFamily: 'Inter_600SemiBold',
     fontSize: 14,
-    fontWeight: 600,
+    fontWeight: '600',
     color: COLORS.gray_700,
-    lineHeight: 18,
+    lineHeight: 20,
   },
   inputContainer: {
-    flexDirection: 'row',      
-    alignItems: 'center',      
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.gray_300,
+    borderColor: COLORS.gray_200,
     borderRadius: 12,
     backgroundColor: COLORS.white,
-      paddingHorizontal: 14,
-    height: 46,
+    paddingHorizontal: 14,
+    height: 48,
   },
   labelError: {
     color: COLORS.error_700,
@@ -27,28 +28,23 @@ const styles = StyleSheet.create({
   inputErrorContainer: {
     borderColor: COLORS.error_700,
   },
-
-
-
   input: {
-    flex: 1,                   
-    fontFamily: 'Inter, sans-serif',
-    fontSize: 16,
-    fontWeight: 400,
-    fontStyle: 'normal',
-    color: COLORS.black,
+    flex: 1,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 15,
+    fontWeight: '400',
+    color: COLORS.gray_900,
   },
   icon: {
-    marginLeft: 12,           
+    marginLeft: 12,
   },
   textarea: {
-  textAlignVertical: 'bottom',
+    textAlignVertical: 'bottom',
   },
-
   textareaContainer: {
     height: 'auto',
     minHeight: 130,
-    alignItems: 'stretch',  
+    alignItems: 'stretch',
   },
 });
 

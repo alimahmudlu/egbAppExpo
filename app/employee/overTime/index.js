@@ -1,5 +1,3 @@
-import Avatar from "@/assets/images/avatar.png";
-import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgTemplateHeader from "@/components/templates/Header/Header";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgCard from "@/components/ui/Card/Card";
@@ -7,7 +5,6 @@ import Clock from "@/assets/images/clock.svg";
 import SgCheckInOutCard from "@/components/ui/CheckInOutCard/CheckInOutCard";
 import SgCheckInOutGroup from "@/components/ui/CheckInOutGroup/CheckInOutGroup";
 import {useAuth} from "@/hooks/useAuth";
-import {Alert, StyleSheet, Text, View} from "react-native";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
 import {useCallback, useEffect, useState} from "react";
@@ -21,7 +18,6 @@ import LoginIcon from "@/assets/images/login.svg";
 import COLORS from "@/constants/colors";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
-import SgButton from "@/components/ui/Button/Button";
 
 export default function EmployeeDashboardScreen() {
     const {user, getRating} = useAuth();
@@ -164,7 +160,7 @@ export default function EmployeeDashboardScreen() {
         >
 
             {storeData?.overTime?.status === 3 ? <SgNoticeCard
-                icon={<LoginIcon width={20} height={20}/>}
+                icon={<LoginIcon width={20} height={20} color={COLORS.error_600}/>}
                 title={t('checkInRejected')}
                 buttonText={t('rejectDetail')}
                 onClick={() => toggleRejectInfoModal(storeData?.overTime?.reject_reason)}
@@ -172,7 +168,7 @@ export default function EmployeeDashboardScreen() {
                 bgButton="danger"
             /> : null}
             {storeData?.overTimeOut?.status === 3 ? <SgNoticeCard
-                icon={<LoginIcon width={20} height={20}/>}
+                icon={<LoginIcon width={20} height={20} color={COLORS.error_600}/>}
                 title={t('checkOutRejected')}
                 buttonText={t('rejectDetail')}
                 onClick={() => toggleRejectInfoModal(storeData?.overTimeOut?.reject_reason)}
@@ -247,25 +243,9 @@ export default function EmployeeDashboardScreen() {
                 visible={rejectInfoModal}
                 onClose={toggleRejectInfoModal}
                 icon={<InfoCircleModalIcon width={50} height={50}/>}
+                title={t('rejectDetail')}
             >
-                <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
-                <SgCard><Text style={styles.title}>{rejectInfoData}</Text></SgCard>
+                <SgCard contentDescription={rejectInfoData} />
             </SgPopup>
         </SgTemplateScreen>);
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, backgroundColor: "#fff",
-    }, title: {
-        fontFamily: "Inter", fontSize: 16, fontStyle: "normal", fontWeight: "600", lineHeight: 20, color: COLORS.black,
-    }, rejectModal: {
-        fontFamily: "Inter",
-        fontSize: 20,
-        fontStyle: "normal",
-        fontWeight: "600",
-        lineHeight: 30,
-        marginBottom: 32,
-        textAlign: "center",
-    },
-});

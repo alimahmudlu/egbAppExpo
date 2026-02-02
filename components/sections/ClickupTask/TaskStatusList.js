@@ -5,8 +5,9 @@ import styles from './ClickupTask.styles';
 import {Link, router} from "expo-router";
 import moment from "moment";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
+import COLORS from '@/constants/colors';
 
-// Android-də LayoutAnimation-ı aktiv etmək üçün
+// Enable LayoutAnimation on Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
@@ -32,13 +33,12 @@ const TaskStatusList = ({ statusId, statusData, taskData, prefix = '/chiefPages/
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.header} onPress={toggleExpansion}>
-                {/* Sol Ox və Status Adı */}
+            <TouchableOpacity style={styles.header} onPress={toggleExpansion} activeOpacity={0.7}>
                 <View style={styles.headerLeft}>
                     <Ionicons
                         name={isExpanded ? "chevron-down-outline" : "chevron-forward-outline"}
-                        size={16}
-                        color="#000"
+                        size={18}
+                        color={COLORS.gray_600}
                     />
                     <View style={[styles.statusButton, { backgroundColor: color }]}>
                         <Text style={styles.headerText}>{name}</Text>

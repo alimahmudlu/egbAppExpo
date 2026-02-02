@@ -9,16 +9,17 @@ import COLORS from '@/constants/colors';
 export default function SgInput({
   label,
   placeholder,
-  type = 'text', // 'text' | 'password' | 'email' | 'textarea' | 'counter'
+  type = 'text',
   value,
   name,
-    isInvalid = false,
+  isInvalid = false,
   onChangeText,
-    disabled = false,
-    max = null,
-    min = null
+  disabled = false,
+  max = null,
+  min = null
 }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [counter, setCounter] = useState(Number(value) || 0);
 
   const handleChange = (val) => {
@@ -26,23 +27,24 @@ export default function SgInput({
     const newValue = isNaN(parsed) ? 0 : parsed;
     setCounter(newValue);
     if (type === 'counter') {
-        if (max && newValue > max) {
-            setCounter(max);
-            onChangeText({ name, value: newValue });
-        }
-        else if (min && newValue < min) {
-            setCounter(min);
-            onChangeText({ name, value: newValue });
-        }
-        else {
-            setCounter(newValue);
-            onChangeText({ name, value: newValue });
-        }
+      if (max && newValue > max) {
+        setCounter(max);
+        onChangeText({ name, value: newValue });
+      } else if (min && newValue < min) {
+        setCounter(min);
+        onChangeText({ name, value: newValue });
+      } else {
+        setCounter(newValue);
+        onChangeText({ name, value: newValue });
+      }
     }
   };
 
   const handleIncrease = () => handleChange(max ? (counter + 1 < max ? counter + 1 : max) : counter + 1);
   const handleDecrease = () => handleChange(min ? ((counter - 1 > 0 && counter - 1 > min) ? counter - 1 : 0) : (counter > 0 ? counter - 1 : 0));
+
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => setIsFocused(false);
 
   const renderInput = () => {
     switch (type) {
@@ -56,10 +58,16 @@ export default function SgInput({
               value={value?.toString()}
               readOnly={disabled}
               onChangeText={(e) => onChangeText({ name, value: e })}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               placeholderTextColor={COLORS.gray_400}
             />
-            <Pressable style={styles.icon} onPress={() => setShowPassword(!showPassword)}>
-              <Eye width={20} height={20} />
+            <Pressable
+              style={styles.icon}
+              onPress={() => setShowPassword(!showPassword)}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Eye width={20} height={20} color={isFocused ? COLORS.gray_600 : COLORS.gray_400} />
             </Pressable>
           </>
         );
@@ -72,6 +80,8 @@ export default function SgInput({
             value={value?.toString()}
             readOnly={disabled}
             onChangeText={(e) => onChangeText({ name, value: e })}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             placeholderTextColor={COLORS.gray_400}
             multiline
             numberOfLines={4}
@@ -85,16 +95,16 @@ export default function SgInput({
             <Pressable style={styles.counterButton} onPress={handleDecrease}>
               <Minus width={20} height={20} />
             </Pressable>
-
             <TextInput
               style={[styles.input, styles.counterInput]}
               keyboardType="numeric"
               value={counter?.toString()}
               readOnly={disabled}
               onChangeText={handleChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               placeholderTextColor={COLORS.gray_400}
             />
-
             <Pressable style={styles.counterButton} onPress={handleIncrease}>
               <Plus width={20} height={20} />
             </Pressable>
@@ -103,17 +113,17 @@ export default function SgInput({
 
       case 'number':
         return (
-          <>
-            <TextInput
-              style={[styles.input]}
-              keyboardType="numeric"
-              value={value?.toString()}
-              readOnly={disabled}
-              placeholder={placeholder}
-              onChangeText={(e) => onChangeText({ name, value: e })}
-              placeholderTextColor={COLORS.gray_400}
-            />
-          </>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            value={value?.toString()}
+            readOnly={disabled}
+            placeholder={placeholder}
+            onChangeText={(e) => onChangeText({ name, value: e })}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            placeholderTextColor={COLORS.gray_400}
+          />
         );
 
       default:
@@ -124,6 +134,8 @@ export default function SgInput({
             value={value?.toString()}
             readOnly={disabled}
             onChangeText={(e) => onChangeText({ name, value: e })}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             placeholderTextColor={COLORS.gray_400}
           />
         );
@@ -133,7 +145,14 @@ export default function SgInput({
   return (
     <View style={styles.wrapper}>
       {label && <Text style={[styles.label, isInvalid && styles.labelError]}>{label}</Text>}
-      <View style={[styles.inputContainer, isInvalid && styles.inputErrorContainer, type === 'textarea' && styles.textareaContainer]}>
+      <View
+        style={[
+          styles.inputContainer,
+          isFocused && styles.inputContainerFocused,
+          isInvalid && styles.inputErrorContainer,
+          type === 'textarea' && styles.textareaContainer
+        ]}
+      >
         {renderInput()}
       </View>
     </View>

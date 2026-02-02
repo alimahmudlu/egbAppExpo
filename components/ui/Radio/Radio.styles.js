@@ -3,30 +3,30 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   radio: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 1,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
     borderColor: COLORS.gray_300,
     alignItems: 'center',
     justifyContent: 'center',
   },
   radioSelected: {
-    borderColor: COLORS.brand_600,
+    borderColor: COLORS.brand_950,
   },
   radioWrapper: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    padding: 6,
-    backgroundColor: COLORS.brand_600,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    padding: 5,
+    backgroundColor: COLORS.brand_950,
     alignItems: 'center',
     justifyContent: 'center',
   },
   radioInner: {
-    width: 8,
-    height: 8,
-    borderRadius: 10,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: COLORS.white,
   },
 });

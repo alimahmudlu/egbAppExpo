@@ -1,67 +1,84 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import Vector from '@/assets/images/vector.svg';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './Header.styles';
-import SgSectionUserInfo from '@/components/sections/UserInfo/UserInfo';
-
 import BellIcon from '@/assets/images/bell.svg';
-import {useFocusEffect, useLocalSearchParams, useRouter} from "expo-router";
-import {request} from "axios";
-import {useApi} from "@/hooks/useApi";
-import moment from "moment";
-import {useData} from "@/hooks/useData";
-import {useTranslation} from "react-i18next";
+import { useRouter } from "expo-router";
+import { useData } from "@/hooks/useData";
+import { useTranslation } from "react-i18next";
+import { FontAwesome } from '@expo/vector-icons';
+import COLORS from '@/constants/colors';
 
-
-export default function SgTemplateHeader({name, role, position, rating, profileImage}) {
+export default function SgTemplateHeader({ name, role, position, rating, profileImage }) {
     const router = useRouter();
-    const { request } = useApi();
     const [notifications, setNotifications] = useState([]);
-
-    const {storeData} = useData();
-    const {refreshKey} = useLocalSearchParams();
-    const {t} = useTranslation()
-
+    const { storeData } = useData();
+    const { t } = useTranslation();
 
     useEffect(() => {
-        setNotifications(storeData?.cache?.[`GET:/notifications/count`]?.data)
+        setNotifications(storeData?.cache?.[`GET:/notifications/count`]?.data);
     }, [storeData?.cache?.[`GET:/notifications/count`]]);
 
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return t('goodMorning') || 'Good morning';
+        if (hour < 18) return t('goodAfternoon') || 'Good afternoon';
+        return t('goodEvening') || 'Good evening';
+    };
 
-    /*useFocusEffect(useCallback(() => {
-        request({
-            url: `/notifications`,
-            method: 'get',
-        }).then().catch(err => {
-            console.log(err, 'apiservice control err')
-        });
-
-        return () => {
-            console.log('Home tab lost focus');
-        };
-    }, []));*/
+    const getInitials = (fullName) => {
+        if (!fullName) return '';
+        return fullName.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
+    };
 
     return (
         <View style={styles.wrapper}>
-            <Vector style={styles.vectorBackground} width={'100%'} resizeMode="stretch"/>
             <View style={styles.container}>
-                <SgSectionUserInfo
-                    name={name}
-                    role={role}
-                    position={position}
-                    rating={rating}
-                    profileImage={profileImage}
-                    color="white"
-                    size="lg"
-                />
-            </View>
-            <View style={styles.rightSection}>
-                <TouchableOpacity style={styles.notification} onPress={() => {
-                    router.push(`/pages/notifications`);
-                }}>
-                    <BellIcon style={styles.notificationIcon} width={20} height={20} resizeMode='strech'/>
-                    {/*{(notifications)?.unread_notifications_count ? <Text style={styles.notificationBadge}>{(notifications)?.unread_notifications_count}</Text> : null}*/}
-                    {(notifications)?.unread_notifications_count ? <Text style={styles.notificationBadge}>{(notifications)?.unread_notifications_count}</Text> : null}
+                {/* Left Section - Avatar & Info */}
+                <View style={styles.leftSection}>
+                    <View style={styles.avatarContainer}>
+                        {profileImage ? (
+                            <Image
+                                source={profileImage}
+                                style={styles.avatar}
+                                resizeMode="cover"
+                            />
+                        ) : (
+                            <Text style={styles.avatarText}>{getInitials(name)}</Text>
+                        )}
+                    </View>
+                    <View style={styles.infoSection}>
+                        <Text style={styles.greeting}>{getGreeting()}</Text>
+                        <Text style={styles.name} numberOfLines={1}>{name}</Text>
+                        <View style={styles.metaRow}>
+                            {role && (
+                                <View style={styles.roleBadge}>
+                                    <Text style={styles.roleText}>{role}</Text>
+                                </View>
+                            )}
+                            {rating && (
+                                <View style={styles.ratingBadge}>
+                                    <FontAwesome name="star" size={12} color="#FBBF24" />
+                                    <Text style={styles.ratingText}>{rating}</Text>
+                                </View>
+                            )}
+                        </View>
+                    </View>
+                </View>
+
+                {/* Right Section - Notification */}
+                <TouchableOpacity
+                    style={styles.notificationButton}
+                    onPress={() => router.push('/pages/notifications')}
+                    activeOpacity={0.7}
+                >
+                    <BellIcon width={20} height={20} fill={COLORS.white} color={COLORS.white} />
+                    {notifications?.unread_notifications_count > 0 && (
+                        <View style={styles.notificationBadge}>
+                            <Text style={styles.notificationBadgeText}>
+                                {notifications.unread_notifications_count > 9 ? '9+' : notifications.unread_notifications_count}
+                            </Text>
+                        </View>
+                    )}
                 </TouchableOpacity>
             </View>
         </View>

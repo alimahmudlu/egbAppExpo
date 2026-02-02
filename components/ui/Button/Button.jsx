@@ -1,4 +1,5 @@
-import { TouchableOpacity, Text } from 'react-native';
+import { Pressable, Text, Animated } from 'react-native';
+import { useRef } from 'react';
 import styles from './Button.styles';
 
 export default function SgButton({
@@ -10,31 +11,53 @@ export default function SgButton({
   bgColor,
   color,
 }) {
-  return (
-    <TouchableOpacity
-  onPress={disabled ? null : onPress}
-  activeOpacity={disabled ? 1 : 0.9}
-  style={[
-    styles.button,
-    style,
-    disabled
-      ? styles.buttonDisabled
-      : bgColor && { backgroundColor: bgColor },
-  ]}
-  disabled={disabled}
->
-  <Text
-    style={[
-      styles.text,
-      textStyle,
-      disabled
-        ? styles.textDisabled
-        : color && { color: color },
-    ]}
-  >
-    {children}
-  </Text>
-</TouchableOpacity>
+  const scaleAnim = useRef(new Animated.Value(1)).current;
 
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.97,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 4,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 4,
+    }).start();
+  };
+
+  return (
+    <Animated.View style={{ transform: [{ scale: disabled ? 1 : scaleAnim }] }}>
+      <Pressable
+        onPress={disabled ? null : onPress}
+        onPressIn={disabled ? null : handlePressIn}
+        onPressOut={disabled ? null : handlePressOut}
+        style={[
+          styles.button,
+          style,
+          disabled
+            ? styles.buttonDisabled
+            : bgColor && { backgroundColor: bgColor },
+        ]}
+        disabled={disabled}
+      >
+        <Text
+          style={[
+            styles.text,
+            textStyle,
+            disabled
+              ? styles.textDisabled
+              : color && { color: color },
+          ]}
+        >
+          {children}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 }

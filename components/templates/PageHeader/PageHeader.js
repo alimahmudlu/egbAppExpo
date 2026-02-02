@@ -3,37 +3,35 @@ import {Link, router} from "expo-router";
 import LeftIcon from "@/assets/images/chevron-left.svg";
 import React from "react";
 import {useData} from "@/hooks/useData";
+import COLORS from "@/constants/colors";
 
 export default function SgTemplatePageHeader(props) {
     const {data: {header, data}, filter} = props;
     const {onBackPress} = useData()
 
     return (
-        <>
-            <View style={styles.headerContainer}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => {
-                        onBackPress()
-                    }}
-                >
-                    <LeftIcon width={20} height={20} />
-                </TouchableOpacity>
+        <View style={styles.headerContainer}>
+            <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => {
+                    onBackPress()
+                }}
+                activeOpacity={0.7}
+            >
+                <LeftIcon width={20} height={20} color={COLORS.gray_700} />
+            </TouchableOpacity>
 
-                <Text style={styles.headerTitle}>{header}</Text>
+            <Text style={styles.headerTitle}>{header}</Text>
 
-                {data?.href ?
-                    <Link
-                        href={data?.href}
-                        style={styles.overviewButton}
-                    >
+            <View style={styles.rightSection}>
+                {data?.href ? (
+                    <Link href={data?.href} style={styles.overviewButton}>
                         <Text style={styles.overviewButtonText}>{data?.header}</Text>
                     </Link>
-                    : null
-                }
-                {filter ? filter : null}
+                ) : null}
+                {filter ? filter : <View style={styles.placeholder} />}
             </View>
-        </>
+        </View>
     )
 }
 
@@ -43,32 +41,46 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingVertical: 14,
-        backgroundColor: '#fff',
+        paddingVertical: 12,
+        backgroundColor: COLORS.white,
         borderBottomWidth: 1,
-        borderBottomColor: '#f0f0f0',
+        borderBottomColor: COLORS.gray_100,
     },
     backButton: {
-        padding: 10,
-        marginLeft: -4,
+        width: 40,
+        height: 40,
+        borderRadius: 12,
+        backgroundColor: COLORS.gray_50,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     headerTitle: {
-        fontSize: 17,
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 18,
         fontWeight: '600',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-        color: '#000000',
+        color: COLORS.gray_900,
         letterSpacing: -0.3,
+        flex: 1,
+        textAlign: 'center',
+    },
+    rightSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    placeholder: {
+        width: 40,
+        height: 40,
     },
     overviewButton: {
-        paddingHorizontal: 12,
+        paddingHorizontal: 14,
         paddingVertical: 8,
-        borderRadius: 8,
+        borderRadius: 10,
+        backgroundColor: COLORS.brand_50,
     },
     overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter, sans-serif',
-        fontWeight: '500',
-        fontSize: 15,
+        fontFamily: 'Inter_600SemiBold',
+        fontWeight: '600',
+        fontSize: 14,
+        color: COLORS.brand_700,
     }
 });

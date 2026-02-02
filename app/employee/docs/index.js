@@ -399,7 +399,7 @@ export default function EmployeeDocsScreen() {
           description={t('addDocument__description')}
           footerButton={
             <SgButton
-                bgColor={COLORS.brand_600}
+                bgColor={COLORS.brand_950}
                 color={COLORS.white}
                 onPress={handleSubmitDoc}
                 disabled={selectedFiles.length === 0}

@@ -1,4 +1,4 @@
-import {FlatList, Linking, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Linking, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import COLORS from "@/constants/colors";
@@ -13,13 +13,9 @@ import SgPopup from "@/components/ui/Modal/Modal";
 import SgButton from "@/components/ui/Button/Button";
 import ReloadArrow from "@/assets/images/reload-arrows.svg";
 import SgSelect from "@/components/ui/Select/Select";
-import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
-import SgInput from "@/components/ui/Input/Input";
 import FilterIcon from "@/assets/images/filter.svg";
 import SgFilterTab from "@/components/ui/FilterTab/FilterTab";
-import SgSectionStatusCard from "@/components/sections/StatusCard/StatusCard";
-import LogIn from "@/assets/images/log-in_20.svg";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
 
@@ -76,6 +72,7 @@ export default function TimeKeeperUserScreen() {
         }).then().catch(err => {
             console.log(err, 'apiservice control err')
         });
+        toggleFilterModal();
     }
 
     useFocusEffect(useCallback(() => {
@@ -108,7 +105,6 @@ export default function TimeKeeperUserScreen() {
             if (res.success) {
                 setProjectsList(res?.data);
             } else {
-                // Handle error response
                 console.log(res.message);
             }
         }).catch(err => {
@@ -128,23 +124,16 @@ export default function TimeKeeperUserScreen() {
     }, [storeData?.cache?.[`GET:/currentUser/activities/work_hours`]])
 
     const openMap = (lat, lng) => {
-        // const url = `https://www.google.com/maps?q=${lat},${lng}`;
-        // Linking.openURL(url);
-
         const scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
         const url = Platform.OS === 'ios'
             ? `${scheme}?q=${lat},${lng}`
             : `${scheme}${lat},${lng}`;
 
-        // For Google Maps specific URL
         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
 
-        // Open the map based on platform
         if (Platform.OS === 'ios') {
-            // On iOS, give option to choose between Apple Maps and Google Maps
             Linking.openURL(url)
         } else {
-            // On Android, directly open Google Maps
             Linking.openURL(googleMapsUrl);
         }
     };
@@ -154,10 +143,34 @@ export default function TimeKeeperUserScreen() {
         setRejectModal(!!item);
     }
 
+    const getStatusBadgeStyle = (statusKey) => {
+        if (statusKey?.includes('Rejected') || statusKey?.includes('rejected')) {
+            return styles.badgeError;
+        }
+        if (statusKey?.includes('Completed') || statusKey?.includes('completed')) {
+            return styles.badgeSuccess;
+        }
+        return styles.badgeDefault;
+    };
+
+    const getStatusTextStyle = (statusKey) => {
+        if (statusKey?.includes('Rejected') || statusKey?.includes('rejected')) {
+            return styles.badgeErrorText;
+        }
+        if (statusKey?.includes('Completed') || statusKey?.includes('completed')) {
+            return styles.badgeSuccessText;
+        }
+        return styles.badgeDefaultText;
+    };
+
     const RenderItem = ({ item }) => (
         <View style={styles.card}>
-            <View style={styles.center}>
-                <Text style={styles.badge2}>{t(item?.activity_status_key)}</Text>
+            <View style={styles.statusBadgeContainer}>
+                <View style={[styles.statusBadge, getStatusBadgeStyle(item?.activity_status_key)]}>
+                    <Text style={[styles.statusBadgeText, getStatusTextStyle(item?.activity_status_key)]}>
+                        {t(item?.activity_status_key)}
+                    </Text>
+                </View>
             </View>
 
             <View style={styles.rowBetween}>
@@ -167,26 +180,9 @@ export default function TimeKeeperUserScreen() {
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
                     <Text style={styles.label}>{t('checkOutDate')}</Text>
-                    <Text style={styles.value}>{item.exit_time ? moment(item.exit_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
+                    <Text style={[styles.value, styles.textRight]}>{item.exit_time ? moment(item.exit_time).format("YYYY-MM-DD HH:mm") : '---'}</Text>
                 </View>
             </View>
-
-            {/*<View style={[styles.rowBetween]}>*/}
-            {/*    {item.entry_latitude ?*/}
-            {/*        <TouchableOpacity onPress={() => openMap(item.entry_latitude, item.entry_longitude)}>*/}
-            {/*            <Text style={styles.link}>{t('checkInLocation')}</Text>*/}
-            {/*        </TouchableOpacity>*/}
-            {/*        :*/}
-            {/*        <Text>---</Text>*/}
-            {/*    }*/}
-            {/*    {item.exit_latitude ?*/}
-            {/*        <TouchableOpacity onPress={() => openMap(item.exit_latitude, item.exit_longitude)}>*/}
-            {/*            <Text style={styles.link}>{t('checkOutLocation')}</Text>*/}
-            {/*        </TouchableOpacity>*/}
-            {/*        :*/}
-            {/*        <Text>---</Text>*/}
-            {/*    }*/}
-            {/*</View>*/}
 
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
@@ -195,7 +191,7 @@ export default function TimeKeeperUserScreen() {
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
                     <Text style={styles.label}>{t('checkOutBy')}</Text>
-                    <Text style={{...styles.value, textAlign: "right"}}>{item.check_out_timekeeper ? item.check_out_timekeeper : '---'}</Text>
+                    <Text style={[styles.value, styles.textRight]}>{item.check_out_timekeeper ? item.check_out_timekeeper : '---'}</Text>
                 </View>
             </View>
 
@@ -206,7 +202,7 @@ export default function TimeKeeperUserScreen() {
                         {item.entry_status === 1 && t('waiting')}
                         {item.entry_status === 2 && t('accepted')}
                         {item.entry_status === 3 && (
-                            <TouchableOpacity onPress={() => handleSelectRow(item)}>
+                            <TouchableOpacity onPress={() => handleSelectRow(item)} activeOpacity={0.7}>
                                 <Text style={styles.link}>{t('rejected')}</Text>
                             </TouchableOpacity>
                         )}
@@ -215,11 +211,11 @@ export default function TimeKeeperUserScreen() {
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
                     <Text style={styles.label}>{t('checkOutStatus')}</Text>
-                    <Text style={{...styles.value, textAlign: "right"}}>
+                    <Text style={[styles.value, styles.textRight]}>
                         {item.exit_status === 1 && t('waiting')}
                         {item.exit_status === 2 && t('accepted')}
                         {item.exit_status === 3 && (
-                            <TouchableOpacity onPress={() => handleSelectRow(item)}>
+                            <TouchableOpacity onPress={() => handleSelectRow(item)} activeOpacity={0.7}>
                                 <Text style={styles.link}>{t('rejected')}</Text>
                             </TouchableOpacity>
                         )}
@@ -227,6 +223,7 @@ export default function TimeKeeperUserScreen() {
                     </Text>
                 </View>
             </View>
+
             <View style={styles.rowBetween}>
                 <View style={styles.flex1}>
                     <Text style={styles.label}>{t('checkStatus')}</Text>
@@ -236,15 +233,17 @@ export default function TimeKeeperUserScreen() {
                 </View>
                 <View style={[styles.flex1, styles.alignRight]}>
                     <Text style={styles.label}>{t('checkType')}</Text>
-                    <Text style={{...styles.value, textAlign: "right"}}>
+                    <Text style={[styles.value, styles.textRight]}>
                         {item.entry_type === 1 && t('Normal')}
                         {item.entry_type === 3 && t('OverTime')}
                     </Text>
                 </View>
             </View>
 
-            <View style={styles.center}>
-                <Text style={styles.badge}>{t('workHours')}: {item.work_duration || '00:00'}</Text>
+            <View style={styles.workHoursBadgeContainer}>
+                <View style={styles.workHoursBadge}>
+                    <Text style={styles.workHoursBadgeText}>{t('workHours')}: {item.work_duration || '00:00'}</Text>
+                </View>
             </View>
         </View>
     );
@@ -254,9 +253,10 @@ export default function TimeKeeperUserScreen() {
             head={<SgTemplatePageHeader data={{
                 header: t('activities'),
             }} filter={
-                <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
-                <Text><FilterIcon width={20} height={20} /></Text>
-            </Pressable>} />}
+                <TouchableOpacity style={styles.iconWrapper} onPress={toggleFilterModal} activeOpacity={0.7}>
+                    <FilterIcon width={20} height={20} color={COLORS.brand_950} fill={COLORS.brand_950} />
+                </TouchableOpacity>
+            } />}
         >
 
             <SgFilterTab
@@ -269,9 +269,9 @@ export default function TimeKeeperUserScreen() {
                 tabContent={[
                     {
                         element: (
-                            <>
-                                <View style={{gap: 16}}>
-                                    {employeeActivities?.filter(el => (el.type === 1 || el.type === 3)).map((emp, index) => (
+                            <View style={styles.listContainer}>
+                                {employeeActivities?.filter(el => (el.type === 1 || el.type === 3)).length > 0 ? (
+                                    employeeActivities?.filter(el => (el.type === 1 || el.type === 3)).map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
@@ -285,17 +285,21 @@ export default function TimeKeeperUserScreen() {
                                             reason={emp.reject_reason}
                                             project={emp?.project?.name}
                                         />
-                                    ))}
-                                </View>
-                            </>
+                                    ))
+                                ) : (
+                                    <View style={styles.emptyState}>
+                                        <Text style={styles.emptyStateText}>{t('noActivities')}</Text>
+                                    </View>
+                                )}
+                            </View>
                         ),
                         id: 'checkIn'
                     },
                     {
                         element: (
-                            <>
-                                <View style={{gap: 16}}>
-                                    {employeeActivities?.filter(el => (el.type === 2 || el.type === 4)).map((emp, index) => (
+                            <View style={styles.listContainer}>
+                                {employeeActivities?.filter(el => (el.type === 2 || el.type === 4)).length > 0 ? (
+                                    employeeActivities?.filter(el => (el.type === 2 || el.type === 4)).map((emp, index) => (
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
@@ -309,56 +313,32 @@ export default function TimeKeeperUserScreen() {
                                             reason={emp.reject_reason}
                                             project={emp?.project?.name}
                                         />
-                                    ))}
-                                </View>
-                            </>
+                                    ))
+                                ) : (
+                                    <View style={styles.emptyState}>
+                                        <Text style={styles.emptyStateText}>{t('noActivities')}</Text>
+                                    </View>
+                                )}
+                            </View>
                         ),
                         id: 'checkOut'
                     },
                     {
                         element: (
-                            <>
-                                <View style={{gap: 16}}>
-                                    {employeeWorkHours?.map((item, index) => (
+                            <View style={styles.listContainer}>
+                                {employeeWorkHours?.length > 0 ? (
+                                    employeeWorkHours?.map((item, index) => (
                                         <RenderItem
                                             key={index}
                                             item={item}
                                         />
-                                    ))}
-                                    {/*{employeeWorkHours?.map((item, index) => (*/}
-                                    {/*    <View key={index} style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>*/}
-                                    {/*        <View style={{flex: 1,}}>*/}
-                                    {/*            <SgSectionStatusCard*/}
-                                    {/*                mapData={{*/}
-                                    {/*                    latitude: item?.entry_latitude,*/}
-                                    {/*                    longitude: item?.entry_longitude,*/}
-                                    {/*                }}*/}
-                                    {/*                title={t('checkIn')}*/}
-                                    {/*                time={moment(item.entry_time).format('YYYY-MM-DD HH:mm')}*/}
-                                    {/*                icon={<LogIn width={20} height={20}/>}*/}
-                                    {/*            />*/}
-                                    {/*        </View>*/}
-                                    {/*        <View style={{flex: 1}}>*/}
-                                    {/*            <SgSectionStatusCard*/}
-                                    {/*                mapData={{*/}
-                                    {/*                    latitude: item?.exit_latitude,*/}
-                                    {/*                    longitude: item?.exit_longitude,*/}
-                                    {/*                }}*/}
-                                    {/*                title={t('checkOut')}*/}
-                                    {/*                time={moment(item.exit_time).format('YYYY-MM-DD HH:mm')}*/}
-                                    {/*                icon={<LogIn width={20} height={20}/>}*/}
-                                    {/*            />*/}
-                                    {/*        </View>*/}
-                                    {/*    </View>*/}
-                                    {/*))}*/}
-                                    {/*<FlatList*/}
-                                    {/*    data={employeeWorkHours}*/}
-                                    {/*    keyExtractor={(_, index) => index.toString()}*/}
-                                    {/*    renderItem={renderItem}*/}
-                                    {/*    contentContainerStyle={{ padding: 12 }}*/}
-                                    {/*/>*/}
-                                </View>
-                            </>
+                                    ))
+                                ) : (
+                                    <View style={styles.emptyState}>
+                                        <Text style={styles.emptyStateText}>{t('noActivities')}</Text>
+                                    </View>
+                                )}
+                            </View>
                         ),
                         id: 'workHours'
                     }
@@ -369,40 +349,31 @@ export default function TimeKeeperUserScreen() {
             <SgPopup
                 visible={filterModal}
                 onClose={toggleFilterModal}
+                title={t('filters')}
                 footerButton={
                     <SgButton
                         onPress={handleFilters}
-                        bgColor={COLORS.primary}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                     >
                         {t('accept')}
                     </SgButton>
                 }
             >
-                <View style={{paddingBottom: 20}}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
-
-                        <SgButton
+                <View style={styles.filterContent}>
+                    <View style={styles.filterHeader}>
+                        <TouchableOpacity
                             onPress={resetFilters}
-                            color={COLORS.brand_700}
-                            style={{
-                                flex: 0,
-                                width: 'auto',
-                                marginLeft: 'auto',
-                                paddingVertical: 0,
-                                paddingHorizontal: 0,
-                                gap: 7
-                            }}
-
+                            style={styles.clearFiltersButton}
+                            activeOpacity={0.7}
                         >
-                            {t('clearFilters')}
-                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
-                        </SgButton>
+                            <Text style={styles.clearFiltersText}>{t('clearFilters')}</Text>
+                            <ReloadArrow width={16} height={16} color={COLORS.brand_700} fill={COLORS.brand_700} />
+                        </TouchableOpacity>
                     </View>
 
-                    <View style={{gap: 16}}>
-                        <View style={{flex: 1}}>
+                    <View style={styles.filterFields}>
+                        <View style={styles.filterField}>
                             <SgDatePicker
                                 label={t('startDate')}
                                 placeholder="dd/mm/yyyy - hh/mm"
@@ -411,7 +382,7 @@ export default function TimeKeeperUserScreen() {
                                 onChangeText={handleChange}
                             />
                         </View>
-                        <View style={{flex: 1}}>
+                        <View style={styles.filterField}>
                             <SgDatePicker
                                 label={t('endDate')}
                                 placeholder="dd/mm/yyyy - hh/mm"
@@ -420,7 +391,7 @@ export default function TimeKeeperUserScreen() {
                                 onChangeText={handleChange}
                             />
                         </View>
-                        <View style={{flex: 1}}>
+                        <View style={styles.filterField}>
                             <SgSelect
                                 label={t("checkStatus")}
                                 placeholder={t("enterCheckStatus")}
@@ -442,7 +413,7 @@ export default function TimeKeeperUserScreen() {
                                 ]}
                             />
                         </View>
-                        <View style={{flex: 1}}>
+                        <View style={styles.filterField}>
                             <SgSelect
                                 label={t("checkType")}
                                 placeholder={t("enterCheckType")}
@@ -472,12 +443,9 @@ export default function TimeKeeperUserScreen() {
                 visible={rejectModal}
                 onClose={() => handleSelectRow(null)}
                 icon={<InfoCircleModalIcon width={50} height={50}/>}
+                title={t('rejectDetail')}
             >
-                <Text style={styles.rejectModal}>{t('rejectDetail')}</Text>
-                <SgCard>
-                    {selectedRow?.entry_reject_reason ? <Text style={styles.title}>{selectedRow?.entry_reject_reason}</Text> : null}
-                    {selectedRow?.exit_reject_reason ? <Text style={styles.title}>{selectedRow?.exit_reject_reason}</Text> : null}
-                </SgCard>
+                <SgCard contentDescription={selectedRow?.entry_reject_reason || selectedRow?.exit_reject_reason || ''} />
             </SgPopup>
         </SgTemplateScreen>
     )
@@ -485,160 +453,154 @@ export default function TimeKeeperUserScreen() {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: "#fff",
+        backgroundColor: COLORS.white,
         borderRadius: 16,
-        padding: 12,
-        marginBottom: 12,
+        padding: 16,
         borderWidth: 1,
-        borderColor: "#ddd",
-        shadowColor: "#000",
-        shadowOpacity: 0.01,
-        shadowRadius: 6,
-        elevation: 3,
-        gap: 16
+        borderColor: COLORS.gray_100,
+        shadowColor: COLORS.brand_950,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.04,
+        shadowRadius: 8,
+        elevation: 2,
+        gap: 14,
+    },
+    listContainer: {
+        gap: 12,
     },
     rowBetween: {
         flexDirection: "row",
         justifyContent: "space-between",
-        gap: 8,
-        marginBottom: 4,
+        gap: 12,
     },
     flex1: {
         flex: 1,
     },
     alignRight: {
         alignItems: "flex-end",
+    },
+    textRight: {
         textAlign: "right",
     },
     label: {
+        fontFamily: 'Inter_400Regular',
         fontSize: 12,
-        color: "#6b7280", // gray-500
+        fontWeight: '400',
+        lineHeight: 16,
+        color: COLORS.gray_500,
+        marginBottom: 2,
     },
     value: {
-        fontSize: 12,
-        fontWeight: "600",
-        color: "#111827", // gray-900
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 13,
+        fontWeight: '600',
+        lineHeight: 18,
+        color: COLORS.gray_900,
     },
     link: {
-        // color: "#2563eb", // blue-600
-        color: "#111827", // gray-900
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 13,
+        fontWeight: '600',
+        color: COLORS.error_600,
         textDecorationLine: "underline",
-        fontSize: 14,
     },
-    center: {
-        marginTop: 8,
+    statusBadgeContainer: {
         alignItems: "center",
     },
-    badge: {
-        backgroundColor: "#f3f4f6", // gray-100
-        textAlign: "center",
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 12,
-        fontSize: 14,
-        fontWeight: "700",
-        color: "#1f2937", // gray-800
-    },
-    badge2: {
-        backgroundColor: "#e9f0ff", // gray-100
+    statusBadge: {
         width: '100%',
-        textAlign: "center",
         paddingHorizontal: 16,
         paddingVertical: 10,
-        borderRadius: 12,
-        fontSize: 14,
-        fontWeight: "700",
-        color: "#1f2937", // gray-800
-    },
-
-
-    headerContainer: {
-        flexDirection: 'row',
+        borderRadius: 10,
         alignItems: 'center',
-        justifyContent: 'space-between',
+    },
+    badgeDefault: {
+        backgroundColor: COLORS.brand_50,
+    },
+    badgeSuccess: {
+        backgroundColor: COLORS.success_50,
+    },
+    badgeError: {
+        backgroundColor: COLORS.error_50,
+    },
+    statusBadgeText: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 13,
+        fontWeight: '600',
+        lineHeight: 18,
+    },
+    badgeDefaultText: {
+        color: COLORS.brand_950,
+    },
+    badgeSuccessText: {
+        color: COLORS.success_700,
+    },
+    badgeErrorText: {
+        color: COLORS.error_700,
+    },
+    workHoursBadgeContainer: {
+        alignItems: "center",
+        marginTop: 4,
+    },
+    workHoursBadge: {
+        backgroundColor: COLORS.gray_100,
         paddingHorizontal: 16,
-        paddingVertical: 12,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
+        paddingVertical: 8,
+        borderRadius: 10,
+    },
+    workHoursBadgeText: {
+        fontFamily: 'Inter_700Bold',
+        fontSize: 14,
+        fontWeight: '700',
+        lineHeight: 20,
+        color: COLORS.gray_800,
     },
     iconWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: COLORS.brand_50,
-        padding: 14,
-        borderRadius: 50,
+        padding: 12,
+        borderRadius: 12,
     },
-    backButton: {
-        padding: 8,
+    filterContent: {
+        paddingBottom: 8,
     },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 'auto',
-        marginLeft: 'auto',
+    filterHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginBottom: 16,
     },
-    overviewButton: {
+    clearFiltersButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        paddingVertical: 8,
         paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 4,
+        backgroundColor: COLORS.brand_50,
+        borderRadius: 10,
     },
-    overviewButtonText: {
-        color: '#000000',
-        fontFamily: 'Inter, sans-serif',
-        fontWeight: '500',
-        fontSize: 16,
-        // lineHeight: '24px',
+    clearFiltersText: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 13,
+        fontWeight: '600',
+        color: COLORS.brand_700,
     },
-    container: {
+    filterFields: {
+        gap: 16,
+    },
+    filterField: {
         flex: 1,
     },
-    contentText: {
-        fontSize: 16,
-    },
-    acceptButton: {
-        display: 'flex',
-        flexDirection: 'row',
+    emptyState: {
+        paddingVertical: 40,
         alignItems: 'center',
-        gap: 6,
-        backgroundColor: COLORS.brand_50,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 16,
+        justifyContent: 'center',
     },
-    acceptButtonText: {
-        fontFamily: 'Inter, sans-serif',
-        fontSize: 10,
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: 14,
-        color: COLORS.brand_600,
-    },
-    rejectButton: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-        backgroundColor: COLORS.error_100,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 16,
-    },
-    rejectButtonText: {
-        fontFamily: 'Inter, sans-serif',
-        fontSize: 10,
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: 14,
-        color: COLORS.error_600,
-    },
-    rejectModal: {
-        fontFamily: "Inter",
-        fontSize: 20,
-        fontStyle: "normal",
-        fontWeight: "600",
-        lineHeight: 30,
-        marginBottom: 32,
-        textAlign: "center",
+    emptyStateText: {
+        fontFamily: 'Inter_400Regular',
+        fontSize: 14,
+        fontWeight: '400',
+        color: COLORS.gray_500,
     },
 });

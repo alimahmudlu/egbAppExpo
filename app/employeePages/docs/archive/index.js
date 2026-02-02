@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text, Pressable} from "react-native";
+import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
@@ -68,66 +68,67 @@ export default function ProjectItemScreen() {
     useEffect(() => {
         setDocList(storeData?.cache?.[`GET:/employee/doc/history`]?.data)
     }, [storeData?.cache?.[`GET:/employee/doc/history`]])
-    return (<SgTemplateScreen
-            head={<SgTemplatePageHeader data={{
-                header: t('docsArchive')
-            }}
-            filter={
-                <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
-                    <Text><FilterIcon width={20} height={20} /></Text>
-                </Pressable>
+    return (
+        <SgTemplateScreen
+            head={
+                <SgTemplatePageHeader
+                    data={{ header: t('docsArchive') }}
+                    filter={
+                        <TouchableOpacity style={styles.iconWrapper} onPress={toggleFilterModal} activeOpacity={0.7}>
+                            <FilterIcon width={20} height={20} color={COLORS.brand_950} fill={COLORS.brand_950} />
+                        </TouchableOpacity>
+                    }
+                />
             }
-            />}
         >
-            <View style={{gap: 12}}>
-                {(docList || []).map((el, index) => (<SgFileCard
-                        key={index}
-                        fileType={el.mimetype}
-                        title={el?.filename}
-                        url={el?.filepath}
-                        expiryDate={el?.date_of_expiry}
-                        issueDate={el?.date_of_issue}
-                        migrationId={el?.type}
-                    />))}
+            <View style={styles.listContainer}>
+                {(docList || []).length > 0 ? (
+                    (docList || []).map((el, index) => (
+                        <SgFileCard
+                            key={index}
+                            fileType={el.mimetype}
+                            title={el?.filename}
+                            url={el?.filepath}
+                            expiryDate={el?.date_of_expiry}
+                            issueDate={el?.date_of_issue}
+                            migrationId={el?.type}
+                        />
+                    ))
+                ) : (
+                    <View style={styles.emptyState}>
+                        <Text style={styles.emptyText}>{t('noDocuments')}</Text>
+                    </View>
+                )}
             </View>
 
             <SgPopup
                 visible={filterModal}
                 onClose={toggleFilterModal}
+                title={t('filters')}
                 footerButton={
                     <SgButton
                         onPress={handleFilters}
-                        bgColor={COLORS.primary}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                     >
                         {t('accept')}
                     </SgButton>
                 }
             >
-                <View style={{paddingBottom: 20}}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
-
-                        <SgButton
+                <View style={styles.filterContent}>
+                    <View style={styles.filterHeader}>
+                        <TouchableOpacity
                             onPress={resetFilters}
-                            color={COLORS.brand_700}
-                            style={{
-                                flex: 0,
-                                width: 'auto',
-                                marginLeft: 'auto',
-                                paddingVertical: 0,
-                                paddingHorizontal: 0,
-                                gap: 7
-                            }}
-
+                            style={styles.clearFiltersButton}
+                            activeOpacity={0.7}
                         >
-                            {t('clearFilters')}
-                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
-                        </SgButton>
+                            <Text style={styles.clearFiltersText}>{t('clearFilters')}</Text>
+                            <ReloadArrow width={16} height={16} color={COLORS.brand_700} fill={COLORS.brand_700} />
+                        </TouchableOpacity>
                     </View>
 
-                    <View style={{gap: 16}}>
-                        <View style={{flex: 1}}>
+                    <View style={styles.filterFields}>
+                        <View style={styles.filterField}>
                             <SgSelect
                                 label={t("Replaced")}
                                 placeholder={t("enterReplaced")}
@@ -138,11 +139,13 @@ export default function ProjectItemScreen() {
                                 list={[
                                     {
                                         id: 1,
-                                        name: t('Yes')
+                                        name: t('Yes'),
+                                        render: <Text>{t('Yes')}</Text>
                                     },
                                     {
                                         id: 2,
-                                        name: t('No')
+                                        name: t('No'),
+                                        render: <Text>{t('No')}</Text>
                                     }
                                 ]}
                             />
@@ -150,7 +153,8 @@ export default function ProjectItemScreen() {
                     </View>
                 </View>
             </SgPopup>
-        </SgTemplateScreen>);
+        </SgTemplateScreen>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -158,29 +162,52 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: COLORS.brand_50,
-        padding: 14,
-        borderRadius: 50,
+        padding: 12,
+        borderRadius: 12,
     },
-    headerContainer: {
+    listContainer: {
+        gap: 12,
+    },
+    emptyState: {
+        paddingVertical: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    emptyText: {
+        fontFamily: 'Inter_400Regular',
+        fontSize: 14,
+        fontWeight: '400',
+        textAlign: 'center',
+        color: COLORS.gray_500,
+    },
+    filterContent: {
+        paddingBottom: 8,
+    },
+    filterHeader: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    }, backButton: {
-        padding: 8,
-    }, headerTitle: {
-        fontSize: 18, fontWeight: 'bold', marginRight: 'auto', marginLeft: 'auto',
-    }, overviewButton: {
-        paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4,
-    }, overviewButtonText: {
-        color: '#000000', fontFamily: 'Inter, sans-serif', fontWeight: '500', fontSize: 16, // lineHeight: '24px',
-    }, container: {
+        justifyContent: 'flex-end',
+        marginBottom: 16,
+    },
+    clearFiltersButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        backgroundColor: COLORS.brand_50,
+        borderRadius: 10,
+    },
+    clearFiltersText: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 13,
+        fontWeight: '600',
+        color: COLORS.brand_700,
+    },
+    filterFields: {
+        gap: 16,
+    },
+    filterField: {
         flex: 1,
-    }, contentText: {
-        fontSize: 16,
-    }
+    },
 });

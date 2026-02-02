@@ -1,6 +1,10 @@
 import {
     View,
-    Keyboard
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    StatusBar,
 } from "react-native";
 import styles from "@/assets/styles/auth/auth.styles";
 import SgSectionAuth from "@/components/sections/AuthSection/AuthSection";
@@ -12,8 +16,8 @@ import COLORS from "@/constants/colors";
 import {useAuth} from "@/hooks/useAuth";
 import SgPopup from "@/components/ui/Modal/Modal";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
-import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import {useTranslation} from "react-i18next";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Login() {
     const [id, setId] = useState('');
@@ -22,85 +26,87 @@ export default function Login() {
     const [errorModalData, setErrorModalData] = useState("");
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
+    const insets = useSafeAreaInsets();
 
     function toggleErrorModal() {
         setErrorModal(!errorModal);
     }
 
-    const { login } = useAuth(); // Assuming useAuth is defined in your hooks
+    const { login } = useAuth();
 
-  const handleLogin = () => {
-      Keyboard.dismiss();
-      setLoading(true)
-    login(id, password).then((resp) => {
-        if (!resp.success) {
-            setErrorModalData(resp.error || 'Login failed');
-            // console.log(resp.error || 'Login failed', 'iffffffffff');
-            toggleErrorModal()
-        }
-    }).catch((error) => {
-        setErrorModalData(error.error || 'Login failed');
-        // console.log(error, 'error', 'catchhhhhhhhhhhhhhhhh');
-        toggleErrorModal()
-    }).finally(() => {
-        setTimeout(() => {
-            setLoading(false)
-        }, 1000)
-    })
-  };
-  return (
-    <>
-      {/*<TouchableWithoutFeedback onPress={Keyboard.dismiss}>*/}
-        <SgTemplateScreen head={null}>
-            <View style={[styles.container]}>
-                <View>
-                    <SgSectionAuth />
-                    <SgForm>
-                        <SgInput
-                            label={t('yourId')}
-                            placeholder={t('enterId')}
-                            type="text"
-                            value={id}
-                            onChangeText={(e) => setId(e.value)}
-                        />
-                        <SgInput
-                            label={t('password')}
-                            placeholder={t('enterPassword')}
-                            type="password"
-                            value={password}
-                            onChangeText={(e) => setPassword(e.value)}
-                        />
-                        {/*<SgCheckbox label="Remember me" />*/}
-                    </SgForm>
-                </View>
-                <View style={styles.buttonLayout}>
-                    {/*<TouchableOpacity*/}
-                    {/*    style={{backgroundColor: '#f02f58', padding: 15, marginBottom: 30}}*/}
-                    {/*>*/}
-                    {/*    <Text>asas</Text>*/}
-                    {/*</TouchableOpacity>*/}
-                    <SgButton
-                        onPress={handleLogin}
-                        // disabled={!id || !password}
-                        bgColor = {COLORS.primary}
-                        color= {COLORS.white}
+    const handleLogin = () => {
+        Keyboard.dismiss();
+        setLoading(true);
+        login(id, password).then((resp) => {
+            if (!resp.success) {
+                setErrorModalData(resp.error || 'Login failed');
+                toggleErrorModal();
+            }
+        }).catch((error) => {
+            setErrorModalData(error.error || 'Login failed');
+            toggleErrorModal();
+        }).finally(() => {
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        });
+    };
+
+    return (
+        <>
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={[styles.container, { paddingTop: insets.top }]}>
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                        style={styles.keyboardView}
                     >
-                        {loading ? t('loading') : t('login')}
-                    </SgButton>
+                        <View style={styles.content}>
+                            <View style={styles.headerSection}>
+                                <SgSectionAuth />
+                            </View>
+
+                            <View style={styles.formSection}>
+                                <SgForm>
+                                    <SgInput
+                                        label={t('yourId')}
+                                        placeholder={t('enterId')}
+                                        type="text"
+                                        value={id}
+                                        onChangeText={(e) => setId(e.value)}
+                                    />
+                                    <SgInput
+                                        label={t('password')}
+                                        placeholder={t('enterPassword')}
+                                        type="password"
+                                        value={password}
+                                        onChangeText={(e) => setPassword(e.value)}
+                                    />
+                                </SgForm>
+                            </View>
+                        </View>
+
+                        <View style={[styles.buttonLayout, { paddingBottom: Math.max(insets.bottom, 16) + 8 }]}>
+                            <SgButton
+                                onPress={handleLogin}
+                                disabled={!id.trim() || !password.trim()}
+                                bgColor={COLORS.primary}
+                                color={COLORS.white}
+                            >
+                                {loading ? t('loading') : t('login')}
+                            </SgButton>
+                        </View>
+                    </KeyboardAvoidingView>
+
+                    <SgPopup
+                        visible={errorModal}
+                        onClose={toggleErrorModal}
+                        icon={<InfoCircleModalIcon width={50} height={50} />}
+                        title='Error'
+                        description={errorModalData}
+                    />
                 </View>
-            </View>
-
-
-            <SgPopup
-                visible={errorModal}
-                onClose={toggleErrorModal}
-                icon={<InfoCircleModalIcon width={50} height={50} />}
-                title='Error'
-                description={errorModalData}
-            />
-        </SgTemplateScreen>
-      {/*</TouchableWithoutFeedback>*/}
-
-    </>
-  );
+            </TouchableWithoutFeedback>
+        </>
+    );
 }

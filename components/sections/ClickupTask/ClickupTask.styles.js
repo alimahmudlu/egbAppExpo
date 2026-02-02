@@ -1,84 +1,97 @@
 import { StyleSheet } from 'react-native';
+import COLORS from '@/constants/colors';
 
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.white,
     },
     listArea: {
         flex: 1,
-        paddingHorizontal: 6,
     },
-    // TaskStatusList Stili
+    // TaskStatusList styles
+    container: {
+        marginBottom: 8,
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 14,
+        paddingHorizontal: 4,
         borderBottomWidth: 1,
-        borderBottomColor: '#f0f0f0',
+        borderBottomColor: COLORS.gray_100,
     },
     headerLeft: {
         flexDirection: 'row',
         alignItems: 'center',
+        gap: 8,
     },
     headerText: {
-        color: '#fff',
+        fontFamily: 'Inter_600SemiBold',
+        color: COLORS.white,
         fontWeight: '600',
-        fontSize: 12,
+        fontSize: 11,
         letterSpacing: 0.3,
+        textTransform: 'uppercase',
     },
     headerRight: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     statusButton: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 12,
         paddingVertical: 6,
-        borderRadius: 6,
-        marginRight: 8,
-        marginLeft: 8,
+        borderRadius: 8,
     },
     statusButtonText: {
-        color: '#fff',
+        color: COLORS.white,
         fontWeight: '600',
         fontSize: 12,
     },
     taskCountText: {
+        fontFamily: 'Inter_500Medium',
         fontSize: 13,
-        color: '#888',
+        color: COLORS.gray_500,
         fontWeight: '500',
     },
     taskList: {
-        paddingTop: 12,
-        paddingBottom: 16,
+        paddingTop: 16,
+        paddingBottom: 8,
     },
     noTasksText: {
-        padding: 10,
+        fontFamily: 'Inter_400Regular',
+        padding: 16,
         textAlign: 'center',
-        color: '#888',
+        color: COLORS.gray_400,
+        fontSize: 14,
     },
-    // TaskCard Stili
+    // TaskCard styles
     taskCard: {
-        backgroundColor: '#fff',
-        padding: 10,
-        marginVertical: 4,
-        borderRadius: 6,
+        backgroundColor: COLORS.white,
+        padding: 14,
+        marginVertical: 6,
+        borderRadius: 14,
         borderLeftWidth: 4,
-        borderLeftColor: '#f9ac00', // Məsələn, task prioritet rəngi
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 1,
+        borderLeftColor: COLORS.brand_600,
+        shadowColor: COLORS.brand_950,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.06,
+        shadowRadius: 8,
         elevation: 2,
     },
     taskTitle: {
-        fontSize: 14,
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 15,
         fontWeight: '600',
+        color: COLORS.gray_900,
+        marginBottom: 4,
     },
     taskDescription: {
-        fontSize: 12,
-        color: '#666',
+        fontFamily: 'Inter_400Regular',
+        fontSize: 13,
+        color: COLORS.gray_500,
+        lineHeight: 18,
     }
 });
 

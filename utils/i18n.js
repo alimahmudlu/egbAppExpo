@@ -145,6 +145,7 @@ i18n.use(initReactI18next).init({
                 notifications: 'Notifications',
                 duties: 'My job responsibilities',
                 appInfo: 'App Info',
+                appVersion: 'App version',
                 termsConditions: 'Terms & Conditions',
                 privacyPolicy: 'Privacy Policy',
                 docsArchive: 'Docs Archive',
@@ -310,6 +311,9 @@ i18n.use(initReactI18next).init({
                 tabBar__myTeams: "My Teams",
                 tabBar__food_schedules: "Food Schedule",
                 tabBar__bus_schedules: "Bus Schedule",
+                general: "General",
+                preferences: "Preferences",
+                about: "About",
                 enterProject: "Enter project",
                 appInfo1: "Rate the app on the following platforms",
                 appInfo2: "Enter Flow is the official mobile app for employees of Enter Green Buildings.\nIt helps workers stay compliant and connected on the job by providing: \n  * Daily check-in and check-out with GPS location capture \n  * View assigned tasks and performance scores \n  * Get notified about upcoming document expirations \n  * Multilingual support (Russian,Uzbek, English)\n",
@@ -422,7 +426,27 @@ i18n.use(initReactI18next).init({
 
                 Camps: "Camps",
                 Camp: "Camp",
-                selectCamp: "Select Camp"
+                selectCamp: "Select Camp",
+
+                // Home screen
+                goodMorning: "Good morning",
+                goodAfternoon: "Good afternoon",
+                goodEvening: "Good evening",
+                currentlyWorking: "Currently working",
+                dayCompleted: "Day completed",
+                waitingApproval: "Waiting for approval",
+                notCheckedIn: "Not checked in",
+
+                // Notifications
+                noNotifications: "No notifications",
+                noNotificationsDesc: "You're all caught up!",
+
+                // Activities
+                noActivities: "No activities",
+                noActivitiesDesc: "No activity records found",
+
+                // Documents
+                noDocuments: "No documents found"
             }
         },
         ru: {
@@ -560,6 +584,7 @@ i18n.use(initReactI18next).init({
                 notifications: 'Уведомления',
                 duties: 'Мои должностные обязанности',
                 appInfo: 'Информация о приложении',
+                appVersion: 'Версия приложения',
                 termsConditions: 'Условия и положения',
                 privacyPolicy: 'Политика конфиденциальности',
                 docsArchive: 'Архив документов',
@@ -725,6 +750,9 @@ i18n.use(initReactI18next).init({
                 tabBar__myTeams: "Моя команда",
                 tabBar__food_schedules: "Расписание питания",
                 tabBar__bus_schedules: "Расписание автобусов",
+                general: "Основное",
+                preferences: "Настройки",
+                about: "О приложении",
                 enterProject: "Выбор проекта",
                 appInfo1: "Оцените приложение на следующих платформах",
                 appInfo2: "Enter Flow — официальное мобильное приложение для сотрудников Enter Green Buildings.\nОн помогает работникам соблюдать требования и оставаться на связи на рабочем месте, предоставляя: \n  * Ежедневная регистрация заезда и отъезда с фиксацией местоположения по GPS \n  * Просмотр назначенных задач и оценок производительности \n  * Получайте уведомления о приближающемся истечении срока действия документов \n  * Многоязычная поддержка (русский, узбекский, английский)",
@@ -831,7 +859,27 @@ i18n.use(initReactI18next).init({
 
                 Camps: "Лагеря",
                 Camp: "Лагерь",
-                selectCamp: "Выберите лагерь"
+                selectCamp: "Выберите лагерь",
+
+                // Home screen
+                goodMorning: "Доброе утро",
+                goodAfternoon: "Добрый день",
+                goodEvening: "Добрый вечер",
+                currentlyWorking: "Сейчас работаете",
+                dayCompleted: "День завершён",
+                waitingApproval: "Ожидание подтверждения",
+                notCheckedIn: "Не зарегистрирован",
+
+                // Notifications
+                noNotifications: "Нет уведомлений",
+                noNotificationsDesc: "Вы в курсе всех событий!",
+
+                // Activities
+                noActivities: "Нет активности",
+                noActivitiesDesc: "Записи активности не найдены",
+
+                // Documents
+                noDocuments: "Документы не найдены"
             }
         },
         uz: {
@@ -966,6 +1014,7 @@ i18n.use(initReactI18next).init({
                 notifications: 'Bildirishnomalar',
                 duties: 'Mening ish vazifalarim',
                 appInfo: "Ilova haqida ma'lumot",
+                appVersion: "Ilova versiyasi",
                 termsConditions: 'Shartlar va qoidalar',
                 privacyPolicy: 'Maxfiylik siyosati',
                 docsArchive: 'Hujjatlar arxivi',
@@ -1129,6 +1178,9 @@ i18n.use(initReactI18next).init({
                 tabBar__myTeams: "Mening jamoam",
                 tabBar__food_schedules: "Ovqatlanish jadvali",
                 tabBar__bus_schedules: "Avtobus jadvallari",
+                general: "Umumiy",
+                preferences: "Sozlamalar",
+                about: "Ilova haqida",
                 enterProject: "Loyihani kiriting",
                 appInfo1: "Tatbiqi platformalarda baholash",
                 appInfo2: "Enter Flow - Enter Green Buildings xodimlari uchun rasmiy mobil ilova.\nBu ishchilarga quyidagi shartlarni ta'minlash orqali ishda rioya qilish va bog'lanishda yordam beradi: \n  * GPS joylashuvni yozib olish bilan har kuni ro'yxatdan o'tish va chiqish \n  * Belgilangan vazifalar va ishlash ballarini ko'rish \n  * Hujjatning amal qilish muddati tugashi haqida xabar oling \n  * Ko'p tilli yordam (rus, o'zbek, ingliz)",
@@ -1236,7 +1288,27 @@ i18n.use(initReactI18next).init({
 
                 Camps: "Lagerlar",
                 Camp: "Lager",
-                selectCamp: "Lagerni tanlang"
+                selectCamp: "Lagerni tanlang",
+
+                // Home screen
+                goodMorning: "Xayrli tong",
+                goodAfternoon: "Xayrli kun",
+                goodEvening: "Xayrli kech",
+                currentlyWorking: "Hozirda ishlayapsiz",
+                dayCompleted: "Kun yakunlandi",
+                waitingApproval: "Tasdiqlash kutilmoqda",
+                notCheckedIn: "Ro'yxatdan o'tmagan",
+
+                // Notifications
+                noNotifications: "Bildirishnomalar yo'q",
+                noNotificationsDesc: "Barcha xabarlarni ko'rib chiqdingiz!",
+
+                // Activities
+                noActivities: "Faoliyat yo'q",
+                noActivitiesDesc: "Faoliyat yozuvlari topilmadi",
+
+                // Documents
+                noDocuments: "Hujjatlar topilmadi"
             }
         }
     },

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, TouchableOpacity} from 'react-native';
 import SgTemplateScreen from "@/components/templates/Screen/Screen";
 import SgSectionTaskCard from "@/components/sections/TaskCard/TaskCard";
 import moment from "moment/moment";
@@ -79,9 +79,9 @@ export default function EmployeeDocsScreen() {
                 header: t('allTasks'),
             }}
             filter={
-                <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
-                    <Text><FilterIcon width={20} height={20} /></Text>
-                </Pressable>
+                <TouchableOpacity style={styles.iconWrapper} onPress={toggleFilterModal} activeOpacity={0.7}>
+                    <FilterIcon width={20} height={20} color={COLORS.white} fill={COLORS.white} />
+                </TouchableOpacity>
             }
             />}
         >
@@ -96,35 +96,26 @@ export default function EmployeeDocsScreen() {
                 onClose={toggleFilterModal}
                 footerButton={<SgButton
                     onPress={handleFilters}
-                    bgColor={COLORS.primary}
+                    bgColor={COLORS.brand_950}
                     color={COLORS.white}
                 >
                     {t('accept')}
                 </SgButton>}
             >
-                <View style={{paddingBottom: 20}}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 20, fontWeight: 600, lineHeight: 30}}>{t('filters')}</Text>
-
-                        <SgButton
+                <View style={styles.filterContent}>
+                    <View style={styles.filterHeader}>
+                        <Text style={styles.filterTitle}>{t('filters')}</Text>
+                        <TouchableOpacity
                             onPress={resetFilters}
-                            color={COLORS.brand_700}
-                            style={{
-                                flex: 0,
-                                width: 'auto',
-                                marginLeft: 'auto',
-                                paddingVertical: 0,
-                                paddingHorizontal: 0,
-                                gap: 7
-                            }}
-
+                            style={styles.clearButton}
+                            activeOpacity={0.7}
                         >
-                            {t('clearFilters')}
-                            <ReloadArrow width={20} height={20} style={{marginLeft: 7}}/>
-                        </SgButton>
+                            <ReloadArrow width={16} height={16} color={COLORS.brand_700} />
+                            <Text style={styles.clearButtonText}>{t('clearFilters')}</Text>
+                        </TouchableOpacity>
                     </View>
 
-                    <View style={{gap: 16}}>
+                    <View style={styles.filterFields}>
                         <SgSelect
                             label={t('progress')}
                             placeholder={t('select')}
@@ -134,7 +125,7 @@ export default function EmployeeDocsScreen() {
                             list={(taskStatuses || []).sort((a, b) => a.id - b.id).map((el) => ({
                                 id: el.id,
                                 name: el.name,
-                                render: (<Text style={{fontSize: 16, fontWeight: 500}}>
+                                render: (<Text style={styles.selectOptionText}>
                                     {el.id === 1 && t("open")}
                                     {el.id === 2 && t("inProgress")}
                                     {el.id === 3 && t("checkProgressRequested")}
@@ -147,8 +138,8 @@ export default function EmployeeDocsScreen() {
                             }))}
                             onChangeText={handleChange}
                         />
-                        <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
-                            <View style={{flex: 1}}>
+                        <View style={styles.rowFields}>
+                            <View style={styles.fieldHalf}>
                                 <SgInput
                                     label={t("scoreRange")}
                                     placeholder={t('min')}
@@ -158,9 +149,9 @@ export default function EmployeeDocsScreen() {
                                     type='number'
                                 />
                             </View>
-                            <View style={{flex: 1}}>
+                            <View style={styles.fieldHalf}>
                                 <SgInput
-                                    label=""
+                                    label=" "
                                     placeholder={t('max')}
                                     value={filters?.score_max}
                                     name='score_max'
@@ -169,18 +160,19 @@ export default function EmployeeDocsScreen() {
                                 />
                             </View>
                         </View>
-                        <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
-                            <View style={{flex: 1}}>
+                        <View style={styles.rowFields}>
+                            <View style={styles.fieldHalf}>
                                 <SgDatePicker
                                     label={t('deadlineDateRange')}
-                                    placeholder="min."
+                                    placeholder={t('min')}
                                     value={filters?.deadline_min}
                                     name='deadline_min'
                                     onChangeText={handleChange}
                                 />
                             </View>
-                            <View style={{flex: 1}}>
+                            <View style={styles.fieldHalf}>
                                 <SgDatePicker
+                                    label=" "
                                     placeholder={t('max')}
                                     value={filters?.deadline_max}
                                     name='deadline_max'
@@ -199,80 +191,57 @@ const styles = StyleSheet.create({
     iconWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: COLORS.brand_50,
-        padding: 12,
-        borderRadius: 14,
+        backgroundColor: COLORS.brand_950,
+        padding: 10,
+        borderRadius: 12,
     },
-    container: {
-        flex: 1, backgroundColor: '#f5f5f5',
-    }, header: {
+    // Filter popup styles
+    filterContent: {
+        paddingBottom: 16,
+    },
+    filterHeader: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 15,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    }, headerTitle: {
-        fontSize: 18, fontWeight: 'bold',
-    }, addButton: {
-        backgroundColor: '#007BFF', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 5,
-    }, addButtonText: {
-        color: '#fff', fontWeight: 'bold',
-    }, listContainer: {
-        padding: 15,
-    }, jobCard: {
-        backgroundColor: '#fff',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    filterTitle: {
+        fontFamily: 'Inter_700Bold',
+        fontSize: 20,
+        fontWeight: '700',
+        color: COLORS.gray_900,
+        letterSpacing: -0.3,
+    },
+    clearButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        backgroundColor: COLORS.brand_50,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
         borderRadius: 10,
-        padding: 15,
-        marginBottom: 15,
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
-    }, jobHeader: {
-        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10,
-    }, jobTitle: {
-        fontSize: 18, fontWeight: 'bold', flex: 1,
-    }, statusBadge: {
-        paddingVertical: 4, paddingHorizontal: 8, borderRadius: 4,
-    }, activeBadge: {
-        backgroundColor: '#e6f7ee',
-    }, closedBadge: {
-        backgroundColor: '#ffebee',
-    }, statusText: {
-        fontSize: 12, fontWeight: 'bold',
-    }, activeText: {
-        color: '#00a86b',
-    }, closedText: {
-        color: '#f44336',
-    }, jobDetails: {
-        flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10,
-    }, jobInfo: {
-        fontSize: 14, color: '#666', marginRight: 15, marginBottom: 5,
-    }, applicantsContainer: {
-        borderTopWidth: 1,
-        borderTopColor: '#eee',
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-        paddingVertical: 10,
-        marginVertical: 10,
-    }, applicantsText: {
-        fontSize: 16, fontWeight: '500',
-    }, actionsContainer: {
-        flexDirection: 'row', justifyContent: 'space-between',
-    }, actionButton: {
-        flex: 1, backgroundColor: '#007BFF', padding: 10, borderRadius: 5, alignItems: 'center', marginHorizontal: 5,
-    }, closeButton: {
-        backgroundColor: '#f44336',
-    }, reopenButton: {
-        backgroundColor: '#4caf50',
-    }, actionButtonText: {
-        color: '#fff', fontWeight: 'bold',
-    }, closeButtonText: {
-        color: '#fff',
-    }, reopenButtonText: {
-        color: '#fff',
+    },
+    clearButtonText: {
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 13,
+        fontWeight: '600',
+        color: COLORS.brand_700,
+    },
+    filterFields: {
+        gap: 16,
+    },
+    rowFields: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        gap: 12,
+    },
+    fieldHalf: {
+        flex: 1,
+    },
+    selectOptionText: {
+        fontFamily: 'Inter_500Medium',
+        fontSize: 15,
+        fontWeight: '500',
+        color: COLORS.gray_800,
     },
 });

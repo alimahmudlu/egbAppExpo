@@ -1,9 +1,9 @@
 import {
   FlatList,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
@@ -18,14 +18,10 @@ import { useTranslation } from "react-i18next";
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgButton from "@/components/ui/Button/Button";
 import ReloadArrow from "@/assets/images/reload-arrows.svg";
-import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
-import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import FilterIcon from "@/assets/images/filter.svg";
 import SgInput from "@/components/ui/Input/Input";
 import SgSelect from "@/components/ui/Select/Select";
 import CollapsibleView from "@/components/ui/Collapse/Collapse";
-
-const isAndroid = Platform.OS === "android";
 
 const EmployeeListItem = ({ name, role, isLast }) => (
   <View style={[styles.employeeItem, !isLast && styles.separator]}>
@@ -41,13 +37,10 @@ const ProjectItem = ({ project }) => {
     <CollapsibleView
       title={<Text style={styles.projectName}>{project.name}</Text>}
     >
-      {/*<View style={styles.card}>*/}
-      {/*    <Text style={styles.projectName}>{project.name}</Text>*/}
       <Text style={styles.teamHeader}>
         {t("teamMembers")} ({project.members.length})
       </Text>
 
-      {/* 3. İşçi Object-lərinin Map ilə Ekranlaşdırılması */}
       <View style={styles.employeesContainer}>
         {project?.members
           ?.sort((a, b) => b?.role?.id - a?.role?.id)
@@ -60,7 +53,6 @@ const ProjectItem = ({ project }) => {
             />
           ))}
       </View>
-      {/*</View>*/}
     </CollapsibleView>
   );
 };
@@ -106,6 +98,7 @@ export default function TimeKeeperUserScreen() {
       .catch((err) => {
         console.log(err, "apiservice control err");
       });
+    toggleFilterModal();
   }
 
   useFocusEffect(
@@ -131,78 +124,60 @@ export default function TimeKeeperUserScreen() {
 
   return (
     <SgTemplateScreen
+      scrollView={false}
       head={
         <SgTemplatePageHeader
           data={{
             header: t("myTeam"),
           }}
           filter={
-            <Pressable style={styles.iconWrapper} onPress={toggleFilterModal}>
-              <Text>
-                <FilterIcon width={20} height={20} />
-              </Text>
-            </Pressable>
+            <TouchableOpacity style={styles.iconWrapper} onPress={toggleFilterModal} activeOpacity={0.7}>
+              <FilterIcon width={20} height={20} color={COLORS.brand_950} fill={COLORS.brand_950} />
+            </TouchableOpacity>
           }
         />
       }
     >
-      {data && (
-        <FlatList
-          data={data || []}
-          keyExtractor={(item) => item?.id?.toString()}
-          renderItem={({ item }) => <ProjectItem project={item} />}
-          contentContainerStyle={styles.listContainer}
-          // Boş siyahı üçün placeholder (opsiyonel)
-          ListEmptyComponent={() => (
-            <Text style={styles.emptyText}>Layihə yoxdur.</Text>
-          )}
-        />
-      )}
+      <FlatList
+        data={data || []}
+        keyExtractor={(item) => item?.id?.toString()}
+        renderItem={({ item }) => <ProjectItem project={item} />}
+        contentContainerStyle={styles.listContainer}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyText}>{t('noActivities')}</Text>
+          </View>
+        )}
+      />
 
       <SgPopup
         visible={filterModal}
         onClose={toggleFilterModal}
+        title={t("filters")}
         footerButton={
           <SgButton
             onPress={handleFilters}
-            bgColor={COLORS.primary}
+            bgColor={COLORS.brand_950}
             color={COLORS.white}
           >
             {t("accept")}
           </SgButton>
         }
       >
-        <View style={{ paddingBottom: 20 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ fontSize: 20, fontWeight: 600, lineHeight: 30 }}>
-              {t("filters")}
-            </Text>
-
-            <SgButton
+        <View style={styles.filterContent}>
+          <View style={styles.filterHeader}>
+            <TouchableOpacity
               onPress={resetFilters}
-              color={COLORS.brand_700}
-              style={{
-                flex: 0,
-                width: "auto",
-                marginLeft: "auto",
-                paddingVertical: 0,
-                paddingHorizontal: 0,
-                gap: 7,
-              }}
+              style={styles.clearFiltersButton}
+              activeOpacity={0.7}
             >
-              {t("clearFilters")}
-              <ReloadArrow width={20} height={20} style={{ marginLeft: 7 }} />
-            </SgButton>
+              <Text style={styles.clearFiltersText}>{t("clearFilters")}</Text>
+              <ReloadArrow width={16} height={16} color={COLORS.brand_700} fill={COLORS.brand_700} />
+            </TouchableOpacity>
           </View>
 
-          <View style={{ gap: 16 }}>
-            <View style={{ flex: 1 }}>
+          <View style={styles.filterFields}>
+            <View style={styles.filterField}>
               <SgInput
                 label={t("employeeName")}
                 placeholder={t("employeeName_placeholder")}
@@ -211,7 +186,7 @@ export default function TimeKeeperUserScreen() {
                 onChangeText={handleChange}
               />
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={styles.filterField}>
               <SgSelect
                 label={t("role")}
                 placeholder={t("enterRole")}
@@ -222,18 +197,18 @@ export default function TimeKeeperUserScreen() {
                 list={[
                   {
                     id: 1,
-                    name: "Employee",
-                    render: <Text>Employee</Text>,
+                    name: t("Employee"),
+                    render: <Text>{t("Employee")}</Text>,
                   },
                   {
                     id: 2,
-                    name: "TimeKeeper",
-                    render: <Text>TimeKeeper</Text>,
+                    name: t("TimeKeeper"),
+                    render: <Text>{t("TimeKeeper")}</Text>,
                   },
                   {
                     id: 3,
-                    name: "Construction Chief",
-                    render: <Text>Construction Chief</Text>,
+                    name: t("ConstructionChief"),
+                    render: <Text>{t("ConstructionChief")}</Text>,
                   },
                 ]}
               />
@@ -247,80 +222,101 @@ export default function TimeKeeperUserScreen() {
 
 const styles = StyleSheet.create({
   employeeItem: {
-    paddingVertical: 10,
+    paddingVertical: 12,
     flexDirection: "column",
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-    paddingHorizontal: 5,
+    paddingHorizontal: 4,
   },
   employeeName: {
-    fontSize: 12,
-    fontWeight: "500",
-    color: "#333333",
-    flex: 2, // Ad çox yer tutsun
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.gray_900,
+    lineHeight: 20,
   },
   employeeRole: {
-    fontSize: 10,
-    fontWeight: "400",
-    color: "#718096", // Solğun Boz
-    // textAlign: 'right',
-    flex: 1, // Rol daha az yer tutsun
+    fontFamily: 'Inter_400Regular',
+    fontSize: 12,
+    fontWeight: '400',
+    color: COLORS.gray_500,
+    lineHeight: 18,
+    marginTop: 2,
   },
   separator: {
     borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE", // Çox yüngül ayırıcı xətt
-  },
-
-  card: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    // Modern Kölgə Effekti (Minimalist qalır)
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 5,
-    borderWidth: isAndroid ? 0 : 0.5,
-    borderColor: isAndroid ? "transparent" : COLORS.gray_200,
+    borderBottomColor: COLORS.gray_100,
   },
   projectName: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#333333",
-    marginBottom: 15,
+    fontFamily: 'Inter_700Bold',
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.gray_900,
+    lineHeight: 26,
   },
   teamHeader: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#666666",
-    marginBottom: 5,
-    paddingTop: 10,
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.gray_600,
+    marginBottom: 4,
+    paddingTop: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
-    paddingBottom: 5,
+    borderBottomColor: COLORS.gray_100,
+    paddingBottom: 8,
   },
   employeesContainer: {
-    // Artıq flexWrap lazım deyil, çünki alt-alta sıralanır
-    marginTop: 5,
+    marginTop: 4,
   },
-
   listContainer: {
-    paddingBottom: 20, // Aşağıda boşluq yaratmaq üçün
+    paddingBottom: 20,
+    gap: 16,
+  },
+  emptyState: {
+    paddingVertical: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   emptyText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    fontWeight: '400',
     textAlign: "center",
-    marginTop: 50,
-    color: "#999",
+    color: COLORS.gray_500,
   },
-
   iconWrapper: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORS.brand_50,
-    padding: 14,
-    borderRadius: 50,
+    padding: 12,
+    borderRadius: 12,
+  },
+  filterContent: {
+    paddingBottom: 8,
+  },
+  filterHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginBottom: 16,
+  },
+  clearFiltersButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: COLORS.brand_50,
+    borderRadius: 10,
+  },
+  clearFiltersText: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.brand_700,
+  },
+  filterFields: {
+    gap: 16,
+  },
+  filterField: {
+    flex: 1,
   },
 });

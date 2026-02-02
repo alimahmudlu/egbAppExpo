@@ -184,12 +184,12 @@ export default function SgSectionAddFile({title, type, datetime, fileType, onPre
                         <Text style={styles.title}>{title}</Text>
                         <Text style={styles.dateTime}>{datetime}</Text>
                     </View>
-                    <TouchableOpacity style={styles.eyeIconWrapper} activeOpacity={0.5} onPress={togglePreviewModal}>
-                        <Eye width={20} height={20} style={styles.eyeIcon}/>
+                    <TouchableOpacity style={styles.eyeIconWrapper} activeOpacity={0.7} onPress={togglePreviewModal}>
+                        <Eye width={18} height={18} color={COLORS.gray_600}/>
                     </TouchableOpacity>
                     {remove ?
-                        <TouchableOpacity style={styles.eyeIconWrapper} activeOpacity={0.5} onPress={handleRemove}>
-                            <Trash width={20} height={20} style={styles.eyeIcon}/>
+                        <TouchableOpacity style={[styles.eyeIconWrapper, {backgroundColor: COLORS.error_50}]} activeOpacity={0.7} onPress={handleRemove}>
+                            <Trash width={18} height={18} color={COLORS.error_600}/>
                         </TouchableOpacity>
                         :
                         null
@@ -204,7 +204,7 @@ export default function SgSectionAddFile({title, type, datetime, fileType, onPre
                 title={title ? title : t('documentView')}
                 footerButton={
                     <SgButton
-                        bgColor={COLORS.brand_600}
+                        bgColor={COLORS.brand_950}
                         color={COLORS.white}
                         onPress={handleDownload}
                     >
