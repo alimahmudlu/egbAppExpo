@@ -97,8 +97,6 @@ export default function TaskDetailsScreen() {
         setData({ ...data, [e?.name]: e?.value });
     }
 
-
-
     const cacheKey = `GET:/${rolePath}/project/item/${projectId}/tasks/item/${taskId}`;
 
     const fetchData = () => {
@@ -150,6 +148,7 @@ export default function TaskDetailsScreen() {
                 date: moment().format(''),
                 status: statusId,
                 files: (selectedFiles || []).map(el => el?.id) || [],
+                finalPoint: statusId === 7 ? data?.finalPoint || taskDetails?.points || 0 : null,
                 comment: data?.comment || '',
             }
         }).then(() => {
@@ -344,6 +343,21 @@ export default function TaskDetailsScreen() {
                             type='textarea'
                         />
                     </View>
+
+                    {actionModal.status === 7 ?
+                        <SgInput
+                            label={t('finalPoint')}
+                            placeholder={t('enterPoint')}
+                            type="counter"
+                            value={data?.point || taskDetails?.points || 0}
+                            name='finalPoint'
+                            onChangeText={handleChange}
+                            max={taskDetails?.points || 0}
+                            min={0}
+                        />
+                        : null
+                    }
+
                     <View>
                         <SgTemplateUploadScreen setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
                         {selectedFiles.map((el, index) => (
