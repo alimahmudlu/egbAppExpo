@@ -51,7 +51,6 @@ export default function TimeKeeperUserScreen() {
                 id
             },
         }).then(res => {
-            console.log(res, 'apiservice control res')
         }).catch(err => {
             console.log(err, 'apiservice control err')
         })
