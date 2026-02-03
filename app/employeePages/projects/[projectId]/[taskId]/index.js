@@ -97,8 +97,6 @@ export default function TaskDetailsScreen() {
         setData({ ...data, [e?.name]: e?.value });
     }
 
-
-
     const cacheKey = `GET:/${rolePath}/project/item/${projectId}/tasks/item/${taskId}`;
 
     const fetchData = () => {
@@ -150,6 +148,7 @@ export default function TaskDetailsScreen() {
                 date: moment().format(''),
                 status: statusId,
                 files: (selectedFiles || []).map(el => el?.id) || [],
+                finalPoint: statusId === 7 ? data?.finalPoint || taskDetails?.points || 0 : null,
                 comment: data?.comment || '',
             }
         }).then(() => {
@@ -239,6 +238,7 @@ export default function TaskDetailsScreen() {
             {/* Common Info Cards */}
             <SgCard contentTitle={t('deadlineDate')} contentDescription={taskDetails?.deadline ? moment(taskDetails?.deadline).format('DD.MM.YYYY / HH:mm') : ''} />
             <SgCard contentTitle={t('pointsToBeEarned')} contentDescription={taskDetails?.points} />
+            {taskDetails?.status?.id === 7 ? <SgCard contentTitle={t('finalPoint')} contentDescription={taskDetails?.finalpoints || '0'} /> : null}
             <SgCard contentTitle={t('task')} contentDescription={taskDetails?.name} padding={false} bgColor={null} />
             <SgCard contentTitle={t('description')} contentDescription={taskDetails?.description} padding={false} bgColor={null} />
 
@@ -258,9 +258,9 @@ export default function TaskDetailsScreen() {
                     <SgCard><Text style={styles.title}>{t('Comments')}</Text></SgCard>
                     {((taskDetails?.activities || []).filter((ac, ac_i) => ac.comment)).map((ac, ac_i) => (
                         <View key={ac_i} style={{borderBottomWidth: 1, paddingVertical: 8, borderBottomColor: COLORS.gray_200, gap: 4}}>
-                            <Text style={{ fontWeight: 'bold', marginBottom: 4}}>{ac?.status?.name}</Text>
-                            <Text style={{fontSize: 14, }}>{ac.comment}</Text>
+                            <Text style={{ fontWeight: 'bold'}}>{ac?.status?.name}</Text>
                             <Text style={{fontSize: 10, fontWeight: 700}}>{moment(ac.created_at).format('DD/MM/YYYY HH:mm')}</Text>
+                            <Text style={{fontSize: 14, marginTop: 4 }}>{ac.comment}</Text>
                         </View>
                     ))}
                 </>
@@ -344,6 +344,21 @@ export default function TaskDetailsScreen() {
                             type='textarea'
                         />
                     </View>
+
+                    {actionModal.status === 7 ?
+                        <SgInput
+                            label={t('finalPoint')}
+                            placeholder={t('enterPoint')}
+                            type="counter"
+                            value={data?.point || taskDetails?.points || 0}
+                            name='finalPoint'
+                            onChangeText={handleChange}
+                            max={taskDetails?.points || 0}
+                            min={0}
+                        />
+                        : null
+                    }
+
                     <View>
                         <SgTemplateUploadScreen setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
                         {selectedFiles.map((el, index) => (

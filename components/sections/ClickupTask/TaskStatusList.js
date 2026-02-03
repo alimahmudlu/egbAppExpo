@@ -52,23 +52,25 @@ const TaskStatusList = ({ statusId, statusData, taskData, prefix = '/chiefPages/
 
             {isExpanded && (
                 <View style={[styles.taskList, {gap: 16}]}>
-                    {statusData.tasks.map((el, index) => (
-                        <SgSectionTaskCard
-                            size={'sm'}
-                            id={el?.id}
-                            projectId={el?.project_id}
-                            key={index}
-                            time={moment(el?.deadline).format('') || ''}
-                            duration={el?.points}
-                            title={el?.name}
-                            description={el?.description}
-                            name={el?.assigned_employee?.full_name}
-                            image={null}
-                            status={el?.status}
-                            href={`${prefix}${el?.project_id}/${el?.id}`}
-                        />
-                        // <TaskCard key={el.id} task={el} color={color} />
-                    ))}
+                    {statusData.tasks.map((el, index) => {
+                        return (
+                            <SgSectionTaskCard
+                                size={'sm'}
+                                id={el?.id}
+                                projectId={el?.project_id}
+                                key={index}
+                                time={moment(el?.deadline).format('') || ''}
+                                duration={el?.status?.id === 7 ? `${el?.finalpoints || 0}/${el?.points}` : el?.points}
+                                title={el?.name}
+                                description={el?.description}
+                                name={el?.assigned_employee?.full_name}
+                                image={null}
+                                status={el?.status}
+                                href={`${prefix}${el?.project_id}/${el?.id}`}
+                            />
+                            // <TaskCard key={el.id} task={el} color={color} />
+                        )
+                    })}
                     {taskCount === 0 && (
                         <Text style={styles.noTasksText}>Bu statusda task yoxdur.</Text>
                     )}

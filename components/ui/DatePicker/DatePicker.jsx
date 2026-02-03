@@ -48,7 +48,6 @@ export default function SgDatePicker(props) {
             visible={datePickerModal}
             onClose={toggleDatePickerModal}
             onShow={() => {
-                console.log('acildi')
                 setShowPicker(true)
             }}
             footerButton={

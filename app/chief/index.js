@@ -20,7 +20,7 @@ import Clock from "@/assets/images/clock.svg";
 import {useSocket} from "@/hooks/useSocket";
 
 export default function EmployeeDashboardScreen() {
-    const {user} = useAuth();
+    const {user, getRating} = useAuth();
     const {storeData, setStoreData} = useData();
     const {request} = useApi();
     const [taskList, setTaskList] = useState([]);
@@ -145,6 +145,8 @@ export default function EmployeeDashboardScreen() {
             }));
         })
 
+        getRating()
+
         return () => {
             setCheckIn({})
             setCheckOut({})
@@ -158,6 +160,7 @@ export default function EmployeeDashboardScreen() {
                 name={user?.full_name}
                 role={user?.role?.name}
                 position={user?.position}
+                rating={user?.rating}
                 profileImage={''}
             />}
         >
@@ -232,7 +235,7 @@ export default function EmployeeDashboardScreen() {
                     projectId={el?.project_id}
                     key={index}
                     time={moment(el?.deadline).format('') || ''}
-                    duration={el?.points}
+                    duration={el?.status?.id === 7 ? `${el?.finalpoints || 0}/${el?.points}` : el?.points}
                     title={el?.name}
                     description={el?.description}
                     name={el?.assigned_employee?.full_name}

@@ -29,6 +29,7 @@ export default function EmployeeDocsScreen() {
     const [statistics, setStatistics] = useState({})
     const [otherStatistics, setOtherStatistics] = useState({})
     const [workingHours, setWorkingHours] = useState({})
+    const [currentlyAtWork, setCurrentlyAtWork] = useState({})
     const [projectsList, setProjectsList] = useState([])
     const [filters, setFilters] = useState({
         start_date: moment().endOf('day').utc().startOf('day').format('YYYY-MM-DD'),
@@ -105,6 +106,18 @@ export default function EmployeeDocsScreen() {
         }).catch(err => {
             console.log(err);
         })
+
+        request({
+            url: `/chief/reports/statistics/at_work`,
+            method: 'get',
+            params: {
+                ...filters,
+                project: filters?.project?.map(el => el.id),
+            }
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
     }
 
     useFocusEffect(useCallback(() => {
@@ -143,8 +156,12 @@ export default function EmployeeDocsScreen() {
     }, [storeData?.cache?.[`GET:/chief/reports/statistics/working_hours`]]);
 
     useEffect(() => {
-        setWorkingHours(storeData?.cache?.[`GET:/chief/reports/statistics/checkin`]?.data)
+        setOtherStatistics(storeData?.cache?.[`GET:/chief/reports/statistics/checkin`]?.data)
     }, [storeData?.cache?.[`GET:/chief/reports/statistics/checkin`]]);
+
+    useEffect(() => {
+        setCurrentlyAtWork(storeData?.cache?.[`GET:/chief/reports/statistics/at_work`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/reports/statistics/at_work`]]);
 
 
     return (
@@ -163,7 +180,7 @@ export default function EmployeeDocsScreen() {
             <ScrollView horizontal={true}
                         showsHorizontalScrollIndicator={false} style={styles.summaryWrapper}>
                 <View style={styles.summaryCard}>
-                    <Text style={styles.summaryLabel}>Employees</Text>
+                    <Text style={styles.summaryLabel}>{t('reports__statistics_Employees')}</Text>
                     <TouchableOpacity onPress={() => {
                         router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?start=${filters?.start_date}&end=${filters?.end_date}`)
                     }}>
@@ -171,7 +188,7 @@ export default function EmployeeDocsScreen() {
                     </TouchableOpacity>
 
                     <Text style={styles.summarySubText}>
-                        Indirect Employees #:
+                        {t('reports__statistics_Indirect_Employees')} #:
                         <TouchableOpacity onPress={() => {
                             router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
                         }}>
@@ -179,7 +196,7 @@ export default function EmployeeDocsScreen() {
                         </TouchableOpacity>
                     </Text>
                     <Text style={styles.summarySubText}>
-                        Direct Employees #:
+                        {t('reports__statistics_Direct_Employees')} #:
                         <TouchableOpacity onPress={() => {
                             router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
                         }}>
@@ -188,7 +205,7 @@ export default function EmployeeDocsScreen() {
                     </Text>
                 </View>
                 <View style={styles.summaryCard}>
-                    <Text style={styles.summaryLabel}>Currently at Work</Text>
+                    <Text style={styles.summaryLabel}>{t('reports__statistics_Currently_at_Work')}</Text>
                     <TouchableOpacity onPress={() => {
                         router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
                     }}>
@@ -200,7 +217,7 @@ export default function EmployeeDocsScreen() {
                         style={{fontWeight: 700}}>{(statistics?.total_checkin_count || 0) - (statistics?.total_manual_checkin_count || 0)}</Text> Auto)</Text>
 
                     <Text style={styles.summarySubText}>
-                        Indirect Employees #:
+                        {t('reports__statistics_Indirect_Employees')} #:
                         <TouchableOpacity onPress={() => {
                             router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=2&checkin_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
                         }}>
@@ -208,7 +225,7 @@ export default function EmployeeDocsScreen() {
                         </TouchableOpacity>
                     </Text>
                     <Text style={styles.summarySubText}>
-                        Direct Employees #:
+                        {t('reports__statistics_Direct_Employees')} #:
                         <TouchableOpacity onPress={() => {
                             router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=1&checkin_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
                         }}>
@@ -217,14 +234,14 @@ export default function EmployeeDocsScreen() {
                     </Text>
                 </View>
                 <View style={styles.summaryCard}>
-                    <Text style={styles.summaryLabel}>Absent</Text>
+                    <Text style={styles.summaryLabel}>{t('reports__statistics_Absent')}</Text>
                     <TouchableOpacity onPress={() => {
                         router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
                     }}>
                         <Text style={styles.summaryValue}>{statistics?.member_count - statistics?.total_checkin_count || '0'}</Text>
                     </TouchableOpacity>
                     <Text style={styles.summarySubText}>
-                        Indirect Employees #:
+                        {t('reports__statistics_Indirect_Employees')} #:
                         <TouchableOpacity onPress={() => {
                             router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=2&checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
                         }}>
@@ -232,7 +249,7 @@ export default function EmployeeDocsScreen() {
                         </TouchableOpacity>
                     </Text>
                     <Text style={styles.summarySubText}>
-                        Direct Employees #:
+                        {t('reports__statistics_Direct_Employees')} #:
                         <TouchableOpacity onPress={() => {
                             router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?staff_status=1&checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
                         }}>
@@ -241,7 +258,7 @@ export default function EmployeeDocsScreen() {
                     </Text>
                 </View>
                 <View style={styles.summaryCard}>
-                    <Text style={styles.summaryLabel}>Rejected Check-Ins</Text>
+                    <Text style={styles.summaryLabel}>{t('reports__statistics_Rejected_Check_Ins')}</Text>
                     <TouchableOpacity onPress={() => {
                         router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=3&start=${filters?.start_date}&end=${filters?.end_date}`)
                     }}>
@@ -249,48 +266,77 @@ export default function EmployeeDocsScreen() {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+
             <ScrollView horizontal={true}
                         showsHorizontalScrollIndicator={false} style={styles.summaryWrapper}>
                 <View style={styles.summaryCard2}>
-                    <Text style={styles.summaryLabel2}>Total Working Hours</Text>
+                    <Text style={styles.summaryLabel2}>{t('reports__statistics_Total_Working_Hours')}</Text>
                     <View>
                         <Text style={styles.summaryValue2}>{workingHours?.total_working_hours || '00:00'}</Text>
                     </View>
                 </View>
                 <View style={styles.summaryCard2}>
-                    <Text style={styles.summaryLabel2}>Day Shift Hours</Text>
+                    <Text style={styles.summaryLabel2}>{t('reports__statistics_Day_Shift_Hours')}</Text>
                     <View>
                         <Text style={styles.summaryValue2}>{workingHours?.day_shift_hours || '00:00'}</Text>
                     </View>
                 </View>
                 <View style={styles.summaryCard2}>
-                    <Text style={styles.summaryLabel2}>Night Shift Hours</Text>
+                    <Text style={styles.summaryLabel2}>{t('reports__statistics_Night_Shift_Hours')}</Text>
                     <View>
                         <Text style={styles.summaryValue2}>{workingHours?.night_shift_hours || '00:00'}</Text>
                     </View>
                 </View>
                 <View style={styles.summaryCard2}>
-                    <Text style={styles.summaryLabel2}>Indirect Hours</Text>
+                    <Text style={styles.summaryLabel2}>{t('reports__statistics_Indirect_Hours')}</Text>
                     <View>
                         <Text style={styles.summaryValue2}>{workingHours?.indirect_hours || '00:00'}</Text>
                     </View>
                 </View>
                 <View style={styles.summaryCard2}>
-                    <Text style={styles.summaryLabel2}>Direct Hours</Text>
+                    <Text style={styles.summaryLabel2}>{t('reports__statistics_Direct_Hours')}</Text>
                     <View>
                         <Text style={styles.summaryValue2}>{workingHours?.direct_hours || '00:00'}</Text>
                     </View>
                 </View>
                 <View style={styles.summaryCard2}>
-                    <Text style={styles.summaryLabel2}>Normal Hours</Text>
+                    <Text style={styles.summaryLabel2}>{t('reports__statistics_Normal_Hours')}</Text>
                     <View>
                         <Text style={styles.summaryValue2}>{workingHours?.normal_hours || '00:00'}</Text>
                     </View>
                 </View>
                 <View style={styles.summaryCard2}>
-                    <Text style={styles.summaryLabel2}>Overtime Hours</Text>
+                    <Text style={styles.summaryLabel2}>{t('reports__statistics_Overtime_Hours')}</Text>
                     <View>
                         <Text style={styles.summaryValue2}>{workingHours?.overtime_hours || '00:00'}</Text>
+                    </View>
+                </View>
+            </ScrollView>
+
+            <ScrollView horizontal={true}
+                        showsHorizontalScrollIndicator={false} style={styles.summaryWrapper}>
+                <View style={[styles.summaryCard3, {borderLeftColor: '#fd9a00', backgroundColor: '#fffbeb'}]}>
+                    <Text style={styles.summaryLabel3}>{t('reports__statistics_Day_Shift_Employees')}</Text>
+                    <View>
+                        <Text style={styles.summaryValue3}>{currentlyAtWork?.day_shift_count || 0}</Text>
+                    </View>
+                </View>
+                <View style={[styles.summaryCard3, {borderLeftColor: '#4f39f6', backgroundColor: '#eef2ff'}]}>
+                    <Text style={styles.summaryLabel3}>{t('reports__statistics_Night_Shift_Employees')}</Text>
+                    <View>
+                        <Text style={styles.summaryValue3}>{currentlyAtWork?.night_shift_count || 0}</Text>
+                    </View>
+                </View>
+                <View style={[styles.summaryCard3, {borderLeftColor: '#00c951', backgroundColor: '#f0fdf4'}]}>
+                    <Text style={styles.summaryLabel3}>{t('reports__statistics_Normal_Check_in_Employees')}</Text>
+                    <View>
+                        <Text style={styles.summaryValue3}>{currentlyAtWork?.normal_checkin_count || 0}</Text>
+                    </View>
+                </View>
+                <View style={[styles.summaryCard3, {borderLeftColor: '#fb2c36', backgroundColor: '#fef2f2'}]}>
+                    <Text style={styles.summaryLabel3}>{t('reports__statistics_Overtime_Employees')}</Text>
+                    <View>
+                        <Text style={styles.summaryValue3}>{currentlyAtWork?.overtime_count || 0}</Text>
                     </View>
                 </View>
             </ScrollView>
@@ -488,7 +534,7 @@ const styles = StyleSheet.create({
         gap: 16,
         // flexWrap: 'wrap', // Ekrana sığmasa aşağı düşməsi üçün
         // justifyContent: 'space-between',
-        marginBottom: 25,
+        // marginBottom: 10,
     },
     summaryCard: {
         minWidth: width * 2 / 3,
@@ -510,6 +556,17 @@ const styles = StyleSheet.create({
         borderColor: '#F3F4F6',
         marginRight: 12
     },
+    summaryCard3: {
+        minWidth: width * 2 / 3,
+        backgroundColor: '#f9fafb',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#F3F4F6',
+        marginRight: 12,
+        borderLeftWidth: 4
+    },
     summaryLabel: {
         fontSize: 9,
         color: '#6B7280',
@@ -522,6 +579,12 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textTransform: 'uppercase'
     },
+    summaryLabel3: {
+        fontSize: 8,
+        color: '#6B7280',
+        fontWeight: '600',
+        textTransform: 'uppercase'
+    },
     summaryValue: {
         fontSize: 24,
         fontWeight: '700',
@@ -529,6 +592,12 @@ const styles = StyleSheet.create({
         marginVertical: 4,
     },
     summaryValue2: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#111827',
+        marginVertical: 4,
+    },
+    summaryValue3: {
         fontSize: 20,
         fontWeight: '700',
         color: '#111827',

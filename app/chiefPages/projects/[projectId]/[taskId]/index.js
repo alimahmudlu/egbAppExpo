@@ -238,6 +238,7 @@ export default function TaskDetailsScreen() {
             {/* Common Info Cards */}
             <SgCard contentTitle={t('deadlineDate')} contentDescription={taskDetails?.deadline ? moment(taskDetails?.deadline).format('DD.MM.YYYY / HH:mm') : ''} />
             <SgCard contentTitle={t('pointsToBeEarned')} contentDescription={taskDetails?.points} />
+            {taskDetails?.status?.id === 7 ? <SgCard contentTitle={t('finalPoint')} contentDescription={taskDetails?.finalpoints || '0'} /> : null}
             <SgCard contentTitle={t('task')} contentDescription={taskDetails?.name} padding={false} bgColor={null} />
             <SgCard contentTitle={t('description')} contentDescription={taskDetails?.description} padding={false} bgColor={null} />
 

@@ -201,7 +201,7 @@ export default function SgSectionUserInfo({
                                     },
                                 ]}
                             >
-                                {rating}
+                                {rating?.finalPoints || 0}/{rating?.points || 0}
                             </Text>
                         </View>
                     )}
