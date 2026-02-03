@@ -70,7 +70,7 @@ export function AuthProvider({ children }) {
 
           if (currentUser.status === 200 && currentUser?.data?.data) {
             setUser(currentUser?.data?.data || userData);
-            await storeAuthData(accessToken, currentUser?.data?.data);
+            await storeAuthData(storedToken, currentUser?.data?.data);
             if (currentUser?.data?.data?.role?.id !== userData?.role?.id) {
               if (currentUser?.data?.data?.role?.id === 1) {
                 router.replace('/employee');
