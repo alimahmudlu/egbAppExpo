@@ -26,7 +26,9 @@ export default function EmployeeDocsScreen() {
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
     const [data, setData] = useState([])
-    const [statistics, setStatistics] = useState([])
+    const [statistics, setStatistics] = useState({})
+    const [otherStatistics, setOtherStatistics] = useState({})
+    const [workingHours, setWorkingHours] = useState({})
     const [projectsList, setProjectsList] = useState([])
     const [filters, setFilters] = useState({
         start_date: moment().endOf('day').utc().startOf('day').format('YYYY-MM-DD'),
@@ -56,10 +58,6 @@ export default function EmployeeDocsScreen() {
     }
 
     function getData() {
-        console.log({
-            ...filters,
-            project: filters?.project?.map(el => el.id),
-        })
         request({
             url: `/chief/reports/list`,
             method: 'get',
@@ -71,8 +69,33 @@ export default function EmployeeDocsScreen() {
         }).catch(err => {
             console.log(err);
         })
+
         request({
             url: `/chief/reports/statistics`,
+            method: 'get',
+            params: {
+                ...filters,
+                project: filters?.project?.map(el => el.id),
+            }
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
+
+        request({
+            url: `/chief/reports/statistics/working_hours`,
+            method: 'get',
+            params: {
+                ...filters,
+                project: filters?.project?.map(el => el.id),
+            }
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
+
+        request({
+            url: `/chief/reports/statistics/checkin`,
             method: 'get',
             params: {
                 ...filters,
@@ -93,7 +116,8 @@ export default function EmployeeDocsScreen() {
         }).then(res => {
             if (res.success) {
                 setProjectsList(res?.data);
-            } else {
+            }
+            else {
                 // Handle error response
                 // console.log(res.message);
             }
@@ -113,6 +137,14 @@ export default function EmployeeDocsScreen() {
     useEffect(() => {
         setStatistics(storeData?.cache?.[`GET:/chief/reports/statistics`]?.data)
     }, [storeData?.cache?.[`GET:/chief/reports/statistics`]]);
+
+    useEffect(() => {
+        setWorkingHours(storeData?.cache?.[`GET:/chief/reports/statistics/working_hours`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/reports/statistics/working_hours`]]);
+
+    useEffect(() => {
+        setWorkingHours(storeData?.cache?.[`GET:/chief/reports/statistics/checkin`]?.data)
+    }, [storeData?.cache?.[`GET:/chief/reports/statistics/checkin`]]);
 
 
     return (
@@ -156,7 +188,7 @@ export default function EmployeeDocsScreen() {
                     </Text>
                 </View>
                 <View style={styles.summaryCard}>
-                    <Text style={styles.summaryLabel}>Employees</Text>
+                    <Text style={styles.summaryLabel}>Currently at Work</Text>
                     <TouchableOpacity onPress={() => {
                         router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=1&start=${filters?.start_date}&end=${filters?.end_date}`)
                     }}>
@@ -185,7 +217,7 @@ export default function EmployeeDocsScreen() {
                     </Text>
                 </View>
                 <View style={styles.summaryCard}>
-                    <Text style={styles.summaryLabel}>Employees</Text>
+                    <Text style={styles.summaryLabel}>Absent</Text>
                     <TouchableOpacity onPress={() => {
                         router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=2&start=${filters?.start_date}&end=${filters?.end_date}`)
                     }}>
@@ -207,6 +239,59 @@ export default function EmployeeDocsScreen() {
                             <Text style={{fontWeight: 700}}>{statistics?.direct_member_count - statistics?.direct_checkin_count}</Text>
                         </TouchableOpacity>
                     </Text>
+                </View>
+                <View style={styles.summaryCard}>
+                    <Text style={styles.summaryLabel}>Rejected Check-Ins</Text>
+                    <TouchableOpacity onPress={() => {
+                        router.navigate(`/chiefPages/reports/${filters.project ? filters.project?.map(el => el.id) : 'all'}?checkin_status=3&start=${filters?.start_date}&end=${filters?.end_date}`)
+                    }}>
+                        <Text style={styles.summaryValue}>{otherStatistics?.rejected_checkins || '0'}</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+            <ScrollView horizontal={true}
+                        showsHorizontalScrollIndicator={false} style={styles.summaryWrapper}>
+                <View style={styles.summaryCard2}>
+                    <Text style={styles.summaryLabel2}>Total Working Hours</Text>
+                    <View>
+                        <Text style={styles.summaryValue2}>{workingHours?.total_working_hours || '00:00'}</Text>
+                    </View>
+                </View>
+                <View style={styles.summaryCard2}>
+                    <Text style={styles.summaryLabel2}>Day Shift Hours</Text>
+                    <View>
+                        <Text style={styles.summaryValue2}>{workingHours?.day_shift_hours || '00:00'}</Text>
+                    </View>
+                </View>
+                <View style={styles.summaryCard2}>
+                    <Text style={styles.summaryLabel2}>Night Shift Hours</Text>
+                    <View>
+                        <Text style={styles.summaryValue2}>{workingHours?.night_shift_hours || '00:00'}</Text>
+                    </View>
+                </View>
+                <View style={styles.summaryCard2}>
+                    <Text style={styles.summaryLabel2}>Indirect Hours</Text>
+                    <View>
+                        <Text style={styles.summaryValue2}>{workingHours?.indirect_hours || '00:00'}</Text>
+                    </View>
+                </View>
+                <View style={styles.summaryCard2}>
+                    <Text style={styles.summaryLabel2}>Direct Hours</Text>
+                    <View>
+                        <Text style={styles.summaryValue2}>{workingHours?.direct_hours || '00:00'}</Text>
+                    </View>
+                </View>
+                <View style={styles.summaryCard2}>
+                    <Text style={styles.summaryLabel2}>Normal Hours</Text>
+                    <View>
+                        <Text style={styles.summaryValue2}>{workingHours?.normal_hours || '00:00'}</Text>
+                    </View>
+                </View>
+                <View style={styles.summaryCard2}>
+                    <Text style={styles.summaryLabel2}>Overtime Hours</Text>
+                    <View>
+                        <Text style={styles.summaryValue2}>{workingHours?.overtime_hours || '00:00'}</Text>
+                    </View>
                 </View>
             </ScrollView>
 
@@ -415,14 +500,36 @@ const styles = StyleSheet.create({
         borderColor: '#F3F4F6',
         marginRight: 12
     },
+    summaryCard2: {
+        minWidth: width * 2 / 4,
+        backgroundColor: '#f9fafb',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#F3F4F6',
+        marginRight: 12
+    },
     summaryLabel: {
         fontSize: 9,
         color: '#6B7280',
         fontWeight: '600',
         textTransform: 'uppercase'
     },
+    summaryLabel2: {
+        fontSize: 8,
+        color: '#6B7280',
+        fontWeight: '600',
+        textTransform: 'uppercase'
+    },
     summaryValue: {
         fontSize: 24,
+        fontWeight: '700',
+        color: '#111827',
+        marginVertical: 4,
+    },
+    summaryValue2: {
+        fontSize: 20,
         fontWeight: '700',
         color: '#111827',
         marginVertical: 4,

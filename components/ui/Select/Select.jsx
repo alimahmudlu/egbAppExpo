@@ -176,7 +176,8 @@ export default function SgSelect(props) {
                 onClose={toggleSelectModal}
                 fullScreen={true}
                 title={modalTitle || placeholder}
-                closeType={multiple ? "default" : "select"}
+                // closeType={multiple ? "default" : "select"}
+                closeType={multiple ? "select" : "select"}
                 footerButton={
                     !multiple ?
                         <SgButton onPress={toggleSelectModal} bgColor={COLORS.buttonColor} color={COLORS.buttonNoColor}>
