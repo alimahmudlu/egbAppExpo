@@ -30,7 +30,7 @@ import SgRadio from "@/components/ui/Radio/Radio";
 
 
 export default function SgSectionEmployeeCard(props) {
-    const {fullData, removeRowData, cardType, image, title, project, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, timeRaw, overTime = false} = props;
+    const {fullData, removeRowData, cardType, image, title, project, role, position, time, checkType, editable = true, manual=false, manualData = {}, status, reason, atWork, newStatus, timeRaw, overTime = false} = props;
     const [userOperationModal, setUserOperationModal] = useState(false);
     const [rejectCheckInModal, setRejectCheckInModal] = useState(false);
     const [rejectedCheckInModal, setRejectedCheckInModal] = useState(false);
@@ -46,7 +46,6 @@ export default function SgSectionEmployeeCard(props) {
     const {t} = useTranslation();
     const [buttonStatus, setButtonStatus] = useState(false);
     const [confirmType, setConfirmType] = useState(1);
-
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
 
     function toggleRejectInfoModal() {
@@ -147,7 +146,7 @@ export default function SgSectionEmployeeCard(props) {
         //
         // return false;
 
-        return fullData?.type === 2 || fullData?.type === 1;
+        return !newStatus ? (fullData?.type === 2 || fullData?.type === 1) : false;
 
     };
 

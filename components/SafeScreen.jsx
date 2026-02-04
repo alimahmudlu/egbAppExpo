@@ -12,7 +12,7 @@ export default function SafeScreen({children}) {
                                                 // paddingLeft: insets.left || 0,
                                                 // paddingRight: insets.right || 0,
                                                 paddingTop: insets.top || 0,
-                                                paddingBottom: insets.bottom ? 20 : 0
+                                                paddingBottom: insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0
     }]}>{children}</View>
 }
 

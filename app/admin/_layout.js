@@ -15,10 +15,12 @@ import OvertimeActiveIcon from "@/assets/images/overtime-active.svg";
 import OvertimeIcon from "@/assets/images/overtime.svg";
 import HistoryActiveIcon from "@/assets/images/history-active.svg";
 import HistoryIcon from "@/assets/images/history.svg";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function WorkerTabLayout() {
     const {t} = useTranslation()
     const {isLoggedIn, loading} = useAuth();
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         if (!loading && !isLoggedIn) {
@@ -42,7 +44,9 @@ export default function WorkerTabLayout() {
                     default: {
                         boxShadow: '0px -24px 40px -20px #00000014',
                         border: 'none',
-                        borderColor: '#FFFFFF'
+                        borderColor: '#FFFFFF',
+                        paddingBottom: insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0,
+                        height: 60 + (insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0),
                     },
                 }),
                 tabBarItemStyle: {

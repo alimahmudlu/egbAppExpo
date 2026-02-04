@@ -16,6 +16,7 @@ import COLORS from '@/constants/colors';
 
 import InfoIcon from '@/assets/images/info-circle.svg';
 import {useTranslation} from "react-i18next";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function SgPopup({
   visible,
@@ -33,6 +34,7 @@ export default function SgPopup({
 }) {
   const backdropOpacity = useRef(new Animated.Value(0)).current;
   const {t} = useTranslation();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
@@ -97,7 +99,7 @@ export default function SgPopup({
                 onPress={Keyboard.dismiss}
                 accessible={false}
             >
-              <View style={{ backgroundColor: 'transparent',flex: 1, height: Dimensions.get('window').height }}>
+              <View style={{ backgroundColor: 'transparent',flex: 1, height: Dimensions.get('window').height, paddingBottom: insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0 }}>
                 <TouchableWithoutFeedback onPress={onClose}>
                   <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
                 </TouchableWithoutFeedback>

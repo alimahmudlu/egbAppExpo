@@ -590,6 +590,7 @@ export default function EmployeeDashboardScreen() {
                                             return (
                                                 <SgSectionEmployeeCard
                                                     cardType={'atWork'}
+                                                    newStatus={!!((employeeActivitiesCheckOut || {})?.data || []).find(el => el.employee_id === emp.employee_id)?.id}
                                                     removeRowData={removeRowData}
                                                     key={`atwork--${index}--${emp.id}`}
                                                     fullData={emp}

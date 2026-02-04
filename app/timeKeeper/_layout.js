@@ -11,15 +11,16 @@ import ManualIcon from '@/assets/images/manual.svg';
 import ManualActiveIcon from '@/assets/images/manual-active2.svg';
 import MenuIcon from '@/assets/images/menu.svg';
 import MenuActiveIcon from '@/assets/images/menu-active.svg';
-import {useData} from "@/hooks/useData";
 import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "@/hooks/useAuth";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function TimeKeeperTabLayout() {
     const {t} = useTranslation();
     const {isLoggedIn, loading} = useAuth();
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         if (!loading && !isLoggedIn) {
@@ -43,7 +44,9 @@ export default function TimeKeeperTabLayout() {
                     default: {
                         boxShadow: '0px -24px 40px -20px #00000014',
                         border: 'none',
-                        borderColor: '#FFFFFF'
+                        borderColor: '#FFFFFF',
+                        paddingBottom: insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0,
+                        height: 60 + (insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0),
                     },
                 }),
                 tabBarItemStyle: {

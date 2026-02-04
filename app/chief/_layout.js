@@ -17,12 +17,14 @@ import DocsActiveIcon from "@/assets/images/docs-active.svg";
 import DocsIcon from "@/assets/images/docs.svg";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "@/hooks/useAuth";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function WorkerTabLayout() {
     const {changeRowData} = useData();
     const {socket} = useSocket();
     const {t} = useTranslation()
     const {isLoggedIn, loading} = useAuth();
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         if (!loading && !isLoggedIn) {
@@ -62,7 +64,9 @@ export default function WorkerTabLayout() {
                     default: {
                         boxShadow: '0px -24px 40px -20px #00000014',
                         border: 'none',
-                        borderColor: '#FFFFFF'
+                        borderColor: '#FFFFFF',
+                        paddingBottom: insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0,
+                        height: 60 + (insets.bottom > 0 ? (insets.bottom < 50 ? insets.bottom : 20) : 0),
                     },
                 }),
                 tabBarItemStyle: {
