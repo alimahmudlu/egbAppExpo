@@ -16,6 +16,7 @@ import SgSectionProjectListItem from "@/components/sections/ProjectListItem/Proj
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgInput from "@/components/ui/Input/Input";
 import FilterIcon from "@/assets/images/filter.svg";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function TimeKeeperUserScreen() {
     const {request} = useApi();
@@ -26,6 +27,7 @@ export default function TimeKeeperUserScreen() {
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
     const {t} = useTranslation()
+    const {selectedLanguage} = useLanguage();
 
     function toggleFilterModal() {
         setFilterModal(!filterModal);
@@ -112,7 +114,7 @@ export default function TimeKeeperUserScreen() {
                     <SgSectionEmployeeCard
                         key={index}
                         fullData={emp}
-                        title={emp?.employee?.full_name}
+                        title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                         role={emp?.employee?.role?.name}
                         time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
                         image={emp?.employee?.image}

@@ -441,6 +441,8 @@ export default function SgSectionEmployeeCard(props) {
         setConfirmType(type)
     }
 
+    console.log(moment().tz("Europe/Moscow").weekday(), 'weekday')
+
     useEffect(() => {
         setConfirmType(1)
     }, [userOperationModal]);

@@ -4,14 +4,14 @@ export default {
     "expo": {
         "name": "EGB",
         "slug": "egb-expo-app",
-        "version": "0.4.4",
+        "version": "0.4.5",
         "orientation": "default",
         "icon": "./assets/images/icon-color.png",
         "scheme": "egbappexpo",
         "userInterfaceStyle": "automatic",
         "newArchEnabled": true,
         ios: {
-            bundleIdentifier: "com.egb.egb",
+            bundleIdentifier: "com.egb.egb2",
             supportsTablet: true,
             config: {
                 googleMapsApiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
@@ -33,7 +33,7 @@ export default {
             package: "com.egb.egb",
             edgeToEdgeEnabled: true,
             usesCleartextTraffic: true,
-            versionCode: 54,
+            versionCode: 55,
             "softwareKeyboardLayoutMode": "resize",
             adaptiveIcon: {
                 foregroundImage: "./assets/images/icon-white.png",

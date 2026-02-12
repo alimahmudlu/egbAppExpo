@@ -75,6 +75,11 @@ export default function ChiefMenuScreen() {
             id: 8,
             name: 'Airport',
             render: <Text>Airport</Text>,
+        },
+        {
+            id: 9,
+            name: 'EGB buses',
+            render: <Text>EGB buses</Text>,
         }
     ]);
 

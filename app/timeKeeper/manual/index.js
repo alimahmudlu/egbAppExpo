@@ -16,6 +16,7 @@ import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -29,6 +30,7 @@ export default function EmployeeDocsScreen() {
     const [page, setPage] = useState(1);
     const [oldPage, setOldPage] = useState(1);
     const [getDataStatus, setDataStatus] = useState(false)
+    const {selectedLanguage} = useLanguage();
 
     function getData(_filters = {}) {
         request({
@@ -140,7 +142,8 @@ export default function EmployeeDocsScreen() {
                     <SgSectionEmployeeCard
                         key={index}
                         fullData={emp}
-                        title={emp?.full_name}
+                        // title={emp?.full_name}
+                        title={selectedLanguage?.id === 'en' ? emp?.full_name : emp?.full_name_russian || emp?.full_name}
                         role={emp?.role?.name}
                         timeRaw={emp?.checkin?.review_time || emp?.overtimecheckin?.request_time}
                         time={emp?.checkin?.request_time ? moment(emp?.checkin?.request_time).format('MM-DD-YYYY HH:mm') : (emp?.overtimecheckin?.request_time ? moment(emp?.overtimecheckin?.request_time).format('MM-DD-YYYY HH:mm') : '')}

@@ -28,6 +28,7 @@ import ReloadArrow from "@/assets/images/reload-arrows.svg";
 import SgPopup from "@/components/ui/Modal/Modal";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
 import SgLoading from "@/components/sections/Loading/Loading";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function EmployeeDashboardScreen() {
     const {user} = useAuth();
@@ -40,7 +41,8 @@ export default function EmployeeDashboardScreen() {
     const {storeData, insertDataWithPagination, setStoreData, updateData} = useData();
     const {socket} = useSocket()
     const {refreshKey} = useLocalSearchParams();
-    const {t} = useTranslation()
+    const {t} = useTranslation();
+    const {selectedLanguage} = useLanguage();
 
     const [activeTab, setActiveTab] = useState('checkIn');
     const [projectsList, setProjectsList] = useState([]);
@@ -514,7 +516,7 @@ export default function EmployeeDashboardScreen() {
                                                     removeRowData={removeRowData}
                                                     key={`checkIn--${index}--${emp.id}`}
                                                     fullData={emp}
-                                                    title={emp?.employee?.full_name}
+                                                    title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                                     role={emp?.employee?.role?.name}
                                                     project={emp?.project?.name}
                                                     checkType={emp?.is_manual ? t('manual') : t('auto')}
@@ -553,7 +555,7 @@ export default function EmployeeDashboardScreen() {
                                                     removeRowData={removeRowData}
                                                     key={`checkOut--${index}--${emp.id}`}
                                                     fullData={emp}
-                                                    title={emp?.employee?.full_name}
+                                                    title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                                     role={emp?.employee?.role?.name}
                                                     project={emp?.project?.name}
                                                     checkType={emp?.is_manual ? t('manual') : t('auto')}
@@ -595,7 +597,7 @@ export default function EmployeeDashboardScreen() {
                                                     key={`atwork--${index}--${emp.id}`}
                                                     fullData={emp}
                                                     atWork={true}
-                                                    title={emp?.employee?.full_name}
+                                                    title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                                     role={emp?.employee?.role?.name}
                                                     project={emp?.project?.name}
                                                     checkType={emp?.is_manual ? t('manual') : t('auto')}

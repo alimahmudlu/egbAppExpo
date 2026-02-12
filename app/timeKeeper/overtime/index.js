@@ -27,6 +27,7 @@ import LoginIcon from "@/assets/images/login.svg";
 import SgCard from "@/components/ui/Card/Card";
 import SgUtilsTimeDifference from "@/utils/TimeDifference";
 import Clock from "@/assets/images/clock.svg";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -36,6 +37,7 @@ export default function EmployeeDocsScreen() {
     const {storeData, setStoreData, insertData, updateData, changeAddRowData, insertDataWithPagination} = useData();
     const {socket} = useSocket();
     const [activeTab, setActiveTab] = useState('checkIn');
+    const {selectedLanguage} = useLanguage();
 
     const [pageAtWork, setPageAtWork] = useState(1);
     const [pageCheckIn, setPageCheckIn] = useState(1);
@@ -485,7 +487,7 @@ export default function EmployeeDocsScreen() {
                                                 removeRowData={removeRowData}
                                                 key={index}
                                                 fullData={emp}
-                                                title={emp?.employee?.full_name}
+                                                title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                                 role={emp?.employee?.role?.name}
                                                 project={emp?.project?.name}
                                                 checkType={emp?.is_manual ? t('manual') : t('auto')}
@@ -521,7 +523,7 @@ export default function EmployeeDocsScreen() {
                                                 removeRowData={removeRowData}
                                                 key={index}
                                                 fullData={emp}
-                                                title={emp?.employee?.full_name}
+                                                title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                                 role={emp?.employee?.role?.name}
                                                 project={emp?.project?.name}
                                                 checkType={emp?.is_manual ? t('manual') : t('auto')}
@@ -559,7 +561,7 @@ export default function EmployeeDocsScreen() {
                                                 key={index}
                                                 fullData={emp}
                                                 atWork={true}
-                                                title={emp?.employee?.full_name}
+                                                title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                                 role={emp?.employee?.role?.name}
                                                 project={emp?.project?.name}
                                                 checkType={emp?.is_manual ? t('manual') : t('auto')}

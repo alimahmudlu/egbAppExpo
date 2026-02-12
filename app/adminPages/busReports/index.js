@@ -55,6 +55,21 @@ export default function ProjectItemScreen() {
             id: 6,
             name: 'Transit Additional',
             render: <Text>Transit Additional</Text>,
+        },
+        {
+            id: 7,
+            name: 'FMS',
+            render: <Text>FMS</Text>,
+        },
+        {
+            id: 8,
+            name: 'Airport',
+            render: <Text>Airport</Text>,
+        },
+        {
+            id: 9,
+            name: 'EGB buses',
+            render: <Text>EGB buses</Text>,
         }
     ]);
     const [filters, setFilters] = useState({})

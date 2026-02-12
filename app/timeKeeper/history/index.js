@@ -18,6 +18,7 @@ import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {useTranslation} from "react-i18next";
 import SgSectionProjectListItem from "@/components/sections/ProjectListItem/ProjectListItem";
 import SgCheckbox from "@/components/ui/Checkbox/Checkbox";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function EmployeeDocsScreen() {
     const {request} = useApi();
@@ -35,6 +36,7 @@ export default function EmployeeDocsScreen() {
     const {t} = useTranslation();
     const [activeTab, setActiveTab] = useState('checkIn');
     const [getDataStatus, setDataStatus] = useState(false)
+    const {selectedLanguage} = useLanguage();
 
     function getData(_filters = {}) {
         request({
@@ -208,7 +210,7 @@ export default function EmployeeDocsScreen() {
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
-                                            title={emp?.employee?.full_name}
+                                            title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
                                             project={emp?.project?.name}
                                             checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
@@ -257,7 +259,7 @@ export default function EmployeeDocsScreen() {
                                         <SgSectionEmployeeCard
                                             key={index}
                                             fullData={emp}
-                                            title={emp?.employee?.full_name}
+                                            title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                                             role={emp?.employee?.role?.name}
                                             project={emp?.project?.name}
                                             checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}

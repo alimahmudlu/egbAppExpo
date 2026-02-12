@@ -17,6 +17,7 @@ import SgSectionProjectListItem from "@/components/sections/ProjectListItem/Proj
 import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 import SgInput from "@/components/ui/Input/Input";
 import FilterIcon from "@/assets/images/filter.svg";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function TimeKeeperUserScreen() {
     const { request } = useApi();
@@ -29,6 +30,7 @@ export default function TimeKeeperUserScreen() {
     const {t} = useTranslation()
     const [page, setPage] = useState(1);
     const [getDataStatus, setDataStatus] = useState(false)
+    const {selectedLanguage} = useLanguage();
 
     function toggleFilterModal() {
         setFilterModal(!filterModal);
@@ -143,7 +145,7 @@ export default function TimeKeeperUserScreen() {
                     <SgSectionEmployeeCard
                         key={index}
                         fullData={emp}
-                        title={emp?.employee?.full_name}
+                        title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                         role={emp?.employee?.role?.name}
                         position={emp?.employee?.position}
                         checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}

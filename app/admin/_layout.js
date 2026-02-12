@@ -15,6 +15,8 @@ import OvertimeActiveIcon from "@/assets/images/overtime-active.svg";
 import OvertimeIcon from "@/assets/images/overtime.svg";
 import HistoryActiveIcon from "@/assets/images/history-active.svg";
 import HistoryIcon from "@/assets/images/history.svg";
+import BusActiveIcon from "@/assets/images/busActive.svg";
+import BusIcon from "@/assets/images/bus.svg";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function WorkerTabLayout() {
@@ -113,8 +115,8 @@ export default function WorkerTabLayout() {
                     title: t('tabBar__bus_schedules'),
                     tabBarLabel: t('tabBar__bus_schedules'),
                     headerTitle: t('tabBar__bus_schedules'),
-                    tabBarIcon: ({color, focused}) => focused ? <MenuActiveIcon width={20} height={20}/> :
-                        <MenuIcon width={20} height={20}/>
+                    tabBarIcon: ({color, focused}) => focused ? <BusActiveIcon width={20} height={20}/> :
+                        <BusIcon width={20} height={20}/>
                 }}
             />
             <Tabs.Screen

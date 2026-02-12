@@ -9,6 +9,7 @@ import {useApi} from "@/hooks/useApi";
 import SgTemplatePageHeader from "@/components/templates/PageHeader/PageHeader";
 import {useData} from "@/hooks/useData";
 import {useTranslation} from "react-i18next";
+import {useLanguage} from "@/hooks/useLanguage";
 
 export default function TimeKeeperUserScreen() {
     const { request } = useApi();
@@ -16,7 +17,8 @@ export default function TimeKeeperUserScreen() {
     const [employeeActivities, setEmployeeActivities] = useState([]);
     const {storeData} = useData();
     const {refreshKey} = useLocalSearchParams();
-    const {t} = useTranslation()
+    const {t} = useTranslation();
+    const {selectedLanguage} = useLanguage();
 
     useFocusEffect(useCallback(() => {
 request({
@@ -49,7 +51,7 @@ request({
                 <SgSectionEmployeeCard
                     key={index}
                     fullData={emp}
-                    title={emp?.employee?.full_name}
+                    title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
                     role={emp?.employee?.role?.name}
                     checkType={`${emp?.is_manual ? t('manual') : t('auto')} / ${emp.type === 3 ? t('overTime') : t('normal')}`}
                     position={emp?.employee?.position}
