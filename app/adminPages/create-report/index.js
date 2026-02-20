@@ -165,6 +165,10 @@ export default function ChiefMenuScreen() {
                 kefir: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.kefir,
                 sugar: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.sugar,
                 tea: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.tea,
+                spoon: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.spoon,
+                cup: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.cup,
+                salt: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.salt,
+                pepper: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.pepper,
             }
         })
     }, [storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]])
@@ -348,6 +352,46 @@ export default function ChiefMenuScreen() {
                                 value={data?.turnextras?.tea?.order || selectedRow?.tea?.order || ''}
                                 name='order'
                                 onChangeText={(e) => handleChange(e, 'tea', 'extras')}
+                                type='number'
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                placeholder={t('enterExtraPlasticSpoon')}
+                                label={t('extraPlasticSpoon')}
+                                value={data?.turnextras?.spoon?.order || selectedRow?.spoon?.order || ''}
+                                name='order'
+                                onChangeText={(e) => handleChange(e, 'spoon', 'extras')}
+                                type='number'
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                placeholder={t('enterExtraPlasticCup')}
+                                label={t('extraPlasticCup')}
+                                value={data?.turnextras?.cup?.order || selectedRow?.cup?.order || ''}
+                                name='order'
+                                onChangeText={(e) => handleChange(e, 'cup', 'extras')}
+                                type='number'
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                placeholder={t('enterExtraSalt')}
+                                label={t('extraSalt')}
+                                value={data?.turnextras?.salt?.order || selectedRow?.salt?.order || ''}
+                                name='order'
+                                onChangeText={(e) => handleChange(e, 'salt', 'extras')}
+                                type='number'
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                placeholder={t('enterExtraPepper')}
+                                label={t('extraPepper')}
+                                value={data?.turnextras?.pepper?.order || selectedRow?.pepper?.order || ''}
+                                name='order'
+                                onChangeText={(e) => handleChange(e, 'pepper', 'extras')}
                                 type='number'
                             />
                         </View>

@@ -8,6 +8,18 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                enterExtraPlasticSpoon: 'Enter Extra Plastic Spoon',
+                extraPlasticSpoon: 'Extra Plastic Spoon',
+
+                enterExtraPlasticCup: 'Enter Extra Plastic Cup',
+                extraPlasticCup: 'Extra Plastic Cup',
+
+                enterExtraSalt: 'Enter Extra Salt',
+                extraSalt: 'Extra Salt',
+
+                enterExtraPepper: 'Enter Extra Pepper',
+                extraPepper: 'Extra Pepper',
+
                 reports__statistics_Employees: 'Employees',
                 reports__statistics_Indirect_Employees: 'Indirect Employees',
                 reports__statistics_Direct_Employees: 'Direct Employees',
@@ -453,6 +465,18 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                enterExtraPlasticSpoon: 'Введите количество дополнительных пластиковых ложек',
+                extraPlasticSpoon: 'Дополнительная пластиковая ложка',
+
+                enterExtraPlasticCup: 'Введите количество дополнительных пластиковых стаканов',
+                extraPlasticCup: 'Дополнительный пластиковый стакан',
+
+                enterExtraSalt: 'Введите количество дополнительной соли',
+                extraSalt: 'Дополнительная соль',
+
+                enterExtraPepper: 'Введите количество дополнительного перца',
+                extraPepper: 'Дополнительный перец',
+
                 reports__statistics_Employees: 'Сотрудники',
                 reports__statistics_Indirect_Employees: 'Вспомогательный персонал',
                 reports__statistics_Direct_Employees: 'Основной персонал',
@@ -888,6 +912,19 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                enterExtraPlasticSpoon: 'Qo\'shimcha plastik qoshiq kiriting',
+                extraPlasticSpoon: 'Qo\'shimcha plastik qoshiq',
+
+                enterExtraPlasticCup: 'Qo\'shimcha plastik stakan kiriting',
+                extraPlasticCup: 'Qo\'shimcha plastik stakan',
+
+                enterExtraSalt: 'Qo\'shimcha tuz kiriting',
+                extraSalt: 'Qo\'shimcha tuz',
+
+                enterExtraPepper: 'Qo\'shimcha murch kiriting',
+                extraPepper: 'Qo\'shimcha murch',
+
+
                 reports__statistics_Employees: 'Xodimlar',
                 reports__statistics_Indirect_Employees: 'Yordamchi xodimlar',
                 reports__statistics_Direct_Employees: 'Asosiy xodimlar',
