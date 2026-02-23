@@ -11,7 +11,7 @@ export default {
         "userInterfaceStyle": "automatic",
         "newArchEnabled": true,
         ios: {
-            bundleIdentifier: "com.egb.egb2",
+            bundleIdentifier: "com.egb.egb",
             supportsTablet: true,
             config: {
                 googleMapsApiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
