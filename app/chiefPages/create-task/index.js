@@ -214,7 +214,6 @@ export default function TaskCreateScreen() {
                     name='point'
                     isInvalid={errors?.point}
                     onChangeText={handleChange}
-                    max={3}
                     min={0}
                 />
                 <SgDatePicker

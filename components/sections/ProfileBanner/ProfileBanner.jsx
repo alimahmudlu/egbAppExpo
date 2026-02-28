@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
+import {View, Text, TouchableOpacity, Pressable} from 'react-native';
 import styles from '@/components/sections/ProfileBanner/ProfileBanner.styles';
 import Vector from '@/assets/images/vector2.svg';
 import {useTranslation} from "react-i18next";

@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
-import DotsIcon from "../../../assets/images/dots-icon.svg";
+import {View, Text, TouchableOpacity, Pressable} from 'react-native';
+import {Image} from "expo-image";
 import styles from './TaskCard.styles';
 import stylesSm from './TaskCardSm.styles';
 import COLORS from '@/constants/colors';
 import SgPopup from '@/components/ui/Modal/Modal';
 import ClipboardIcon from "@/assets/images/clipboard-check.svg"
-import PencilIcon from "@/assets/images/pencil.svg"
 import TrashIcon from "@/assets/images/trash2.svg"
 import SgButton from '@/components/ui/Button/Button';
 import LogOutModalIcon from "@/assets/images/logout.svg";
@@ -14,7 +13,6 @@ import TaskRemovedIcon from "@/assets/images/taskRemove.svg";
 import CompleteModalIcon from "@/assets/images/CheckModal.svg";
 import CompletedModalIcon from "@/assets/images/CompletedIcon.svg";
 import {useRouter} from "expo-router";
-import ApiService from "@/services/ApiService";
 import {useAuth} from "@/hooks/useAuth";
 import SgTemplateUploadScreen from "@/components/templates/Upload/Upload";
 import SgSectionAddFile from "@/components/sections/AddFile/AddFile";

@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, Image, Pressable} from 'react-native';
+import {View, Text, Pressable} from 'react-native';
+import {Image} from "expo-image";
 import {FontAwesome} from '@expo/vector-icons';
 import styles from '@/components/sections/UserInfo/UserInfo.styles';
 import COLORS from '@/constants/colors';

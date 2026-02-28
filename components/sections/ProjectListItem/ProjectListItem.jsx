@@ -1,4 +1,5 @@
-import {View, Text, Image, Pressable} from 'react-native';
+import {View, Text, Pressable} from 'react-native';
+import {Image} from "expo-image";
 import styles from './ProjectListItem.styles';
 import RightIcon from '@/assets/images/chevron-right.svg';
 import {useRouter} from "expo-router";

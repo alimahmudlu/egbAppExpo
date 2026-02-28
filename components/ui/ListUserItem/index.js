@@ -1,4 +1,5 @@
-import {Image, Pressable, Text, View} from "react-native";
+import {Pressable, Text, View} from "react-native";
+import {Image} from "expo-image";
 import React from "react";
 import styles from "@/components/ui/ListUserItem/styles";
 
