@@ -284,7 +284,7 @@ export default function EmployeeDocsScreen() {
       url: '/chief/doc/list',
       method: 'get',
       params: {
-        replaced: filters?.replaced?.id
+        status: filters?.status?.id
       }
     }).then().catch(err => {
       // console.log(err);
