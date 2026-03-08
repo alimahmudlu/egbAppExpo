@@ -36,51 +36,6 @@ export default function ChiefMenuScreen() {
     const [projects, setProjects] = useState([]);
     const [camps, setCamps] = useState([]);
     const [tripTypeList, setTripTypeList] = useState([
-        {
-            id: 1,
-            name: 'Bus Main Day',
-            render: <Text>Bus Main Day</Text>,
-        },
-        {
-            id: 3,
-            name: 'Bus Main Night',
-            render: <Text>Bus Main Night</Text>,
-        },
-        {
-            id: 2,
-            name: 'Bus Additional',
-            render: <Text>Bus Additional</Text>,
-        },
-        {
-            id: 4,
-            name: 'Transit Main Day',
-            render: <Text>Transit Main Day</Text>,
-        },
-        {
-            id: 5,
-            name: 'Transit Main Night',
-            render: <Text>Transit Main Night</Text>,
-        },
-        {
-            id: 6,
-            name: 'Transit Additional',
-            render: <Text>Transit Additional</Text>,
-        },
-        {
-            id: 7,
-            name: 'FMS',
-            render: <Text>FMS</Text>,
-        },
-        {
-            id: 8,
-            name: 'Airport',
-            render: <Text>Airport</Text>,
-        },
-        {
-            id: 9,
-            name: 'EGB buses',
-            render: <Text>EGB buses</Text>,
-        }
     ]);
 
     function handleChange(e) {
@@ -146,8 +101,16 @@ export default function ChiefMenuScreen() {
             console.log(err);
         })
 
+        request({
+            url: '/admin/bus/types', method: 'get',
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        })
+
         return () => {
             setProjects([])
+            setTripTypeList([])
             setData({});
             console.log('Home tab lost focus');
         };
@@ -164,6 +127,14 @@ export default function ChiefMenuScreen() {
     useEffect(() => {
         setCamps(storeData?.cache?.[`GET:/admin/options/camps`]?.data)
     }, [storeData?.cache?.[`GET:/admin/options/camps`]])
+
+    useEffect(() => {
+        setTripTypeList((storeData?.cache?.[`GET:/admin/bus/types`]?.data || []).map(el => ({
+            id: el?.id,
+            name: el?.name,
+            render: <Text>{el?.name}</Text>,
+        })))
+    }, [storeData?.cache?.[`GET:/admin/bus/types`]])
 
 
     const addOtherCamp = () => {

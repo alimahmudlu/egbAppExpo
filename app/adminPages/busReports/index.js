@@ -28,48 +28,43 @@ export default function ProjectItemScreen() {
     const [tripTypeList, setTripTypeList] = useState([
         {
             id: 1,
-            name: 'Bus Main Day',
-            render: <Text>Bus Main Day</Text>,
+            name: 'EGB Bus Main Day',
+            render: <Text>EGB Bus Main Day</Text>,
         },
         {
             id: 3,
-            name: 'Bus Main Night',
-            render: <Text>Bus Main Night</Text>,
+            name: 'EGB Bus Main Night',
+            render: <Text>EGB Bus Main Night</Text>,
         },
         {
             id: 2,
-            name: 'Bus Additional',
-            render: <Text>Bus Additional</Text>,
+            name: 'EGB Bus Additional',
+            render: <Text>EGB Bus Additional</Text>,
         },
         {
             id: 4,
-            name: 'Transit Main Day',
-            render: <Text>Transit Main Day</Text>,
+            name: 'EGB Transit Main Day',
+            render: <Text>EGB Transit Main Day</Text>,
         },
         {
             id: 5,
-            name: 'Transit Main Night',
-            render: <Text>Transit Main Night</Text>,
+            name: 'EGB Transit Main Night',
+            render: <Text>EGB Transit Main Night</Text>,
         },
         {
             id: 6,
-            name: 'Transit Additional',
-            render: <Text>Transit Additional</Text>,
+            name: 'EGB Transit Additional',
+            render: <Text>EGB Transit Additional</Text>,
         },
         {
             id: 7,
-            name: 'FMS',
-            render: <Text>FMS</Text>,
+            name: 'EGB FMS',
+            render: <Text>EGB FMS</Text>,
         },
         {
             id: 8,
-            name: 'Airport',
-            render: <Text>Airport</Text>,
-        },
-        {
-            id: 9,
-            name: 'EGB buses',
-            render: <Text>EGB buses</Text>,
+            name: 'EGB Airport',
+            render: <Text>EGB Airport</Text>,
         }
     ]);
     const [filters, setFilters] = useState({})
