@@ -169,6 +169,8 @@ export default function ChiefMenuScreen() {
                 cup: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.cup,
                 salt: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.salt,
                 pepper: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.pepper,
+                suhur: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.suhur,
+                iftar: storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]?.data?.iftar,
             }
         })
     }, [storeData?.cache?.[`GET:/admin/food/projects/${data?.project?.id}`]])
@@ -392,6 +394,26 @@ export default function ChiefMenuScreen() {
                                 value={data?.turnextras?.pepper?.order || selectedRow?.pepper?.order || ''}
                                 name='order'
                                 onChangeText={(e) => handleChange(e, 'pepper', 'extras')}
+                                type='number'
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                placeholder={t('enterExtraSuhur')}
+                                label={t('extraSuhur')}
+                                value={data?.turnextras?.suhur?.order || selectedRow?.suhur?.order || ''}
+                                name='order'
+                                onChangeText={(e) => handleChange(e, 'suhur', 'extras')}
+                                type='number'
+                            />
+                        </View>
+                        <View>
+                            <SgInput
+                                placeholder={t('enterExtraIftar')}
+                                label={t('extraIftar')}
+                                value={data?.turnextras?.iftar?.order || selectedRow?.iftar?.order || ''}
+                                name='order'
+                                onChangeText={(e) => handleChange(e, 'iftar', 'extras')}
                                 type='number'
                             />
                         </View>

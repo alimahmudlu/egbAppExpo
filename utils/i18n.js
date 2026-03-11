@@ -20,6 +20,12 @@ i18n.use(initReactI18next).init({
                 enterExtraPepper: 'Enter Extra Pepper',
                 extraPepper: 'Extra Pepper',
 
+                enterExtraSuhur: 'Enter Extra Suhur',
+                extraSuhur: 'Extra Suhur',
+
+                enterExtraIftar: 'Enter Extra Iftar',
+                extraIftar: 'Extra Iftar',
+
                 reports__statistics_Employees: 'Employees',
                 reports__statistics_Indirect_Employees: 'Indirect Employees',
                 reports__statistics_Direct_Employees: 'Direct Employees',
@@ -477,6 +483,12 @@ i18n.use(initReactI18next).init({
                 enterExtraPepper: 'Введите количество дополнительного перца',
                 extraPepper: 'Дополнительный перец',
 
+                enterExtraSuhur: 'Введите количество дополнительного сухур',
+                extraSuhur: 'Дополнительный сухур',
+
+                enterExtraIftar: 'Введите дополнительный ифтар',
+                extraIftar: 'Дополнительный ифтар',
+
                 reports__statistics_Employees: 'Сотрудники',
                 reports__statistics_Indirect_Employees: 'Вспомогательный персонал',
                 reports__statistics_Direct_Employees: 'Основной персонал',
@@ -923,6 +935,12 @@ i18n.use(initReactI18next).init({
 
                 enterExtraPepper: 'Qo\'shimcha murch kiriting',
                 extraPepper: 'Qo\'shimcha murch',
+
+                enterExtraSuhur: 'Qo\'shimcha Suhurga kiring',
+                extraSuhur: 'Qo\'shimcha Suhur',
+
+                enterExtraIftar: 'Qo\'shimcha iftorga kiring',
+                extraIftar: 'Qo\'shimcha iftor',
 
 
                 reports__statistics_Employees: 'Xodimlar',

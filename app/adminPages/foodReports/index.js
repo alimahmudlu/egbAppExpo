@@ -41,7 +41,14 @@ export default function ProjectItemScreen() {
         5: t('ExtraBread'),
         6: t('ExtraKefir'),
         7: t('ExtraSugar'),
-        8: t('ExtraTea')
+        8: t('ExtraTea'),
+
+        9: t('extraPlasticSpoon'),
+        10: t('extraPlasticCup'),
+        11: t('extraSalt'),
+        12: t('extraPepper'),
+        13: t('extraSuhur'),
+        14: t('extraIftar')
     }
 
     function handleChangeReport(e) {
