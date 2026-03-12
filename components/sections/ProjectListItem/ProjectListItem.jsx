@@ -25,8 +25,7 @@ export default function SgSectionProjectListItem({ title, staffData = [], id, hr
       <View style={styles.rowWrapper}>
         <View style={styles.contentWrapper}>
           <Text style={styles.title}>{title}</Text>
-
-          <View style={styles.imageRow}>
+          {/*<View style={styles.imageRow}>
               {(staffData || []).length > 0 ?
                 <>
                     {(visibleImages || []).map((el, i) => {
@@ -66,8 +65,7 @@ export default function SgSectionProjectListItem({ title, staffData = [], id, hr
                   :
                   <Text style={{fontSize: 12, fontStyle: 'italic'}}>No staff</Text>
               }
-
-          </View>
+          </View>*/}
         </View>
 
         {href ?
