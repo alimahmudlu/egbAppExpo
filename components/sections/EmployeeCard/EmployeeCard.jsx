@@ -178,7 +178,7 @@ export default function SgSectionEmployeeCard(props) {
                 //         ...fullData,
                 //         complete_status: 1,
                 //         confirm_time: moment(),
-                //         review_time: moment(),
+                //         request_time: moment(),
                 //         timezone: moment.tz.guess(),
                 //         confirm_employee_id: user?.id,
                 //         status: 2
@@ -190,7 +190,7 @@ export default function SgSectionEmployeeCard(props) {
                 //     //     ...fullData,
                 //     //     complete_status: 1,
                 //     //     confirm_time: moment(),
-                //     //     review_time: moment(),
+                //     //     request_time: moment(),
                 //     //     timezone: moment.tz.guess(),
                 //     //     confirm_employee_id: user?.id,
                 //     //     status: 2
@@ -203,7 +203,7 @@ export default function SgSectionEmployeeCard(props) {
                 //         ...fullData,
                 //         activity_id: fullData?.id,
                 //         confirm_time: moment(),
-                //         review_time: moment(),
+                //         request_time: moment(),
                 //         timezone: moment.tz.guess(),
                 //         confirm_employee_id: user?.id,
                 //         status: 2,
@@ -250,7 +250,7 @@ export default function SgSectionEmployeeCard(props) {
                 // //         ...fullData,
                 // //         complete_status: 0,
                 // //         confirm_time: moment(),
-                // //         review_time: moment(),
+                // //         request_time: moment(),
                 // //         timezone: moment.tz.guess(),
                 // //         confirm_employee_id: user?.id,
                 // //         status: 2
@@ -262,7 +262,7 @@ export default function SgSectionEmployeeCard(props) {
                 // //     //     ...fullData,
                 // //     //     complete_status: 1,
                 // //     //     confirm_time: moment(),
-                // //     //     review_time: moment(),
+                // //     //     request_time: moment(),
                 // //     //     timezone: moment.tz.guess(),
                 // //     //     confirm_employee_id: user?.id,
                 // //     //     status: 2
@@ -275,7 +275,7 @@ export default function SgSectionEmployeeCard(props) {
                 //         ...fullData,
                 //         complete_status: 1,
                 //         confirm_time: moment(),
-                //         review_time: moment(),
+                //         request_time: moment(),
                 //         timezone: moment.tz.guess(),
                 //         confirm_employee_id: user?.id,
                 //         status: 2
@@ -288,7 +288,7 @@ export default function SgSectionEmployeeCard(props) {
                 //         ...fullData,
                 //         activity_id: fullData?.id,
                 //         confirm_time: moment(),
-                //         review_time: moment(),
+                //         request_time: moment(),
                 //         timezone: moment.tz.guess(),
                 //         confirm_employee_id: user?.id,
                 //         status: 2,

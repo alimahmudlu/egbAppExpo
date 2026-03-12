@@ -226,7 +226,7 @@ export default function EmployeeDashboardScreen() {
             <SgCheckInOutCard
                 type="checkin"
                 title={t('checkIn')}
-                time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
+                time={checkIn?.status !== 3 ? (checkIn?.request_time ? moment.tz(checkIn?.request_time, checkIn?.employee_timezone).format('HH:mm') : '') : ''}
                 buttonLabel={t('checkIn')}
                 status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
                 mapData={{
@@ -239,7 +239,7 @@ export default function EmployeeDashboardScreen() {
             <SgCheckInOutCard
                 type="checkout"
                 title={t('checkOut')}
-                time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
+                time={checkOut?.status !== 3 ? (checkOut?.request_time ? moment.tz(checkOut?.request_time, checkOut?.employee_timezone).format('HH:mm') : '') : ''}
                 buttonLabel={t('checkOut')}
                 status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
                 checkInStatus={checkIn?.status === 2}
@@ -256,7 +256,7 @@ export default function EmployeeDashboardScreen() {
         <SgCard
             title={t('workTime')}
             time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
-                startTime={checkIn?.review_time ? checkIn?.review_time : null}/>}
+                startTime={checkIn?.request_time ? checkIn?.request_time : null}/>}
             icon={Clock}
         />
 

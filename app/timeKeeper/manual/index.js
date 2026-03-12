@@ -145,7 +145,7 @@ export default function EmployeeDocsScreen() {
                         // title={emp?.full_name}
                         title={selectedLanguage?.id === 'en' ? emp?.full_name : emp?.full_name_russian || emp?.full_name}
                         role={emp?.role?.name}
-                        timeRaw={emp?.checkin?.review_time || emp?.overtimecheckin?.request_time}
+                        timeRaw={emp?.checkin?.request_time || emp?.overtimecheckin?.request_time}
                         time={emp?.checkin?.request_time ? moment(emp?.checkin?.request_time).format('MM-DD-YYYY HH:mm') : (emp?.overtimecheckin?.request_time ? moment(emp?.overtimecheckin?.request_time).format('MM-DD-YYYY HH:mm') : '')}
                         image={emp?.image}
                         editable={true}

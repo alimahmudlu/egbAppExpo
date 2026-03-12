@@ -171,7 +171,7 @@ export default function EmployeeDashboardScreen() {
             {/*{(*/}
             {/*    // checkIn?.status === 2 &&*/}
             {/*    // (checkOut?.status && checkOut?.status !== 0) &&*/}
-            {/*    // moment.duration(moment().diff(checkIn?.review_time)).asHours() < 24 &&*/}
+            {/*    // moment.duration(moment().diff(checkIn?.request_time)).asHours() < 24 &&*/}
             {/*    moment(moment(), "HH:mm").isBetween(moment("09:00", "HH:mm"), moment("11:59", "HH:mm"))*/}
             {/*) ?*/}
                 <SgCheckInOutGroup>
@@ -179,7 +179,7 @@ export default function EmployeeDashboardScreen() {
                         employeeType={'admin'}
                         type="overTime"
                         title={t('overTime')}
-                        time={overTime?.status !== 3 ? (overTime?.review_time ? moment.tz(overTime?.review_time, overTime?.reviewer_timezone).format('HH:mm') : '') : ''}
+                        time={overTime?.status !== 3 ? (overTime?.request_time ? moment.tz(overTime?.request_time, overTime?.employee_timezone).format('HH:mm') : '') : ''}
                         buttonLabel={t('overTime')}
                         status={overTime?.status} // 0: not checked in, 1: waiting, 2: checked in
                         mapData={{
@@ -194,7 +194,7 @@ export default function EmployeeDashboardScreen() {
                         employeeType={'admin'}
                         type="overTimeOut"
                         title={t('overTimeOut')}
-                        time={checkOut?.status !== 3 ? (overTimeOut?.review_time ? moment.tz(overTimeOut?.review_time, overTimeOut?.reviewer_timezone).format('HH:mm') : '') : ''}
+                        time={checkOut?.status !== 3 ? (overTimeOut?.request_time ? moment.tz(overTimeOut?.request_time, overTimeOut?.employee_timezone).format('HH:mm') : '') : ''}
                         buttonLabel={t('overTimeOut')}
                         status={overTimeOut?.status} // 0: not checked in, 1: waiting, 2: checked in
                         checkInStatus={overTime?.status === 2}
@@ -213,7 +213,7 @@ export default function EmployeeDashboardScreen() {
             <SgCard
                 title={t('workTime')}
                 time={checkOut?.completed_status ? checkIn?.work_time : <SgUtilsTimeDifference
-                    startTime={overTime?.review_time ? moment(overTime?.review_time).format('') : null}/>}
+                    startTime={overTime?.request_time ? moment(overTime?.request_time).format('') : null}/>}
                 icon={Clock}
             />
 

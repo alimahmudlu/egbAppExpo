@@ -409,7 +409,7 @@ export default function EmployeeDashboardScreen() {
                     employeeType={'timekeeper'}
                     type="checkin"
                     title={t('checkIn')}
-                    time={checkIn?.status !== 3 ? (checkIn?.review_time ? moment.tz(checkIn?.review_time, checkIn?.reviewer_timezone).format('HH:mm') : '') : ''}
+                    time={checkIn?.status !== 3 ? (checkIn?.request_time ? moment.tz(checkIn?.request_time, checkIn?.employee_timezone).format('HH:mm') : '') : ''}
                     buttonLabel={t('checkIn')}
                     status={checkIn?.status} // 0: not checked in, 1: waiting, 2: checked in
                     mapData={{
@@ -423,7 +423,7 @@ export default function EmployeeDashboardScreen() {
                     employeeType={'timekeeper'}
                     type="checkout"
                     title={t('checkOut')}
-                    time={checkOut?.status !== 3 ? (checkOut?.review_time ? moment.tz(checkOut?.review_time, checkOut?.reviewer_timezone).format('HH:mm') : '') : ''}
+                    time={checkOut?.status !== 3 ? (checkOut?.request_time ? moment.tz(checkOut?.request_time, checkOut?.employee_timezone).format('HH:mm') : '') : ''}
                     buttonLabel={t('checkOut')}
                     status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
                     checkInStatus={checkIn?.status === 2}
@@ -442,7 +442,7 @@ export default function EmployeeDashboardScreen() {
                 time={checkOut?.completed_status ?
                     checkIn?.work_time :
                     <SgUtilsTimeDifference
-                        startTime={checkIn?.review_time ? moment(checkIn?.review_time).format('') : null}
+                        startTime={checkIn?.request_time ? moment(checkIn?.request_time).format('') : null}
                     />
                 }
                 icon={Clock}
