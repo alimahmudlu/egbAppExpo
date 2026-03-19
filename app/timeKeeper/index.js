@@ -428,6 +428,7 @@ export default function EmployeeDashboardScreen() {
                     status={checkOut?.status} // 0: not checked in, 1: waiting, 2: checked in
                     checkInStatus={checkIn?.status === 2}
                     checkInId={checkIn?.id}
+                    check_in_data={checkIn}
                     mapData={{
                         checkOut: {
                             latitude: checkOut?.latitude || 0, longitude: checkOut?.longitude || 0,

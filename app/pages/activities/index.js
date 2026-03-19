@@ -155,9 +155,9 @@ export default function TimeKeeperUserScreen() {
     }
 
     const RenderItem = ({ item }) => (
-        <View style={styles.card}>
+        <View style={[styles.card, item?.activity_status_key === 'activitySick' ? styles.card2 : '']}>
             <View style={styles.center}>
-                <Text style={styles.badge2}>{t(item?.activity_status_key)}</Text>
+                <Text style={[styles.badge2, item?.activity_status_key === 'activitySick' ? styles.badge3 : '']}>{t(item?.activity_status_key)}</Text>
             </View>
 
             <View style={styles.rowBetween}>
@@ -497,6 +497,11 @@ const styles = StyleSheet.create({
         elevation: 3,
         gap: 16
     },
+    card2:
+        {
+            borderStyle: "dashed",
+            borderColor: COLORS.warning_600,
+        },
     rowBetween: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -549,6 +554,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: "700",
         color: "#1f2937", // gray-800
+    },
+    badge3: {
+        backgroundColor: COLORS.warning_600,
+        color: "#FFFFFF", // gray-800
     },
 
 

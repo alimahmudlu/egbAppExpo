@@ -96,7 +96,7 @@ export default function SgSectionDatePicker(props) {
     const {value, onChange, userMode, firstShow} = props;
 
     const [date, setDate] = useState(value);
-    const [mode, setMode] = useState('date');
+    const [mode, setMode] = useState(userMode !== 'time' ? 'date' : 'time');
     const [show, setShow] = useState(firstShow);
 
     const handleChange = (event, selectedDate) => {

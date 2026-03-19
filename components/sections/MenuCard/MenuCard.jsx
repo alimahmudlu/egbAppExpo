@@ -68,7 +68,7 @@ export default function SgSectionMenuCard({ extraItems = [] }) {
                             <View style={styles.iconContainer}>
                                 <DocsIcon width={20} height={20} />
                             </View>
-                            <Text style={styles.title}>{t('tabBar__myDocs')}-{`/${rolePath}/docs`}</Text>
+                            <Text style={styles.title}>{t('tabBar__myDocs')}</Text>
                         </View>
                         <RightIcon width={20} height={20} />
                     </TouchableOpacity>

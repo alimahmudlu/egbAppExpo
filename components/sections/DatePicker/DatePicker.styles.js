@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 32,
     gap: 12,
+    // backgroundColor: COLORS.blue_50,
   },
   header: {
     flexDirection: 'row',

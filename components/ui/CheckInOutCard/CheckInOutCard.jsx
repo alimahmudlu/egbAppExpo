@@ -19,6 +19,7 @@ import SgRadio from "@/components/ui/Radio/Radio";
 import InfoCircleModalIcon from "@/assets/images/infoCircleModal.svg";
 import SgCard from "@/components/ui/Card/Card";
 import {useLanguage} from "@/hooks/useLanguage";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 
 export default function SgCheckInOutCard(props) {
     const {request} = useApi();
@@ -32,7 +33,8 @@ export default function SgCheckInOutCard(props) {
         checkInStatus = undefined,
         checkInId = undefined,
         reviewer,
-        employeeType = 'employee'
+        employeeType = 'employee',
+        check_in_data
     } = props;
 
 
@@ -47,6 +49,7 @@ export default function SgCheckInOutCard(props) {
     const [overTimeOutData, setOverTimeOutData] = useState({})
     const [buttonStatus, setButtonStatus] = useState(false)
     const [confirmType, setConfirmType] = useState(1)
+    const [workTime, setWorkTime] = useState(moment('2020-01-01 00:00:00'))
 
     const isCheckIn = type === 'checkin';
     const isCheckOut = type === 'checkout';
@@ -60,6 +63,21 @@ export default function SgCheckInOutCard(props) {
     const { selectedLanguage } = useLanguage();
     const isSubmitting = useRef(false);
 
+    useEffect(() => {
+        const start = moment(check_in_data?.request_time);
+        const end = moment();
+
+        const duration = moment.duration(end.diff(start));
+
+        const hours = Math.floor(duration.asHours());
+        const minutes = duration.minutes();
+
+        const formattedDiff =
+            String(hours).padStart(2, '0') + ":" +
+            String(minutes).padStart(2, '0');
+
+        setWorkTime(`2020-01-01 ${formattedDiff}:00`)
+    }, [check_in_data])
 
     function toggleRejectInfoModal(reject_reason) {
         setRejectInfoData(reject_reason || {})
@@ -234,7 +252,8 @@ export default function SgCheckInOutCard(props) {
                 latitude: Number(checkOutData?.latitude),
                 longitude: Number(checkOutData?.longitude),
                 activity_id: checkInId,
-                confirm_type: confirmType
+                confirm_type: confirmType,
+                work_time: confirmType === 2 ? moment(workTime).format('HH:mm') : null,
             }
         }).then(res => {
             setButtonStatus(false)
@@ -781,65 +800,80 @@ export default function SgCheckInOutCard(props) {
             >
                 {employeeType === 'timekeeper' ?
                     <View>
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            key={1}
-                            onPress={() => handleChangeConfirmType(1)}
-                            style={[
-                                styles.item,
-                                confirmType === 1 && styles.selectedItem
-                            ]}
-                        >
-                            <SgRadio selected={confirmType === 1} />
-                            <View>
-                                <Text style={styles.itemTitle}>Full Time</Text>
-                            </View>
-                        </TouchableOpacity>
-                        {moment().tz("Europe/Moscow").weekday() === 7 ?
+                        <View>
                             <TouchableOpacity
                                 activeOpacity={1}
-                                key={4}
-                                onPress={() => handleChangeConfirmType(4)}
+                                key={1}
+                                onPress={() => handleChangeConfirmType(1)}
                                 style={[
                                     styles.item,
-                                    confirmType === 4 && styles.selectedItem
+                                    confirmType === 1 && styles.selectedItem
                                 ]}
                             >
-                                <SgRadio selected={confirmType === 4} />
-                                <View style={styles.content}>
-                                    <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                <SgRadio selected={confirmType === 1} />
+                                <View>
+                                    <Text style={styles.itemTitle}>Full Time</Text>
                                 </View>
                             </TouchableOpacity>
+                            {moment().tz("Europe/Moscow").weekday() === 7 ?
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    key={4}
+                                    onPress={() => handleChangeConfirmType(4)}
+                                    style={[
+                                        styles.item,
+                                        confirmType === 4 && styles.selectedItem
+                                    ]}
+                                >
+                                    <SgRadio selected={confirmType === 4} />
+                                    <View style={styles.content}>
+                                        <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                : null
+                            }
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={2}
+                                onPress={() => handleChangeConfirmType(2)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 2 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 2} />
+                                <View>
+                                    <Text style={styles.itemTitle}>Actual Time</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={3}
+                                onPress={() => handleChangeConfirmType(3)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 3 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 3} />
+                                <View>
+                                    <Text style={styles.itemTitle}>No Time</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        {confirmType === 2 ?
+                            <View style={{marginTop: 8}}>
+                                <SgDatePicker
+                                    label={t("work_time")}
+                                    placeholder={t('enter_work_time')}
+                                    value={workTime}
+                                    name='work_time'
+                                    mode='time'
+                                    onChangeText={(e) => setWorkTime(e.value)}
+                                />
+                            </View>
                             : null
                         }
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            key={2}
-                            onPress={() => handleChangeConfirmType(2)}
-                            style={[
-                                styles.item,
-                                confirmType === 2 && styles.selectedItem
-                            ]}
-                        >
-                            <SgRadio selected={confirmType === 2} />
-                            <View>
-                                <Text style={styles.itemTitle}>Actual Time</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            key={3}
-                            onPress={() => handleChangeConfirmType(3)}
-                            style={[
-                                styles.item,
-                                confirmType === 3 && styles.selectedItem
-                            ]}
-                        >
-                            <SgRadio selected={confirmType === 3} />
-                            <View>
-                                <Text style={styles.itemTitle}>No Time</Text>
-                            </View>
-                        </TouchableOpacity>
                     </View>
                     : null
                 }

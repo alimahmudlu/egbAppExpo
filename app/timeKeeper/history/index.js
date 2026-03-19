@@ -24,9 +24,11 @@ export default function EmployeeDocsScreen() {
     const {request} = useApi();
     const [employeeActivitiesCheckIn, setEmployeeActivitiesCheckIn] = useState({});
     const [employeeActivitiesCheckOut, setEmployeeActivitiesCheckOut] = useState({});
+    const [employeeActivitiesSick, setEmployeeActivitiesSick] = useState({});
 
     const [page, setPage] = useState(1);
     const [pageCheckOut, setPageCheckOut] = useState(1);
+    const [pageSick, setPageSick] = useState(1);
 
     const [projectsList, setProjectsList] = useState([]);
     const [filters, setFilters] = useState({})
@@ -66,6 +68,20 @@ export default function EmployeeDocsScreen() {
         });
     }
 
+    function getDataSick(_filters = {}) {
+        request({
+            url: '/timekeeper/history/list/sick',
+            method: 'get',
+            params: {
+                ..._filters,
+                page: pageSick,
+                limit: 10
+            }
+        }).then().catch(err => {
+            // console.log(err, 'apiservice control err')
+        });
+    }
+
     function toggleFilterModal() {
         setFilterModal(!filterModal);
     }
@@ -81,12 +97,14 @@ export default function EmployeeDocsScreen() {
     function handleFilters() {
         setPage(1)
         setPageCheckOut(1)
+        setPageSick(1)
         setDataStatus(!getDataStatus)
     }
 
     useEffect(() => {
         setPage(1)
         setPageCheckOut(1)
+        setPageSick(1)
     }, [filters?.full_name])
 
     useEffect(() => {
@@ -100,6 +118,12 @@ export default function EmployeeDocsScreen() {
             getDataCheckOut({...filters, project: filters?.project?.id, checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id})
         }
     }, [pageCheckOut, filters?.full_name, getDataStatus])
+
+    useEffect(() => {
+        if (pageSick) {
+            getDataSick({...filters, project: filters?.project?.id, checkStatus: filters?.checkStatus?.id, checkType: filters?.checkType?.id})
+        }
+    }, [pageSick, filters?.full_name, getDataStatus])
 
     useFocusEffect(useCallback(() => {
         setPage(1)
@@ -127,8 +151,10 @@ export default function EmployeeDocsScreen() {
             setDataStatus(!getDataStatus)
             setEmployeeActivitiesCheckIn({data: []})
             setEmployeeActivitiesCheckOut({data: []})
+            setEmployeeActivitiesSick({data: []})
             updateData(`GET:/timekeeper/history/list/checkin`, {data: []})
             updateData(`GET:/timekeeper/history/list/checkout`, {data: []})
+            updateData(`GET:/timekeeper/history/list/sick`, {data: []})
         };
     }, [refreshKey]));
 
@@ -162,12 +188,31 @@ export default function EmployeeDocsScreen() {
         })
     }, [storeData?.cache?.[`GET:/timekeeper/history/list/checkout`]]);
 
+    useEffect(() => {
+        setEmployeeActivitiesSick((prevState) => {
+            if (pageSick === 1) {
+                return {
+                    ...storeData?.cache?.[`GET:/timekeeper/history/list/sick`]?.data || {}
+                }
+            } else {
+                return {
+                    ...(storeData?.cache?.[`GET:/timekeeper/history/list/sick`]?.data || {}),
+                    data: [...prevState?.data || [], ...((storeData?.cache?.[`GET:/timekeeper/history/list/sick`]?.data || {})?.data || [])]
+                }
+            }
+        })
+    }, [storeData?.cache?.[`GET:/timekeeper/history/list/sick`]]);
+
     function handleMoreCheckIn() {
         setPage(page + 1);
     }
 
     function handleMoreCheckOut() {
         setPageCheckOut(pageCheckOut + 1);
+    }
+
+    function handleMoreSick() {
+        setPageSick(pageCheckOut + 1);
     }
 
 
@@ -189,6 +234,7 @@ export default function EmployeeDocsScreen() {
                 tabs={[
                     {label: t('checkIn'), id: 'checkIn', onClick: setActiveTab},
                     {label: t('checkOut'), id: 'checkOut', onClick: setActiveTab},
+                    {label: t('sick'), id: 'sick', onClick: setActiveTab},
                 ]}
                 tabContent={[
                     {
@@ -287,6 +333,55 @@ export default function EmployeeDocsScreen() {
                             </>
                         ),
                         id: 'checkOut'
+                    },
+                    {
+                        element: (
+                            // <></>
+                            <>
+                                <View>
+                                    <View style={{flex: 1}}>
+                                        <SgInput
+                                            label={t('employeeName')}
+                                            placeholder={t('employeeName_placeholder')}
+                                            value={filters?.full_name}
+                                            name='full_name'
+                                            onChangeText={handleChange}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={{gap: 8}}>
+                                    {((employeeActivitiesSick || {}).data || [])?.map((emp, index) => (
+                                        <SgSectionEmployeeCard
+                                            key={index}
+                                            fullData={emp}
+                                            title={selectedLanguage?.id === 'en' ? emp?.employee?.full_name : emp?.employee?.full_name_russian || emp?.employee?.full_name}
+                                            role={emp?.employee?.role?.name}
+                                            project={emp?.project?.name}
+                                            checkType={t('sick')}
+                                            time={moment(emp.request_time).format('MM-DD-YYYY HH:mm')}
+                                            image={emp?.employee?.image}
+                                            editable={false}
+                                            status={emp.status}
+                                            reason={emp.reject_reason}
+                                        />
+                                    ))}
+
+                                    {((employeeActivitiesSick || {}).total || 0) > page * 10 ?
+                                        <View style={{marginTop: 16}}>
+                                            <SgButton
+                                                onPress={handleMoreSick}
+                                                bgColor={COLORS.primary}
+                                                color={COLORS.white}
+                                            >
+                                                {t('loadMore')}
+                                            </SgButton>
+                                        </View>
+                                        : null
+                                    }
+                                </View>
+                            </>
+                        ),
+                        id: 'sick'
                     }
                 ]}
             />

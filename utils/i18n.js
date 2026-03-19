@@ -8,6 +8,11 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                SickReport: "Sick Report",
+                work_time: "Work Time",
+                enter_work_time: "Enter Work Time",
+                activitySick: "Sick Report",
+
                 enterExtraPlasticSpoon: 'Enter Extra Plastic Spoon',
                 extraPlasticSpoon: 'Extra Plastic Spoon',
 
@@ -471,6 +476,11 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                SickReport: "Отчет о болезни",
+                work_time: "Рабочее время",
+                enter_work_time: "Введите рабочее время",
+                activitySick: "Отчет о болезни",
+
                 enterExtraPlasticSpoon: 'Введите количество дополнительных пластиковых ложек',
                 extraPlasticSpoon: 'Дополнительная пластиковая ложка',
 
@@ -924,6 +934,11 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                SickReport: "Kasallik haqida hisobot",
+                work_time: "Ish vaqti",
+                enter_work_time: "Ish vaqtini kiriting",
+                activitySick: "Kasallik haqida hisobot",
+
                 enterExtraPlasticSpoon: 'Qo\'shimcha plastik qoshiq kiriting',
                 extraPlasticSpoon: 'Qo\'shimcha plastik qoshiq',
 

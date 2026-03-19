@@ -24,6 +24,8 @@ import {useApi} from "@/hooks/useApi";
 import * as Linking from "expo-linking";
 import {useTranslation} from "react-i18next";
 import SgRadio from "@/components/ui/Radio/Radio";
+import SgInput from "@/components/ui/Input/Input";
+import SgDatePicker from "@/components/ui/DatePicker/DatePicker";
 
 
 export default function SgSectionEmployeeCard(props) {
@@ -39,19 +41,87 @@ export default function SgSectionEmployeeCard(props) {
     const { insertData, changeRowData, changeAddRowData, storeData, removeRowFromPaginationData } = useData();
     const {request} = useApi();
     const [clickType, setClickType] = useState(null)
+    const [workTime, setWorkTime] = useState(moment('2020-01-01 00:00:00'))
     const [openSettingsModal, setOpenSettingsModal] = useState(false)
     const {t} = useTranslation();
     const [buttonStatus, setButtonStatus] = useState(false);
     const [confirmType, setConfirmType] = useState(1);
     const [rejectInfoModal, setRejectInfoModal] = useState(false);
 
+    const [sickReportModal, setSickReportModal] = useState(false);
+    const [sickReason, setSickReason] = useState('');
+
+    function toggleSickReportModal() {
+        setSickReportModal(!sickReportModal);
+        setUserOperationModal(false)
+    }
+
+    function handleSubmitSickReport() {
+        request({
+            url: '/timekeeper/manual/sick', method: 'post', data: {
+                employee_id: fullData?.id,
+                reason: sickReason || '',
+                confirm_time: moment(),
+                timezone: moment.tz.guess(),
+            }
+        }).then(res => {
+            console.log('red', res)
+            setButtonStatus(false)
+            if (res.success) {
+                removeRowFromPaginationData(`GET:/timekeeper/manual/list`, fullData)
+            } else {
+                // console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
+            }
+
+        }).catch(err => {
+            setButtonStatus(false)
+            console.log(err, 'apiservice control err aaaa')
+        });
+    }
+
     function toggleRejectInfoModal() {
         setRejectInfoModal(!rejectInfoModal);
     }
 
+    useEffect(() => {
+        if (atWork) {
+            const start = moment(fullData?.request_time);
+            const end = moment();
+
+            const duration = moment.duration(end.diff(start));
+
+            const hours = Math.floor(duration.asHours());
+            const minutes = duration.minutes();
+
+            const formattedDiff =
+                String(hours).padStart(2, '0') + ":" +
+                String(minutes).padStart(2, '0');
+
+            setWorkTime(`2020-01-01 ${formattedDiff}:00`)
+        }
+        else {
+            const start = moment(fullData?.check_in_data?.request_time);
+            const end = moment(fullData.request_time);
+
+            const duration = moment.duration(end.diff(start));
+
+            const hours = Math.floor(duration.asHours());
+            const minutes = duration.minutes();
+
+            const formattedDiff =
+                String(hours).padStart(2, '0') + ":" +
+                String(minutes).padStart(2, '0');
+
+            setWorkTime(`2020-01-01 ${formattedDiff}:00`)
+        }
+    }, [fullData, userOperationModal])
+
 
     function toggleUserOperationModal() {
         if (editable || (isManualCheckoutAvailable() && atWork) || (overTime && atWork)) {
+            if (userOperationModal) {
+                setClickType(null);
+            }
             setUserOperationModal(status === 1 ? false : !userOperationModal);
         } else {
             router.push(`/timeKeeperPages/users/${fullData?.employee?.id}`)
@@ -160,7 +230,8 @@ export default function SgSectionEmployeeCard(props) {
             timezone: moment.tz.guess(),
             activity_id: fullData?.id,
             type: fullData?.type,
-            confirm_type: fullData?.type === 2 ? confirmType : null
+            confirm_type: fullData?.type === 2 ? confirmType : null,
+            work_time: (fullData?.type === 2 && confirmType === 2) ? moment(workTime).format('HH:mm') : null,
         }, {
             headers: {
                 'authorization': accessToken || ''
@@ -438,8 +509,6 @@ export default function SgSectionEmployeeCard(props) {
         setConfirmType(type)
     }
 
-    console.log(moment().tz("Europe/Moscow").weekday(), 'weekday')
-
     useEffect(() => {
         setConfirmType(1)
     }, [userOperationModal]);
@@ -618,11 +687,12 @@ export default function SgSectionEmployeeCard(props) {
                                 </View>
                                 :
                                 <View style={styles.modalGroup}>
+
                                     <View style={{flexDirection: 'row', gap: 12, alignItems: 'stretch'}}>
                                         <View style={{flex: 1,}}>
                                             <SgSectionStatusCard
-                                                title={fullData?.type === 1 ? t('checkIn') : (fullData?.type === 3 ? t('overTime') : t('checkOut'))}
-                                                time={time}
+                                                title={fullData?.type === 1 ? t('checkIn') : (fullData?.type === 3 ? t('overTime') : t('checkIn'))}
+                                                time={fullData?.check_in_data?.request_time ? moment(fullData?.check_in_data?.request_time).format('MM-DD-YYYY HH:mm') : null}
                                                 icon={<LogIn width={20} height={20}/>}
                                             />
                                         </View>
@@ -644,107 +714,134 @@ export default function SgSectionEmployeeCard(props) {
                     {/*{((manual && !fullData?.checkout?.latitude && fullData?.checkin?.latitude) || (isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?*/}
                     {((((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) || ((isManualOverTimeCheckoutAvailable() && atWork) || fullData?.type === 4)) && clickType !== 'reject') ?
                         <View>
-                            <TouchableOpacity
-                                activeOpacity={1}
-                                key={1}
-                                onPress={() => handleChangeConfirmType(1)}
-                                style={[
-                                    styles.item,
-                                    confirmType === 1 && styles.selectedItem
-                                ]}
-                            >
-                                <SgRadio selected={confirmType === 1} />
-                                <View style={styles.content}>
-                                    <Text style={styles.title}>Full Time</Text>
-                                </View>
-                            </TouchableOpacity>
-                            {moment().tz("Europe/Moscow").weekday() === 7 ?
+                            <View>
                                 <TouchableOpacity
                                     activeOpacity={1}
-                                    key={4}
-                                    onPress={() => handleChangeConfirmType(4)}
+                                    key={1}
+                                    onPress={() => handleChangeConfirmType(1)}
                                     style={[
                                         styles.item,
-                                        confirmType === 4 && styles.selectedItem
+                                        confirmType === 1 && styles.selectedItem
                                     ]}
                                 >
-                                    <SgRadio selected={confirmType === 4} />
+                                    <SgRadio selected={confirmType === 1} />
                                     <View style={styles.content}>
-                                        <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                        <Text style={styles.title}>Full Time</Text>
                                     </View>
                                 </TouchableOpacity>
+                                {moment().tz("Europe/Moscow").weekday() === 7 ?
+                                    <TouchableOpacity
+                                        activeOpacity={1}
+                                        key={4}
+                                        onPress={() => handleChangeConfirmType(4)}
+                                        style={[
+                                            styles.item,
+                                            confirmType === 4 && styles.selectedItem
+                                        ]}
+                                    >
+                                        <SgRadio selected={confirmType === 4} />
+                                        <View style={styles.content}>
+                                            <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    : null
+                                }
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    key={2}
+                                    onPress={() => handleChangeConfirmType(2)}
+                                    style={[
+                                        styles.item,
+                                        confirmType === 2 && styles.selectedItem
+                                    ]}
+                                >
+                                    <SgRadio selected={confirmType === 2} />
+                                    <View style={styles.content}>
+                                        <Text style={styles.title}>Actual Time</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    key={3}
+                                    onPress={() => handleChangeConfirmType(3)}
+                                    style={[
+                                        styles.item,
+                                        confirmType === 3 && styles.selectedItem
+                                    ]}
+                                >
+                                    <SgRadio selected={confirmType === 3} />
+                                    <View style={styles.content}>
+                                        <Text style={styles.title}>No Time</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            {confirmType === 2 ?
+                                <View style={{marginTop: 8}}>
+                                    <SgDatePicker
+                                        label={t("work_time")}
+                                        placeholder={t('enter_work_time')}
+                                        value={workTime}
+                                        name='work_time'
+                                        mode='time'
+                                        onChangeText={(e) => setWorkTime(e.value)}
+                                    />
+                                </View>
                                 : null
                             }
-                            <TouchableOpacity
-                                activeOpacity={1}
-                                key={2}
-                                onPress={() => handleChangeConfirmType(2)}
-                                style={[
-                                    styles.item,
-                                    confirmType === 2 && styles.selectedItem
-                                ]}
-                            >
-                                <SgRadio selected={confirmType === 2} />
-                                <View style={styles.content}>
-                                    <Text style={styles.title}>Actual Time</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                activeOpacity={1}
-                                key={3}
-                                onPress={() => handleChangeConfirmType(3)}
-                                style={[
-                                    styles.item,
-                                    confirmType === 3 && styles.selectedItem
-                                ]}
-                            >
-                                <SgRadio selected={confirmType === 3} />
-                                <View style={styles.content}>
-                                    <Text style={styles.title}>No Time</Text>
-                                </View>
-                            </TouchableOpacity>
                         </View>
                         : null
                     }
                     <View style={styles.modalGroup}>
                         {manual ?
-                            <View style={styles.modalGroupButtons}>
-                                {(!fullData?.checkin?.latitude && !fullData?.overtimecheckin?.latitude) ?
-                                    <>
-                                        <SgButton
-                                            disabled={buttonStatus}
-                                            color={COLORS.white}
-                                            bgColor={COLORS.brand_600}
-                                            onPress={() => handleCheckInRequest('checkin')}
-                                        >
-                                            {t('checkIn')}
-                                        </SgButton>
-
-                                        {!fullData?.overtimecheckin?.latitude ?
+                            <View style={{gap: 12, alignItems: 'stretch'}}>
+                                <View style={styles.modalGroupButtons}>
+                                    {(!fullData?.checkin?.latitude && !fullData?.overtimecheckin?.latitude) ?
+                                        <>
                                             <SgButton
                                                 disabled={buttonStatus}
                                                 color={COLORS.white}
                                                 bgColor={COLORS.brand_600}
-                                                onPress={() => handleCheckInRequest('overtime_checkin')}
+                                                onPress={() => handleCheckInRequest('checkin')}
                                             >
-                                                {t('overtimeCheckIn')}
+                                                {t('checkIn')}
                                             </SgButton>
-                                            : null
-                                        }
-                                    </>
-                                    : null
-                                }
-                                {(!fullData?.checkout?.latitude && fullData?.checkin?.latitude && timeRaw) ?
+
+                                            {!fullData?.overtimecheckin?.latitude ?
+                                                <SgButton
+                                                    disabled={buttonStatus}
+                                                    color={COLORS.white}
+                                                    bgColor={COLORS.brand_600}
+                                                    onPress={() => handleCheckInRequest('overtime_checkin')}
+                                                >
+                                                    {t('overtimeCheckIn')}
+                                                </SgButton>
+                                                : null
+                                            }
+                                        </>
+                                        : null
+                                    }
+                                    {(!fullData?.checkout?.latitude && fullData?.checkin?.latitude && timeRaw) ?
+                                        <SgButton
+                                            disabled={buttonStatus}
+                                            color={COLORS.white}
+                                            bgColor={COLORS.brand_600}
+                                            onPress={() => handleCheckInRequest('checkout')}
+                                        >
+                                            {t('checkOut')}
+                                        </SgButton>
+                                        : null
+                                    }
+                                </View>
+                                <View>
                                     <SgButton
                                         disabled={buttonStatus}
                                         color={COLORS.white}
-                                        bgColor={COLORS.brand_600}
-                                        onPress={() => handleCheckInRequest('checkout')}
+                                        bgColor={COLORS.warning_600}
+                                        onPress={() => handleSubmitSickReport()}
                                     >
-                                        {t('checkOut')}
+                                        {t('SickReport')}
                                     </SgButton>
-                                    : null
-                                }
+                                </View>
                             </View>
                             :
                             ((isManualCheckoutAvailable() && atWork) ?
@@ -901,65 +998,80 @@ export default function SgSectionEmployeeCard(props) {
             >
                 {fullData?.type === 2 ?
                     <View style={{marginBottom: 16}}>
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            key={1}
-                            onPress={() => handleChangeConfirmType(1)}
-                            style={[
-                                styles.item,
-                                confirmType === 1 && styles.selectedItem
-                            ]}
-                        >
-                            <SgRadio selected={confirmType === 1} />
-                            <View style={styles.content}>
-                                <Text style={styles.title}>Full Time</Text>
-                            </View>
-                        </TouchableOpacity>
-                        {moment().tz("Europe/Moscow").weekday() === 7 ?
+                        <View>
                             <TouchableOpacity
                                 activeOpacity={1}
-                                key={4}
-                                onPress={() => handleChangeConfirmType(4)}
+                                key={1}
+                                onPress={() => handleChangeConfirmType(1)}
                                 style={[
                                     styles.item,
-                                    confirmType === 4 && styles.selectedItem
+                                    confirmType === 1 && styles.selectedItem
                                 ]}
                             >
-                                <SgRadio selected={confirmType === 4} />
+                                <SgRadio selected={confirmType === 1} />
                                 <View style={styles.content}>
-                                    <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                    <Text style={styles.title}>Full Time</Text>
                                 </View>
                             </TouchableOpacity>
+                            {moment().tz("Europe/Moscow").weekday() === 7 ?
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    key={4}
+                                    onPress={() => handleChangeConfirmType(4)}
+                                    style={[
+                                        styles.item,
+                                        confirmType === 4 && styles.selectedItem
+                                    ]}
+                                >
+                                    <SgRadio selected={confirmType === 4} />
+                                    <View style={styles.content}>
+                                        <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                : null
+                            }
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={2}
+                                onPress={() => handleChangeConfirmType(2)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 2 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 2} />
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>Actual Time</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={3}
+                                onPress={() => handleChangeConfirmType(3)}
+                                style={[
+                                    styles.item,
+                                    confirmType === 3 && styles.selectedItem
+                                ]}
+                            >
+                                <SgRadio selected={confirmType === 3} />
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>No Time</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        {confirmType === 2 ?
+                            <View style={{marginTop: 8}}>
+                                <SgDatePicker
+                                    label={t("work_time")}
+                                    placeholder={t('enter_work_time')}
+                                    value={workTime}
+                                    name='work_time'
+                                    mode='time'
+                                    onChangeText={(e) => setWorkTime(e.value)}
+                                />
+                            </View>
                             : null
                         }
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            key={2}
-                            onPress={() => handleChangeConfirmType(2)}
-                            style={[
-                                styles.item,
-                                confirmType === 2 && styles.selectedItem
-                            ]}
-                        >
-                            <SgRadio selected={confirmType === 2} />
-                            <View style={styles.content}>
-                                <Text style={styles.title}>Actual Time</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            key={3}
-                            onPress={() => handleChangeConfirmType(3)}
-                            style={[
-                                styles.item,
-                                confirmType === 3 && styles.selectedItem
-                            ]}
-                        >
-                            <SgRadio selected={confirmType === 3} />
-                            <View style={styles.content}>
-                                <Text style={styles.title}>No Time</Text>
-                            </View>
-                        </TouchableOpacity>
                     </View>
                     :
                     null
@@ -992,6 +1104,41 @@ export default function SgSectionEmployeeCard(props) {
                 }
                 autoClose={false}
             />
+
+
+
+            <SgPopup
+                visible={sickReportModal}
+                onClose={() => toggleSickReportModal()}
+                title={t('sickReport')}
+                description={t('sickReport__description')}
+                icon={<ErrorIconModal width={50} height={50}/>}
+                footerButton={
+                    <SgButton
+                        disabled={buttonStatus}
+                        bgColor={COLORS.error_600}
+                        color={COLORS.white}
+                        onPress={handleSubmitRejectOverTime}
+                    >
+                        {t('sickReportButton')}
+                    </SgButton>
+                }
+                autoClose={false}
+            >
+                <View style={{marginBottom: 16, width: '100%'}}>
+                    <TextInput
+                        style={styles.textArea}
+                        multiline
+                        numberOfLines={4}
+                        onChangeText={(e) => {
+                            setSickReason(e)
+                        }}
+                        value={sickReason || ''}
+                        placeholder={t('rejectDetail')}
+                        keyboardType="default"
+                    />
+                </View>
+            </SgPopup>
         </>
     );
 };
