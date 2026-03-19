@@ -4,7 +4,7 @@ export default {
     "expo": {
         "name": "EGB",
         "slug": "egb-expo-app",
-        "version": "0.5.1",
+        "version": "1.0.0",
         "orientation": "default",
         "icon": "./assets/images/icon-color.png",
         "scheme": "egbappexpo",
@@ -13,16 +13,24 @@ export default {
         ios: {
             bundleIdentifier: "com.egb.egb",
             supportsTablet: true,
-            config: {
-                googleMapsApiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
-            },
+            // config: {
+            //     googleMapsApiKey: "AIzaSyCbSIJJg22-oDVQ8cR-nvQiPPDrG9CZgcE"
+            // },
             "infoPlist": {
                 "NSAppTransportSecurity": {
-                    "NSAllowsArbitraryLoads": true
+                    "NSAllowsArbitraryLoads": false,
+                    "NSExceptionDomains": {
+                        "entergreenbuildings.com": {
+                            "NSIncludesSubdomains": true,
+                            "NSExceptionAllowsInsecureHTTPLoads": true
+                        }
+                    }
                 },
+                "ITSAppUsesNonExemptEncryption": false,
+
+
                 NSLocationWhenInUseUsageDescription: "Location is required.",
                 NSLocationAlwaysAndWhenInUseUsageDescription: "Location maybe work on app background",
-                "ITSAppUsesNonExemptEncryption": false,
                 NSPhotoLibraryAddUsageDescription: "Bu tətbiq şəkil və videoları yaddaşa yazmaq üçün giriş istəyir.",
                 NSPhotoLibraryUsageDescription: "Bu tətbiq şəkil və videolara baxmaq və yazmaq üçün icazə istəyir.",
                 NSCameraUsageDescription: "Bu tətbiq kameraya giriş üçün icazə istəyir.",
@@ -33,7 +41,7 @@ export default {
             package: "com.egb.egb",
             edgeToEdgeEnabled: true,
             usesCleartextTraffic: true,
-            versionCode: 61,
+            versionCode: 62,
             "softwareKeyboardLayoutMode": "resize",
             adaptiveIcon: {
                 foregroundImage: "./assets/images/icon-white.png",
