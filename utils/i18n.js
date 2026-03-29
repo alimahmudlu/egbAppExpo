@@ -8,6 +8,7 @@ i18n.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                sick: "Sick",
                 SickReport: "Sick Report",
                 work_time: "Work Time",
                 enter_work_time: "Enter Work Time",
@@ -476,6 +477,7 @@ i18n.use(initReactI18next).init({
         },
         ru: {
             translation: {
+                sick: "Отчет",
                 SickReport: "Отчет о болезни",
                 work_time: "Рабочее время",
                 enter_work_time: "Введите рабочее время",
@@ -934,6 +936,7 @@ i18n.use(initReactI18next).init({
         },
         uz: {
             translation: {
+                sick: "Kasallik",
                 SickReport: "Kasallik haqida hisobot",
                 work_time: "Ish vaqti",
                 enter_work_time: "Ish vaqtini kiriting",

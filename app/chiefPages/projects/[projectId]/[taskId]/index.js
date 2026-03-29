@@ -360,7 +360,7 @@ export default function TaskDetailsScreen() {
                     }
 
                     <View>
-                        <SgTemplateUploadScreen setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
+                        <SgTemplateUploadScreen multiple={true} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
                         {selectedFiles.map((el, index) => (
                             <SgSectionAddFile key={index} title={el?.name} remove={true} handleRemove={() => handleRemoveFile(index)} />
                         ))}

@@ -65,10 +65,10 @@ export default function SgSectionEmployeeCard(props) {
                 timezone: moment.tz.guess(),
             }
         }).then(res => {
-            console.log('red', res)
             setButtonStatus(false)
             if (res.success) {
                 removeRowFromPaginationData(`GET:/timekeeper/manual/list`, fullData)
+                setUserOperationModal(false)
             } else {
                 // console.log('Error', res.data.message || 'An error occurred while accepting the check-in.');
             }
@@ -729,7 +729,7 @@ export default function SgSectionEmployeeCard(props) {
                                         <Text style={styles.title}>Full Time</Text>
                                     </View>
                                 </TouchableOpacity>
-                                {moment().tz("Europe/Moscow").weekday() === 7 ?
+                                {moment().tz("Europe/Moscow").weekday() === 0 ?
                                     <TouchableOpacity
                                         activeOpacity={1}
                                         key={4}
@@ -1013,7 +1013,7 @@ export default function SgSectionEmployeeCard(props) {
                                     <Text style={styles.title}>Full Time</Text>
                                 </View>
                             </TouchableOpacity>
-                            {moment().tz("Europe/Moscow").weekday() === 7 ?
+                            {moment().tz("Europe/Moscow").weekday() === 0 ?
                                 <TouchableOpacity
                                     activeOpacity={1}
                                     key={4}
