@@ -729,21 +729,23 @@ export default function SgSectionEmployeeCard(props) {
                                         <Text style={styles.title}>Full Time</Text>
                                     </View>
                                 </TouchableOpacity>
-                                {moment().tz("Europe/Moscow").weekday() === 0 ?
-                                    <TouchableOpacity
-                                        activeOpacity={1}
-                                        key={4}
-                                        onPress={() => handleChangeConfirmType(4)}
-                                        style={[
-                                            styles.item,
-                                            confirmType === 4 && styles.selectedItem
-                                        ]}
-                                    >
-                                        <SgRadio selected={confirmType === 4} />
-                                        <View style={styles.content}>
-                                            <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
-                                        </View>
-                                    </TouchableOpacity>
+                                {fullData?.type === 2 ?
+                                    (moment().tz("Europe/Moscow").weekday() === 0 ?
+                                        <TouchableOpacity
+                                            activeOpacity={1}
+                                            key={4}
+                                            onPress={() => handleChangeConfirmType(4)}
+                                            style={[
+                                                styles.item,
+                                                confirmType === 4 && styles.selectedItem
+                                            ]}
+                                        >
+                                            <SgRadio selected={confirmType === 4} />
+                                            <View style={styles.content}>
+                                                <Text style={styles.title}>Full Time (Leisure Sunday)</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        : null)
                                     : null
                                 }
                                 <TouchableOpacity
@@ -775,17 +777,19 @@ export default function SgSectionEmployeeCard(props) {
                                     </View>
                                 </TouchableOpacity>
                             </View>
-                            {confirmType === 2 ?
-                                <View style={{marginTop: 8}}>
-                                    <SgDatePicker
-                                        label={t("work_time")}
-                                        placeholder={t('enter_work_time')}
-                                        value={workTime}
-                                        name='work_time'
-                                        mode='time'
-                                        onChangeText={(e) => setWorkTime(e.value)}
-                                    />
-                                </View>
+                            {fullData?.type === 2 ?
+                                (confirmType === 2 ?
+                                    <View style={{marginTop: 8}}>
+                                        <SgDatePicker
+                                            label={t("work_time")}
+                                            placeholder={t('enter_work_time')}
+                                            value={workTime}
+                                            name='work_time'
+                                            mode='time'
+                                            onChangeText={(e) => setWorkTime(e.value)}
+                                        />
+                                    </View>
+                                    : null)
                                 : null
                             }
                         </View>
