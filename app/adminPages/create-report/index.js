@@ -73,23 +73,25 @@ export default function ChiefMenuScreen() {
     }
 
     function handleSubmit() {
-        request({
-            method: "post",
-            url: "/admin/food/report/add",
-            data: {
-                ...data,
-                project_id: selectedRow?.project_id,
-                turn1employees: selectedRow?.turn1employees || 0,
-                turn2employees: selectedRow?.turn2employees || 0,
-            },
-        }).then(res => {
-            setData({
-                date: moment().tz("Europe/Moscow").format('YYYY-MM-DD')
+        if (data?.project || data?.date) {
+            request({
+                method: "post",
+                url: "/admin/food/report/add",
+                data: {
+                    ...data,
+                    project_id: selectedRow?.project_id,
+                    turn1employees: selectedRow?.turn1employees || 0,
+                    turn2employees: selectedRow?.turn2employees || 0,
+                },
+            }).then(res => {
+                setData({
+                    date: moment().tz("Europe/Moscow").format('YYYY-MM-DD')
+                })
+                router.replace(`/adminPages/foodReports?project_id=${selectedRow?.project_id}`);
+            }).catch(err => {
+                console.log(err, 'err');
             })
-            router.replace(`/adminPages/foodReports?project_id=${selectedRow?.project_id}`);
-        }).catch(err => {
-            console.log(err, 'err');
-        })
+        }
     }
 
 

@@ -25,48 +25,7 @@ export default function ProjectItemScreen() {
     const {t} = useTranslation();
     const [projects, setProjects] = useState([]);
     const [camps, setCamps] = useState([]);
-    const [tripTypeList, setTripTypeList] = useState([
-        {
-            id: 1,
-            name: 'EGB Bus Main Day',
-            render: <Text>EGB Bus Main Day</Text>,
-        },
-        {
-            id: 3,
-            name: 'EGB Bus Main Night',
-            render: <Text>EGB Bus Main Night</Text>,
-        },
-        {
-            id: 2,
-            name: 'EGB Bus Additional',
-            render: <Text>EGB Bus Additional</Text>,
-        },
-        {
-            id: 4,
-            name: 'EGB Transit Main Day',
-            render: <Text>EGB Transit Main Day</Text>,
-        },
-        {
-            id: 5,
-            name: 'EGB Transit Main Night',
-            render: <Text>EGB Transit Main Night</Text>,
-        },
-        {
-            id: 6,
-            name: 'EGB Transit Additional',
-            render: <Text>EGB Transit Additional</Text>,
-        },
-        {
-            id: 7,
-            name: 'EGB FMS',
-            render: <Text>EGB FMS</Text>,
-        },
-        {
-            id: 8,
-            name: 'EGB Airport',
-            render: <Text>EGB Airport</Text>,
-        }
-    ]);
+    const [tripTypeList, setTripTypeList] = useState([]);
     const [filters, setFilters] = useState({})
     const [projectsList, setProjectsList] = useState([]);
     const [reportModal, setReportModal] = useState(false);
@@ -192,6 +151,7 @@ export default function ProjectItemScreen() {
         return () => {
             setProjects([])
             setList([]);
+            setTripTypeList([])
             console.log('Home tab lost focus');
         };
     }, [refreshKey]));
@@ -220,6 +180,14 @@ export default function ProjectItemScreen() {
     useEffect(() => {
         setCamps(storeData?.cache?.[`GET:/admin/options/camps`]?.data)
     }, [storeData?.cache?.[`GET:/admin/options/camps`]])
+
+    useEffect(() => {
+        setTripTypeList((storeData?.cache?.[`GET:/admin/bus/types`]?.data || []).map(el => ({
+            id: el?.id,
+            name: el?.name,
+            render: <Text>{el?.name}</Text>,
+        })))
+    }, [storeData?.cache?.[`GET:/admin/bus/types`]])
 
 
     const addOtherCamp = () => {
