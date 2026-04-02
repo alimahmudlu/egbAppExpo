@@ -777,7 +777,7 @@ export default function SgSectionEmployeeCard(props) {
                                     </View>
                                 </TouchableOpacity>
                             </View>
-                            {fullData?.type === 2 ?
+                            {((isManualCheckoutAvailable() && atWork) || fullData?.type === 2) ?
                                 (confirmType === 2 ?
                                     <View style={{marginTop: 8}}>
                                         <SgDatePicker
