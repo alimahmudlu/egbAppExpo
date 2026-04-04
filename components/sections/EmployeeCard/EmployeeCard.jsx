@@ -451,7 +451,7 @@ export default function SgSectionEmployeeCard(props) {
                 request_time: moment(),
                 longitude: locationData?.longitude,
                 latitude: locationData?.latitude,
-                work_time: null,
+                work_time: (fullData?.type === 2 && confirmType === 2) ? moment(workTime).format('HH:mm') : null,
                 activity_id: manual ? fullData?.checkin?.id : fullData?.id,
                 confirm_type: confirmType
             }
