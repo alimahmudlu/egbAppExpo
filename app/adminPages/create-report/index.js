@@ -73,7 +73,8 @@ export default function ChiefMenuScreen() {
     }
 
     function handleSubmit() {
-        if (data?.project || data?.date) {
+        if (data?.project && data?.date) {
+            console.log(data, 'data');
             request({
                 method: "post",
                 url: "/admin/food/report/add",
