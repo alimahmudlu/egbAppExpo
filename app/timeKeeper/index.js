@@ -590,6 +590,7 @@ export default function EmployeeDashboardScreen() {
                                         <SgLoading />
                                         :
                                         (((employeeActivitiesAtWork || {})?.data || [])?.map((emp, index) => {
+                                            console.log(((employeeActivitiesCheckOut || {})?.data || []).find(el => el.employee_id === emp.employee_id)?.id, 'news')
                                             return (
                                                 <SgSectionEmployeeCard
                                                     cardType={'atWork'}
