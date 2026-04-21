@@ -734,7 +734,7 @@ export default function SgSectionEmployeeCard(props) {
                                     </View>
                                 </TouchableOpacity>
                                 {(fullData?.type === 2 || (atWork && fullData?.type === 1)) ?
-                                    (moment().tz("Europe/Moscow").weekday() === 2 ?
+                                    (moment().tz("Europe/Moscow").weekday() === 0 ?
                                         <TouchableOpacity
                                             activeOpacity={1}
                                             key={4}
@@ -1021,7 +1021,7 @@ export default function SgSectionEmployeeCard(props) {
                                     <Text style={styles.title}>Full Time</Text>
                                 </View>
                             </TouchableOpacity>
-                            {moment().tz("Europe/Moscow").weekday() === 2 ?
+                            {moment().tz("Europe/Moscow").weekday() === 0 ?
                                 <TouchableOpacity
                                     activeOpacity={1}
                                     key={4}

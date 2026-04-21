@@ -815,7 +815,7 @@ export default function SgCheckInOutCard(props) {
                                     <Text style={styles.itemTitle}>Full Time</Text>
                                 </View>
                             </TouchableOpacity>
-                            {moment().tz("Europe/Moscow").weekday() === 2 ?
+                            {moment().tz("Europe/Moscow").weekday() === 0 ?
                                 <TouchableOpacity
                                     activeOpacity={1}
                                     key={4}
